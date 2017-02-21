@@ -8,6 +8,6 @@ public class SmartCampus extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_smart_campus);
+        setContentView(R.layout.activity_login);
     }
 }
