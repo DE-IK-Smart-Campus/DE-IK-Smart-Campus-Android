@@ -3,4 +3,7 @@
     <string name="usernameHint">felhasználónév</string>
     <string name="passwordHint">jelszó</string>
     <string name="loginbuttonText">Bejelentkezés</string>
+    <string name="usernamePasswordNeed">Felhasználónév és jelszó megadása kötelező!</string>
+    <string name="usernamePasswordWrong">Felhasználónév vagy jelszó helytelen!</string>
+    <string name="loginSucces">"Sikeresen bejeletkezve! "</string>
 </resources>

@@ -32,11 +32,11 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         setupVariables();
         if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Felhasználónév és jelszó megadása kötelező!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else if (!username.getText().toString().equals("admin") || !password.getText().toString().equals("admin")) {
-            Toast.makeText(getApplicationContext(), "Felhasználónév vagy jelszó helytelen!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.usernamePasswordWrong, Toast.LENGTH_SHORT).show();
         } else if (username.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
-            Toast.makeText(getApplicationContext(), "Sikeresen bejeletkezve: " + username.getText().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, SmartCampus.class);
             startActivity(intent);
         }
