@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus;
+package hu.unideb.smartcampus.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import hu.unideb.smartcampus.R;
 
 public class LoginActivity extends AppCompatActivity {
 
