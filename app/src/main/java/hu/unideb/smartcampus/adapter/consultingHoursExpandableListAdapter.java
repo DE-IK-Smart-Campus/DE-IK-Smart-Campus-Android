@@ -1,12 +1,16 @@
 package hu.unideb.smartcampus.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.TextView;
 
 import java.util.List;
 
+import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.Class;
 
 /**
@@ -59,13 +63,37 @@ public class ConsultingHoursExpandableListAdapter extends BaseExpandableListAdap
     }
 
     @Override
-    public View getGroupView(int classAt, boolean b, View view, ViewGroup viewGroup) {
-        return null;
+    public View getGroupView(int classAt, boolean isExpanded, View view, ViewGroup parent) {
+        String headerTitle = classList.get(classAt).getName();
+        if (view == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = layoutInflater.inflate(R.layout.list_class, null);
+        }
+        TextView lblListHeader = (TextView) view
+                .findViewById(R.id.classListId);
+        lblListHeader.setTypeface(null, Typeface.BOLD);
+        lblListHeader.setText(headerTitle);
+
+        return view;
+
     }
 
     @Override
-    public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-        return null;
+    public View getChildView(int classAt, int teacherAt, boolean isExpanded, View view, ViewGroup viewGroup) {
+        final String teacherName = classList.get(classAt).getTeacherList().get(teacherAt).getName();
+
+        if (view == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this.context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = infalInflater.inflate(R.layout.list_teacher, null);
+        }
+
+        TextView teacherTextView = (TextView) view
+                .findViewById(R.id.teacherListItemId);
+
+        teacherTextView.setText(teacherName);
+        return view;
     }
 
     @Override

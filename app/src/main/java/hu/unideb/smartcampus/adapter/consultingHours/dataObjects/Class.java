@@ -1,6 +1,5 @@
 package hu.unideb.smartcampus.adapter.consultingHours.dataObjects;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,13 +8,11 @@ import java.util.List;
 
 public class Class {
 
+    private String name;
     private List<Teacher> teacherList;
 
-    public Class() {
-        teacherList = new ArrayList<>();
-    }
-
-    public Class(List<Teacher> teacherList) {
+    public Class(String name, List<Teacher> teacherList) {
+        this.name = name;
         this.teacherList = teacherList;
     }
 
@@ -23,4 +20,11 @@ public class Class {
         return teacherList;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
