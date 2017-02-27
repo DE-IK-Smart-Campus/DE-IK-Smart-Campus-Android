@@ -4,20 +4,26 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:title="@string/homeTitle" />
+            android:title="@string/nav_home_name" />
         <item
             android:id="@+id/nav_calendar"
-            android:title="@string/calendarTitle" />
+            android:title="@string/nav_calendar_name" />
+        <item
+            android:id="@+id/nav_officeHours"
+            android:title="@string/nav_consultingHours_name" />
+
         <item
             android:id="@+id/nav_chat"
-            android:title="Beszélgetések" />
+            android:title="@string/nav_chat_name" />
+
     </group>
 
-    <item android:title="@string/other">
+    <item android:title="@string/other_name">
         <menu>
             <item
                 android:id="@+id/nav_about_us"
-                android:title="@string/aboutUs" />
+                android:title="@string/nav_about_us_name" />
+
         </menu>
     </item>
 

@@ -1,6 +1,8 @@
 package hu.unideb.smartcampus.activity;
 
+
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -9,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +19,9 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.CalendarFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
+import hu.unideb.smartcampus.fragment.ConsultingHours;
 
-public class SmartCampus extends AppCompatActivity {
-
+public class MainActivity_SmartCampus extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private Toolbar toolbar;
@@ -29,19 +30,20 @@ public class SmartCampus extends AppCompatActivity {
 
     private static final String TAG_HOME = "home";
     private static final String TAG_CALENDAR = "calendar";
-    private static final String TAG_CHAT = "cHAT";
+    private static final String TAG_OFFICEHOURS = "officeHours";
+    private static final String TAG_CHAT = "chat";
     public static String CURRENT_TAG = TAG_HOME;
 
     private String[] activityTitles;
 
     private Handler mHandler;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_smart_campus);
+        setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
 
         mHandler = new Handler();
@@ -50,6 +52,7 @@ public class SmartCampus extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
+
         setUpNavigationView();
 
         if (savedInstanceState == null) {
@@ -57,8 +60,6 @@ public class SmartCampus extends AppCompatActivity {
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
-
-
     }
 
     private void loadHomeFragment() {
@@ -66,10 +67,6 @@ public class SmartCampus extends AppCompatActivity {
 
         setToolbarTitle();
 
-        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
-            drawer.closeDrawers();
-            return;
-        }
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
@@ -100,6 +97,9 @@ public class SmartCampus extends AppCompatActivity {
                 CalendarFragment calendarFragment = new CalendarFragment();
                 return calendarFragment;
             case 2:
+                ConsultingHours consultingHours = new ConsultingHours();
+                return consultingHours;
+            case 3:
                 ChatFragment chatFragment = new ChatFragment();
                 return chatFragment;
             default:
@@ -118,12 +118,11 @@ public class SmartCampus extends AppCompatActivity {
     private void setUpNavigationView() {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
-            // This method will trigger on item Click of navigation menu
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
-                    case R.id.nav_home:
+                    case R.id.home:
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         break;
@@ -131,15 +130,16 @@ public class SmartCampus extends AppCompatActivity {
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_CALENDAR;
                         break;
-                    case R.id.nav_chat:
+                    case R.id.nav_officeHours:
                         navItemIndex = 2;
+                        CURRENT_TAG = TAG_OFFICEHOURS;
+                        break;
+                    case R.id.nav_chat:
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_CHAT;
-//                        startActivity(new Intent(SmartCampus.this, Chat.class));
-//                        drawer.closeDrawers();
-//                        return true;
                         break;
                     case R.id.nav_about_us:
-                        startActivity(new Intent(SmartCampus.this, AboutUsActivity.class));
+                        startActivity(new Intent(MainActivity_SmartCampus.this, AboutUsActivity.class));
                         drawer.closeDrawers();
                         return true;
                     default:
@@ -184,6 +184,17 @@ public class SmartCampus extends AppCompatActivity {
             drawer.closeDrawers();
             return;
         }
+
+        boolean shouldLoadHomeFragOnBackPress = true;
+        if (shouldLoadHomeFragOnBackPress) {
+            if (navItemIndex != 0) {
+                navItemIndex = 0;
+                CURRENT_TAG = TAG_HOME;
+                loadHomeFragment();
+                return;
+            }
+        }
+
         super.onBackPressed();
     }
 }
