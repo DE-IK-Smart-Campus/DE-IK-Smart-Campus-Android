@@ -8,7 +8,7 @@
 
     <string name="nav_home_name">Kezdőképernyő</string>
     <string name="nav_calendar_name">Naptár</string>
-    <string name="nav_officeHours_name">Fogadóórák</string>
+    <string name="nav_consultingHours_name">Fogadóórák</string>
     <string name="nav_chat_name">Beszélgetés</string>
     <string name="nav_about_us_name">Rólunk</string>
 
@@ -23,7 +23,10 @@
     <string name="activity_title_about_us">Rólunk</string>
     <string name="usernamehint">felhasználónév</string>
     <string name="passwordHint">jelszó</string>
-    <string name="loginButtonText">Bejeletkezés</string>
+    <string name="loginButtonText">Bejelentkezés</string>
+    <string name="usernamePasswordNeed">Felhasználónév és jelszó megadása kötelező!</string>
+    <string name="usernamePasswordWrong">Felhasználónév vagy jelszó helytelen!</string>
+    <string name="loginSucces">"Sikeresen bejeletkezve! "</string>
 
 
 </resources>

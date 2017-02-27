@@ -23,11 +23,11 @@ public class MainChatMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ListView chatRoomsList = (ListView) findViewById(R.id.chat_menu_ListView);
-        List names = Arrays.asList("Holkai","Gabai","Atkai","Norkai","Filtián","Balai");
+        List names = Arrays.asList("Holkai", "Gabai", "Atkai", "Norkai", "Filtián", "Balai");
         // need function to get all the chat rooms available
         // need function - and brainstorm about chat history, what the xmpp server does
 
-        ListAdapter listAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,names);
+        ListAdapter listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
         chatRoomsList.setAdapter(listAdapter);
     }
 }

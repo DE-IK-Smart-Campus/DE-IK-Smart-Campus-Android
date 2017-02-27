@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 import hu.unideb.smartcampus.R;
 
 
-public class OfficeHours extends Fragment {
+public class ConsultingHours extends Fragment {
 
-    public OfficeHours() {}
+    public ConsultingHours() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_officehours,container,false);
+        return inflater.inflate(R.layout.fragment_consultinghours, container, false);
     }
 }

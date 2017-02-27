@@ -10,7 +10,7 @@
             android:title="@string/nav_calendar_name" />
         <item
             android:id="@+id/nav_officeHours"
-            android:title="@string/nav_officeHours_name" />
+            android:title="@string/nav_consultingHours_name" />
 
         <item
             android:id="@+id/nav_chat"

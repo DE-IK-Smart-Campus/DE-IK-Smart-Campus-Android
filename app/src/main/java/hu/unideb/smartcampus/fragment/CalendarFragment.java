@@ -14,12 +14,13 @@ public class CalendarFragment extends Fragment {
 
     CalendarView myCalendar;
 
-    public CalendarFragment(){}
+    public CalendarFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_calendar,container,false);
+        View v = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         myCalendar = (CalendarView) v.findViewById(R.id.calendar);
 

@@ -23,11 +23,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.Chat"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.AboutUsActivity"/>
-        <activity android:name=".chat.MainChatMenu">
+            android:name=".activity.AboutUsActivity"
+            android:label="@string/activity_title_about_us"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".chat.MainChatMenu"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
