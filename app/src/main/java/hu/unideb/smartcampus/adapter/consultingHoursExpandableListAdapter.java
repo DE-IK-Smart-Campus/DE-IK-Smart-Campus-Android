@@ -70,10 +70,10 @@ public class ConsultingHoursExpandableListAdapter extends BaseExpandableListAdap
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.list_class, null);
         }
-        TextView lblListHeader = (TextView) view
+        TextView classTextView = (TextView) view
                 .findViewById(R.id.classListId);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle);
+        classTextView.setTypeface(null, Typeface.BOLD);
+        classTextView.setText(headerTitle);
 
         return view;
 

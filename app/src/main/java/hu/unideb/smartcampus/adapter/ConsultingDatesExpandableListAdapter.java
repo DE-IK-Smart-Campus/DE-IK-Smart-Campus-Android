@@ -34,7 +34,7 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public int getChildrenCount(int classAt) {
-        return teacherList.get(classAt).getConsultingDates().size();
+        return teacherList.get(classAt).getConsultingDates().getDateList().size();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public Object getChild(int teacherAt, int consultingHoursAt) {
-        return teacherList.get(teacherAt).getConsultingDates().get(consultingHoursAt);
+        return teacherList.get(teacherAt).getConsultingDates().getDateList().get(consultingHoursAt);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public View getChildView(int teacherAt, int consultingHoursAt, boolean isExpanded, View view, ViewGroup viewGroup) {
-        final String dateDisplayName = teacherList.get(teacherAt).getConsultingDates().get(consultingHoursAt).toString();
+        final String dateDisplayName = teacherList.get(teacherAt).getConsultingDates().getDateList().get(consultingHoursAt).toString();
         if (view == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
