@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="aboutUs">Rólunk</string>
+    <string name="other">Egyéb</string>
+    <string name="chatTitle">Beszélgetések</string>
+</resources>
