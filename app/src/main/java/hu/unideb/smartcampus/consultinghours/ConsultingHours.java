@@ -14,8 +14,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import hu.unideb.smartcampus.LoginActivity;
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.activity.LoginActivity;
 import hu.unideb.smartcampus.adapter.ConsultingDatesExpandableListAdapter;
 import hu.unideb.smartcampus.adapter.ConsultingHoursExpandableListAdapter;
 import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.Class;
