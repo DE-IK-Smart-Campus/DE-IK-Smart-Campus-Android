@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="hu.unideb.smartcampus.activity.SmartCampus">
+    tools:context=".activity.MainActivity_SmartCampus">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -25,8 +25,6 @@
         android:id="@+id/frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    </FrameLayout>
-
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"></FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

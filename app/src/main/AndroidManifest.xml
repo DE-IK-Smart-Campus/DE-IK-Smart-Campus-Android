@@ -19,13 +19,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.SmartCampus"
+            android:name=".activity.MainActivity_SmartCampus"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.Chat"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.AboutUsActivity"/>
         <activity android:name=".chat.MainChatMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
