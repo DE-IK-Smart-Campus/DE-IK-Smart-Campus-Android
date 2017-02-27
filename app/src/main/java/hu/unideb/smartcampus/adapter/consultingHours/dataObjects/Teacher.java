@@ -1,5 +1,8 @@
 package hu.unideb.smartcampus.adapter.consultingHours.dataObjects;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by Headswitcher on 2017. 02. 24..
  */
@@ -7,11 +10,11 @@ public class Teacher {
 
     //private Id;
     private String name;
-    private ConsultingHoursObject consultingHours;
+    private List<Date> consultingDates;
 
-    public Teacher(String name, ConsultingHoursObject consultingHours) {
+    public Teacher(String name, List<Date> consultingDates) {
         this.name = name;
-        this.consultingHours = consultingHours;
+        this.consultingDates = consultingDates;
     }
 
     public String getName() {
@@ -22,11 +25,11 @@ public class Teacher {
         this.name = name;
     }
 
-    public ConsultingHoursObject getConsultingHours() {
-        return consultingHours;
+    public List<Date> getConsultingDates() {
+        return consultingDates;
     }
 
-    public void setConsultingHours(ConsultingHoursObject consultingHours) {
-        this.consultingHours = consultingHours;
+    public void setConsultingDates(List<Date> consultingDates) {
+        this.consultingDates = consultingDates;
     }
 }

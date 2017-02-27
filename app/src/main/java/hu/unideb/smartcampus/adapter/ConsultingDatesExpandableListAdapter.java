@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.Class;
 import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.Teacher;
 
 /**
@@ -35,7 +34,7 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public int getChildrenCount(int classAt) {
-        return teacherList.get(classAt).getConsultingHours().getDateList().size();
+        return teacherList.get(classAt).getConsultingDates().size();
     }
 
     @Override
@@ -45,7 +44,7 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public Object getChild(int teacherAt, int consultingHoursAt) {
-        return teacherList.get(teacherAt).getConsultingHours().getDateList().get(consultingHoursAt);
+        return teacherList.get(teacherAt).getConsultingDates().get(consultingHoursAt);
     }
 
     @Override
@@ -82,8 +81,7 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public View getChildView(int teacherAt, int consultingHoursAt, boolean isExpanded, View view, ViewGroup viewGroup) {
-        final String dateDisplayName = teacherList.get(teacherAt).getConsultingHours().getDateList().get(consultingHoursAt).toString();
-
+        final String dateDisplayName = teacherList.get(teacherAt).getConsultingDates().get(consultingHoursAt).toString();
         if (view == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -99,6 +97,6 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public boolean isChildSelectable(int i, int i1) {
-        return false;
+        return true;
     }
 }
