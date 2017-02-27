@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void login() {
+      private void login() {
         setupVariables();
         if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
