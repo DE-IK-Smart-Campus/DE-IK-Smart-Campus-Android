@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import hu.unideb.smartcampus.R;
 
@@ -21,7 +23,11 @@ public class ReserveConsultation extends AppCompatActivity {
         String fromUntilDates = intent.getStringExtra("FROMUNTILDATES");
         TextView fromUntilDatesTextView = (TextView) findViewById(R.id.selected_consulting_hour_editText);
         fromUntilDatesTextView.setText(fromUntilDates);
+    }
 
+    public void onReserveClick(View v) {
+
+        Toast.makeText(this, "TODO", Toast.LENGTH_SHORT).show();
 
     }
 

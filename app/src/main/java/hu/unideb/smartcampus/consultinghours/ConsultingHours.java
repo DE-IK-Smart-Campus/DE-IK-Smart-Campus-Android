@@ -11,6 +11,7 @@ import android.widget.ExpandableListView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import hu.unideb.smartcampus.LoginActivity;
@@ -56,16 +57,22 @@ public class ConsultingHours extends AppCompatActivity {
 
         //Mocked data , we will need some functions here
 
-        //Refactor inc for dates
+        //Refactor inc for dates , ugly as ...
         final ExpandableListView ClassList = (ExpandableListView) findViewById(R.id.consulting_hours_ExpandableListView);
         List<Teacher> teacherList = new ArrayList<>();
         List<Teacher> teacherList1 = new ArrayList<>();
         List<Teacher> teacherList2 = new ArrayList<>();
         Date date = new Date();
-        List<Date> dateList = Arrays.asList(date, date);
-        Date _1500 = new Date(1488294000 * 1000);
-        Date _1600 = new Date(1488297600 * 1000);
-        FromUntilDates fromUntilDates = new FromUntilDates(_1500, _1600);
+        GregorianCalendar gcalendar = new GregorianCalendar();
+        gcalendar.set(2017, 02, 28, 15, 00);
+        GregorianCalendar gcalendar2 = new GregorianCalendar();
+        gcalendar2.set(2017, 02, 28, 16, 00);
+        GregorianCalendar gcalendar3 = new GregorianCalendar();
+        gcalendar.set(2017, 02, 29, 17, 00);
+        GregorianCalendar gcalendar4 = new GregorianCalendar();
+        gcalendar2.set(2017, 02, 29, 18, 00);
+        FromUntilDates fromUntilDates = new FromUntilDates(gcalendar.getTime(), gcalendar2.getTime());
+        FromUntilDates fromUntilDates2 = new FromUntilDates(gcalendar.getTime(), gcalendar2.getTime());
         ConsultingHoursObject consultingHours = new ConsultingHoursObject(Arrays.asList(fromUntilDates));
 
         teacherList.add(new Teacher("Várterész Magdolna", consultingHours));
@@ -95,13 +102,18 @@ public class ConsultingHours extends AppCompatActivity {
                     ExpandableListAdapter teacherChildConsultingHoursListAdapter =
                             new ConsultingDatesExpandableListAdapter(getApplicationContext(), Arrays.asList(parentClass.getTeacherList().get(childPosition)));
                     ClassList.setAdapter(teacherChildConsultingHoursListAdapter);
+                    ClassList.expandGroup(0);
                     isItOnChildItem = true;
                     return true;
                 } else {
                     Teacher parentClass = (Teacher) parent.getExpandableListAdapter().getGroup(groupAt);
-
                     Intent intent = new Intent(getApplicationContext(), ReserveConsultation.class);
-                    intent.putExtra("FROMUNTILDATES", parentClass.getConsultingDates().getDateList().get(childPosition).toString());
+
+                    //Will change after mock / 1.8
+                    FromUntilDates dates = parentClass.getConsultingDates().getDateList().get(childPosition);
+                    String untilDateString = dates.getUntil().getHours() + ":" + dates.getUntil().getMinutes();
+                    String fromDateString = dates.getFrom().getHours() + ":" + dates.getFrom().getMinutes();
+                    intent.putExtra("FROMUNTILDATES", fromDateString + "-" + untilDateString);
                     startActivity(intent);
                     return true;
                 }

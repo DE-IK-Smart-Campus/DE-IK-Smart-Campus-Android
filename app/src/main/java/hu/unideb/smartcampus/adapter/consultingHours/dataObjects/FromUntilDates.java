@@ -33,8 +33,4 @@ public class FromUntilDates {
         this.until = until;
     }
 
-    @Override
-    public String toString() {
-        return from.getHours() + ":" + from.getMinutes() +"-"+until.getHours() + ":" + until.getMinutes();
-    }
 }
