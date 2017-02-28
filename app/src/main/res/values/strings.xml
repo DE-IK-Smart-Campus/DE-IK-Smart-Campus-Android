@@ -27,6 +27,7 @@
     <string name="usernamePasswordNeed">Felhasználónév és jelszó megadása kötelező!</string>
     <string name="usernamePasswordWrong">Felhasználónév vagy jelszó helytelen!</string>
     <string name="loginSucces">"Sikeresen bejeletkezve! "</string>
+    <string name="EXTRA_FROM_UNTIL_DATES">EXTRA_FROM_UNTIL_DATES</string>
 
 
 </resources>

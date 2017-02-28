@@ -111,9 +111,8 @@ public class ConsultingHours extends AppCompatActivity {
 
                     //Will change after mock / 1.8
                     FromUntilDates dates = parentClass.getConsultingDates().getDateList().get(childPosition);
-                    String untilDateString = dates.getUntil().getHours() + ":" + dates.getUntil().getMinutes();
-                    String fromDateString = dates.getFrom().getHours() + ":" + dates.getFrom().getMinutes();
-                    intent.putExtra("FROMUNTILDATES", fromDateString + "-" + untilDateString);
+                    FromUntilDates fromUntilDates = new FromUntilDates(dates.getFrom(), dates.getUntil());
+                    intent.putExtra(getString(R.string.EXTRA_FROM_UNTIL_DATES), fromUntilDates);
                     startActivity(intent);
                     return true;
                 }

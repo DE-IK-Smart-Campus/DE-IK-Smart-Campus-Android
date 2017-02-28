@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class ConsultingHoursObject {
 
-    List<FromUntilDates> dateList;
+    private List<FromUntilDates> dateList;
 
     public ConsultingHoursObject(List<FromUntilDates> dateList) {
         this.dateList = dateList;
