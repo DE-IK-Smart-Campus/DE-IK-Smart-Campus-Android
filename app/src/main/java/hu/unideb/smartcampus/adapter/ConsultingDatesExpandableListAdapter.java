@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
@@ -83,11 +84,11 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
     @Override
     public View getChildView(int teacherAt, int consultingHoursAt, boolean isExpanded, View view, ViewGroup viewGroup) {
 
-        //will change with 1.8
+        //will change with 1.8 TODO
         FromUntilDates dates = teacherList.get(teacherAt).getConsultingDates().getDateList().get(consultingHoursAt);
-        String fromDateString = dates.getFrom().getMonth() + " " + dates.getFrom().getDate() + " " + dates.getFrom().getHours() + ":" + dates.getFrom().getMinutes();
-        String untilDateString = dates.getUntil().getMonth() + " " + dates.getUntil().getDate() + " " + dates.getUntil().getHours() + ":" + dates.getUntil().getMinutes();
-        final String dateDisplayName = fromDateString + "  -  " + untilDateString;
+        final String dateDisplayName = DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getFrom())
+                + "  -  "
+                + DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getUntil());
         if (view == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
