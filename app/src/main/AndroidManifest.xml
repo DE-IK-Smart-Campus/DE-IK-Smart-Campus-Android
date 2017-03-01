@@ -34,22 +34,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".consultinghours.ConsultingHours">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
         <activity android:name=".consultinghours.ReserveConsultation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
-        </activity>
-
-
-        <activity
-            android:name=".SmartCampus"
-            android:theme="@style/AppTheme" />
-
+        </activity>ú
     </application>
 
 </manifest>

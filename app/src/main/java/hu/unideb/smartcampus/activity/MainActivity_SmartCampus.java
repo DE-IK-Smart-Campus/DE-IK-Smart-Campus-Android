@@ -19,7 +19,7 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.CalendarFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
-import hu.unideb.smartcampus.fragment.ConsultingHours;
+import hu.unideb.smartcampus.fragment.ConsultingHoursFragment;
 
 public class MainActivity_SmartCampus extends AppCompatActivity {
     private NavigationView navigationView;
@@ -97,8 +97,8 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                 CalendarFragment calendarFragment = new CalendarFragment();
                 return calendarFragment;
             case 2:
-                ConsultingHours consultingHours = new ConsultingHours();
-                return consultingHours;
+                ConsultingHoursFragment consultingHoursFragment = new ConsultingHoursFragment();
+                return consultingHoursFragment;
             case 3:
                 ChatFragment chatFragment = new ChatFragment();
                 return chatFragment;

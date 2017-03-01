@@ -1,10 +1,11 @@
-package hu.unideb.smartcampus.consultinghours;
+package hu.unideb.smartcampus.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
@@ -15,50 +16,31 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.activity.LoginActivity;
 import hu.unideb.smartcampus.adapter.ConsultingDatesExpandableListAdapter;
 import hu.unideb.smartcampus.adapter.ConsultingHoursExpandableListAdapter;
 import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.Class;
 import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.ConsultingHoursObject;
 import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.FromUntilDates;
 import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.Teacher;
+import hu.unideb.smartcampus.consultinghours.ReserveConsultation;
 
-/**
- * Created by Headswitcher on 2017. 02. 24..
- */
 
-public class ConsultingHours extends AppCompatActivity {
+public class ConsultingHoursFragment extends Fragment {
     boolean isItOnChildItem;
 
-    public ConsultingHours() {
-        super();
+    public ConsultingHoursFragment() {
         isItOnChildItem = false;
     }
 
-    /**
-     * Take care of popping the fragment back stack or finishing the activity
-     * as appropriate.
-     */
     @Override
-    public void onBackPressed() {
-        if (isItOnChildItem) {
-            Intent intent = new Intent(getApplicationContext(), ConsultingHours.class);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        }
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_consulting_hours);
+        View view = inflater.inflate(R.layout.fragment_consultinghours, container, false);
 
         //Mocked data , we will need some functions here
 
         //Refactor inc for dates , ugly as ...
-        final ExpandableListView ClassList = (ExpandableListView) findViewById(R.id.consulting_hours_ExpandableListView);
+        final ExpandableListView ClassList = (ExpandableListView) view.findViewById(R.id.consulting_hours_ExpandableListView);
         List<Teacher> teacherList = new ArrayList<>();
         List<Teacher> teacherList1 = new ArrayList<>();
         List<Teacher> teacherList2 = new ArrayList<>();
@@ -89,7 +71,7 @@ public class ConsultingHours extends AppCompatActivity {
         classList.add(mestint);
         classList.add(halo);
         classList.add(internet);
-        final ExpandableListAdapter ClassChildTeacherListAdapter = new ConsultingHoursExpandableListAdapter(getApplicationContext(), classList);
+        final ExpandableListAdapter ClassChildTeacherListAdapter = new ConsultingHoursExpandableListAdapter(getContext(), classList);
         ClassList.setAdapter(ClassChildTeacherListAdapter);
 
         ClassList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -100,14 +82,14 @@ public class ConsultingHours extends AppCompatActivity {
                     Class parentClass = (Class) parent.getExpandableListAdapter().getGroup(groupAt);
 
                     ExpandableListAdapter teacherChildConsultingHoursListAdapter =
-                            new ConsultingDatesExpandableListAdapter(getApplicationContext(), Arrays.asList(parentClass.getTeacherList().get(childPosition)));
+                            new ConsultingDatesExpandableListAdapter(getContext(), Arrays.asList(parentClass.getTeacherList().get(childPosition)));
                     ClassList.setAdapter(teacherChildConsultingHoursListAdapter);
                     ClassList.expandGroup(0);
                     isItOnChildItem = true;
                     return true;
                 } else {
                     Teacher parentClass = (Teacher) parent.getExpandableListAdapter().getGroup(groupAt);
-                    Intent intent = new Intent(getApplicationContext(), ReserveConsultation.class);
+                    Intent intent = new Intent(getContext(), ReserveConsultation.class);
 
                     //Will change after mock / 1.8
                     FromUntilDates dates = parentClass.getConsultingDates().getDateList().get(childPosition);
@@ -119,7 +101,17 @@ public class ConsultingHours extends AppCompatActivity {
             }
         });
 
-
+        return view;
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        if (isItOnChildItem) {
+//            Intent intent = new Intent(getApplicationContext(), ConsultingHours.class);
+//            startActivity(intent);
+//        } else {
+//            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//            startActivity(intent);
+//        }
+//    }
 }
