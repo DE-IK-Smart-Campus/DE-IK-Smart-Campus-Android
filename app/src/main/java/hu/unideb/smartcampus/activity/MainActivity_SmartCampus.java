@@ -15,11 +15,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.List;
+
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.CalendarFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.ConsultingHoursFragment;
+import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 
 public class MainActivity_SmartCampus extends AppCompatActivity {
     private NavigationView navigationView;
@@ -180,11 +183,23 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+      //  each fragment will have a OnBackPressedListener.
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             return;
         }
 
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        if (fragmentList != null) {
+            //TODO: Perform your logic to pass back press here
+            for (Fragment fragment : fragmentList) {
+                if (fragment instanceof OnBackPressedListener) {
+                    ((OnBackPressedListener) fragment).onBackPressed();
+                }
+            }
+        }
+
+  /*
         boolean shouldLoadHomeFragOnBackPress = true;
         if (shouldLoadHomeFragOnBackPress) {
             if (navItemIndex != 0) {
@@ -194,7 +209,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                 return;
             }
         }
+*/
 
-        super.onBackPressed();
     }
 }
