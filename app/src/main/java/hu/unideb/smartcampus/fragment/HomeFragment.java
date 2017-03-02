@@ -8,8 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements OnBackPressedListener {
 
     public HomeFragment() {
     }
@@ -17,5 +18,10 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

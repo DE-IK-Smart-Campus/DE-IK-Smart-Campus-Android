@@ -1,8 +1,11 @@
 package hu.unideb.smartcampus.fragment;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +26,10 @@ import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.ConsultingHours
 import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.FromUntilDates;
 import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.Teacher;
 import hu.unideb.smartcampus.consultinghours.ReserveConsultation;
+import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 
 
-public class ConsultingHoursFragment extends Fragment {
+public class ConsultingHoursFragment extends Fragment implements OnBackPressedListener {
     boolean isItOnChildItem;
 
     public ConsultingHoursFragment() {
@@ -39,7 +43,7 @@ public class ConsultingHoursFragment extends Fragment {
 
         //Mocked data , we will need some functions here
 
-        //Refactor inc for dates , ugly as ...
+        //Ref*actor inc for dates , ugly as ...
         final ExpandableListView ClassList = (ExpandableListView) view.findViewById(R.id.consulting_hours_ExpandableListView);
         List<Teacher> teacherList = new ArrayList<>();
         List<Teacher> teacherList1 = new ArrayList<>();
@@ -55,7 +59,7 @@ public class ConsultingHoursFragment extends Fragment {
         gcalendar2.set(2017, 02, 29, 18, 00);
         FromUntilDates fromUntilDates = new FromUntilDates(gcalendar.getTime(), gcalendar2.getTime());
         FromUntilDates fromUntilDates2 = new FromUntilDates(gcalendar.getTime(), gcalendar2.getTime());
-        ConsultingHoursObject consultingHours = new ConsultingHoursObject(Arrays.asList(fromUntilDates));
+        final ConsultingHoursObject consultingHours = new ConsultingHoursObject(Arrays.asList(fromUntilDates));
 
         teacherList.add(new Teacher("Várterész Magdolna", consultingHours));
         teacherList.add(new Teacher("Kádek Tamás", consultingHours));
@@ -100,18 +104,16 @@ public class ConsultingHoursFragment extends Fragment {
                 }
             }
         });
-
         return view;
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (isItOnChildItem) {
-//            Intent intent = new Intent(getApplicationContext(), ConsultingHours.class);
-//            startActivity(intent);
-//        } else {
-//            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//            startActivity(intent);
-//        }
-//    }
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = new ConsultingHoursFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame, fragment, "teszt");
+        fragmentTransaction.commitAllowingStateLoss();
+    }
 }

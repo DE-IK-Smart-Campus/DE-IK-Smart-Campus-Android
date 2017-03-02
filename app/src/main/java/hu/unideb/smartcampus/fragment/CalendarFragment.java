@@ -9,8 +9,9 @@ import android.widget.CalendarView;
 import android.widget.Toast;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 
-public class CalendarFragment extends Fragment {
+public class CalendarFragment extends Fragment implements OnBackPressedListener {
 
     CalendarView myCalendar;
 
@@ -27,5 +28,10 @@ public class CalendarFragment extends Fragment {
         myCalendar.setFirstDayOfWeek(2);
 
         return v;
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
