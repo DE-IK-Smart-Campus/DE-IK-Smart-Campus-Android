@@ -2,5 +2,5 @@
 <resources>
     <string name="other">Egyéb</string>
     <string name="aboutUs">Rólunk</string>
-    <string name="loginButtonText">Bejeletkezés</string>
+    <string name="loginButtonText">Bejelentkezés</string>
 </resources>
