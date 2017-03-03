@@ -3,6 +3,7 @@ android:
   components:  
     - build-tools-25.0.2
     - android-25
+    - android-17
     - platform-tools
     - tools
     
@@ -11,7 +12,6 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
     - addon-google_apis-google-19
-    
 
 licenses:
 - '.*'
