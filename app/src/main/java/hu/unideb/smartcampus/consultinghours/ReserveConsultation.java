@@ -23,7 +23,7 @@ public class ReserveConsultation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_consultation);
         Intent intent = getIntent();
-        FromUntilDates fromUntilDates = intent.getExtras().getParcelable(getString(R.string.EXTRA_FROM_UNTIL_DATES));
+        FromUntilDates fromUntilDates = intent.getExtras().getParcelable(getString(R.string.extra_from_until_dates));
         TextView fromUntilDatesTextView = (TextView) findViewById(R.id.selected_consulting_hour_editText);
 
         fromUntilDatesTextView.
