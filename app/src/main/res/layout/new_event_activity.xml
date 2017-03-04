@@ -8,45 +8,36 @@
         android:id="@+id/eventName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/eventDescription"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/eventDescription"
         android:layout_marginTop="39dp"
         android:ems="10"
-        android:hint="Esemény neve"
-        android:inputType="text"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/eventDescription"
-        android:layout_alignStart="@+id/eventDescription">
-
-        <requestFocus />
-    </EditText>
+        android:hint="@string/eventNameHint"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/eventDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/start_date"
+        android:layout_alignStart="@+id/start_date"
+        android:layout_below="@+id/eventName"
         android:layout_marginTop="30dp"
         android:ems="10"
-        android:hint="Esemény leírása"
-        android:inputType="text"
-        android:layout_below="@+id/eventName"
-        android:layout_alignLeft="@+id/start_date"
-        android:layout_alignStart="@+id/start_date">
-
-        <requestFocus />
-    </EditText>
+        android:hint="@string/eventDescriptionHint"
+        android:inputType="text"/>
 
     <EditText
         android:id="@+id/start_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cancelButton"
+        android:layout_alignStart="@+id/cancelButton"
+        android:layout_below="@+id/eventDescription"
         android:layout_marginTop="30dp"
         android:ems="10"
-        android:inputType="date"
-        android:layout_below="@+id/eventDescription"
-        android:layout_alignLeft="@+id/cancelButton"
-        android:layout_alignStart="@+id/cancelButton">
-
-        <requestFocus />
-    </EditText>
+        android:inputType="date"/>
 
     <EditText
         android:id="@+id/start_time"
@@ -58,24 +49,18 @@
         android:layout_toEndOf="@+id/start_date"
         android:layout_toRightOf="@+id/start_date"
         android:ems="10"
-        android:inputType="time">
-
-        <requestFocus />
-    </EditText>
+        android:inputType="time"/>
 
     <EditText
         android:id="@+id/end_time"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time"
         android:layout_alignBaseline="@+id/end_date"
         android:layout_alignBottom="@+id/end_date"
         android:layout_alignLeft="@+id/start_time"
-        android:layout_alignStart="@+id/start_time">
-
-        <requestFocus />
-    </EditText>
+        android:layout_alignStart="@+id/start_time"
+        android:ems="10"
+        android:inputType="time"/>
 
     <EditText
         android:id="@+id/end_date"
@@ -86,44 +71,41 @@
         android:layout_below="@+id/start_date"
         android:layout_marginTop="30dp"
         android:ems="10"
-        android:inputType="date">
-
-        <requestFocus />
-    </EditText>
+        android:inputType="date"/>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mentés"
-        android:layout_marginBottom="35dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/end_time"
-        android:layout_alignStart="@+id/end_time" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/end_time"
+        android:layout_marginBottom="35dp"
+        android:text="@string/saveButton" />
 
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mégse"
-        android:onClick="cancelOnClick"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/button2" />
+        android:layout_alignTop="@+id/saveButton"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:onClick="cancelOnClick"
+        android:text="@string/cancelButtonText" />
 
     <CheckBox
         android:id="@+id/allDayEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:text="Egész napos esemény"
-        android:layout_below="@+id/end_date"
-        android:layout_alignLeft="@+id/end_date"
-        android:layout_alignStart="@+id/end_date"
-        android:layout_alignRight="@+id/end_date"
         android:layout_alignEnd="@+id/end_date"
-        android:onClick="allDayEventOnClick"/>
+        android:layout_alignLeft="@+id/end_date"
+        android:layout_alignRight="@+id/end_date"
+        android:layout_alignStart="@+id/end_date"
+        android:layout_below="@+id/end_date"
+        android:layout_marginTop="17dp"
+        android:onClick="allDayEventOnClick"
+        android:text="@string/allDayEventText" />
 
 </RelativeLayout>

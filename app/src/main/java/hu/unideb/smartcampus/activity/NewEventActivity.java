@@ -8,12 +8,16 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import hu.unideb.smartcampus.R;
+
+import static android.R.attr.y;
 
 
 public class NewEventActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,7 +49,17 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
         findViewsById();
 
-        startDate.setText(date);
+//        String y = getIntent().getStringExtra("tess");
+
+
+        long aa = 1231334;
+
+        Date a = new Date(getIntent().getExtras().getLong("tess"));
+
+        String asd = dateFormatter.format(a);
+
+        Toast.makeText(getApplicationContext(),asd ,Toast.LENGTH_LONG).show();
+        startDate.setText(asd);
         startTime.setText(time);
         endDate.setText(date);
         endTime.setText(time);

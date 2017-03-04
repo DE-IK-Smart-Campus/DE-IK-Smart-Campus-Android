@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="loginButtonText">Bejelentkezés</string>
+    <string name="eventDescriptionHint">Esemény leírása</string>
+    <string name="saveButton">Mentés</string>
+    <string name="cancelButtonText">Mégse</string>
+    <string name="allDayEventText">Egész napos esemény</string>
 </resources>

@@ -29,6 +29,11 @@
     <string name="usernamePasswordWrong">Felhasználónév vagy jelszó helytelen!</string>
     <string name="loginSucces">"Sikeresen bejeletkezve! "</string>
     <string name="EXTRA_FROM_UNTIL_DATES">EXTRA_FROM_UNTIL_DATES</string>
+    <string name="eventNameHint">Esemény neve</string>
+    <string name="eventDescriptionHint">Esemény leírása</string>
+    <string name="saveButton">Mentés</string>
+    <string name="cancelButtonText">Mégse</string>
+    <string name="allDayEventText">Egész napos esemény</string>
 
 
 </resources>

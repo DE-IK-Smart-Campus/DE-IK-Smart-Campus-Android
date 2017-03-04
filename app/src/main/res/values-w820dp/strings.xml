@@ -3,4 +3,8 @@
     <string name="other">Egyéb</string>
     <string name="aboutUs">Rólunk</string>
     <string name="loginButtonText">Bejelentkezés</string>
+    <string name="eventDescriptionHint">Esemény leírása</string>
+    <string name="saveButton">Mentés</string>
+    <string name="cancelButtonText">Mégse</string>
+    <string name="allDayEventText">Egész napos esemény</string>
 </resources>
