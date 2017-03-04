@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }).start();
 
+            startActivity(intent);
 
         }
     }
