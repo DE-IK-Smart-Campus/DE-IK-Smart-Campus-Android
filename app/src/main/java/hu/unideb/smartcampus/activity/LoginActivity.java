@@ -21,16 +21,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
       private void login() {
-        setupVariables();
-        if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
-        } else if (!username.getText().toString().equals("admin") || !password.getText().toString().equals("admin")) {
-            Toast.makeText(getApplicationContext(), R.string.usernamePasswordWrong, Toast.LENGTH_SHORT).show();
-        } else if (username.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
-            Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MainActivity_SmartCampus.class);
-            startActivity(intent);
-        }
+//        setupVariables();
+//        if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
+//            Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
+//        } else if (!username.getText().toString().equals("admin") || !password.getText().toString().equals("admin")) {
+//            Toast.makeText(getApplicationContext(), R.string.usernamePasswordWrong, Toast.LENGTH_SHORT).show();
+//        } else if (username.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
+//            Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
+//
+//
+//        }
+          Intent intent = new Intent(this, MainActivity_SmartCampus.class);
+          startActivity(intent);
     }
 
     public void loginOnClick(View v) {

@@ -1,17 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
 
     <CalendarView
         android:id="@+id/calendar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:dateTextAppearance="@style/TextAppearance.AppCompat"
-        android:focusedMonthDateColor="@color/colorPrimaryDark"
-        android:selectedWeekBackgroundColor="@color/colorAccent"
         style="@android:style/Widget.CalendarView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_width="match_parent"
+        android:layout_height="290dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:focusedMonthDateColor="@color/Black"
+        android:selectedWeekBackgroundColor="@color/colorAccent"
+        android:unfocusedMonthDateColor="@color/colorPrimary"
+        android:weekNumberColor="@color/Black"
+        android:weekSeparatorLineColor="@color/Black" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="155dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/calendar">
+
+        <ListView
+            android:id="@+id/calendar_event_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/new_event_add"
+            style="@style/Widget.Design.FloatingActionButton"
+            android:layout_width="53dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|end"
+            android:clickable="true"
+            app:elevation="0dp"
+            app:fabSize="normal"
+            app:rippleColor="@color/colorAccent"
+            app:srcCompat="@android:drawable/ic_input_add" />
+    </FrameLayout>
+
 </RelativeLayout>

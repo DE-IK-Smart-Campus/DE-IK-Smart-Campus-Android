@@ -11,6 +11,7 @@
     <string name="nav_consultingHours_name">Fogadóórák</string>
     <string name="nav_chat_name">Beszélgetés</string>
     <string name="nav_about_us_name">Rólunk</string>
+    <string name="new_event_add">Új Esemény</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Kezdőképernyő</item>

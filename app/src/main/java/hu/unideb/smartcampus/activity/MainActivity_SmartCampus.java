@@ -198,18 +198,5 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                 }
             }
         }
-
-  /*
-        boolean shouldLoadHomeFragOnBackPress = true;
-        if (shouldLoadHomeFragOnBackPress) {
-            if (navItemIndex != 0) {
-                navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
-                loadHomeFragment();
-                return;
-            }
-        }
-*/
-
     }
 }
