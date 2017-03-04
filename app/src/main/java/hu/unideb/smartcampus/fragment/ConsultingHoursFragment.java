@@ -98,7 +98,7 @@ public class ConsultingHoursFragment extends Fragment implements OnBackPressedLi
                     //Will change after mock / 1.8
                     FromUntilDates dates = parentClass.getConsultingDates().getDateList().get(childPosition);
                     FromUntilDates fromUntilDates = new FromUntilDates(dates.getFrom(), dates.getUntil());
-                    intent.putExtra(getString(R.string.EXTRA_FROM_UNTIL_DATES), fromUntilDates);
+                    intent.putExtra(getString(R.string.extra_from_until_dates), fromUntilDates);
                     startActivity(intent);
                     return true;
                 }
