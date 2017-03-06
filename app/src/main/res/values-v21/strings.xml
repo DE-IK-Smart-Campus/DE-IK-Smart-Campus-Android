@@ -5,4 +5,6 @@
     <string name="saveButton">Mentés</string>
     <string name="cancelButtonText">Mégse</string>
     <string name="allDayEventText">Egész napos esemény</string>
+    <string name="textViewStart">Kezdete:</string>
+    <string name="textViewEnd">Befejezés:</string>
 </resources>

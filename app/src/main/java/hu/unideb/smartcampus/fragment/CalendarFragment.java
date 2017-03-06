@@ -9,10 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.NewEventActivity;
@@ -21,8 +25,7 @@ import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 public class CalendarFragment extends Fragment implements OnBackPressedListener {
 
     CalendarView myCalendar;
-    GregorianCalendar Date;
-    FloatingActionButton fab;
+    FloatingActionButton newEventFab;
 
     public CalendarFragment() {
     }
@@ -39,50 +42,58 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_calendar, container, false);
+        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        fab = (FloatingActionButton) v.findViewById(R.id.new_event_add);
+        CalendarInitialize(view);
 
-        c(v);
+        newEventFab = (FloatingActionButton) view.findViewById(R.id.new_event_add);
 
-        return v;
+        GregorianCalendar as = new GregorianCalendar();
+        as.set(2017,3-1,6);
+
+
+        GregorianCalendar ad = new GregorianCalendar(TimeZone.getTimeZone("Europe/Budapest"));
+        ad.setTime(Calendar.getInstance().getTime());
+
+        ListView a = (ListView) view.findViewById(R.id.calendar_event_listview);
+        if(ad.getTime().toString().equals(as.getTime().toString())) {
+
+            MyAdapter aa = new MyAdapter(getContext(), generateData());
+
+            a.setAdapter(aa);
+        }
+
+        return view;
     }
 
-    public void c(View v) {
+    public void CalendarInitialize(View v) {
         myCalendar = (CalendarView) v.findViewById(R.id.calendar);
 
         myCalendar.setFirstDayOfWeek(2);
-        GregorianCalendar minDate = new GregorianCalendar();
-        minDate.set(2000, 0, 0);
 
-        myCalendar.setMinDate(minDate.getTimeInMillis());
+        GregorianCalendar ad = new GregorianCalendar(TimeZone.getTimeZone("Europe/Budapest"));
+        ad.setTime(Calendar.getInstance().getTime());
+
+        GregorianCalendar ac = new GregorianCalendar();
+        ac.set(2017,3-1,4,0,0,0);
+
 
         myCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView calendarView, int year, int mounth, int day) {
-                int u = mounth + 1;
-                Date = new GregorianCalendar();
-                Date.set(year, u, day);
+                GregorianCalendar selectedDate = new GregorianCalendar();
 
-                GregorianCalendar asd = new GregorianCalendar(year, mounth, day);
+                selectedDate.set(year,mounth,day,0,0,0);
 
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent i = new Intent(getContext(), NewEventActivity.class);
-
-                        i.putExtra("tess", asd.getTimeInMillis());
-
-                        startActivity(i);
-                    }
+                newEventFab.setOnClickListener(view -> {
+                    Intent i = new Intent(getContext(), NewEventActivity.class);
+                    i.putExtra("selectedDate", selectedDate.getTimeInMillis());
+                    startActivity(i);
                 });
 
-                GregorianCalendar test = new GregorianCalendar();
-
-                test.set(2017, 3, 4);
                 ListView a = (ListView) v.findViewById(R.id.calendar_event_listview);
 
-                if (Date.equals(test)) {
+                if (selectedDate.getTime().toString().equals(ac.getTime().toString())) {
 
                     MyAdapter aa = new MyAdapter(getContext(), generateData());
 
@@ -93,6 +104,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
             }
         });
     }
+
 
     @Override
     public void onBackPressed() {

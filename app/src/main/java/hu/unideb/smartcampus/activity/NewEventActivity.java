@@ -2,11 +2,13 @@ package hu.unideb.smartcampus.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,8 +18,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import hu.unideb.smartcampus.R;
-
-import static android.R.attr.y;
 
 
 public class NewEventActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,28 +44,23 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         dateFormatter = new SimpleDateFormat("yyyy.MMM dd.,EEE", Locale.getDefault());
         timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
-        String date = dateFormatter.format(Calendar.getInstance().getTime());
         String time = timeFormatter.format(Calendar.getInstance().getTime());
 
         findViewsById();
 
-//        String y = getIntent().getStringExtra("tess");
-
-
-        long aa = 1231334;
-
-        Date a = new Date(getIntent().getExtras().getLong("tess"));
+        Date a = new Date(getIntent().getExtras().getLong("selectedDate"));
 
         String asd = dateFormatter.format(a);
 
-        Toast.makeText(getApplicationContext(),asd ,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), asd, Toast.LENGTH_LONG).show();
         startDate.setText(asd);
         startTime.setText(time);
-        endDate.setText(date);
+        endDate.setText(asd);
         endTime.setText(time);
 
         setDateTimeField();
         setTimeField();
+
     }
 
     private void findViewsById() {
@@ -88,6 +83,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void setDateTimeField() {
+        t();
         startDate.setOnClickListener(this);
         endDate.setOnClickListener(this);
 
@@ -96,6 +92,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
             startDate.setText(dateFormatter.format(newDate.getTime()));
+            endDate.setText(startDate.getText());
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         toDatePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
@@ -103,6 +100,8 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
             newDate.set(year, monthOfYear, dayOfMonth);
             endDate.setText(dateFormatter.format(newDate.getTime()));
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+
     }
 
     private void setTimeField() {
@@ -138,19 +137,42 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void cancelOnClick(View view) {
-        super.onBackPressed();
+    public void t() {
+        CheckBox ce = (CheckBox) findViewById(R.id.allDayEvent);
+
+
+
+        ce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                          @Override
+                                          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                              if (ce.isChecked()) {
+                                                  startTime.setVisibility(View.INVISIBLE);
+                                                  endTime.setVisibility(View.INVISIBLE);
+                                                  endDate.setText(startDate.getText());
+                                                  endDate.setFocusable(false);
+                                                  endDate.setEnabled(false);
+                                                  endDate.setCursorVisible(false);
+                                                  endDate.setKeyListener(null);
+                                                  endDate.setInputType(InputType.TYPE_NULL);
+//                                                  endDate.setBackgroundColor(Color.TRANSPARENT);
+
+                                              } else if (!ce.isChecked()) {
+                                                  startTime.setVisibility(View.VISIBLE);
+                                                  endTime.setVisibility(View.VISIBLE);
+//                                                 endDate.setFocusable(false);
+                                                  endDate.setEnabled(true);
+                                                  endDate.setCursorVisible(true);
+//                                                  endDate.setKeyListener(true);
+                                                  endDate.setInputType(InputType.TYPE_DATETIME_VARIATION_DATE);
+                                              }
+
+                                          }
+                                      }
+        );
     }
 
-    public void allDayEventOnClick(View view) {
-        CheckBox ce = (CheckBox) findViewById(R.id.allDayEvent);
-        if (ce.isChecked()) {
-            startTime.setVisibility(View.INVISIBLE);
-            endTime.setVisibility(View.INVISIBLE);
-        } else if (!ce.isChecked()) {
-            startTime.setVisibility(View.VISIBLE);
-            endTime.setVisibility(View.VISIBLE);
-        }
+    public void cancelOnClick(View view) {
+        super.onBackPressed();
     }
 
 }
