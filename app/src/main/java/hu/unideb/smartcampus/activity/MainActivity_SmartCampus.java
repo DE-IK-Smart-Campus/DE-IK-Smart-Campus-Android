@@ -25,7 +25,7 @@ import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.xmpp.Connection;
-import hu.unideb.smartcampus.xmpp.listeners.ConsultingHoursHandler;
+import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 
 public class MainActivity_SmartCampus extends AppCompatActivity {
     private NavigationView navigationView;
@@ -103,7 +103,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:
-                    Connection.getInstance().getAdminChat().addMessageListener(new ConsultingHoursHandler(getSupportFragmentManager()));
+                    Connection.getInstance().getAdminChat().addMessageListener(new OfficeHourHandler(getSupportFragmentManager()));
                     break;
 
                 case 3:

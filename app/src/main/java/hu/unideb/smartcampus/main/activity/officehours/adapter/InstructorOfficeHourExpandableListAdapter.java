@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.adapter;
+package hu.unideb.smartcampus.main.activity.officehours.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -12,19 +12,21 @@ import java.text.DateFormat;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.xmpp.pojos.CHFromToDatesPojo;
-import hu.unideb.smartcampus.xmpp.pojos.CHInstructorPojo;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.FromToDatesInLong;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.Instructor;
 
 /**
+ * @see hu.unideb.smartcampus.main.activity.officehours.fragment.OfficeHourFragment
+ * <p>
  * Created by Headswitcher on 2017. 02. 24..
  */
 
-public class CHInstructorExpandableListAdapter extends BaseExpandableListAdapter {
+public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableListAdapter {
 
-    List<CHInstructorPojo> instructor;
-    Context context;
+    private List<Instructor> instructor;
+    private Context context;
 
-    public CHInstructorExpandableListAdapter(Context context, List<CHInstructorPojo> instructor) {
+    public InstructorOfficeHourExpandableListAdapter(Context context, List<Instructor> instructor) {
         this.instructor = instructor;
         this.context = context;
     }
@@ -85,7 +87,7 @@ public class CHInstructorExpandableListAdapter extends BaseExpandableListAdapter
     public View getChildView(int instructorAt, int consultingHoursAt, boolean isExpanded, View view, ViewGroup viewGroup) {
 
         //will change with 1.8 TODO
-        final CHFromToDatesPojo dates = instructor.get(instructorAt).getConsultingHoursList().get(consultingHoursAt).getFromToDates();
+        final FromToDatesInLong dates = instructor.get(instructorAt).getConsultingHoursList().get(consultingHoursAt).getFromToDatesInLong();
         final String dateDisplayName = DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getFrom())
                 + "  -  "
                 + DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getTo());

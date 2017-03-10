@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.adapter;
+package hu.unideb.smartcampus.main.activity.officehours.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -11,18 +11,20 @@ import android.widget.TextView;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.xmpp.pojos.CHSubjectPojo;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.Subject;
 
 /**
+ * @see SubjectInstructorExpandableListAdapter
+ *
  * Created by Headswitcher on 2017. 02. 24..
  */
 
-public class CHExpandableListAdapter extends BaseExpandableListAdapter {
+public class SubjectInstructorExpandableListAdapter extends BaseExpandableListAdapter {
 
-    List<CHSubjectPojo> subjectList;
-    Context context;
+    private List<Subject> subjectList;
+    private Context context;
 
-    public CHExpandableListAdapter(Context context, List<CHSubjectPojo> subjectList) {
+    public SubjectInstructorExpandableListAdapter(Context context, List<Subject> subjectList) {
         this.subjectList = subjectList;
         this.context = context;
     }

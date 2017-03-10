@@ -20,6 +20,7 @@ import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.xmpp.listeners.AdminListen;
 
 import static android.content.ContentValues.TAG;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOGTAG;
 
 /**
  * Created by Erdei Krisztián on 2017.03.03..
@@ -27,34 +28,11 @@ import static android.content.ContentValues.TAG;
 
 public class Connection {
 
-    public void createLoadingDialog(String toAdminMsg, FragmentManager fragmentManager, Bundle bundle) throws SmackException.NotConnectedException {
-        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag("DIALOG");
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (loadingDialogFragment != null) {
-            fragmentTransaction.remove(loadingDialogFragment);
-        } else {
-            loadingDialogFragment = new LoadingDialogFragment();
+    public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu";
+    public static final String HOSTNAME= "wt2.inf.unideb.hu";
 
-        }
-        //Bundle null TODO gondoldás
-        if (loadingDialogFragment.getArguments() != null) {
-            loadingDialogFragment.getArguments().putAll(bundle);
-        } else {
-            loadingDialogFragment.setArguments(bundle);
-        }
-        fragmentTransaction.commitNow();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame, loadingDialogFragment, "DIALOG");
-        fragmentTransaction.addToBackStack("DIALOG");
-        fragmentTransaction.commit();
-        Log.d(TAG, "Sent MSG: " + toAdminMsg);
-        adminChat.sendMessage(new Message(adminJID, toAdminMsg));
-    }
-
-    final String adminJID = "smartcampus@wt2.inf.unideb.hu"; // TODO
+    private final String adminJID = ADMINJID;
     private static Connection instance = null;
-
     private XMPPBOSHConnection xmppConnection;
     private Chat adminChat;
     private String userJID;
@@ -119,6 +97,35 @@ public class Connection {
         }
     }
 
+    public void createLoadingDialog(String toAdminMsg, FragmentManager fragmentManager, Bundle bundle) throws SmackException.NotConnectedException {
+        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag("DIALOGTAG");
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (loadingDialogFragment != null) {
+            fragmentTransaction.remove(loadingDialogFragment);
+        } else {
+            loadingDialogFragment = new LoadingDialogFragment();
+
+        }
+
+        if (bundle == null) {
+            throw new NullPointerException("Bundle was null");
+        }
+
+        if (loadingDialogFragment.getArguments() != null) {
+            loadingDialogFragment.getArguments().putAll(bundle);
+        } else {
+            loadingDialogFragment.setArguments(bundle);
+        }
+
+        fragmentTransaction.commitNow();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOGTAG);
+        fragmentTransaction.addToBackStack(DIALOGTAG);
+        fragmentTransaction.commit();
+        Log.d(TAG, "Sent MSG: " + toAdminMsg);
+        adminChat.sendMessage(new Message(adminJID, toAdminMsg));
+    }
 
     public String getUserJID() {
         return userJID;

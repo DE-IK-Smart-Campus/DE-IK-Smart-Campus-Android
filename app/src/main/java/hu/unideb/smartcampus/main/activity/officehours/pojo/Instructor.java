@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.xmpp.pojos;
+package hu.unideb.smartcampus.main.activity.officehours.pojo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,27 +6,36 @@ import android.os.Parcelable;
 import java.util.List;
 
 /**
+ * Pojo class
+ * <p>
+ * The university will have instructors this the pojo class for it.
+ * <p>
+ * The Instructor will have an {@code Long instructorId , String name} and a list of {@code consultingHoursList}
+ *
+ * @see OfficeHour
+ * @see Parcelable
+ * <p>
  * Created by Headswitcher on 2017. 03. 08..
  */
 
-public class CHInstructorPojo implements Parcelable {
+public class Instructor implements Parcelable {
     private Long instructorId;
     private String name;
-    private List<CHConsultingHoursPojo> consultingHoursList;
+    private List<OfficeHour> consultingHoursList;
 
-    public CHInstructorPojo() {
+    public Instructor() {
     }
 
-    public CHInstructorPojo(Long instructorId, String name, List<CHConsultingHoursPojo> consultingHoursList) {
+    public Instructor(Long instructorId, String name, List<OfficeHour> consultingHoursList) {
         this.instructorId = instructorId;
         this.name = name;
         this.consultingHoursList = consultingHoursList;
     }
 
-    protected CHInstructorPojo(Parcel in) {
+    protected Instructor(Parcel in) {
         instructorId = in.readLong();
         name = in.readString();
-        consultingHoursList = in.createTypedArrayList(CHConsultingHoursPojo.CREATOR);
+        consultingHoursList = in.createTypedArrayList(OfficeHour.CREATOR);
     }
 
     @Override
@@ -41,15 +50,15 @@ public class CHInstructorPojo implements Parcelable {
         return 0;
     }
 
-    public static final Creator<CHInstructorPojo> CREATOR = new Creator<CHInstructorPojo>() {
+    public static final Creator<Instructor> CREATOR = new Creator<Instructor>() {
         @Override
-        public CHInstructorPojo createFromParcel(Parcel in) {
-            return new CHInstructorPojo(in);
+        public Instructor createFromParcel(Parcel in) {
+            return new Instructor(in);
         }
 
         @Override
-        public CHInstructorPojo[] newArray(int size) {
-            return new CHInstructorPojo[size];
+        public Instructor[] newArray(int size) {
+            return new Instructor[size];
         }
     };
 
@@ -69,11 +78,11 @@ public class CHInstructorPojo implements Parcelable {
         this.name = name;
     }
 
-    public List<CHConsultingHoursPojo> getConsultingHoursList() {
+    public List<OfficeHour> getConsultingHoursList() {
         return consultingHoursList;
     }
 
-    public void setConsultingHoursList(List<CHConsultingHoursPojo> consultingHoursList) {
+    public void setConsultingHoursList(List<OfficeHour> consultingHoursList) {
         this.consultingHoursList = consultingHoursList;
     }
 }

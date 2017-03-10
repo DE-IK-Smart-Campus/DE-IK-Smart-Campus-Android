@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.chat;
+package hu.unideb.smartcampus.main.activity.chat;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

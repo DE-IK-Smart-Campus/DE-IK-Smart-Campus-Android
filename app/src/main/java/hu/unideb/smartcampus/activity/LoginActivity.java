@@ -13,6 +13,8 @@ import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.xmpp.Connection;
 
+import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
+
 public class LoginActivity extends AppCompatActivity {
 
     private Connection connection;
@@ -40,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 BOSHConfiguration config = BOSHConfiguration.builder()
                         .setUsernameAndPassword("testuser", "admin")
-                        .setServiceName("wt2.inf.unideb.hu")
-                        .setHost("wt2.inf.unideb.hu")
+                        .setServiceName(HOSTNAME)
+                        .setHost(HOSTNAME)
                         .setPort(80)
                         .setFile("/http-bind/")
                         .build();

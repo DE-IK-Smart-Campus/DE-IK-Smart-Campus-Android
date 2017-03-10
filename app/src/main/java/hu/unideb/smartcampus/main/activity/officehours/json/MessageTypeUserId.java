@@ -1,8 +1,5 @@
-package hu.unideb.smartcampus.xmpp.pojos;
+package hu.unideb.smartcampus.main.activity.officehours.json;
 
-/**
- * Created by Headswitcher on 2017. 03. 10..
- */
 
 public class MessageTypeUserId {
 

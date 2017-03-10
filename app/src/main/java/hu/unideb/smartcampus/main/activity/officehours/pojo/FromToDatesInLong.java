@@ -1,26 +1,30 @@
-package hu.unideb.smartcampus.xmpp.pojos;
+package hu.unideb.smartcampus.main.activity.officehours.pojo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
+ * Pojo class
+ * <p>
+ * This class will have two "dates" ({@code Long from , Long to}) for the Office hours
+ * <p>
  * Created by Headswitcher on 2017. 03. 10..
  */
 
-public class CHFromToDatesPojo implements Parcelable {
+public class FromToDatesInLong implements Parcelable {
 
     private Long from;
     private Long to;
 
-    public CHFromToDatesPojo() {
+    public FromToDatesInLong() {
     }
 
-    public CHFromToDatesPojo(Long from, Long to) {
+    public FromToDatesInLong(Long from, Long to) {
         this.from = from;
         this.to = to;
     }
 
-    protected CHFromToDatesPojo(Parcel in) {
+    protected FromToDatesInLong(Parcel in) {
         from = in.readLong();
         to = in.readLong();
     }
@@ -36,15 +40,15 @@ public class CHFromToDatesPojo implements Parcelable {
         return 0;
     }
 
-    public static final Creator<CHFromToDatesPojo> CREATOR = new Creator<CHFromToDatesPojo>() {
+    public static final Creator<FromToDatesInLong> CREATOR = new Creator<FromToDatesInLong>() {
         @Override
-        public CHFromToDatesPojo createFromParcel(Parcel in) {
-            return new CHFromToDatesPojo(in);
+        public FromToDatesInLong createFromParcel(Parcel in) {
+            return new FromToDatesInLong(in);
         }
 
         @Override
-        public CHFromToDatesPojo[] newArray(int size) {
-            return new CHFromToDatesPojo[size];
+        public FromToDatesInLong[] newArray(int size) {
+            return new FromToDatesInLong[size];
         }
     };
 
