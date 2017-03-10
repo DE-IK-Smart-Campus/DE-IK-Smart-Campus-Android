@@ -1,16 +1,25 @@
 package hu.unideb.smartcampus.xmpp;
 
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.chat.*;
+import org.jivesoftware.smack.bosh.BOSHConfiguration;
+import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.chat.Chat;
+import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
 import java.io.IOException;
 
+import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.xmpp.listeners.AdminListen;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Erdei Krisztián on 2017.03.03..
@@ -18,10 +27,37 @@ import hu.unideb.smartcampus.xmpp.listeners.AdminListen;
 
 public class Connection {
 
+    public void createLoadingDialog(String toAdminMsg, FragmentManager fragmentManager, Bundle bundle) throws SmackException.NotConnectedException {
+        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag("DIALOG");
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (loadingDialogFragment != null) {
+            fragmentTransaction.remove(loadingDialogFragment);
+        } else {
+            loadingDialogFragment = new LoadingDialogFragment();
+
+        }
+        //Bundle null TODO gondoldás
+        if (loadingDialogFragment.getArguments() != null) {
+            loadingDialogFragment.getArguments().putAll(bundle);
+        } else {
+            loadingDialogFragment.setArguments(bundle);
+        }
+        fragmentTransaction.commitNow();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame, loadingDialogFragment, "DIALOG");
+        fragmentTransaction.addToBackStack("DIALOG");
+        fragmentTransaction.commit();
+        Log.d(TAG, "Sent MSG: " + toAdminMsg);
+        adminChat.sendMessage(new Message(adminJID, toAdminMsg));
+    }
+
+    final String adminJID = "smartcampus@wt2.inf.unideb.hu"; // TODO
     private static Connection instance = null;
 
-    private XMPPTCPConnection xmpptcpConnection;
+    private XMPPBOSHConnection xmppConnection;
     private Chat adminChat;
+    private String userJID;
 
 
     protected Connection() {
@@ -31,31 +67,31 @@ public class Connection {
 
         if (instance == null) {
             instance = new Connection();
-
-            //TODO exception handling
         }
         return instance;
     }
 
-    public XMPPTCPConnection getXmpptcpConnection() {
-        return xmpptcpConnection;
+    public XMPPBOSHConnection getXmppConnection() {
+        return xmppConnection;
     }
 
-    public void setXMPPTCPConnection(XMPPTCPConnectionConfiguration config) {
+    public void setXMPPTCPConnection(BOSHConfiguration config) {
 
-        setLocalXmpptcpConnection(new XMPPTCPConnection(config));
+        setLocalXmpptcpConnection(new XMPPBOSHConnection(config));
 
         // Will refactor TODO;
         try {
-            xmpptcpConnection.connect();
-            xmpptcpConnection.login();
-            ChatManager chatManager = ChatManager.getInstanceFor(xmpptcpConnection);
-            Message uzi = new Message("smartcampus@192.168.1.11");
-            uzi.setBody("Kommunikáció kialakítása ");
-            adminChat = chatManager.createChat("smartcampus@192.168.1.11"); //TODO
+            xmppConnection.connect();
+            xmppConnection.login();
+            userJID = config.getUsername().toString();
+            ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
+            Message uzi = new Message(adminJID);
+            uzi.setBody("Kommunikáció kialakítása");
+            adminChat = chatManager.createChat(adminJID); //TODO
+
 
             try {
-              adminChat.sendMessage(uzi);
+                adminChat.sendMessage(uzi);
             } catch (SmackException.NotConnectedException e) {
                 e.printStackTrace();
             }
@@ -69,18 +105,30 @@ public class Connection {
         }
     }
 
-    private void setLocalXmpptcpConnection(XMPPTCPConnection xmpptcpConnection) {
-        this.xmpptcpConnection = xmpptcpConnection;
+    private void setLocalXmpptcpConnection(XMPPBOSHConnection xmpptcpConnection) {
+        this.xmppConnection = xmpptcpConnection;
     }
 
     public Chat getAdminChat() {
-       if (adminChat != null)
+        if (adminChat != null)
 
-        return adminChat;
+            return adminChat;
 
         else {
-           //TODO
-           throw new RuntimeException();
-       }
+            throw new RuntimeException();
+        }
+    }
+
+
+    public String getUserJID() {
+        return userJID;
+    }
+
+    public void setUserJID(String userJID) {
+        this.userJID = userJID;
+    }
+
+    public String getAdminJID() {
+        return adminJID;
     }
 }

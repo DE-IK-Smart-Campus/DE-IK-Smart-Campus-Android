@@ -8,16 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.jivesoftware.smack.AbstractXMPPConnection;
-import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.chat.Chat;
-import org.jivesoftware.smack.chat.ChatManager;
-import org.jivesoftware.smack.chat.ChatManagerListener;
-import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
-
-import java.io.IOException;
+import org.jivesoftware.smack.bosh.BOSHConfiguration;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -36,32 +27,38 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         setupVariables();
-        if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
+     /*   if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else if (!username.getText().toString().equals("admin") || !password.getText().toString().equals("admin")) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordWrong, Toast.LENGTH_SHORT).show();
         } else if (username.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
-            Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MainActivity_SmartCampus.class);
+       */
+        Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MainActivity_SmartCampus.class);
 
-            new Thread(new Runnable() {
-                public void run() {
-                    XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
-                            .setUsernameAndPassword("testuser", "admin")
-                            .setServiceName("192.168.1.11")
-                            .setHost("192.168.1.11")
-                            .setPort(5222)
-                            .build();
-                    connection = Connection.getInstance();
-                    connection.setXMPPTCPConnection(config);
-                    connection.getXmpptcpConnection().isConnected();
+        new Thread(new Runnable() {
+            public void run() {
+                BOSHConfiguration config = BOSHConfiguration.builder()
+                        .setUsernameAndPassword("testuser", "admin")
+                        .setServiceName("wt2.inf.unideb.hu")
+                        .setHost("wt2.inf.unideb.hu")
+                        .setPort(80)
+                        .setFile("/http-bind/")
+                        .build();
+                connection = Connection.getInstance();
+                connection.setXMPPTCPConnection(config);
+                if (connection.getXmppConnection().isConnected()) {
+                    Log.d("Conected:", "CONNECTED");
+                } else {
+                    Log.e("Conected:", "NOT CONNECTED");
                 }
+            }
 
-            }).start();
+        }).start();
 
-            startActivity(intent);
+        startActivity(intent);
 
-        }
+        //     }
     }
 
     public void loginOnClick(View v) {

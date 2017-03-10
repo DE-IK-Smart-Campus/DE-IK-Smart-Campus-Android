@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,22 +14,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.jivesoftware.smack.SmackException;
+
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.CalendarFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
-import hu.unideb.smartcampus.fragment.ConsultingHoursFragment;
+import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
+import hu.unideb.smartcampus.xmpp.Connection;
+import hu.unideb.smartcampus.xmpp.listeners.ConsultingHoursHandler;
 
 public class MainActivity_SmartCampus extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private Toolbar toolbar;
-
     public static int navItemIndex = 0;
-
     private static final String TAG_HOME = "home";
     private static final String TAG_CALENDAR = "calendar";
     private static final String TAG_OFFICEHOURS = "officeHours";
@@ -38,13 +39,15 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     public static String CURRENT_TAG = TAG_HOME;
 
     private String[] activityTitles;
-
     private Handler mHandler;
+
+    public static LoadingDialogFragment loadingDialogFragment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadingDialogFragment = new LoadingDialogFragment();
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -73,12 +76,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                Fragment fragment = getHomeFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();
+                setListenerForSelectedMenu();
             }
         };
 
@@ -91,22 +89,35 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
-    private Fragment getHomeFragment() {
-        switch (navItemIndex) {
-            case 0:
-                HomeFragment homeFragment = new HomeFragment();
-                return homeFragment;
-            case 1:
-                CalendarFragment calendarFragment = new CalendarFragment();
-                return calendarFragment;
-            case 2:
-                ConsultingHoursFragment consultingHoursFragment = new ConsultingHoursFragment();
-                return consultingHoursFragment;
-            case 3:
-                ChatFragment chatFragment = new ChatFragment();
-                return chatFragment;
-            default:
-                return new HomeFragment();
+    private void setListenerForSelectedMenu() {
+        try {
+
+
+            switch (navItemIndex) {
+
+                case 0:
+                    HomeFragment homeFragment = new HomeFragment();
+                    break;
+                case 1:
+                    CalendarFragment calendarFragment = new CalendarFragment();
+                    //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
+                    break;
+                case 2:
+                    Connection.getInstance().getAdminChat().addMessageListener(new ConsultingHoursHandler(getSupportFragmentManager()));
+                    break;
+
+                case 3:
+                    ChatFragment chatFragment = new ChatFragment();
+                    //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
+                    break;
+                default:
+                    break;
+            }
+
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -183,7 +194,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-      //  each fragment will have a OnBackPressedListener.
+        //  each fragment will have a OnBackPressedListener.
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             return;

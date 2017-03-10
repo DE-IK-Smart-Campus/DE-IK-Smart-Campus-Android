@@ -52,7 +52,8 @@ dependencies {
     compile "org.igniterealtime.smack:smack-im:4.1.0"
     // Optional for XMPP extensions support
     compile "org.igniterealtime.smack:smack-extensions:4.1.0"
-
+    compile group: 'org.igniterealtime.smack', name: 'smack-bosh', version: '4.1.0'
+    compile 'org.apache.commons:commons-lang3:3.5'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.7'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.8.7'
     compile 'com.android.support:appcompat-v7:25.2.0'

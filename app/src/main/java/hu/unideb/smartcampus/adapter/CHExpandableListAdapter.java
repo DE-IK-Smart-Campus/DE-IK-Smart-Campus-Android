@@ -11,40 +11,40 @@ import android.widget.TextView;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.Class;
+import hu.unideb.smartcampus.xmpp.pojos.CHSubjectPojo;
 
 /**
  * Created by Headswitcher on 2017. 02. 24..
  */
 
-public class ConsultingHoursExpandableListAdapter extends BaseExpandableListAdapter {
+public class CHExpandableListAdapter extends BaseExpandableListAdapter {
 
-    List<Class> classList;
+    List<CHSubjectPojo> subjectList;
     Context context;
 
-    public ConsultingHoursExpandableListAdapter(Context context, List<Class> classList) {
-        this.classList = classList;
+    public CHExpandableListAdapter(Context context, List<CHSubjectPojo> subjectList) {
+        this.subjectList = subjectList;
         this.context = context;
     }
 
     @Override
     public int getGroupCount() {
-        return classList.size();
+        return subjectList.size();
     }
 
     @Override
     public int getChildrenCount(int classAt) {
-        return classList.get(classAt).getTeacherList().size();
+        return subjectList.get(classAt).getInstructors().size();
     }
 
     @Override
     public Object getGroup(int at) {
-        return classList.get(at);
+        return subjectList.get(at);
     }
 
     @Override
     public Object getChild(int classAt, int teacherAt) {
-        return classList.get(classAt).getTeacherList().get(teacherAt);
+        return subjectList.get(classAt).getInstructors().get(teacherAt);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ConsultingHoursExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public View getGroupView(int classAt, boolean isExpanded, View view, ViewGroup parent) {
-        String headerTitle = classList.get(classAt).getName();
+        String headerTitle = subjectList.get(classAt).getName();
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -81,12 +81,12 @@ public class ConsultingHoursExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public View getChildView(int classAt, int teacherAt, boolean isExpanded, View view, ViewGroup viewGroup) {
-        final String teacherName = classList.get(classAt).getTeacherList().get(teacherAt).getName();
+        final String teacherName = subjectList.get(classAt).getInstructors().get(teacherAt).getName();
 
         if (view == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = infalInflater.inflate(R.layout.list_teacher, null);
+            view = infalInflater.inflate(R.layout.list_instructor, null);
         }
 
         TextView teacherTextView = (TextView) view

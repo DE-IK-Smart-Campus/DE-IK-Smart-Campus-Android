@@ -12,50 +12,50 @@ import java.text.DateFormat;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.FromUntilDates;
-import hu.unideb.smartcampus.adapter.consultingHours.dataObjects.Teacher;
+import hu.unideb.smartcampus.xmpp.pojos.CHFromToDatesPojo;
+import hu.unideb.smartcampus.xmpp.pojos.CHInstructorPojo;
 
 /**
  * Created by Headswitcher on 2017. 02. 24..
  */
 
-public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdapter {
+public class CHInstructorExpandableListAdapter extends BaseExpandableListAdapter {
 
-    List<Teacher> teacherList;
+    List<CHInstructorPojo> instructor;
     Context context;
 
-    public ConsultingDatesExpandableListAdapter(Context context, List<Teacher> teacherList) {
-        this.teacherList = teacherList;
+    public CHInstructorExpandableListAdapter(Context context, List<CHInstructorPojo> instructor) {
+        this.instructor = instructor;
         this.context = context;
     }
 
     @Override
     public int getGroupCount() {
-        return teacherList.size();
+        return instructor.size();
     }
 
     @Override
     public int getChildrenCount(int classAt) {
-        return teacherList.get(classAt).getConsultingDates().getDateList().size();
+        return instructor.get(classAt).getConsultingHoursList().size();
     }
 
     @Override
     public Object getGroup(int at) {
-        return teacherList.get(at);
+        return instructor.get(at);
     }
 
     @Override
-    public Object getChild(int teacherAt, int consultingHoursAt) {
-        return teacherList.get(teacherAt).getConsultingDates().getDateList().get(consultingHoursAt);
+    public Object getChild(int instructorAt, int consultingHoursAt) {
+        return instructor.get(instructorAt).getConsultingHoursList().get(consultingHoursAt);
     }
 
     @Override
-    public long getGroupId(int teacherAt) {
-        return teacherAt;
+    public long getGroupId(int instructorAt) {
+        return instructorAt;
     }
 
     @Override
-    public long getChildId(int teacherAt, int consultingHoursAt) {
+    public long getChildId(int instructorAt, int consultingHoursAt) {
         return consultingHoursAt;
     }
 
@@ -66,11 +66,11 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public View getGroupView(int teacherAt, boolean isExpanded, View view, ViewGroup parent) {
-        String headerTitle = teacherList.get(teacherAt).getName();
+        String headerTitle = instructor.get(teacherAt).getName();
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.list_teacher, null);
+            view = layoutInflater.inflate(R.layout.list_instructor, null);
         }
         TextView teacherNameTextView = (TextView) view
                 .findViewById(R.id.teacherListItemId);
@@ -82,13 +82,13 @@ public class ConsultingDatesExpandableListAdapter extends BaseExpandableListAdap
     }
 
     @Override
-    public View getChildView(int teacherAt, int consultingHoursAt, boolean isExpanded, View view, ViewGroup viewGroup) {
+    public View getChildView(int instructorAt, int consultingHoursAt, boolean isExpanded, View view, ViewGroup viewGroup) {
 
         //will change with 1.8 TODO
-        FromUntilDates dates = teacherList.get(teacherAt).getConsultingDates().getDateList().get(consultingHoursAt);
+        final CHFromToDatesPojo dates = instructor.get(instructorAt).getConsultingHoursList().get(consultingHoursAt).getFromToDates();
         final String dateDisplayName = DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getFrom())
                 + "  -  "
-                + DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getUntil());
+                + DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getTo());
         if (view == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
