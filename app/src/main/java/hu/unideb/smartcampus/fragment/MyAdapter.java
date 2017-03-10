@@ -18,7 +18,7 @@ public class MyAdapter extends ArrayAdapter<Item> {
 
     public MyAdapter(Context context, ArrayList<Item> itemsArrayList) {
 
-        super(context, R.layout.row, itemsArrayList);
+        super(context, R.layout.event_list_row, itemsArrayList);
 
         this.context = context;
         this.itemsArrayList = itemsArrayList;
@@ -32,7 +32,7 @@ public class MyAdapter extends ArrayAdapter<Item> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // 2. Get rowView from inflater
-        View rowView = inflater.inflate(R.layout.row, parent, false);
+        View rowView = inflater.inflate(R.layout.event_list_row, parent, false);
 
         // 3. Get the two text view from the rowView
         TextView labelView = (TextView) rowView.findViewById(R.id.label);

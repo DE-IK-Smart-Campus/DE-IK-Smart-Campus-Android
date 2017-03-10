@@ -20,8 +20,8 @@ import java.util.List;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.CalendarFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
-import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.ConsultingHoursFragment;
+import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 
 public class MainActivity_SmartCampus extends AppCompatActivity {

@@ -9,4 +9,7 @@
     <string name="allDayEventText">Egész napos esemény</string>
     <string name="textViewStart">Kezdete:</string>
     <string name="textViewEnd">Befejezés:</string>
+    <string name="remainderText">Emlékeztető</string>
+    <string name="repaitText">Ismétlődés</string>
+    <string name="placeHint">hely</string>
 </resources>

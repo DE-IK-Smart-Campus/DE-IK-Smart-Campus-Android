@@ -2,30 +2,39 @@ package hu.unideb.smartcampus.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import hu.unideb.smartcampus.R;
 
-
 public class NewEventActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private EditText eventName;
+    private EditText eventDescription;
+    private EditText eventPlace;
     private EditText startDate;
     private EditText endDate;
     private EditText startTime;
     private EditText endTime;
+    private EditText repaitEditText;
+
+    private AlertDialog.Builder repaitDialog;
+    private String[] repaitOptionText;
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
@@ -40,30 +49,40 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_event_activity);
+        setupVariables();
+
+        repaitOptionText = getApplicationContext().getResources().getStringArray(R.array.remainder_array_item);
 
         dateFormatter = new SimpleDateFormat("yyyy.MMM dd.,EEE", Locale.getDefault());
         timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
-        String time = timeFormatter.format(Calendar.getInstance().getTime());
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.HOUR, 1);
 
-        findViewsById();
+        String fromTime = timeFormatter.format(Calendar.getInstance().getTime());
+        String toTime = timeFormatter.format(now.getTime());
 
-        Date a = new Date(getIntent().getExtras().getLong("selectedDate"));
+        Date selectedDate = new Date(getIntent().getExtras().getLong("selectedDate"));
 
-        String asd = dateFormatter.format(a);
+        String selectedDateCalendar = dateFormatter.format(selectedDate);
 
-        Toast.makeText(getApplicationContext(), asd, Toast.LENGTH_LONG).show();
-        startDate.setText(asd);
-        startTime.setText(time);
-        endDate.setText(asd);
-        endTime.setText(time);
+        startDate.setText(selectedDateCalendar);
+        startTime.setText(fromTime);
+        endDate.setText(selectedDateCalendar);
+        endTime.setText(toTime);
 
         setDateTimeField();
         setTimeField();
+        spinnerSetup();
 
     }
 
-    private void findViewsById() {
+    private void setupVariables() {
+
+        eventName = (EditText) findViewById(R.id.eventName);
+        eventDescription = (EditText) findViewById(R.id.eventDescription);
+        eventPlace = (EditText) findViewById(R.id.eventPlaceText);
+
         startDate = (EditText) findViewById(R.id.start_date);
         startDate.setInputType(InputType.TYPE_NULL);
         startDate.setFocusable(false);
@@ -79,13 +98,61 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         endTime = (EditText) findViewById(R.id.end_time);
         endTime.setInputType(InputType.TYPE_NULL);
         endTime.setFocusable(false);
+
+        repaitEditText = (EditText) findViewById(R.id.repaitText);
+        repaitEditText.setInputType(InputType.TYPE_NULL);
+        repaitEditText.setFocusable(false);
     }
 
+    private void spinnerSetup() {
+        Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
+        repaitEditText.setOnClickListener(this);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeats_array_item, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        repeatSpinner.setAdapter(adapter);
+
+        repeatSpinner.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view1,
+                                               int pos, long id) {
+                        Toast.makeText(getApplicationContext(), "You have selected " + parent.getItemAtPosition(pos), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> arg0) {
+
+                    }
+
+                }
+        );
+
+        ArrayList<String> selColors = new ArrayList<>();
+        final boolean[] _selections = {false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+        repaitDialog = new AlertDialog.Builder(NewEventActivity.this);
+        repaitDialog.setTitle(R.string.context_choice);
+        repaitDialog.setMultiChoiceItems(repaitOptionText, _selections, (dialogInterface, i, b) -> {
+            if (b) {
+                selColors.add(repaitOptionText[i]);
+                Toast.makeText(getApplicationContext(), "You have selected " + i, Toast.LENGTH_SHORT).show();
+            } else {
+                selColors.remove(repaitOptionText[i]);
+            }
+        });
+
+        repaitDialog.setPositiveButton(R.string.ok_button, (dialog, id) -> {
+            Toast.makeText(getApplicationContext(), "SAVED", Toast.LENGTH_SHORT).show();
+            repaitEditText.setText(selColors.toString());
+        });
+        repaitDialog.setNegativeButton(R.string.cancel_button, (dialog, id) -> Toast.makeText(getApplicationContext(), "CANCELED", Toast.LENGTH_SHORT).show());
+    }
 
     private void setDateTimeField() {
-        t();
         startDate.setOnClickListener(this);
         endDate.setOnClickListener(this);
+        checkBoxOnOff();
 
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
@@ -114,6 +181,11 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
             Calendar newTime = Calendar.getInstance();
             newTime.set(0, 0, 0, hourOfDay, minute);
             startTime.setText(timeFormatter.format(newTime.getTime()));
+            Calendar toS = Calendar.getInstance();
+            Date to = newTime.getTime();
+            toS.setTime(to);
+            toS.add(Calendar.HOUR_OF_DAY, 1);
+            endTime.setText(timeFormatter.format(toS.getTime()));
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
 
         toTimePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
@@ -121,6 +193,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
             newTime.set(0, 0, 0, hourOfDay, minute);
             endTime.setText(timeFormatter.format(newTime.getTime()));
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
+
 
     }
 
@@ -134,45 +207,42 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
             fromTimePickerDialog.show();
         } else if (view == endTime) {
             toTimePickerDialog.show();
+        } else if (view == repaitEditText) {
+            repaitDialog.show();
         }
     }
 
-    public void t() {
-        CheckBox ce = (CheckBox) findViewById(R.id.allDayEvent);
+    private void checkBoxOnOff() {
+        CheckBox checkBox = (CheckBox) findViewById(R.id.allDayEvent);
 
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (checkBox.isChecked()) {
+                        startTime.setVisibility(View.INVISIBLE);
+                        endTime.setVisibility(View.INVISIBLE);
+                        endDate.setText(startDate.getText());
+                        editTextEnableOrDisable(endDate, false, InputType.TYPE_NULL);
+                    } else if (!checkBox.isChecked()) {
+                        startTime.setVisibility(View.VISIBLE);
+                        endTime.setVisibility(View.VISIBLE);
+                        editTextEnableOrDisable(endDate, true, InputType.TYPE_DATETIME_VARIATION_DATE);
+                    }
 
-
-        ce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                          @Override
-                                          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                              if (ce.isChecked()) {
-                                                  startTime.setVisibility(View.INVISIBLE);
-                                                  endTime.setVisibility(View.INVISIBLE);
-                                                  endDate.setText(startDate.getText());
-                                                  endDate.setFocusable(false);
-                                                  endDate.setEnabled(false);
-                                                  endDate.setCursorVisible(false);
-                                                  endDate.setKeyListener(null);
-                                                  endDate.setInputType(InputType.TYPE_NULL);
-//                                                  endDate.setBackgroundColor(Color.TRANSPARENT);
-
-                                              } else if (!ce.isChecked()) {
-                                                  startTime.setVisibility(View.VISIBLE);
-                                                  endTime.setVisibility(View.VISIBLE);
-//                                                 endDate.setFocusable(false);
-                                                  endDate.setEnabled(true);
-                                                  endDate.setCursorVisible(true);
-//                                                  endDate.setKeyListener(true);
-                                                  endDate.setInputType(InputType.TYPE_DATETIME_VARIATION_DATE);
-                                              }
-
-                                          }
-                                      }
+                }
         );
+    }
+
+    private void editTextEnableOrDisable(EditText editTextName, boolean trueOrFalse, int inputType) {
+        editTextName.setFocusable(trueOrFalse);
+        editTextName.setEnabled(trueOrFalse);
+        editTextName.setCursorVisible(trueOrFalse);
+        editTextName.setInputType(inputType);
     }
 
     public void cancelOnClick(View view) {
         super.onBackPressed();
+    }
+
+    public void saveOnClick(View view) {
     }
 
 }

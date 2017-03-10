@@ -1,12 +1,15 @@
 package hu.unideb.smartcampus.fragment;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class CalendarEvent {
 
-    String EventName;
-    String EventDescription;
-    Date StartTime;
-    Date EndTime;
+    String eventName;
+    String eventDescription;
+    String eventPlace;
+    GregorianCalendar eventStartTime;
+    GregorianCalendar eventEndTime;
+    Boolean allDayEvent;
+
 
 }
