@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.joda.time.DateTime;
+import org.joda.time.JodaTimePermission;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,8 +76,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
         setDateTimeField();
         setTimeField();
-        spinnerSetup();
-
+        repeatAndRemainderSetup();
     }
 
     private void setupVariables() {
@@ -104,7 +106,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         repaitEditText.setFocusable(false);
     }
 
-    private void spinnerSetup() {
+    private void repeatAndRemainderSetup() {
         Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
         repaitEditText.setOnClickListener(this);
 
@@ -118,7 +120,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view1,
                                                int pos, long id) {
-                        Toast.makeText(getApplicationContext(), "You have selected " + parent.getItemAtPosition(pos), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "You have selected " + parent.getItemAtPosition(pos), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -136,17 +138,16 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         repaitDialog.setMultiChoiceItems(repaitOptionText, _selections, (dialogInterface, i, b) -> {
             if (b) {
                 selColors.add(repaitOptionText[i]);
-                Toast.makeText(getApplicationContext(), "You have selected " + i, Toast.LENGTH_SHORT).show();
             } else {
                 selColors.remove(repaitOptionText[i]);
             }
         });
 
         repaitDialog.setPositiveButton(R.string.ok_button, (dialog, id) -> {
-            Toast.makeText(getApplicationContext(), "SAVED", Toast.LENGTH_SHORT).show();
             repaitEditText.setText(selColors.toString());
         });
-        repaitDialog.setNegativeButton(R.string.cancel_button, (dialog, id) -> Toast.makeText(getApplicationContext(), "CANCELED", Toast.LENGTH_SHORT).show());
+        repaitDialog.setNegativeButton(R.string.cancel_button, (dialog, id) -> {
+        });
     }
 
     private void setDateTimeField() {

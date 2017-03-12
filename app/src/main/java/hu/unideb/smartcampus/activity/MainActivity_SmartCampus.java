@@ -2,6 +2,8 @@ package hu.unideb.smartcampus.activity;
 
 
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -11,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +43,6 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     private String[] activityTitles;
 
     private Handler mHandler;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
