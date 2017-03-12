@@ -25,28 +25,28 @@ import android.os.Parcelable;
 public class OfficeHour implements Parcelable {
 
     private Long consultingHourId;
-    private FromToDatesInLong fromToDatesInLong;
+    private FromToDatesInLong fromToDates;
     private Long reservedSum;
 
     public OfficeHour() {
     }
 
-    public OfficeHour(Long consultingHourId, FromToDatesInLong fromToDatesInLong, Long reservedSum) {
+    public OfficeHour(Long consultingHourId, FromToDatesInLong fromToDates, Long reservedSum) {
         this.consultingHourId = consultingHourId;
-        this.fromToDatesInLong = fromToDatesInLong;
+        this.fromToDates = fromToDates;
         this.reservedSum = reservedSum;
     }
 
     protected OfficeHour(Parcel in) {
         consultingHourId = in.readLong();
-        fromToDatesInLong = in.readParcelable(FromToDatesInLong.class.getClassLoader());
+        fromToDates = in.readParcelable(FromToDatesInLong.class.getClassLoader());
         reservedSum = in.readLong();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(consultingHourId);
-        dest.writeParcelable(fromToDatesInLong, flags);
+        dest.writeParcelable(fromToDates, flags);
         dest.writeLong(reservedSum);
     }
 
@@ -75,12 +75,12 @@ public class OfficeHour implements Parcelable {
         this.consultingHourId = consultingHourId;
     }
 
-    public FromToDatesInLong getFromToDatesInLong() {
-        return fromToDatesInLong;
+    public FromToDatesInLong getFromToDates() {
+        return fromToDates;
     }
 
-    public void setFromToDatesInLong(FromToDatesInLong fromToDatesInLong) {
-        this.fromToDatesInLong = fromToDatesInLong;
+    public void setFromToDates(FromToDatesInLong fromToDates) {
+        this.fromToDates = fromToDates;
     }
 
     public Long getReservedSum() {

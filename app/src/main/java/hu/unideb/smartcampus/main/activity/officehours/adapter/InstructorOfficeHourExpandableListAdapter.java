@@ -87,7 +87,7 @@ public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableLis
     public View getChildView(int instructorAt, int consultingHoursAt, boolean isExpanded, View view, ViewGroup viewGroup) {
 
         //will change with 1.8 TODO
-        final FromToDatesInLong dates = instructor.get(instructorAt).getConsultingHoursList().get(consultingHoursAt).getFromToDatesInLong();
+        final FromToDatesInLong dates = instructor.get(instructorAt).getConsultingHoursList().get(consultingHoursAt).getFromToDates();
         final String dateDisplayName = DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getFrom())
                 + "  -  "
                 + DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getTo());

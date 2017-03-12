@@ -11,16 +11,15 @@ public class MessageTypeConsultingHourIdReasonDuration {
     private String duration;
     private String userId;
 
-    public MessageTypeConsultingHourIdReasonDuration(String messageType, String consultingHourId, String reason, String duration , String userId) {
+    public MessageTypeConsultingHourIdReasonDuration() {
+    }
+
+    public MessageTypeConsultingHourIdReasonDuration(String messageType, String consultingHourId, String reason, String duration, String userId) {
         this.messageType = messageType;
         this.consultingHourId = consultingHourId;
         this.reason = reason;
         this.duration = duration;
         this.userId = userId;
-    }
-
-    public MessageTypeConsultingHourIdReasonDuration() {
-
     }
 
     public String getMessageType() {
@@ -53,5 +52,13 @@ public class MessageTypeConsultingHourIdReasonDuration {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

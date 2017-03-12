@@ -12,7 +12,6 @@ public class OfficeHourConstant {
     public static final String SELECTED_OFFICE_HOUR_ID = "selectedOfficeHourId";
     public static final String EXTRA_FROM_UNTIL_DATES = "EXTRA_FROM_UNTIL_DATES";
     public static final String STATUSOFCONSULTINGHOURS = "STATUSOFCONSULTINGHOURS";
-    public static final String EXTRA_CH_SUBJECT_AND_INSTRUCTOR_POJO = "EXTRA_CH_SUBJECT_AND_INSTRUCTOR_POJO";
     public static final String EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO = "EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO";
     public static final String ASKSUBJECTS = "ASKSUBJECTS";
     public static final String ASKINSTRUCTOR = "ASKINSTRUCTOR";

@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                         .setUsernameAndPassword("testuser", "admin")
                         .setServiceName(HOSTNAME)
                         .setHost(HOSTNAME)
-                        .setPort(80)
+                        .setPort(5280)
                         .setFile("/http-bind/")
                         .build();
                 connection = Connection.getInstance();

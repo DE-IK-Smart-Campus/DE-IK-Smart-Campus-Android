@@ -7,12 +7,10 @@ package hu.unideb.smartcampus.main.activity.officehours.json;
 public class MessageTypeInstructorIdUserId {
 
     private String messageType;
-    private String userId;
     private String instructorId;
 
-    public MessageTypeInstructorIdUserId(String messageType, String userId, String instructorId) {
+    public MessageTypeInstructorIdUserId(String messageType, String instructorId) {
         this.messageType = messageType;
-        this.userId = userId;
         this.instructorId = instructorId;
     }
 
@@ -25,14 +23,6 @@ public class MessageTypeInstructorIdUserId {
 
     public void setMessageType(String messageType) {
         this.messageType = messageType;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getInstructorId() {

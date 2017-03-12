@@ -17,7 +17,6 @@ import java.io.IOException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
-import hu.unideb.smartcampus.xmpp.listeners.AdminListen;
 
 import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOGTAG;
@@ -28,8 +27,8 @@ import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHou
 
 public class Connection {
 
-    public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu";
-    public static final String HOSTNAME= "wt2.inf.unideb.hu";
+    public static final String ADMINJID = "smartcampus@192.168.0.43";
+    public static final String HOSTNAME= "192.168.0.43";
 
     private final String adminJID = ADMINJID;
     private static Connection instance = null;
@@ -68,17 +67,24 @@ public class Connection {
             adminChat = chatManager.createChat(adminJID); //TODO
 
 
-            try {
-                adminChat.sendMessage(uzi);
-            } catch (SmackException.NotConnectedException e) {
-                e.printStackTrace();
-            }
-            adminChat.addMessageListener(new AdminListen());
+//            try {
+//                adminChat.sendMessage("");
+//            } catch (SmackException.NotConnectedException e) {
+//                e.printStackTrace();
+//            }
+//            adminChat.addMessageListener(new AdminListen());
+//        } catch (XMPPException e) {
+//            e.printStackTrace();
+//        } catch (SmackException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         } catch (XMPPException e) {
             e.printStackTrace();
-        } catch (SmackException e) {
-            e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SmackException e) {
             e.printStackTrace();
         }
     }

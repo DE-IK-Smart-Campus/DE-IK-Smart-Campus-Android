@@ -3,6 +3,7 @@ package hu.unideb.smartcampus.main.activity.officehours.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,14 +96,14 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
             Bundle bundle = new Bundle();
-            bundle.putString(STATUSOFCONSULTINGHOURS, "ASKINSTRUCTOR");
+            bundle.putString(STATUSOFCONSULTINGHOURS, ASKINSTRUCTOR);
             Subject parentListAdapterGroup = (Subject) parent.getExpandableListAdapter().getGroup(groupPosition);
-            bundle.putParcelable("INSTRUCTOR", parentListAdapterGroup.getInstructors().get(childPosition));
-            bundle.putInt("INSTRUCTORPOS", childPosition);
-            bundle.putInt("SUBJECTPOS", groupPosition);
+            //bundle.putParcelable("INSTRUCTOR", parentListAdapterGroup.getInstructors().get(childPosition));
+            bundle.putInt(INSTRUCTORPOS, childPosition);
+            bundle.putInt(SUBJECTPOS, groupPosition);
 
             MessageTypeInstructorIdUserId messageTypeInstructorIdUserId
-                    = new MessageTypeInstructorIdUserId(ASKINSTRUCTORCONSULTINGHOURSPROCESSMESSAGE, parentListAdapterGroup.getInstructors().get(childPosition).getInstructorId().toString(), Connection.getInstance().getUserJID());
+                    = new MessageTypeInstructorIdUserId(ASKINSTRUCTORCONSULTINGHOURSPROCESSMESSAGE, parentListAdapterGroup.getInstructors().get(childPosition).getInstructorId().toString());
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 String request = objectMapper.writeValueAsString(messageTypeInstructorIdUserId);
@@ -125,8 +126,11 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             final OfficeHour officeHour = parentListAdapterGroup.getConsultingHoursList().get(childPosition);
 
             Intent intent = new Intent(getContext(), ReserveOfficeHourActivity.class);
-            intent.putExtra(EXTRA_FROM_UNTIL_DATES, officeHour.getFromToDatesInLong());
+            intent.putExtra(EXTRA_FROM_UNTIL_DATES, officeHour.getFromToDates());
             intent.putExtra(SELECTED_OFFICE_HOUR_ID, officeHour.getConsultingHourId());
+            final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.detach(OfficeHourFragment.this);
+            fragmentTransaction.commit();
 
             startActivity(intent);
             return true;

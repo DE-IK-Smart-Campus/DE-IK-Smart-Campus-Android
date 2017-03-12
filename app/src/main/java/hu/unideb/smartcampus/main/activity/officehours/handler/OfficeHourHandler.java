@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +31,7 @@ import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHou
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTSPROCESSMESSAGE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTSPROCESSMESSAGERESPONSE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOGTAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_CH_SUBJECT_AND_INSTRUCTOR_POJO;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.INSTRUCTORPOS;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SIGNUPFORCONSULTINGHOURPROCESSMESSAGERESPONSE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.STATUSOFCONSULTINGHOURS;
@@ -41,6 +42,9 @@ import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHou
  * it will change the status , view , keep up the communication with the "adminuser"
  * <p>
  * Created by Erdei Krisztián on 2017.03.04..
+ *
+ * TODO backstack restore
+ * TODO onbackpressed
  */
 
 public class OfficeHourHandler implements ChatMessageListener {
@@ -83,7 +87,7 @@ public class OfficeHourHandler implements ChatMessageListener {
             loadingDialogFragment.nDialog.dismiss();
 
             Bundle bundle = new Bundle();
-            bundle.putParcelable(EXTRA_CH_SUBJECT_AND_INSTRUCTOR_POJO, askSubjectsProcessMessagePojo);
+            bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsProcessMessagePojo);
             bundle.putString(STATUSOFCONSULTINGHOURS, ASKSUBJECTS);
             changeToOfficeFragmentView(bundle);
         }
@@ -103,7 +107,7 @@ public class OfficeHourHandler implements ChatMessageListener {
             Bundle bundle = new Bundle();
             bundle.putInt(INSTRUCTORPOS, instructorPos);
             bundle.putInt(SUBJECTPOS, subjectPos);
-            bundle.putParcelable(EXTRA_CH_SUBJECT_AND_INSTRUCTOR_POJO, askSubjectsProcessMessagePojo);
+            bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsProcessMessagePojo);
             bundle.putString(STATUSOFCONSULTINGHOURS, ASKINSTRUCTOR);
             changeToOfficeFragmentView(bundle);
         }
@@ -112,6 +116,7 @@ public class OfficeHourHandler implements ChatMessageListener {
             Connection.getInstance().getAdminChat().removeMessageListener(this);
         }
 
+        Log.d("Adminchat", "ChatInfo: " + message.getBody());
     }
 
     private void changeToOfficeFragmentView(Bundle bundle) {
