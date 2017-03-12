@@ -44,11 +44,11 @@ public class LoginActivity extends AppCompatActivity {
                         .setUsernameAndPassword("testuser", "admin")
                         .setServiceName(HOSTNAME)
                         .setHost(HOSTNAME)
-                        .setPort(5280)
+                        .setPort(80)
                         .setFile("/http-bind/")
                         .build();
                 connection = Connection.getInstance();
-                connection.setXMPPTCPConnection(config);
+                connection.setXMPPBOSHConnection(config);
                 if (connection.getXmppConnection().isConnected()) {
                     Log.d("Conected:", "CONNECTED");
                 } else {

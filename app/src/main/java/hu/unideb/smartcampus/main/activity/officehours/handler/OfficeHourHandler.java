@@ -38,8 +38,11 @@ import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHou
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SUBJECTPOS;
 
 /**
- * OfficeHourHandler will be the controller for the lifecycle of the : {@link OfficeHourFragment} , {@link hu.unideb.smartcampus.main.activity.officehours.activity.ReserveOfficeHourActivity}
- * it will change the status , view , keep up the communication with the "adminuser"
+ * OfficeHourHandler will be the controller for the lifecycle of the :
+ * {@link OfficeHourFragment} ,
+ * {@link hu.unideb.smartcampus.main.activity.officehours.activity.ReserveOfficeHourActivity}
+ *
+ * It will change the status , view , keep up the communication with the "adminuser"
  * <p>
  * Created by Erdei Krisztián on 2017.03.04..
  *
@@ -114,6 +117,8 @@ public class OfficeHourHandler implements ChatMessageListener {
 
         if (message.getBody().contains(SIGNUPFORCONSULTINGHOURPROCESSMESSAGERESPONSE)) {
             Connection.getInstance().getAdminChat().removeMessageListener(this);
+            LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag("DIALOGTAG");
+            loadingDialogFragment.nDialog.dismiss();
         }
 
         Log.d("Adminchat", "ChatInfo: " + message.getBody());

@@ -1,6 +1,5 @@
 package hu.unideb.smartcampus.main.activity.officehours.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,7 +19,6 @@ import java.util.Collections;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
-import hu.unideb.smartcampus.main.activity.officehours.activity.ReserveOfficeHourActivity;
 import hu.unideb.smartcampus.main.activity.officehours.adapter.InstructorOfficeHourExpandableListAdapter;
 import hu.unideb.smartcampus.main.activity.officehours.adapter.SubjectInstructorExpandableListAdapter;
 import hu.unideb.smartcampus.main.activity.officehours.json.MessageTypeInstructorIdUserId;
@@ -53,17 +51,17 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_consultinghours, container, false);
+        View view = inflater.inflate(R.layout.fragment_consulting_hour, container, false);
 
-        ExpandableListView ClassList = (ExpandableListView) view.findViewById(R.id.consulting_hours_ExpandableListView);
+        ExpandableListView classList = (ExpandableListView) view.findViewById(R.id.consulting_hours_ExpandableListView);
 
         if (StringUtils.equals(getArguments().getString(STATUSOFCONSULTINGHOURS), ASKSUBJECTS)) {
             AskSubjectsProcessMessagePojo askSubjectsProcessMessagePojo = getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO);
             final ExpandableListAdapter ClassChildTeacherListAdapter;
             if (askSubjectsProcessMessagePojo != null) {
                 ClassChildTeacherListAdapter = new SubjectInstructorExpandableListAdapter(getContext(), askSubjectsProcessMessagePojo.getSubjects());
-                ClassList.setAdapter(ClassChildTeacherListAdapter);
-                ClassList.setOnChildClickListener(new OnChildClickListenerOnStatusAskSubjects());
+                classList.setAdapter(ClassChildTeacherListAdapter);
+                classList.setOnChildClickListener(new OnChildClickListenerOnStatusAskSubjects());
             } else {
                 throw new NullPointerException("getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO IS NULL");
             }
@@ -79,8 +77,9 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
                         Collections.singletonList(
                                 askSubjectsProcessMessagePojo.getSubjects().get(subjectPos).getInstructors().get(instructorPos)));
 
-                ClassList.setAdapter(ClassChildTeacherListAdapter);
-                ClassList.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
+                classList.setAdapter(ClassChildTeacherListAdapter);
+                classList.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
+                classList.expandGroup(0);
             } else {
                 throw new NullPointerException("getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO) IS NULL");
             }
@@ -98,7 +97,6 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             Bundle bundle = new Bundle();
             bundle.putString(STATUSOFCONSULTINGHOURS, ASKINSTRUCTOR);
             Subject parentListAdapterGroup = (Subject) parent.getExpandableListAdapter().getGroup(groupPosition);
-            //bundle.putParcelable("INSTRUCTOR", parentListAdapterGroup.getInstructors().get(childPosition));
             bundle.putInt(INSTRUCTORPOS, childPosition);
             bundle.putInt(SUBJECTPOS, groupPosition);
 
@@ -125,20 +123,22 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             Instructor parentListAdapterGroup = (Instructor) parent.getExpandableListAdapter().getGroup(groupPosition);
             final OfficeHour officeHour = parentListAdapterGroup.getConsultingHoursList().get(childPosition);
 
-            Intent intent = new Intent(getContext(), ReserveOfficeHourActivity.class);
-            intent.putExtra(EXTRA_FROM_UNTIL_DATES, officeHour.getFromToDates());
-            intent.putExtra(SELECTED_OFFICE_HOUR_ID, officeHour.getConsultingHourId());
-            final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.detach(OfficeHourFragment.this);
-            fragmentTransaction.commit();
-
-            startActivity(intent);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(EXTRA_FROM_UNTIL_DATES, officeHour.getFromToDates());
+            bundle.putLong(SELECTED_OFFICE_HOUR_ID, officeHour.getConsultingHourId());
+            Fragment fragment = new OfficeHourReserveFragment();
+            fragment.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, "OfficeHourReserveFragment");
+            fragmentTransaction.commitAllowingStateLoss();
             return true;
         }
     }
 
     @Override
     public void onBackPressed() {
-
+        //TODO!
     }
 }

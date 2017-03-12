@@ -103,6 +103,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:
+                    //TODO clear stack!
                     Connection.getInstance().getAdminChat().addMessageListener(new OfficeHourHandler(getSupportFragmentManager()));
                     break;
 

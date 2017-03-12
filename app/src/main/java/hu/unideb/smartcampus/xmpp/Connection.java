@@ -27,8 +27,8 @@ import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHou
 
 public class Connection {
 
-    public static final String ADMINJID = "smartcampus@192.168.0.43";
-    public static final String HOSTNAME= "192.168.0.43";
+    public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu";
+    public static final String HOSTNAME = "wt2.inf.unideb.hu";
 
     private final String adminJID = ADMINJID;
     private static Connection instance = null;
@@ -52,9 +52,9 @@ public class Connection {
         return xmppConnection;
     }
 
-    public void setXMPPTCPConnection(BOSHConfiguration config) {
+    public void setXMPPBOSHConnection(BOSHConfiguration config) {
 
-        setLocalXmpptcpConnection(new XMPPBOSHConnection(config));
+        setLocalXMPPBOSHConnection(new XMPPBOSHConnection(config));
 
         // Will refactor TODO;
         try {
@@ -89,8 +89,8 @@ public class Connection {
         }
     }
 
-    private void setLocalXmpptcpConnection(XMPPBOSHConnection xmpptcpConnection) {
-        this.xmppConnection = xmpptcpConnection;
+    private void setLocalXMPPBOSHConnection(XMPPBOSHConnection xmppboshConnection) {
+        this.xmppConnection = xmppboshConnection;
     }
 
     public Chat getAdminChat() {
@@ -122,8 +122,8 @@ public class Connection {
         } else {
             loadingDialogFragment.setArguments(bundle);
         }
-
         fragmentTransaction.commitNow();
+        Log.i(TAG, "createLoadingDialog: " + fragmentManager.getFragments());
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOGTAG);
