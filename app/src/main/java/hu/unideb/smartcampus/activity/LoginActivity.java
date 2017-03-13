@@ -51,10 +51,10 @@ public class LoginActivity extends AppCompatActivity {
                 connection.setXMPPBOSHConnection(config);
                 if (connection.getXmppConnection().isConnected()) {
                     Log.d("Conected:", "CONNECTED");
-                    Toast.makeText(getApplicationContext(),"Connected",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),"Connected",Toast.LENGTH_SHORT).show();
                 } else {
                     Log.e("Conected:", "NOT CONNECTED");
-                    Toast.makeText(getApplicationContext(),"FAILED TO CONNECT",Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(),"FAILED TO CONNECT",Toast.LENGTH_LONG).show();
                 }
             }
 
