@@ -24,15 +24,15 @@ import hu.unideb.smartcampus.main.activity.officehours.pojo.AskInstructorConsult
 import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsProcessMessagePojo;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static hu.unideb.smartcampus.activity.MainActivity_SmartCampus.CURRENT_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTOR;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTORCONSULTINGHOURSPROCESSMESSAGERESPONSE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTS;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTSPROCESSMESSAGE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTSPROCESSMESSAGERESPONSE;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOGTAG;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.INSTRUCTORPOS;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SIGNUPFORCONSULTINGHOURPROCESSMESSAGERESPONSE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.STATUSOFCONSULTINGHOURS;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SUBJECTPOS;
@@ -40,14 +40,12 @@ import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHou
 /**
  * OfficeHourHandler will be the controller for the lifecycle of the :
  * {@link OfficeHourFragment} ,
- * {@link hu.unideb.smartcampus.main.activity.officehours.activity.ReserveOfficeHourActivity}
- *
+ * {@link hu.unideb.smartcampus.main.activity.officehours.fragment.OfficeHourReserveFragment}
+ * <p>
  * It will change the status , view , keep up the communication with the "adminuser"
  * <p>
  * Created by Erdei Krisztián on 2017.03.04..
- *
- * TODO backstack restore
- * TODO onbackpressed
+ * <p>
  */
 
 public class OfficeHourHandler implements ChatMessageListener {
@@ -58,18 +56,18 @@ public class OfficeHourHandler implements ChatMessageListener {
 
     public OfficeHourHandler(FragmentManager fragmentManager) throws SmackException.NotConnectedException, InterruptedException {
         super();
-        askSubjectsProcessMessagePojo = new AskSubjectsProcessMessagePojo();
-        objectMapper = new ObjectMapper();
 
+        this.askSubjectsProcessMessagePojo = new AskSubjectsProcessMessagePojo();
+        this.objectMapper = new ObjectMapper();
         this.fragmentManager = fragmentManager;
 
         Connection.getInstance().getAdminChat().addMessageListener(this);
         MessageTypeUserId messageTypeUserId = new MessageTypeUserId(ASKSUBJECTSPROCESSMESSAGE, Connection.getInstance().getUserJID());
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             String request = objectMapper.writeValueAsString(messageTypeUserId);
             Connection.getInstance().createLoadingDialog(request, fragmentManager, new Bundle());
         } catch (JsonProcessingException e) {
+            Log.e("OfficeHourHandler()", messageTypeUserId.toString());
             e.printStackTrace();
         }
     }
@@ -78,26 +76,21 @@ public class OfficeHourHandler implements ChatMessageListener {
     public void processMessage(Chat chat, Message message) {
         String body = message.getBody();
         if (message.getBody().contains(ASKSUBJECTSPROCESSMESSAGERESPONSE)) {
-            ObjectMapper objectMapper = new ObjectMapper();
-
+            LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
             try {
                 askSubjectsProcessMessagePojo = objectMapper.readValue(body, AskSubjectsProcessMessagePojo.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOGTAG);
-            loadingDialogFragment.nDialog.dismiss();
-
             Bundle bundle = new Bundle();
             bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsProcessMessagePojo);
             bundle.putString(STATUSOFCONSULTINGHOURS, ASKSUBJECTS);
             changeToOfficeFragmentView(bundle);
+            loadingDialogFragment.nDialog.dismiss();
         }
 
         if (message.getBody().contains(ASKINSTRUCTORCONSULTINGHOURSPROCESSMESSAGERESPONSE)) {
-            LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOGTAG);
-            loadingDialogFragment.nDialog.dismiss();
+            LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
             int instructorPos = loadingDialogFragment.getArguments().getInt(INSTRUCTORPOS);
             int subjectPos = loadingDialogFragment.getArguments().getInt(SUBJECTPOS);
             try {
@@ -113,15 +106,16 @@ public class OfficeHourHandler implements ChatMessageListener {
             bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsProcessMessagePojo);
             bundle.putString(STATUSOFCONSULTINGHOURS, ASKINSTRUCTOR);
             changeToOfficeFragmentView(bundle);
-        }
-
-        if (message.getBody().contains(SIGNUPFORCONSULTINGHOURPROCESSMESSAGERESPONSE)) {
-            Connection.getInstance().getAdminChat().removeMessageListener(this);
-            LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag("DIALOGTAG");
             loadingDialogFragment.nDialog.dismiss();
         }
 
-        Log.d("Adminchat", "ChatInfo: " + message.getBody());
+        if (message.getBody().contains(SIGNUPFORCONSULTINGHOURPROCESSMESSAGERESPONSE)) {
+            LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
+            loadingDialogFragment.nDialog.dismiss();
+            Connection.getInstance().getAdminChat().removeMessageListener(this);
+        }
+
+//        Log.d("Adminchat", "ChatInfo: " + message.getBody());
     }
 
     private void changeToOfficeFragmentView(Bundle bundle) {
@@ -130,7 +124,7 @@ public class OfficeHourHandler implements ChatMessageListener {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                 android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+        fragmentTransaction.replace(R.id.frame, fragment, OFFICE_HOURS_TAG);
         fragmentTransaction.commitAllowingStateLoss();
     }
 }

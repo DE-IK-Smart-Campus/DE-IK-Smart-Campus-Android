@@ -29,12 +29,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         setupVariables();
-     /*   if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
+        if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else if (!username.getText().toString().equals("admin") || !password.getText().toString().equals("admin")) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordWrong, Toast.LENGTH_SHORT).show();
         } else if (username.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
-       */
+
         Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity_SmartCampus.class);
 
@@ -51,8 +51,10 @@ public class LoginActivity extends AppCompatActivity {
                 connection.setXMPPBOSHConnection(config);
                 if (connection.getXmppConnection().isConnected()) {
                     Log.d("Conected:", "CONNECTED");
+                    Toast.makeText(getApplicationContext(),"Connected",Toast.LENGTH_SHORT).show();
                 } else {
                     Log.e("Conected:", "NOT CONNECTED");
+                    Toast.makeText(getApplicationContext(),"FAILED TO CONNECT",Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -60,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
         startActivity(intent);
 
-        //     }
+        }
     }
 
     public void loginOnClick(View v) {

@@ -7,8 +7,6 @@ package hu.unideb.smartcampus.main.activity.officehours.constant;
  */
 
 public class OfficeHourConstant {
-    public static final String DIALOGTAG = "DIALOGTAG";
-
     public static final String SELECTED_OFFICE_HOUR_ID = "selectedOfficeHourId";
     public static final String EXTRA_FROM_UNTIL_DATES = "EXTRA_FROM_UNTIL_DATES";
     public static final String STATUSOFCONSULTINGHOURS = "STATUSOFCONSULTINGHOURS";
@@ -17,6 +15,8 @@ public class OfficeHourConstant {
     public static final String ASKINSTRUCTOR = "ASKINSTRUCTOR";
     public static final String INSTRUCTORPOS = "INSTRUCTORPOS";
     public static final String SUBJECTPOS = "SUBJECTPOS";
+    public static final String DIALOG_TAG = "DIALOG_TAG";
+    public static final String OFFICE_HOURS_TAG = "OFFICE_HOURS_TAG";
 
     //ProcessMessages
     public static final String ASKSUBJECTSPROCESSMESSAGE = "AskSubjectsProcessMessage";

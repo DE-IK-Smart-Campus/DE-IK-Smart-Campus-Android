@@ -15,8 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.chat.ChatMessageListener;
 
 import java.util.List;
+import java.util.Set;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.CalendarFragment;
@@ -24,8 +26,8 @@ import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
-import hu.unideb.smartcampus.xmpp.Connection;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
+import hu.unideb.smartcampus.xmpp.Connection;
 
 public class MainActivity_SmartCampus extends AppCompatActivity {
     private NavigationView navigationView;
@@ -103,7 +105,12 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:
-                    //TODO clear stack!
+                    Set<ChatMessageListener> listeners = Connection.getInstance().getAdminChat().getListeners();
+                    for (ChatMessageListener chatMessageListener : listeners) {
+                        if (chatMessageListener instanceof OfficeHourHandler) {
+                            Connection.getInstance().getAdminChat().removeMessageListener(chatMessageListener);
+                        }
+                    }
                     Connection.getInstance().getAdminChat().addMessageListener(new OfficeHourHandler(getSupportFragmentManager()));
                     break;
 

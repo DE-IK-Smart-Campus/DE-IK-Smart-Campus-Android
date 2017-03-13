@@ -19,10 +19,11 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 
 import static android.content.ContentValues.TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOGTAG;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
 
 /**
  * Created by Erdei Krisztián on 2017.03.03..
+ * TODO
  */
 
 public class Connection {
@@ -62,24 +63,7 @@ public class Connection {
             xmppConnection.login();
             userJID = config.getUsername().toString();
             ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
-            Message uzi = new Message(adminJID);
-            uzi.setBody("Kommunikáció kialakítása");
             adminChat = chatManager.createChat(adminJID); //TODO
-
-
-//            try {
-//                adminChat.sendMessage("");
-//            } catch (SmackException.NotConnectedException e) {
-//                e.printStackTrace();
-//            }
-//            adminChat.addMessageListener(new AdminListen());
-//        } catch (XMPPException e) {
-//            e.printStackTrace();
-//        } catch (SmackException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         } catch (XMPPException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -104,7 +88,7 @@ public class Connection {
     }
 
     public void createLoadingDialog(String toAdminMsg, FragmentManager fragmentManager, Bundle bundle) throws SmackException.NotConnectedException {
-        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag("DIALOGTAG");
+        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (loadingDialogFragment != null) {
             fragmentTransaction.remove(loadingDialogFragment);
@@ -123,11 +107,10 @@ public class Connection {
             loadingDialogFragment.setArguments(bundle);
         }
         fragmentTransaction.commitNow();
-        Log.i(TAG, "createLoadingDialog: " + fragmentManager.getFragments());
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOGTAG);
-        fragmentTransaction.addToBackStack(DIALOGTAG);
+        fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOG_TAG);
+        fragmentTransaction.addToBackStack(DIALOG_TAG);
         fragmentTransaction.commit();
         Log.d(TAG, "Sent MSG: " + toAdminMsg);
         adminChat.sendMessage(new Message(adminJID, toAdminMsg));

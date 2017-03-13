@@ -28,12 +28,14 @@ import hu.unideb.smartcampus.main.activity.officehours.pojo.OfficeHour;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Subject;
 import hu.unideb.smartcampus.xmpp.Connection;
 
+import static hu.unideb.smartcampus.activity.MainActivity_SmartCampus.CURRENT_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTOR;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTORCONSULTINGHOURSPROCESSMESSAGE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTS;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_FROM_UNTIL_DATES;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.INSTRUCTORPOS;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SELECTED_OFFICE_HOUR_ID;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.STATUSOFCONSULTINGHOURS;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SUBJECTPOS;
@@ -43,6 +45,7 @@ import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHou
  * This class responsible for showing view
  */
 public class OfficeHourFragment extends Fragment implements OnBackPressedListener {
+
     /**
      * Will create view for OfficeHourFragment witch depends on the STATUSOFCONSULTINGHOURS.
      *
@@ -53,15 +56,15 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_consulting_hour, container, false);
 
-        ExpandableListView classList = (ExpandableListView) view.findViewById(R.id.consulting_hours_ExpandableListView);
+        ExpandableListView expandableListViewList = (ExpandableListView) view.findViewById(R.id.consulting_hours_ExpandableListView);
 
         if (StringUtils.equals(getArguments().getString(STATUSOFCONSULTINGHOURS), ASKSUBJECTS)) {
             AskSubjectsProcessMessagePojo askSubjectsProcessMessagePojo = getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO);
             final ExpandableListAdapter ClassChildTeacherListAdapter;
             if (askSubjectsProcessMessagePojo != null) {
                 ClassChildTeacherListAdapter = new SubjectInstructorExpandableListAdapter(getContext(), askSubjectsProcessMessagePojo.getSubjects());
-                classList.setAdapter(ClassChildTeacherListAdapter);
-                classList.setOnChildClickListener(new OnChildClickListenerOnStatusAskSubjects());
+                expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
+                expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskSubjects());
             } else {
                 throw new NullPointerException("getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO IS NULL");
             }
@@ -77,14 +80,13 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
                         Collections.singletonList(
                                 askSubjectsProcessMessagePojo.getSubjects().get(subjectPos).getInstructors().get(instructorPos)));
 
-                classList.setAdapter(ClassChildTeacherListAdapter);
-                classList.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
-                classList.expandGroup(0);
+                expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
+                expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
+                expandableListViewList.expandGroup(0);
             } else {
                 throw new NullPointerException("getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO) IS NULL");
             }
         }
-
         return view;
     }
 
@@ -123,7 +125,9 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             Instructor parentListAdapterGroup = (Instructor) parent.getExpandableListAdapter().getGroup(groupPosition);
             final OfficeHour officeHour = parentListAdapterGroup.getConsultingHoursList().get(childPosition);
 
-            Bundle bundle = new Bundle();
+            //We add the information insted of a new one, so the reserver can use onBack without a problem
+            //Bundle bundle = new Bundle();
+            Bundle bundle = getArguments();
             bundle.putParcelable(EXTRA_FROM_UNTIL_DATES, officeHour.getFromToDates());
             bundle.putLong(SELECTED_OFFICE_HOUR_ID, officeHour.getConsultingHourId());
             Fragment fragment = new OfficeHourReserveFragment();
@@ -131,7 +135,7 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                     android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, "OfficeHourReserveFragment");
+            fragmentTransaction.replace(R.id.frame, fragment, OFFICE_HOURS_TAG);
             fragmentTransaction.commitAllowingStateLoss();
             return true;
         }
@@ -139,6 +143,14 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
 
     @Override
     public void onBackPressed() {
-        //TODO!
+        if (StringUtils.equals(getArguments().getString(STATUSOFCONSULTINGHOURS), ASKSUBJECTS)) {
+            Fragment fragment = new OfficeHourFragment();
+            fragment.setArguments(getArguments());
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+            fragmentTransaction.commitAllowingStateLoss();
+        }
     }
 }
