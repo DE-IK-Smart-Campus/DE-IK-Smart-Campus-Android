@@ -13,11 +13,11 @@
         android:textSize="30sp" />
 
     <TextView
-        android:text="Oka:"
+        android:id="@+id/reserve_reason_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:paddingTop="30dp" />
+        android:paddingTop="30dp"
+        android:text="Oka:" />
 
     <EditText
         android:layout_width="match_parent"
@@ -25,6 +25,20 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/consulting_hours_reason_editText" />
+
+    <TextView
+        android:id="@+id/reserve_during_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:text="Meddig" />
+
+    <EditText
+        android:id="@+id/consulting_hours_duration_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
 
     <Button
         android:text="Foglalás"

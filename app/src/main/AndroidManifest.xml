@@ -29,14 +29,14 @@
             android:label="@string/activity_title_about_us"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".chat.MainChatMenu"
+            android:name=".main.activity.chat.MainChatMenu"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".consultinghours.ReserveConsultation">
+        <activity android:name=".main.activity.officehours.activity.ReserveOfficeHourActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
