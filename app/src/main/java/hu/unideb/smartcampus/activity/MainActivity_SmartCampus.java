@@ -24,7 +24,6 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.CalendarFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
-import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -43,13 +42,9 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     private String[] activityTitles;
     private Handler mHandler;
 
-    public static LoadingDialogFragment loadingDialogFragment;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadingDialogFragment = new LoadingDialogFragment();
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -105,13 +100,13 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:
-                    Set<ChatMessageListener> listeners = Connection.getInstance().getAdminChat().getListeners();
+                    Set<ChatMessageListener> listeners = Connection.getInstance(getApplicationContext()).getAdminChat().getListeners();
                     for (ChatMessageListener chatMessageListener : listeners) {
                         if (chatMessageListener instanceof OfficeHourHandler) {
-                            Connection.getInstance().getAdminChat().removeMessageListener(chatMessageListener);
+                            Connection.getInstance(getApplicationContext()).getAdminChat().removeMessageListener(chatMessageListener);
                         }
                     }
-                    Connection.getInstance().getAdminChat().addMessageListener(new OfficeHourHandler(getSupportFragmentManager()));
+                    Connection.getInstance(getApplicationContext()).getAdminChat().addMessageListener(new OfficeHourHandler(getSupportFragmentManager(), getApplicationContext()));
                     break;
 
                 case 3:

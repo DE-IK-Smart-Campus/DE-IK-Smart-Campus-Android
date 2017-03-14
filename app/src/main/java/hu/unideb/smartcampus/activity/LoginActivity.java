@@ -1,9 +1,7 @@
 package hu.unideb.smartcampus.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,14 +27,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         setupVariables();
-        if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
+     /*   if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else if (!username.getText().toString().equals("admin") || !password.getText().toString().equals("admin")) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordWrong, Toast.LENGTH_SHORT).show();
         } else if (username.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
-
+*/
         Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, MainActivity_SmartCampus.class);
 
         new Thread(new Runnable() {
             public void run() {
@@ -47,23 +44,18 @@ public class LoginActivity extends AppCompatActivity {
                         .setPort(80)
                         .setFile("/http-bind/")
                         .build();
-                connection = Connection.getInstance();
-                connection.setXMPPBOSHConnection(config);
-                if (connection.getXmppConnection().isConnected()) {
-                    Log.d("Conected:", "CONNECTED");
-//                    Toast.makeText(getApplicationContext(),"Connected",Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e("Conected:", "NOT CONNECTED");
-//                    Toast.makeText(getApplicationContext(),"FAILED TO CONNECT",Toast.LENGTH_LONG).show();
-                }
+                connection = Connection.getInstance(getApplicationContext());
+                connection.startBoshConnection(config);
             }
 
-        }).start();
+        }).
 
-        startActivity(intent);
+                start();
 
-        }
     }
+
+
+    //  }
 
     public void loginOnClick(View v) {
         login();

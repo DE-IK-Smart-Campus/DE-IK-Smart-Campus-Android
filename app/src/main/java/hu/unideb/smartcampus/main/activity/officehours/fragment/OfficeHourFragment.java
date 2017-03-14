@@ -13,7 +13,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jivesoftware.smack.SmackException;
 
 import java.util.Collections;
 
@@ -105,12 +104,14 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             MessageTypeInstructorIdUserId messageTypeInstructorIdUserId
                     = new MessageTypeInstructorIdUserId(ASKINSTRUCTORCONSULTINGHOURSPROCESSMESSAGE, parentListAdapterGroup.getInstructors().get(childPosition).getInstructorId().toString());
             ObjectMapper objectMapper = new ObjectMapper();
+            String request = null;
             try {
-                String request = objectMapper.writeValueAsString(messageTypeInstructorIdUserId);
-                Connection.getInstance().createLoadingDialog(request, getFragmentManager(), bundle);
-            } catch (JsonProcessingException | SmackException.NotConnectedException e) {
+                request = objectMapper.writeValueAsString(messageTypeInstructorIdUserId);
+                Connection.getInstance(getContext()).createLoadingDialog(request, getFragmentManager(), bundle);
+            } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
+
             return true;
         }
     }

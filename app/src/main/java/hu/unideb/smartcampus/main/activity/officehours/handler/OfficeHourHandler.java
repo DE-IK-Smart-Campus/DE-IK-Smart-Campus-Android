@@ -1,5 +1,6 @@
 package hu.unideb.smartcampus.main.activity.officehours.handler;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,19 +54,20 @@ public class OfficeHourHandler implements ChatMessageListener {
     private AskSubjectsProcessMessagePojo askSubjectsProcessMessagePojo;
     private FragmentManager fragmentManager;
     private ObjectMapper objectMapper;
+    private Context context;
 
-    public OfficeHourHandler(FragmentManager fragmentManager) throws SmackException.NotConnectedException, InterruptedException {
+    public OfficeHourHandler(FragmentManager fragmentManager, Context context) throws SmackException.NotConnectedException, InterruptedException {
         super();
-
+        this.context = context;
         this.askSubjectsProcessMessagePojo = new AskSubjectsProcessMessagePojo();
         this.objectMapper = new ObjectMapper();
         this.fragmentManager = fragmentManager;
 
-        Connection.getInstance().getAdminChat().addMessageListener(this);
-        MessageTypeUserId messageTypeUserId = new MessageTypeUserId(ASKSUBJECTSPROCESSMESSAGE, Connection.getInstance().getUserJID());
+        Connection.getInstance(context).getAdminChat().addMessageListener(this);
+        MessageTypeUserId messageTypeUserId = new MessageTypeUserId(ASKSUBJECTSPROCESSMESSAGE, Connection.getInstance(context).getUserJID());
         try {
             String request = objectMapper.writeValueAsString(messageTypeUserId);
-            Connection.getInstance().createLoadingDialog(request, fragmentManager, new Bundle());
+            Connection.getInstance(context).createLoadingDialog(request, fragmentManager, new Bundle());
         } catch (JsonProcessingException e) {
             Log.e("OfficeHourHandler()", messageTypeUserId.toString());
             e.printStackTrace();
@@ -112,7 +114,7 @@ public class OfficeHourHandler implements ChatMessageListener {
         if (message.getBody().contains(SIGNUPFORCONSULTINGHOURPROCESSMESSAGERESPONSE)) {
             LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
             loadingDialogFragment.nDialog.dismiss();
-            Connection.getInstance().getAdminChat().removeMessageListener(this);
+            Connection.getInstance(context).getAdminChat().removeMessageListener(this);
         }
 
 //        Log.d("Adminchat", "ChatInfo: " + message.getBody());
