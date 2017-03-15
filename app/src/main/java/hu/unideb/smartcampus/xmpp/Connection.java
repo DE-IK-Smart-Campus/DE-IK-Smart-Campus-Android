@@ -18,6 +18,7 @@ import org.jivesoftware.smack.packet.Message;
 import java.io.IOException;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.activity.LoginActivity;
 import hu.unideb.smartcampus.activity.MainActivity_SmartCampus;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 
@@ -45,59 +46,49 @@ public class Connection {
     private Chat adminChat;
     private String userJID;
 
+    public static Context getActualContext() {
+        return actualContext;
+    }
+
+    public static void setActualContext(Context actualContext) {
+        Connection.actualContext = actualContext;
+    }
+
     protected Connection() {
     }
 
-    public static Connection getInstance(Context context) {
-        actualContext = context;
+    public static Connection getInstance() {
         if (instance == null) {
             instance = new Connection();
         }
         return instance;
     }
 
-    private void checkConnection() {
+    private void checkConnection(Context actualContext) {
         if (!xmppConnection.isConnected()) {
             try {
                 xmppConnection.connect();
                 xmppConnection.login();
-            } catch (SmackException e) {
+            } catch (SmackException | IOException | XMPPException e) {
+                Intent intent = new Intent(actualContext, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                actualContext.startActivity(intent);
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XMPPException e) {
-                e.printStackTrace();
-            } finally {
-                //toLoginActivity(); TODO
             }
-
 
         }
     }
 
-
-    public void startBoshConnection(BOSHConfiguration config) {
-
+    public void startBoshConnection(BOSHConfiguration config, Context actualContext) {
+        this.actualContext = actualContext;
         xmppConnection = new XMPPBOSHConnection(config);
-
-        // Will refactor TODO;
-        try {
-            xmppConnection.connect();
-            xmppConnection.login();
-            userJID = config.getUsername().toString();
-            ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
-            adminChat = chatManager.createChat(adminJID); //TODO
-            Intent intent = new Intent(actualContext, MainActivity_SmartCampus.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            actualContext.startActivity(intent);
-        } catch (XMPPException e) {
-
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SmackException e) {
-            e.printStackTrace();
-        }
+        checkConnection(actualContext);
+        userJID = config.getUsername().toString();
+        ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
+        adminChat = chatManager.createChat(adminJID); //TODO
+        Intent intent = new Intent(actualContext, MainActivity_SmartCampus.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        actualContext.startActivity(intent);
     }
 
     public Chat getAdminChat() {
@@ -138,6 +129,7 @@ public class Connection {
         Log.d(TAG, "Sent MSG: " + toAdminMsg);
 
         try {
+            Connection.getInstance().checkConnection(actualContext);
             adminChat.sendMessage(new Message(adminJID, toAdminMsg));
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();

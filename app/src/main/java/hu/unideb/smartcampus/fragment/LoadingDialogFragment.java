@@ -24,7 +24,7 @@ public class LoadingDialogFragment extends Fragment {
         super.onCreate(savedInstanceState);
         nDialog = new ProgressDialog(getActivity());
         nDialog.setMessage("Loading..");
-        nDialog.setIndeterminate(false);
+        nDialog.setIndeterminate(true);
         //nDialog.setCancelable(true); //For debug
         nDialog.setCancelable(false);
     }

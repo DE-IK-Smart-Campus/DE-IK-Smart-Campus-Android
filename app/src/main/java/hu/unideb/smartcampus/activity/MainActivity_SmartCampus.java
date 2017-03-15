@@ -100,13 +100,13 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:
-                    Set<ChatMessageListener> listeners = Connection.getInstance(getApplicationContext()).getAdminChat().getListeners();
+                    Set<ChatMessageListener> listeners = Connection.getInstance().getAdminChat().getListeners();
                     for (ChatMessageListener chatMessageListener : listeners) {
                         if (chatMessageListener instanceof OfficeHourHandler) {
-                            Connection.getInstance(getApplicationContext()).getAdminChat().removeMessageListener(chatMessageListener);
+                            Connection.getInstance().getAdminChat().removeMessageListener(chatMessageListener);
                         }
                     }
-                    Connection.getInstance(getApplicationContext()).getAdminChat().addMessageListener(new OfficeHourHandler(getSupportFragmentManager(), getApplicationContext()));
+                    Connection.getInstance().getAdminChat().addMessageListener(new OfficeHourHandler(getSupportFragmentManager(), getApplicationContext()));
                     break;
 
                 case 3:

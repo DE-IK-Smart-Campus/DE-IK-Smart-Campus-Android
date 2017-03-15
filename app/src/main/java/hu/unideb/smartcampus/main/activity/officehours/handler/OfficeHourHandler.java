@@ -63,11 +63,11 @@ public class OfficeHourHandler implements ChatMessageListener {
         this.objectMapper = new ObjectMapper();
         this.fragmentManager = fragmentManager;
 
-        Connection.getInstance(context).getAdminChat().addMessageListener(this);
-        MessageTypeUserId messageTypeUserId = new MessageTypeUserId(ASKSUBJECTSPROCESSMESSAGE, Connection.getInstance(context).getUserJID());
+        Connection.getInstance().getAdminChat().addMessageListener(this);
+        MessageTypeUserId messageTypeUserId = new MessageTypeUserId(ASKSUBJECTSPROCESSMESSAGE, Connection.getInstance().getUserJID());
         try {
             String request = objectMapper.writeValueAsString(messageTypeUserId);
-            Connection.getInstance(context).createLoadingDialog(request, fragmentManager, new Bundle());
+            Connection.getInstance().createLoadingDialog(request, fragmentManager, new Bundle());
         } catch (JsonProcessingException e) {
             Log.e("OfficeHourHandler()", messageTypeUserId.toString());
             e.printStackTrace();
@@ -114,7 +114,7 @@ public class OfficeHourHandler implements ChatMessageListener {
         if (message.getBody().contains(SIGNUPFORCONSULTINGHOURPROCESSMESSAGERESPONSE)) {
             LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
             loadingDialogFragment.nDialog.dismiss();
-            Connection.getInstance(context).getAdminChat().removeMessageListener(this);
+            Connection.getInstance().getAdminChat().removeMessageListener(this);
         }
 
 //        Log.d("Adminchat", "ChatInfo: " + message.getBody());

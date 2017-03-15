@@ -107,7 +107,7 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             String request = null;
             try {
                 request = objectMapper.writeValueAsString(messageTypeInstructorIdUserId);
-                Connection.getInstance(getContext()).createLoadingDialog(request, getFragmentManager(), bundle);
+                Connection.getInstance().createLoadingDialog(request, getFragmentManager(), bundle);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

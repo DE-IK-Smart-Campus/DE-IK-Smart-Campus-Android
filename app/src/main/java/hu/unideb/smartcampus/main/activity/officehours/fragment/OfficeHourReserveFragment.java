@@ -73,14 +73,14 @@ public class OfficeHourReserveFragment extends Fragment implements OnBackPressed
                         selectedOfficeHourId.toString(),
                         reasonView.getText().toString(),
                         durationView.getText().toString(),
-                        Connection.getInstance(getContext()).getUserJID());
+                        Connection.getInstance().getUserJID());
 
 
                 ObjectMapper objectMapper = new ObjectMapper();
                 String request = null;
                 try {
                     request = objectMapper.writeValueAsString(toJson);
-                    Connection.getInstance(getContext()).createLoadingDialog(request, getFragmentManager(), new Bundle());
+                    Connection.getInstance().createLoadingDialog(request, getFragmentManager(), new Bundle());
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }

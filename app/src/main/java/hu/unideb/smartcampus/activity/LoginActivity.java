@@ -1,6 +1,7 @@
 package hu.unideb.smartcampus.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
@@ -35,6 +37,11 @@ public class LoginActivity extends AppCompatActivity {
 */
         Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
 
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
+        fragmentTransaction.commitAllowingStateLoss();
+
         new Thread(new Runnable() {
             public void run() {
                 BOSHConfiguration config = BOSHConfiguration.builder()
@@ -44,12 +51,11 @@ public class LoginActivity extends AppCompatActivity {
                         .setPort(80)
                         .setFile("/http-bind/")
                         .build();
-                connection = Connection.getInstance(getApplicationContext());
-                connection.startBoshConnection(config);
+                Connection.getInstance().startBoshConnection(config , getApplicationContext());
+
             }
 
         }).
-
                 start();
 
     }
