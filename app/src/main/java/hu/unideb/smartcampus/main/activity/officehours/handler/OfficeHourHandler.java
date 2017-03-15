@@ -1,5 +1,6 @@
 package hu.unideb.smartcampus.main.activity.officehours.handler;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,10 +54,11 @@ public class OfficeHourHandler implements ChatMessageListener {
     private AskSubjectsProcessMessagePojo askSubjectsProcessMessagePojo;
     private FragmentManager fragmentManager;
     private ObjectMapper objectMapper;
+    private Context context;
 
-    public OfficeHourHandler(FragmentManager fragmentManager) throws SmackException.NotConnectedException, InterruptedException {
+    public OfficeHourHandler(FragmentManager fragmentManager, Context context) throws SmackException.NotConnectedException, InterruptedException {
         super();
-
+        this.context = context;
         this.askSubjectsProcessMessagePojo = new AskSubjectsProcessMessagePojo();
         this.objectMapper = new ObjectMapper();
         this.fragmentManager = fragmentManager;

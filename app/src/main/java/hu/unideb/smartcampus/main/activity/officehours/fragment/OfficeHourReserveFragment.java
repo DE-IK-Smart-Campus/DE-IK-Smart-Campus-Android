@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.jivesoftware.smack.SmackException;
-
 import java.text.DateFormat;
 
 import hu.unideb.smartcampus.R;
@@ -79,12 +77,14 @@ public class OfficeHourReserveFragment extends Fragment implements OnBackPressed
 
 
                 ObjectMapper objectMapper = new ObjectMapper();
+                String request = null;
                 try {
-                    String request = objectMapper.writeValueAsString(toJson);
+                    request = objectMapper.writeValueAsString(toJson);
                     Connection.getInstance().createLoadingDialog(request, getFragmentManager(), new Bundle());
-                } catch (JsonProcessingException | SmackException.NotConnectedException e) {
+                } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
+
             });
         } else {
             throw new NullPointerException("getArguments().getLong(SELECTED_OFFICE_HOUR_ID) IS NULL");
