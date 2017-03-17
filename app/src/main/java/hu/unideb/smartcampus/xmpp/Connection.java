@@ -8,14 +8,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
-import org.jivesoftware.smack.chat.Chat;
-import org.jivesoftware.smack.chat.ChatManager;
+import org.jivesoftware.smack.chat2.Chat;
+import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Message;
-
-import java.io.IOException;
+import org.jxmpp.jid.EntityJid;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.LoginActivity;
@@ -24,6 +24,8 @@ import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 
 import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
+import static java.lang.Thread.sleep;
+import static org.jxmpp.jid.impl.JidCreate.entityBareFrom;
 
 /**
  * Created by Erdei Krisztián on 2017.03.03..
@@ -35,15 +37,13 @@ public class Connection {
     private static Connection instance = null;
     private static Context actualContext;
     private BOSHConfiguration config;
-
     public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu";
     public static final String HOSTNAME = "wt2.inf.unideb.hu";
-
-
-    private final String adminJID = ADMINJID;
+    public static EntityJid adminEntityJID;
 
     private XMPPBOSHConnection xmppConnection;
     private Chat adminChat;
+    private ChatManager chatManager;
     private String userJID;
 
     public static Context getActualContext() {
@@ -55,6 +55,11 @@ public class Connection {
     }
 
     protected Connection() {
+        try {
+            adminEntityJID = (EntityJid) JidCreate.from(ADMINJID);
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Connection getInstance() {
@@ -68,27 +73,36 @@ public class Connection {
         if (!xmppConnection.isConnected()) {
             try {
                 xmppConnection.connect();
+                sleep(5000);
                 xmppConnection.login();
-            } catch (SmackException | IOException | XMPPException e) {
-                Intent intent = new Intent(actualContext, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                actualContext.startActivity(intent);
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            Intent intent = new Intent(actualContext, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            actualContext.startActivity(intent);
         }
     }
+
 
     public void startBoshConnection(BOSHConfiguration config, Context actualContext) {
         this.actualContext = actualContext;
         xmppConnection = new XMPPBOSHConnection(config);
         checkConnection(actualContext);
-        userJID = config.getUsername().toString();
-        ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
-        adminChat = chatManager.createChat(adminJID); //TODO
-        Intent intent = new Intent(actualContext, MainActivity_SmartCampus.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        actualContext.startActivity(intent);
+        if (xmppConnection.isConnected()) {
+            userJID = config.getUsername().toString();
+            ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
+            try {
+                adminChat = chatManager.chatWith(entityBareFrom(ADMINJID));
+            } catch (XmppStringprepException e) {
+                e.printStackTrace();
+            }
+            Intent intent = new Intent(actualContext, MainActivity_SmartCampus.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            actualContext.startActivity(intent);
+        }
+        Log.e(TAG, "startBoshConnection: " + xmppConnection.isConnected());
     }
 
     public Chat getAdminChat() {
@@ -127,11 +141,10 @@ public class Connection {
         fragmentTransaction.addToBackStack(DIALOG_TAG);
         fragmentTransaction.commit();
         Log.d(TAG, "Sent MSG: " + toAdminMsg);
-
+        Connection.getInstance().checkConnection(actualContext);
         try {
-            Connection.getInstance().checkConnection(actualContext);
-            adminChat.sendMessage(new Message(adminJID, toAdminMsg));
-        } catch (SmackException.NotConnectedException e) {
+            adminChat.send(new Message(ADMINJID, toAdminMsg));
+        } catch (SmackException.NotConnectedException | XmppStringprepException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -148,7 +161,15 @@ public class Connection {
         this.userJID = userJID;
     }
 
-    public String getAdminJID() {
-        return adminJID;
+    public static String getADMINJID() {
+        return ADMINJID;
+    }
+
+    public EntityJid getAdminEntityJID() {
+        return adminEntityJID;
+    }
+
+    public ChatManager getChatManager() {
+        return chatManager;
     }
 }

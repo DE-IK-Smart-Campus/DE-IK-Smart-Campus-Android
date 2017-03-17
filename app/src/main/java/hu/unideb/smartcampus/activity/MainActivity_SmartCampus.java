@@ -15,10 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.chat.ChatMessageListener;
+import org.jivesoftware.smack.chat2.ChatManager;
 
 import java.util.List;
-import java.util.Set;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.CalendarFragment;
@@ -100,13 +99,11 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:
-                    Set<ChatMessageListener> listeners = Connection.getInstance().getAdminChat().getListeners();
-                    for (ChatMessageListener chatMessageListener : listeners) {
-                        if (chatMessageListener instanceof OfficeHourHandler) {
-                            Connection.getInstance().getAdminChat().removeMessageListener(chatMessageListener);
-                        }
-                    }
-                    Connection.getInstance().getAdminChat().addMessageListener(new OfficeHourHandler(getSupportFragmentManager(), getApplicationContext()));
+                    OfficeHourHandler officeHour = new OfficeHourHandler(getSupportFragmentManager(), getApplicationContext());
+                    ChatManager.getInstanceFor(Connection.getInstance().getXmppConnection()).removeListener(officeHour);
+                    ChatManager.getInstanceFor(Connection.getInstance().getXmppConnection()).addIncomingListener(officeHour);
+                    officeHour.sendDefaultMsg();
+
                     break;
 
                 case 3:
