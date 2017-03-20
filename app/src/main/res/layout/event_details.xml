@@ -7,7 +7,12 @@
         android:id="@+id/event_details_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
 </RelativeLayout>

@@ -2,8 +2,6 @@ package hu.unideb.smartcampus.activity;
 
 
 import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -13,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +18,7 @@ import android.view.View;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.fragment.CalendarFragment;
+import hu.unideb.smartcampus.fragment.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.fragment.ConsultingHoursFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
@@ -30,7 +27,7 @@ import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 public class MainActivity_SmartCampus extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawer;
-    private Toolbar toolbar;
+    public Toolbar toolbar;
 
     public static int navItemIndex = 0;
 
@@ -185,7 +182,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-      //  each fragment will have a OnBackPressedListener.
+        //  each fragment will have a OnBackPressedListener.
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             return;

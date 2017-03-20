@@ -9,46 +9,49 @@
 
     <CalendarView
         android:id="@+id/calendar"
-        style="@android:style/Widget.CalendarView"
+        style="@android:style/Widget.DeviceDefault.Light.CalendarView"
         android:layout_width="match_parent"
-        android:layout_height="290dp"
-        android:focusedMonthDateColor="@color/Black"
-        android:selectedWeekBackgroundColor="@color/colorAccent"
-        android:unfocusedMonthDateColor="@color/colorPrimary"
-        android:weekNumberColor="@color/Black"
-        android:weekSeparatorLineColor="@color/Black"
+        android:layout_height="300dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:dateTextAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
+        android:focusedMonthDateColor="@color/textColorBlack"
+        android:selectedWeekBackgroundColor="@color/colorAccent"
+        android:textAlignment="center"
+        android:unfocusedMonthDateColor="@color/colorPrimary"
+        android:weekNumberColor="@color/textColorBlack"
+        android:weekSeparatorLineColor="@color/textColorBlack" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/calendar">
 
-        <FrameLayout
-            android:id="@+id/frameLayout"
+        <ListView
+            android:id="@+id/calendar_event_listview"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_height="match_parent" />
 
-            <ListView
-                android:id="@+id/calendar_event_listview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/new_event_add"
+            style="@style/Widget.Design.FloatingActionButton"
+            android:layout_width="62dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="15dp"
+            android:foregroundGravity="top"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:elevation="0dp"
+            app:rippleColor="@color/colorAccent"
+            app:srcCompat="@android:drawable/ic_input_add" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/new_event_add"
-                style="@style/Widget.Design.FloatingActionButton"
-                android:layout_width="57dp"
-                android:layout_height="58dp"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="15dp"
-                android:layout_marginRight="10dp"
-                android:clickable="true"
-                app:elevation="1dp"
-                app:rippleColor="@color/colorAccent"
-                app:srcCompat="@android:drawable/ic_input_add" />
-
-        </FrameLayout>
-
+    </FrameLayout>
 
 
 </RelativeLayout>

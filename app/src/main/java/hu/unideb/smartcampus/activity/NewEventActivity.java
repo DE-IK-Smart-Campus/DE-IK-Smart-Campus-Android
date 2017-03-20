@@ -177,23 +177,29 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         endTime.setOnClickListener(this);
 
         Calendar newCalendar = Calendar.getInstance();
+        int round2 = newCalendar.get(Calendar.MINUTE) % 30;
+        newCalendar.add(Calendar.MINUTE, round2 < 8 ? -round2 : (30 -round2));
+        Calendar newTime = Calendar.getInstance();
+
+        startTime.setText(timeFormatter.format(newCalendar.getTime()));
 
         fromTimePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
-            Calendar newTime = Calendar.getInstance();
             newTime.set(0, 0, 0, hourOfDay, minute);
             startTime.setText(timeFormatter.format(newTime.getTime()));
-            Calendar toS = Calendar.getInstance();
-            Date to = newTime.getTime();
-            toS.setTime(to);
-            toS.add(Calendar.HOUR_OF_DAY, 1);
-            endTime.setText(timeFormatter.format(toS.getTime()));
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
 
+        Calendar toS = Calendar.getInstance();
+        toS.setTime(newTime.getTime());
+        toS.add(Calendar.HOUR_OF_DAY, 1);
+        int round = toS.get(Calendar.MINUTE) % 30;
+        toS.add(Calendar.MINUTE, round < 8 ? -round : (30 -round));
+        endTime.setText(timeFormatter.format(toS.getTime()));
+
         toTimePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
-            Calendar newTime = Calendar.getInstance();
-            newTime.set(0, 0, 0, hourOfDay, minute);
+            Calendar newEndTime = Calendar.getInstance();
+            newEndTime.set(0, 0, 0, hourOfDay, minute);
             endTime.setText(timeFormatter.format(newTime.getTime()));
-        }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
+        }, toS.get(Calendar.HOUR_OF_DAY), toS.get(Calendar.MINUTE), true);
 
 
     }
