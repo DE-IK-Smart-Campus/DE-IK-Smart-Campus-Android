@@ -10,21 +10,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.text.DateFormat;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
-import hu.unideb.smartcampus.main.activity.officehours.json.MessageTypeConsultingHourIdReasonDuration;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.FromToDatesInLong;
-import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_FROM_UNTIL_DATES;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SELECTED_OFFICE_HOUR_ID;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SIGNUPFORCONSULTINGHOURPROCESSMESSAGE;
 
 /**
  * This is where the user will reserve the selected office hour.
@@ -57,7 +51,7 @@ public class OfficeHourReserveFragment extends Fragment implements OnBackPressed
 
 
             Button reserveButton = (Button) view.findViewById(R.id.consulting_hour_reserve_button);
-            reserveButton.setOnClickListener(v -> {
+          /*  reserveButton.setOnClickListener(v -> {
                 TextView reasonView = (TextView) getView().findViewById(R.id.consulting_hours_reason_editText);
                 if (reasonView == null) {
                     throw new NullPointerException("reasonView is null");
@@ -86,6 +80,7 @@ public class OfficeHourReserveFragment extends Fragment implements OnBackPressed
                 }
 
             });
+            */
         } else {
             throw new NullPointerException("getArguments().getLong(SELECTED_OFFICE_HOUR_ID) IS NULL");
         }
