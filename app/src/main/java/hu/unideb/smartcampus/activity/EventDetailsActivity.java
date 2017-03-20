@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -61,7 +60,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         eventDetails.add(getResources().getString(R.string.textViewEnd) + "\t" + eventE);
 
 
-        datePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
+     /*   datePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
 //            startDate.setText(dateFormatter.format(newDate.getTime()));
@@ -86,7 +85,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 return true;
             }
         });
-
+*/
         ArrayAdapter<String> a = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventDetails);
 
         eventDetailsListView.setAdapter(a);

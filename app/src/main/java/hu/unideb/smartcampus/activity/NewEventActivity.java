@@ -132,7 +132,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         final boolean[] _selections = {false, false, false, false, false, false, false, false, false, false, false, false, false, false};
         repaitDialog = new AlertDialog.Builder(NewEventActivity.this);
         repaitDialog.setTitle(R.string.context_choice);
-        repaitDialog.setMultiChoiceItems(repaitOptionText, _selections, (dialogInterface, i, b) -> {
+  /*      repaitDialog.setMultiChoiceItems(repaitOptionText, _selections, (dialogInterface, i, b) -> {
             if (b) {
                 selColors.add(repaitOptionText[i]);
             } else {
@@ -144,7 +144,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
             repaitEditText.setText(selColors.toString());
         });
         repaitDialog.setNegativeButton(R.string.cancel_button, (dialog, id) -> {
-        });
+        });*/
     }
 
     private void setDateTimeField() {
@@ -153,6 +153,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         checkBoxOnOff();
 
         Calendar newCalendar = Calendar.getInstance();
+        /*
         fromDatePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
@@ -166,7 +167,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
             endDate.setText(dateFormatter.format(newDate.getTime()));
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
-
+*/
     }
 
     private void setTimeField() {
@@ -179,25 +180,25 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         Calendar newTime = Calendar.getInstance();
 
         startTime.setText(timeFormatter.format(newCalendar.getTime()));
-
+/*
         fromTimePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
             newTime.set(0, 0, 0, hourOfDay, minute);
             startTime.setText(timeFormatter.format(newTime.getTime()));
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
-
+*/
         Calendar toS = Calendar.getInstance();
         toS.setTime(newTime.getTime());
         toS.add(Calendar.HOUR_OF_DAY, 1);
         int round = toS.get(Calendar.MINUTE) % 30;
         toS.add(Calendar.MINUTE, round < 8 ? -round : (30 - round));
         endTime.setText(timeFormatter.format(toS.getTime()));
-
+/*
         toTimePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
             Calendar newEndTime = Calendar.getInstance();
             newEndTime.set(0, 0, 0, hourOfDay, minute);
             endTime.setText(timeFormatter.format(newTime.getTime()));
         }, toS.get(Calendar.HOUR_OF_DAY), toS.get(Calendar.MINUTE), true);
-
+*/
 
     }
 
@@ -218,7 +219,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
     private void checkBoxOnOff() {
         CheckBox checkBox = (CheckBox) findViewById(R.id.allDayEvent);
-
+/*
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (checkBox.isChecked()) {
                         startTime.setVisibility(View.INVISIBLE);
@@ -233,6 +234,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
                 }
         );
+        */
     }
 
     private void editTextEnableOrDisable(EditText editTextName, boolean trueOrFalse, int inputType) {

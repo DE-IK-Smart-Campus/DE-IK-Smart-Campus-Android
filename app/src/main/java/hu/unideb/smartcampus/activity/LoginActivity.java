@@ -11,13 +11,8 @@ import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
-import hu.unideb.smartcampus.main.activity.login.auth.BasicAuth;
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 import hu.unideb.smartcampus.xmpp.Connection;
 
@@ -40,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else {
+            /*
             try {
                 actualUserInfo = new BasicAuth().execute(new ActualUserInfo(username.getText().toString(), password.getText().toString(), null)).get(1000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
@@ -48,10 +44,10 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (TimeoutException e) {
                 e.printStackTrace();
-            }
-            if (actualUserInfo.getUserName() == null) {
-                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
-            } else {
+            }*/
+            /*if (actualUserInfo.getUserName() == null) {
+                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();*/
+            //} else {
                 Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -64,7 +60,8 @@ public class LoginActivity extends AppCompatActivity {
                         BOSHConfiguration config = null;
                         try {
                             config = BOSHConfiguration.builder()
-                                    .setUsernameAndPassword(username.getText().toString(), password.getText().toString())
+                                    //.setUsernameAndPassword(username.getText().toString(), password.getText().toString())
+                                    .setUsernameAndPassword("testuser","admin")
                                     .setXmppDomain(JidCreate.domainBareFrom(HOSTNAME))
                                     .setHost(HOSTNAME)
                                     .setPort(80)
@@ -79,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 }).start();
             }
-        }
+        //}
     }
 
     public void loginOnClick(View v) {

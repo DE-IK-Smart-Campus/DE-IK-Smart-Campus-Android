@@ -1,6 +1,5 @@
 package hu.unideb.smartcampus.main.activity.calendar.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.ListView;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,12 +16,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.activity.EventDetailsActivity;
-import hu.unideb.smartcampus.activity.NewEventActivity;
+import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.adapter.TimetableEventListAdapter;
 import hu.unideb.smartcampus.main.activity.calendar.pojo.TimetableEvent;
 import hu.unideb.smartcampus.main.activity.calendar.pojo.TimetableEventDate;
-import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 
 public class CalendarFragment extends Fragment implements OnBackPressedListener {
 
@@ -151,7 +147,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         calendarDates.add(a4);
         calendarDates.add(a5);
         calendarDates.add(a6);
-
+/*
         listView.setOnItemClickListener((parent, view1, position, id) -> {
             TimetableEvent e = (TimetableEvent) listView.getItemAtPosition(position);
             Intent intent = new Intent(getContext(), EventDetailsActivity.class);
@@ -163,7 +159,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
             intent.putExtra("eventEndTime", DateFormat.getTimeInstance(DateFormat.SHORT).format(e.getTimetableEndTime()));
             startActivity(intent);
         });
-
+*/
         CalendarInitialize(view);
 
         for (TimetableEventDate asd : calendarDates) {
@@ -179,7 +175,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         myCalendar = (CalendarView) v.findViewById(R.id.calendar);
         myCalendar.setShowWeekNumber(false);
         myCalendar.setFirstDayOfWeek(2);
-
+/*
         myCalendar.setOnDateChangeListener((CalendarView calendarView, int year, int mounth, int day) -> {
             selectedDate.set(year, mounth, day);
             for (TimetableEventDate asd : calendarDates) {
@@ -197,7 +193,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
             intent.putExtra("selectedDate", selectedDate.getTimeInMillis());
             startActivity(intent);
         });
-
+*/
     }
 
     @Override
