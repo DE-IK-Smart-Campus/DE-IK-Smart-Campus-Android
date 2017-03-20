@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#BABABA</color>
-    <color name="colorPrimaryDark">#c72c2c</color>
-    <color name="colorAccent">#c72c2c</color>
-    <color name="textColor">#000000</color>
+    <color name="colorPrimary">#bababa</color>
+    <color name="colorPrimaryDark">#8c8c8c</color>
+    <color name="colorAccent">#28da93</color>
+    <color name="textColorBlack">#000000</color>
+    <color name="LightSkyBlue">#87cefa</color>
+    <color name="selection_navigation_view">#18AB70</color>
 </resources>

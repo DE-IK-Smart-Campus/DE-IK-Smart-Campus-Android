@@ -11,13 +11,44 @@
     <string name="nav_consultingHours_name">Fogadóórák</string>
     <string name="nav_chat_name">Beszélgetés</string>
     <string name="nav_about_us_name">Rólunk</string>
+    <string name="new_event_add">Új Esemény</string>
 
     <string-array name="nav_item_activity_titles">
-        <item>Kezdőképernyő</item>
-        <item>Naptár</item>
-        <item>Fogadóórák</item>
-        <item>Beszélgetés</item>
+        <item> Kezdőképernyő</item>
+        <item> Naptár</item>
+        <item> Fogadóórák</item>
+        <item> Beszélgetés</item>
     </string-array>
+
+    <string-array name="repeats_array_item">
+        <item>Egyszeri esemény</item>
+        <item>Naponta</item>
+        <item>Hetente</item>
+        <item>Kéthetente</item>
+        <item>Havonta</item>
+        <item>Évente</item>
+    </string-array>
+
+    <string name="context_choice">Emlékezető</string>
+    <string-array name="remainder_array_item">
+        <item> 5 perc</item>
+        <item>10 perc</item>
+        <item>15 perc</item>
+        <item>20 perc</item>
+        <item>25 perc</item>
+        <item>30 perc</item>
+        <item>45 perc</item>
+        <item> 1 óra</item>
+        <item> 2 óra</item>
+        <item> 3 óra</item>
+        <item>12 óra</item>
+        <item>24 óra</item>
+        <item> 2 nap</item>
+        <item> 1 hét</item>
+    </string-array>
+
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Mégse</string>
 
     <string name="other_name">Egyéb</string>
     <string name="activity_title_about_us">Rólunk</string>
@@ -28,6 +59,19 @@
     <string name="usernamePasswordWrong">Felhasználónév vagy jelszó helytelen!</string>
     <string name="loginSucces">"Sikeresen bejeletkezve! "</string>
     <string name="admin_user_jid">smartcampus@192.168.1.11</string>
+    <string name="eventNameHint">Esemény neve</string>
+    <string name="eventDescriptionHint">Esemény leírása</string>
+    <string name="saveButton">Mentés</string>
+    <string name="cancelButtonText">Mégse</string>
+    <string name="allDayEventText">Egész napos esemény</string>
+    <string name="textViewStart">Kezdete:</string>
+    <string name="textViewEnd">Befejezés:</string>
+    <string name="remainderText">Emlékeztető</string>
+    <string name="repaitText">Ismétlődés</string>
+    <string name="placeHint">hely</string>
+    <string name="eventDetails">Esemény részletező</string>
+    <string name="event_edit">Esemény szerkesztése</string>
+    <string name="event_delete">Esemény törlése</string>
 
 
 </resources>
