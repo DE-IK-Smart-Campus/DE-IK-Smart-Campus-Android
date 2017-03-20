@@ -25,7 +25,6 @@ import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Connection connection;
     private EditText username;
     private EditText password;
 
@@ -37,12 +36,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         setupVariables();
-        ActualUserInfo info = null;
+        ActualUserInfo actualUserInfo = null;
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else {
             try {
-                info = new BasicAuth().execute(new ActualUserInfo(username.getText().toString(), password.getText().toString())).get(1000, TimeUnit.MILLISECONDS);
+                actualUserInfo = new BasicAuth().execute(new ActualUserInfo(username.getText().toString(), password.getText().toString(), null)).get(1000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -50,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (TimeoutException e) {
                 e.printStackTrace();
             }
-            if (info.getUserName().isEmpty()) {
+            if (actualUserInfo.getUserName() == null) {
                 Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
