@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.fragment.calendar.adapter;
+package hu.unideb.smartcampus.main.activity.calendar.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.fragment.calendar.pojo.TimetableEvent;
+import hu.unideb.smartcampus.main.activity.calendar.pojo.TimetableEvent;
 
 public class TimetableEventListAdapter extends BaseAdapter {
 

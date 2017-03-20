@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,11 +22,10 @@ import java.util.List;
 import java.util.Set;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.fragment.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
-import hu.unideb.smartcampus.fragment.ConsultingHoursFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
+import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 import hu.unideb.smartcampus.xmpp.Connection;
 
@@ -97,7 +97,12 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     HomeFragment homeFragment = new HomeFragment();
                     break;
                 case 1:
-                    CalendarFragment calendarFragment = new CalendarFragment();
+                    CalendarFragment fragment = new CalendarFragment();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+                    fragmentTransaction.commitAllowingStateLoss();
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:

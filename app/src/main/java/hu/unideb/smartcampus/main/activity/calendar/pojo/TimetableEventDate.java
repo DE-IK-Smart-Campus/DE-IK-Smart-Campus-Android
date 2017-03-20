@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.fragment.calendar.pojo;
+package hu.unideb.smartcampus.main.activity.calendar.pojo;
 
 import java.util.List;
 

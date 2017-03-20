@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.fragment.calendar.fragment;
+package hu.unideb.smartcampus.main.activity.calendar.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,18 +20,18 @@ import java.util.List;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.EventDetailsActivity;
 import hu.unideb.smartcampus.activity.NewEventActivity;
-import hu.unideb.smartcampus.fragment.calendar.adapter.TimetableEventListAdapter;
-import hu.unideb.smartcampus.fragment.calendar.pojo.TimetableEvent;
-import hu.unideb.smartcampus.fragment.calendar.pojo.TimetableEventDate;
+import hu.unideb.smartcampus.main.activity.calendar.adapter.TimetableEventListAdapter;
+import hu.unideb.smartcampus.main.activity.calendar.pojo.TimetableEvent;
+import hu.unideb.smartcampus.main.activity.calendar.pojo.TimetableEventDate;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 
 public class CalendarFragment extends Fragment implements OnBackPressedListener {
 
-    CalendarView myCalendar;
-    FloatingActionButton newEventFab;
-    List<TimetableEventDate> calendarDates;
-    ListView listView;
-    Calendar selectedDate;
+    private CalendarView myCalendar;
+    private FloatingActionButton newEventFab;
+    private List<TimetableEventDate> calendarDates;
+    private ListView listView;
+    private Calendar selectedDate;
 
     public CalendarFragment() {
     }

@@ -12,10 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import org.joda.time.DateTime;
-import org.joda.time.JodaTimePermission;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -178,7 +175,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
         Calendar newCalendar = Calendar.getInstance();
         int round2 = newCalendar.get(Calendar.MINUTE) % 30;
-        newCalendar.add(Calendar.MINUTE, round2 < 8 ? -round2 : (30 -round2));
+        newCalendar.add(Calendar.MINUTE, round2 < 8 ? -round2 : (30 - round2));
         Calendar newTime = Calendar.getInstance();
 
         startTime.setText(timeFormatter.format(newCalendar.getTime()));
@@ -192,7 +189,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         toS.setTime(newTime.getTime());
         toS.add(Calendar.HOUR_OF_DAY, 1);
         int round = toS.get(Calendar.MINUTE) % 30;
-        toS.add(Calendar.MINUTE, round < 8 ? -round : (30 -round));
+        toS.add(Calendar.MINUTE, round < 8 ? -round : (30 - round));
         endTime.setText(timeFormatter.format(toS.getTime()));
 
         toTimePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {

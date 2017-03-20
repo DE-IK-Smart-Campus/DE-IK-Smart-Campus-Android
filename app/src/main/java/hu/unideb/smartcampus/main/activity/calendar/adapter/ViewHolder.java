@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.fragment.calendar.adapter;
+package hu.unideb.smartcampus.main.activity.calendar.adapter;
 
 import android.widget.TextView;
 
