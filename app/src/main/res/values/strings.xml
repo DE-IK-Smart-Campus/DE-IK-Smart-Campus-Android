@@ -58,7 +58,7 @@
     <string name="usernamePasswordNeed">Felhasználónév és jelszó megadása kötelező!</string>
     <string name="usernamePasswordWrong">Felhasználónév vagy jelszó helytelen!</string>
     <string name="loginSucces">"Sikeresen bejeletkezve! "</string>
-    <string name="EXTRA_FROM_UNTIL_DATES">EXTRA_FROM_UNTIL_DATES</string>
+    <string name="admin_user_jid">smartcampus@192.168.1.11</string>
     <string name="eventNameHint">Esemény neve</string>
     <string name="eventDescriptionHint">Esemény leírása</string>
     <string name="saveButton">Mentés</string>
