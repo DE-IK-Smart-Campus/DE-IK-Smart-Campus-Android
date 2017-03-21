@@ -33,7 +33,7 @@
         android:layout_below="@+id/calendar">
 
         <ListView
-            android:id="@+id/calendar_event_listview"
+            android:id="@+id/calendar_event"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

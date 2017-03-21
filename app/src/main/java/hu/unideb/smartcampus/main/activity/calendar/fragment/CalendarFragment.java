@@ -1,14 +1,18 @@
 package hu.unideb.smartcampus.main.activity.calendar.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,6 +20,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.activity.EventDetailsActivity;
+import hu.unideb.smartcampus.activity.NewEventActivity;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.adapter.TimetableEventListAdapter;
 import hu.unideb.smartcampus.main.activity.calendar.pojo.TimetableEvent;
@@ -43,7 +49,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        listView = (ListView) view.findViewById(R.id.calendar_event_listview);
+        listView = (ListView) view.findViewById(R.id.calendar_event);
 
         calendarDates = new ArrayList<>();
 
@@ -97,6 +103,13 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         g6.set(Calendar.SECOND, 0);
         g6.set(Calendar.MILLISECOND, 0);
 
+        Calendar g10 = Calendar.getInstance();
+        g10.set(2017, 2, 21);
+        g10.set(Calendar.HOUR_OF_DAY, 0);
+        g10.set(Calendar.MINUTE, 0);
+        g10.set(Calendar.SECOND, 0);
+        g10.set(Calendar.MILLISECOND, 0);
+
         GregorianCalendar g7 = new GregorianCalendar();
         g7.set(0, 0, 0, 8, 0, 0);
 
@@ -139,7 +152,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         TimetableEventDate a3 = new TimetableEventDate(g3.getTimeInMillis(), even2);
         TimetableEventDate a4 = new TimetableEventDate(g4.getTimeInMillis(), even3);
         TimetableEventDate a5 = new TimetableEventDate(g5.getTimeInMillis(), even4);
-        TimetableEventDate a6 = new TimetableEventDate(g6.getTimeInMillis(), even5);
+        TimetableEventDate a6 = new TimetableEventDate(g10.getTimeInMillis(), even5);
 
         calendarDates.add(aa);
         calendarDates.add(a2);
@@ -147,24 +160,28 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         calendarDates.add(a4);
         calendarDates.add(a5);
         calendarDates.add(a6);
-/*
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
-            TimetableEvent e = (TimetableEvent) listView.getItemAtPosition(position);
-            Intent intent = new Intent(getContext(), EventDetailsActivity.class);
-            intent.putExtra("eventName", e.getTimetableEventName());
-            intent.putExtra("eventDescription", " ");
-            intent.putExtra("eventPlace", e.getTimetableEventPlace());
-            intent.putExtra("eventDate", selectedDate.getTime().getTime());
-            intent.putExtra("eventStartTime", DateFormat.getTimeInstance(DateFormat.SHORT).format(e.getTimetableStartTime()));
-            intent.putExtra("eventEndTime", DateFormat.getTimeInstance(DateFormat.SHORT).format(e.getTimetableEndTime()));
-            startActivity(intent);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TimetableEvent e = (TimetableEvent) listView.getItemAtPosition(position);
+                Intent intent = new Intent(getContext(), EventDetailsActivity.class);
+                intent.putExtra("eventName", e.getTimetableEventName());
+                intent.putExtra("eventDescription", " ");
+                intent.putExtra("eventPlace", e.getTimetableEventPlace());
+                intent.putExtra("eventDate", selectedDate.getTime().getTime());
+                intent.putExtra("eventStartTime", DateFormat.getTimeInstance(DateFormat.SHORT).format(e.getTimetableStartTime()));
+                intent.putExtra("eventEndTime", DateFormat.getTimeInstance(DateFormat.SHORT).format(e.getTimetableEndTime()));
+                startActivity(intent);
+            }
         });
-*/
+
         CalendarInitialize(view);
 
         for (TimetableEventDate asd : calendarDates) {
             if (asd.getTimetableEventDate().equals(today.getTimeInMillis())) {
-                listView.setAdapter(new TimetableEventListAdapter(getContext(), asd.getTimetableEventList()));
+                TimetableEventListAdapter adapter = new TimetableEventListAdapter(getContext(), asd.getTimetableEventList());
+                listView.setAdapter(adapter);
             }
         }
         return view;
@@ -175,25 +192,30 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         myCalendar = (CalendarView) v.findViewById(R.id.calendar);
         myCalendar.setShowWeekNumber(false);
         myCalendar.setFirstDayOfWeek(2);
-/*
-        myCalendar.setOnDateChangeListener((CalendarView calendarView, int year, int mounth, int day) -> {
-            selectedDate.set(year, mounth, day);
-            for (TimetableEventDate asd : calendarDates) {
-                if (selectedDate.getTimeInMillis() == asd.getTimetableEventDate()) {
-                    listView.setAdapter(new TimetableEventListAdapter(getContext(), asd.getTimetableEventList()));
-                    break;
-                } else {
-                    listView.setAdapter(null);
+
+        myCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                selectedDate.set(year, month, dayOfMonth);
+                for (TimetableEventDate asd : calendarDates) {
+                    if (selectedDate.getTimeInMillis() == asd.getTimetableEventDate()) {
+                        listView.setAdapter(new TimetableEventListAdapter(getContext(), asd.getTimetableEventList()));
+                        break;
+                    } else {
+                        listView.setAdapter(null);
+                    }
                 }
             }
         });
 
-        newEventFab.setOnClickListener(view -> {
-            Intent intent = new Intent(getContext(), NewEventActivity.class);
-            intent.putExtra("selectedDate", selectedDate.getTimeInMillis());
-            startActivity(intent);
+        newEventFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), NewEventActivity.class);
+                intent.putExtra("selectedDate", selectedDate.getTimeInMillis());
+                startActivity(intent);
+            }
         });
-*/
     }
 
     @Override

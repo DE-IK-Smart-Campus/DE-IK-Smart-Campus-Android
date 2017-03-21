@@ -1,5 +1,6 @@
 package hu.unideb.smartcampus.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -30,11 +31,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        setupVariables();
-        ActualUserInfo actualUserInfo = null;
-        if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
-        } else {
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity_SmartCampus.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+
+//        setupVariables();
+//        ActualUserInfo actualUserInfo = null;
+//        if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
+//            Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
+//        } else {
             /*
             try {
                 actualUserInfo = new BasicAuth().execute(new ActualUserInfo(username.getText().toString(), password.getText().toString(), null)).get(1000, TimeUnit.MILLISECONDS);
@@ -48,34 +55,34 @@ public class LoginActivity extends AppCompatActivity {
             /*if (actualUserInfo.getUserName() == null) {
                 Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();*/
             //} else {
-                Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), R.string.loginSucces, Toast.LENGTH_SHORT).show();
 
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
-                fragmentTransaction.commitAllowingStateLoss();
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        BOSHConfiguration config = null;
-                        try {
-                            config = BOSHConfiguration.builder()
-                                    //.setUsernameAndPassword(username.getText().toString(), password.getText().toString())
-                                    .setUsernameAndPassword("testuser","admin")
-                                    .setXmppDomain(JidCreate.domainBareFrom(HOSTNAME))
-                                    .setHost(HOSTNAME)
-                                    .setPort(80)
-                                    .setFile("/http-bind/")
-                                    .build();
-                        } catch (XmppStringprepException e) {
-                            e.printStackTrace();
-                        }
-                        Connection.getInstance().startBoshConnection(config, getApplicationContext());
-
-                    }
-
-                }).start();
-            }
+//                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+//                fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
+//                fragmentTransaction.commitAllowingStateLoss();
+//
+//                new Thread(new Runnable() {
+//                    public void run() {
+//                        BOSHConfiguration config = null;
+//                        try {
+//                            config = BOSHConfiguration.builder()
+//                                    //.setUsernameAndPassword(username.getText().toString(), password.getText().toString())
+//                                    .setUsernameAndPassword("testuser","admin")
+//                                    .setXmppDomain(JidCreate.domainBareFrom(HOSTNAME))
+//                                    .setHost(HOSTNAME)
+//                                    .setPort(80)
+//                                    .setFile("/http-bind/")
+//                                    .build();
+//                        } catch (XmppStringprepException e) {
+//                            e.printStackTrace();
+//                        }
+//                        Connection.getInstance().startBoshConnection(config, getApplicationContext());
+//
+//                    }
+//
+//                }).start();
+//            }
         //}
     }
 

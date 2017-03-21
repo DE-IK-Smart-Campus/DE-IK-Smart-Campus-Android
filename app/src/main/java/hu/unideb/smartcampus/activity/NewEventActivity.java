@@ -10,9 +10,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-
+import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +46,8 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
+
+    Calendar newTime = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +136,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         final boolean[] _selections = {false, false, false, false, false, false, false, false, false, false, false, false, false, false};
         repaitDialog = new AlertDialog.Builder(NewEventActivity.this);
         repaitDialog.setTitle(R.string.context_choice);
+
   /*      repaitDialog.setMultiChoiceItems(repaitOptionText, _selections, (dialogInterface, i, b) -> {
             if (b) {
                 selColors.add(repaitOptionText[i]);
@@ -153,21 +158,24 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         checkBoxOnOff();
 
         Calendar newCalendar = Calendar.getInstance();
-        /*
-        fromDatePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
-            Calendar newDate = Calendar.getInstance();
-            newDate.set(year, monthOfYear, dayOfMonth);
-            startDate.setText(dateFormatter.format(newDate.getTime()));
-            endDate.setText(startDate.getText());
+
+        fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                startDate.setText(dateFormatter.format(newDate.getTime()));
+                endDate.setText(startDate.getText());
+            }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
-        toDatePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
-            Calendar newDate = Calendar.getInstance();
-            newDate.set(year, monthOfYear, dayOfMonth);
-            endDate.setText(dateFormatter.format(newDate.getTime()));
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
-*/
+        fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                endDate.setText(dateFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
     private void setTimeField() {
@@ -177,28 +185,33 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         Calendar newCalendar = Calendar.getInstance();
         int round2 = newCalendar.get(Calendar.MINUTE) % 30;
         newCalendar.add(Calendar.MINUTE, round2 < 8 ? -round2 : (30 - round2));
-        Calendar newTime = Calendar.getInstance();
+
 
         startTime.setText(timeFormatter.format(newCalendar.getTime()));
-/*
-        fromTimePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
-            newTime.set(0, 0, 0, hourOfDay, minute);
-            startTime.setText(timeFormatter.format(newTime.getTime()));
+
+        fromTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                newTime.set(0, 0, 0, hourOfDay, minute);
+                startTime.setText(timeFormatter.format(newTime.getTime()));
+            }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
-*/
+
         Calendar toS = Calendar.getInstance();
         toS.setTime(newTime.getTime());
         toS.add(Calendar.HOUR_OF_DAY, 1);
         int round = toS.get(Calendar.MINUTE) % 30;
         toS.add(Calendar.MINUTE, round < 8 ? -round : (30 - round));
         endTime.setText(timeFormatter.format(toS.getTime()));
-/*
-        toTimePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
-            Calendar newEndTime = Calendar.getInstance();
-            newEndTime.set(0, 0, 0, hourOfDay, minute);
-            endTime.setText(timeFormatter.format(newTime.getTime()));
+
+        toTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Calendar newEndTime = Calendar.getInstance();
+                newEndTime.set(0, 0, 0, hourOfDay, minute);
+                endTime.setText(timeFormatter.format(newEndTime.getTime()));
+            }
         }, toS.get(Calendar.HOUR_OF_DAY), toS.get(Calendar.MINUTE), true);
-*/
 
     }
 
@@ -218,23 +231,23 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void checkBoxOnOff() {
-        CheckBox checkBox = (CheckBox) findViewById(R.id.allDayEvent);
-/*
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if (checkBox.isChecked()) {
-                        startTime.setVisibility(View.INVISIBLE);
-                        endTime.setVisibility(View.INVISIBLE);
-                        endDate.setText(startDate.getText());
-                        editTextEnableOrDisable(endDate, false, InputType.TYPE_NULL);
-                    } else if (!checkBox.isChecked()) {
-                        startTime.setVisibility(View.VISIBLE);
-                        endTime.setVisibility(View.VISIBLE);
-                        editTextEnableOrDisable(endDate, true, InputType.TYPE_DATETIME_VARIATION_DATE);
-                    }
+        final CheckBox checkBox = (CheckBox) findViewById(R.id.allDayEvent);
 
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (checkBox.isChecked()) {
+                    startTime.setVisibility(View.INVISIBLE);
+                    endTime.setVisibility(View.INVISIBLE);
+                    endDate.setText(startDate.getText());
+                    editTextEnableOrDisable(endDate, false, InputType.TYPE_NULL);
+                } else if (!checkBox.isChecked()) {
+                    startTime.setVisibility(View.VISIBLE);
+                    endTime.setVisibility(View.VISIBLE);
+                    editTextEnableOrDisable(endDate, true, InputType.TYPE_DATETIME_VARIATION_DATE);
                 }
-        );
-        */
+            }
+        });
     }
 
     private void editTextEnableOrDisable(EditText editTextName, boolean trueOrFalse, int inputType) {

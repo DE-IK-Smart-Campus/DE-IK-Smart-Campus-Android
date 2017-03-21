@@ -27,12 +27,4 @@ public class TimetableEventDate {
     public void setTimetableEventList(List<TimetableEvent> timetableEventList) {
         this.timetableEventList = timetableEventList;
     }
-
-    @Override
-    public String toString() {
-        return "TimetableEventDate{" +
-                "timetableEventDate=" + timetableEventDate +
-                ", timetableEventList=" + timetableEventList +
-                '}';
-    }
 }

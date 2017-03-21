@@ -11,7 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -38,7 +40,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         setContentView(R.layout.event_details);
 
-        ListView eventDetailsListView = (ListView) findViewById(R.id.event_details_listview);
+        final ListView eventDetailsListView = (ListView) findViewById(R.id.event_details_listview);
 
         eventDetails = new ArrayList<>();
 
@@ -55,23 +57,24 @@ public class EventDetailsActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getDefault());
         cal.setTimeInMillis(eventDate);
-        eventDetails.add("Dátum: " + "\t" + DateFormat.getDateInstance(DateFormat.SHORT).format(cal.getTime()));
+        eventDetails.add(getResources().getString(R.string.date) + "\t" + DateFormat.getDateInstance(DateFormat.SHORT).format(cal.getTime()));
         eventDetails.add(getResources().getString(R.string.textViewStart) + "\t" + eventS);
         eventDetails.add(getResources().getString(R.string.textViewEnd) + "\t" + eventE);
 
+        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
-     /*   datePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
-            Calendar newDate = Calendar.getInstance();
-            newDate.set(year, monthOfYear, dayOfMonth);
-//            startDate.setText(dateFormatter.format(newDate.getTime()));
-//            endDate.setText(startDate.getText());
-        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+            }
+
+        },cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
 
         eventDetailsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(getApplicationContext(), eventDetailsListView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), eventDetailsListView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 
                 if (eventDetailsListView.getItemAtPosition(position).toString().contains("Dátum")) {
                     datePickerDialog.show();
@@ -85,7 +88,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 return true;
             }
         });
-*/
+
         ArrayAdapter<String> a = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventDetails);
 
         eventDetailsListView.setAdapter(a);

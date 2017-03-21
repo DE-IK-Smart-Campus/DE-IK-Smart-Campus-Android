@@ -55,15 +55,4 @@ public class TimetableEvent {
     public void setTimetableEndTime(Long timetableEndTime) {
         this.timetableEndTime = timetableEndTime;
     }
-
-    @Override
-    public String toString() {
-        return "TimetableEvent{" +
-                "timetableEventName='" + timetableEventName + '\'' +
-                ", timetableEventDescription='" + timetableEventDescription + '\'' +
-                ", timetableEventPlace='" + timetableEventPlace + '\'' +
-                ", timetableStartTime=" + timetableStartTime +
-                ", timetableEndTime=" + timetableEndTime +
-                '}';
-    }
 }
