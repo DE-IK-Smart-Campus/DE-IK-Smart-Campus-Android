@@ -43,18 +43,17 @@ public class TimetableEventListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).
-                    inflate(R.layout.event_list_row, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.event_list_row, parent, false);
         }
         TimetableEvent currentItem = (TimetableEvent) getItem(position);
 
         TextView event_name_and_start_time = (TextView) convertView.findViewById(R.id.event_name_and_start_time);
         TextView place = (TextView) convertView.findViewById(R.id.place);
 
-        Date s = new Date(currentItem.getTimetableStartTime());
-        Date e = new Date(currentItem.getTimetableEndTime());
+        Date startDate = new Date(currentItem.getTimetableStartTime());
+        Date endDate = new Date(currentItem.getTimetableEndTime());
 
-        event_name_and_start_time.setText(currentItem.getTimetableEventName() + " : " + DateFormat.getTimeInstance(DateFormat.SHORT).format(s) + " - " + DateFormat.getTimeInstance(DateFormat.SHORT).format(e));
+        event_name_and_start_time.setText(currentItem.getTimetableEventName() + " : " + DateFormat.getTimeInstance(DateFormat.SHORT).format(startDate) + " - " + DateFormat.getTimeInstance(DateFormat.SHORT).format(endDate));
         place.setText(currentItem.getTimetableEventPlace());
 
         return convertView;
