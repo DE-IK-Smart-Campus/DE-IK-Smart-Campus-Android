@@ -2,7 +2,6 @@ package hu.unideb.smartcampus.main.activity.calendar.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -170,8 +168,8 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
                 intent.putExtra("eventDescription", " ");
                 intent.putExtra("eventPlace", e.getTimetableEventPlace());
                 intent.putExtra("eventDate", selectedDate.getTime().getTime());
-                intent.putExtra("eventStartTime", DateFormat.getTimeInstance(DateFormat.SHORT).format(e.getTimetableStartTime()));
-                intent.putExtra("eventEndTime", DateFormat.getTimeInstance(DateFormat.SHORT).format(e.getTimetableEndTime()));
+                intent.putExtra("eventStartTime", e.getTimetableStartTime());
+                intent.putExtra("eventEndTime", e.getTimetableEndTime());
                 startActivity(intent);
             }
         });
@@ -190,7 +188,6 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
     public void CalendarInitialize(View v) {
         newEventFab = (FloatingActionButton) v.findViewById(R.id.new_event_add);
         myCalendar = (CalendarView) v.findViewById(R.id.calendar);
-        myCalendar.setShowWeekNumber(false);
         myCalendar.setFirstDayOfWeek(2);
 
         myCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {

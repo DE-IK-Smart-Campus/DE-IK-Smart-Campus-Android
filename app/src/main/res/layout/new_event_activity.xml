@@ -219,19 +219,14 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_weight="0.16"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="1">
 
-        <EditText
-            android:id="@+id/repaitText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_weight="0.58"
-            android:ems="10"
-            android:inputType="text"
-            android:onClick="repeatTimeSet" />
-
+        <Spinner
+            android:id="@+id/remainderSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="5dp" />
     </LinearLayout>
 
     <LinearLayout

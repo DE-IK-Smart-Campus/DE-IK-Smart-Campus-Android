@@ -1,6 +1,7 @@
 package hu.unideb.smartcampus.activity;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -14,16 +15,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import hu.unideb.smartcampus.R;
 
@@ -33,34 +32,43 @@ public class EventDetailsActivity extends AppCompatActivity {
     private final Context context = this;
 
     private DatePickerDialog datePickerDialog;
-
+    private TimePickerDialog fromTimePickerDialog;
+    private TimePickerDialog toTimePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.event_details);
+
+        Bundle bundle = getIntent().getExtras();
 
         final ListView eventDetailsListView = (ListView) findViewById(R.id.event_details_listview);
 
         eventDetails = new ArrayList<>();
 
         String eventName = getIntent().getExtras().getString("eventName");
-        String eventDescription = getIntent().getExtras().getString("eventDescription");
-        String eventP = getIntent().getExtras().getString("eventPlace");
-        Long eventDate = getIntent().getExtras().getLong("eventDate");
-        String eventS = getIntent().getExtras().getString("eventStartTime");
-        String eventE = getIntent().getExtras().getString("eventEndTime");
+        String eventDescription = bundle.getString("eventDescription");
+        String eventPlace = bundle.getString("eventPlace");
+        Long eventDate = bundle.getLong("eventDate");
+        Long eventStartTime = bundle.getLong("eventStartTime");
+        Long eventEndTime = bundle.getLong("eventEndTime");
+
+        Calendar fromTime = Calendar.getInstance();
+        fromTime.setTimeInMillis(eventStartTime);
+
+        Calendar toTime = Calendar.getInstance();
+        toTime.setTimeInMillis(eventEndTime);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(eventDate);
 
         eventDetails.add(eventName);
         eventDetails.add(eventDescription);
-        eventDetails.add(eventP);
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(TimeZone.getDefault());
-        cal.setTimeInMillis(eventDate);
+        eventDetails.add(eventPlace);
+
         eventDetails.add(getResources().getString(R.string.date) + "\t" + DateFormat.getDateInstance(DateFormat.SHORT).format(cal.getTime()));
-        eventDetails.add(getResources().getString(R.string.textViewStart) + "\t" + eventS);
-        eventDetails.add(getResources().getString(R.string.textViewEnd) + "\t" + eventE);
+        eventDetails.add(getResources().getString(R.string.textViewStart) + "\t" + DateFormat.getTimeInstance(DateFormat.SHORT).format(fromTime.getTime()));
+        eventDetails.add(getResources().getString(R.string.textViewEnd) + "\t" + DateFormat.getTimeInstance(DateFormat.SHORT).format(toTime.getTime()));
 
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
@@ -69,45 +77,60 @@ public class EventDetailsActivity extends AppCompatActivity {
                 newDate.set(year, monthOfYear, dayOfMonth);
             }
 
-        },cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+
+        fromTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                newTime.set(0, 0, 0, hourOfDay, minute);
+//                startTime.setText(timeFormatter.format(newTime.getTime()));
+            }
+        }, fromTime.get(Calendar.HOUR_OF_DAY), fromTime.get(Calendar.MINUTE), true);
+
+        toTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                newTime.set(0, 0, 0, hourOfDay, minute);
+//                startTime.setText(timeFormatter.format(newTime.getTime()));
+            }
+        }, toTime.get(Calendar.HOUR_OF_DAY), toTime.get(Calendar.MINUTE), true);
 
         eventDetailsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-//                Toast.makeText(getApplicationContext(), eventDetailsListView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-
-                if (eventDetailsListView.getItemAtPosition(position).toString().contains("Dátum")) {
+                if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.date))) {
                     datePickerDialog.show();
                 } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textViewStart))) {
-
+                    fromTimePickerDialog.show();
                 } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textViewEnd))) {
-
+                    toTimePickerDialog.show();
                 } else {
-                    TextView test = (TextView) findViewById(R.id.event_details_edit_textview);
                     editEventShowDialog(view);
                 }
                 return true;
             }
         });
 
-        ArrayAdapter<String> a = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventDetails);
+        ArrayAdapter<String> eventDetailsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventDetails);
 
-        eventDetailsListView.setAdapter(a);
+        eventDetailsListView.setAdapter(eventDetailsAdapter);
+
+    }
+
+    public void getDataAnotherScreen(){
 
     }
 
     private void editEventShowDialog(View view) {
 
         LayoutInflater li = LayoutInflater.from(getApplicationContext());
-        View promptsView = li.inflate(R.layout.event_details_editing_dialog, null);
+        View eventDetailsDialog = li.inflate(R.layout.event_details_editing_dialog, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
 
-        alertDialogBuilder.setView(promptsView);
+        alertDialogBuilder.setView(eventDetailsDialog);
 
-        final EditText userInput = (EditText) promptsView
-                .findViewById(R.id.editTextInput);
         alertDialogBuilder
                 .setCancelable(false)
                 .setPositiveButton("OK",
@@ -127,8 +150,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
 
         alertDialog.show();
-
-
     }
 
     @Override

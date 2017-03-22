@@ -21,7 +21,8 @@
         android:textAlignment="center"
         android:unfocusedMonthDateColor="@color/colorPrimary"
         android:weekNumberColor="@color/textColorBlack"
-        android:weekSeparatorLineColor="@color/textColorBlack" />
+        android:weekSeparatorLineColor="@color/textColorBlack"
+        tools:showWeekNumber="false" />
 
     <FrameLayout
         android:id="@+id/frameLayout"

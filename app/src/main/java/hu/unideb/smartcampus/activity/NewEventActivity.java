@@ -17,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -35,9 +34,6 @@ public class NewEventActivity extends AppCompatActivity {
     private EditText endTime;
     private EditText repeatEditText;
 
-    private AlertDialog.Builder repeatDialog;
-    private String[] repeatOptionText;
-
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
 
@@ -54,8 +50,6 @@ public class NewEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_event_activity);
         setupVariables();
-
-        repeatOptionText = getApplicationContext().getResources().getStringArray(R.array.remainder_array_item);
 
         dateFormatter = new SimpleDateFormat("yyyy.MMM dd.,EEE", Locale.getDefault());
         timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -77,7 +71,7 @@ public class NewEventActivity extends AppCompatActivity {
 
         setDateTimeField();
         setTimeField();
-        repeatAndRemainderSetup();
+        repeatSetup();
     }
 
     private void setupVariables() {
@@ -107,7 +101,7 @@ public class NewEventActivity extends AppCompatActivity {
         repeatEditText.setFocusable(false);
     }
 
-    private void repeatAndRemainderSetup() {
+    private void repeatSetup() {
         Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeats_array_item, android.R.layout.simple_spinner_item);
@@ -130,26 +124,8 @@ public class NewEventActivity extends AppCompatActivity {
 
                 }
         );
-
-        ArrayList<String> repeatTimes = new ArrayList<>();
-        final boolean[] _selections = {false, false, false, false, false, false, false, false, false, false, false, false, false, false};
-        repeatDialog = new AlertDialog.Builder(NewEventActivity.this);
-        repeatDialog.setTitle(R.string.context_choice);
-
-  /*      repeatDialog.setMultiChoiceItems(repeatOptionText, _selections, (dialogInterface, i, b) -> {
-            if (b) {
-                selColors.add(repeatOptionText[i]);
-            } else {
-                selColors.remove(repeatOptionText[i]);
-            }
-        });
-
-        repeatDialog.setPositiveButton(R.string.ok_button, (dialog, id) -> {
-            repeatEditText.setText(selColors.toString());
-        });
-        repeatDialog.setNegativeButton(R.string.cancel_button, (dialog, id) -> {
-        });*/
     }
+
 
     private void setDateTimeField() {
         checkBoxOnOff();
@@ -175,9 +151,9 @@ public class NewEventActivity extends AppCompatActivity {
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public void roundingThirtyMinutes(Calendar calendar){
+    public void roundingThirtyMinutes(Calendar calendar) {
         int rounding = calendar.get(Calendar.MINUTE) % 30;
-        calendar.add(Calendar.MINUTE, rounding < 8 ? - rounding :(30 - rounding));
+        calendar.add(Calendar.MINUTE, rounding < 8 ? -rounding : (30 - rounding));
     }
 
     private void setTimeField() {
@@ -193,7 +169,6 @@ public class NewEventActivity extends AppCompatActivity {
                 startTime.setText(timeFormatter.format(newTime.getTime()));
             }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
-
 
         Calendar toTime = Calendar.getInstance();
         toTime.setTime(newTime.getTime());
@@ -239,25 +214,25 @@ public class NewEventActivity extends AppCompatActivity {
         editTextName.setInputType(inputType);
     }
 
-    public void startDateSet(View view){
+    public void startDateSet(View view) {
         fromDatePickerDialog.show();
     }
 
-    public void endDateSet(View view){
+    public void endDateSet(View view) {
         toDatePickerDialog.show();
     }
 
-    public void startTimeSet(View view){
+    public void startTimeSet(View view) {
         fromTimePickerDialog.show();
     }
 
-    public void endTimeSet(View view){
+    public void endTimeSet(View view) {
         toTimePickerDialog.show();
     }
 
-    public void repeatTimeSet(View view){
-        repeatDialog.show();
-    }
+//    public void repeatTimeSet(View view) {
+//        repeatDialog.show();
+//    }
 
     public void cancelOnClick(View view) {
         super.onBackPressed();
@@ -265,5 +240,4 @@ public class NewEventActivity extends AppCompatActivity {
 
     public void saveOnClick(View view) {
     }
-
 }
