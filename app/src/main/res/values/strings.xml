@@ -18,6 +18,7 @@
         <item> Naptár</item>
         <item> Fogadóórák</item>
         <item> Beszélgetés</item>
+        <item> Rólunk</item>
     </string-array>
 
     <string-array name="repeats_array_item">

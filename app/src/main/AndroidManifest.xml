@@ -25,15 +25,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.AboutUsActivity"
-            android:label="@string/activity_title_about_us"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.NewEventActivity"
             android:label="@string/new_event_add"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".chat.MainChatMenu"
+            android:name="main.activity.chat.MainChatMenu"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,12 +39,6 @@
             android:name=".activity.EventDetailsActivity"
             android:label="@string/eventDetails"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".main.activity.officehours.activity.ReserveOfficeHourActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

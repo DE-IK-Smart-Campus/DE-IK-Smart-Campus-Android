@@ -21,6 +21,7 @@ import org.jivesoftware.smack.chat2.ChatManager;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.fragment.AboutUsFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
@@ -37,6 +38,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     private static final String TAG_CALENDAR = "calendar";
     private static final String TAG_OFFICEHOURS = "officeHours";
     private static final String TAG_CHAT = "chat";
+    private static final String TAG_ABOUT = "about";
     public static String CURRENT_TAG = TAG_HOME;
 
     private String[] activityTitles;
@@ -116,6 +118,14 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     ChatFragment chatFragment = new ChatFragment();
                     //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
                     break;
+                case 4:
+                    AboutUsFragment aboutUsFragment = new AboutUsFragment();
+                    FragmentTransaction fragmentTransactiona = getSupportFragmentManager().beginTransaction();
+                    fragmentTransactiona.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransactiona.replace(R.id.frame, aboutUsFragment, CURRENT_TAG);
+                    fragmentTransactiona.commitAllowingStateLoss();
+                    break;
                 default:
                     break;
             }
@@ -159,9 +169,9 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                         CURRENT_TAG = TAG_CHAT;
                         break;
                     case R.id.nav_about_us:
-                        startActivity(new Intent(MainActivity_SmartCampus.this, AboutUsActivity.class));
-                        drawer.closeDrawers();
-                        return true;
+                        navItemIndex = 4;
+                        CURRENT_TAG = TAG_ABOUT;
+                        break;
                     default:
                         navItemIndex = 0;
                 }

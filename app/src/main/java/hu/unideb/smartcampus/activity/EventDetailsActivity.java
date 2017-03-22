@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -83,6 +84,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textViewEnd))) {
 
                 } else {
+                    TextView test = (TextView) findViewById(R.id.event_details_edit_textview);
                     editEventShowDialog(view);
                 }
                 return true;
