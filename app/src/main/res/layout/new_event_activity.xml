@@ -229,7 +229,8 @@
             android:layout_marginLeft="15dp"
             android:layout_weight="0.58"
             android:ems="10"
-            android:inputType="text" />
+            android:inputType="text"
+            android:onClick="repeatTimeSet" />
 
     </LinearLayout>
 

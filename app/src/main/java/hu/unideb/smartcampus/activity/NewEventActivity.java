@@ -24,7 +24,7 @@ import java.util.Locale;
 
 import hu.unideb.smartcampus.R;
 
-public class NewEventActivity extends AppCompatActivity implements View.OnClickListener {
+public class NewEventActivity extends AppCompatActivity {
 
     private EditText eventName;
     private EditText eventDescription;
@@ -109,7 +109,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
     private void repeatAndRemainderSetup() {
         Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
-        repeatEditText.setOnClickListener(this);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeats_array_item, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -176,11 +175,14 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
+    public void roundingThirtyMinutes(Calendar calendar){
+        int rounding = calendar.get(Calendar.MINUTE) % 30;
+        calendar.add(Calendar.MINUTE, rounding < 8 ? - rounding :(30 - rounding));
+    }
+
     private void setTimeField() {
         Calendar newCalendar = Calendar.getInstance();
-        int round2 = newCalendar.get(Calendar.MINUTE) % 30;
-        newCalendar.add(Calendar.MINUTE, round2 < 8 ? -round2 : (30 - round2));
-
+        roundingThirtyMinutes(newCalendar);
 
         startTime.setText(timeFormatter.format(newCalendar.getTime()));
 
@@ -192,12 +194,12 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
             }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
 
-        Calendar toS = Calendar.getInstance();
-        toS.setTime(newTime.getTime());
-        toS.add(Calendar.HOUR_OF_DAY, 1);
-        int round = toS.get(Calendar.MINUTE) % 30;
-        toS.add(Calendar.MINUTE, round < 8 ? -round : (30 - round));
-        endTime.setText(timeFormatter.format(toS.getTime()));
+
+        Calendar toTime = Calendar.getInstance();
+        toTime.setTime(newTime.getTime());
+        toTime.add(Calendar.HOUR_OF_DAY, 1);
+        roundingThirtyMinutes(toTime);
+        endTime.setText(timeFormatter.format(toTime.getTime()));
 
         toTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -206,31 +208,8 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 newEndTime.set(0, 0, 0, hourOfDay, minute);
                 endTime.setText(timeFormatter.format(newEndTime.getTime()));
             }
-        }, toS.get(Calendar.HOUR_OF_DAY), toS.get(Calendar.MINUTE), true);
+        }, toTime.get(Calendar.HOUR_OF_DAY), toTime.get(Calendar.MINUTE), true);
 
-    }
-
-    public void startDateSet(View view){
-        fromDatePickerDialog.show();
-    }
-
-    public void endDateSet(View view){
-        toDatePickerDialog.show();
-    }
-
-    public void startTimeSet(View view){
-        fromTimePickerDialog.show();
-    }
-
-    public void endTimeSet(View view){
-        toTimePickerDialog.show();
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view == repeatEditText) {
-            repeatDialog.show();
-        }
     }
 
     private void checkBoxOnOff() {
@@ -258,6 +237,26 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         editTextName.setEnabled(trueOrFalse);
         editTextName.setCursorVisible(trueOrFalse);
         editTextName.setInputType(inputType);
+    }
+
+    public void startDateSet(View view){
+        fromDatePickerDialog.show();
+    }
+
+    public void endDateSet(View view){
+        toDatePickerDialog.show();
+    }
+
+    public void startTimeSet(View view){
+        fromTimePickerDialog.show();
+    }
+
+    public void endTimeSet(View view){
+        toTimePickerDialog.show();
+    }
+
+    public void repeatTimeSet(View view){
+        repeatDialog.show();
     }
 
     public void cancelOnClick(View view) {
