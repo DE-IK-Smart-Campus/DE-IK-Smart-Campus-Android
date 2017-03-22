@@ -7,12 +7,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
+import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smackx.mam.MamManager;
 import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
@@ -37,6 +40,8 @@ public class Connection {
     private static Connection instance = null;
     private static Context actualContext;
     private BOSHConfiguration config;
+
+    public static final String HTTP_BASIC_AUTH_PATH = "http://wt2.inf.unideb.hu/smartcampus-web/integration/retrieveUserData";
     public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu";
     public static final String HOSTNAME = "wt2.inf.unideb.hu";
     public static EntityJid adminEntityJID;
@@ -73,7 +78,7 @@ public class Connection {
         if (!xmppConnection.isConnected()) {
             try {
                 xmppConnection.connect();
-                sleep(5000);
+                sleep(SmackConfiguration.getDefaultReplyTimeout());
                 xmppConnection.login();
 
             } catch (Exception e) {
@@ -90,7 +95,19 @@ public class Connection {
         this.actualContext = actualContext;
         xmppConnection = new XMPPBOSHConnection(config);
         checkConnection(actualContext);
-        if (xmppConnection.isConnected()) {
+        if (xmppConnection.isAuthenticated()) {
+            MamManager mamManager = MamManager.getInstanceFor(xmppConnection);
+            try {
+                Log.e("IS SUPPORTED", String.valueOf(mamManager.isSupportedByServer()));
+            } catch (SmackException.NoResponseException e) {
+                e.printStackTrace();
+            } catch (XMPPException.XMPPErrorException e) {
+                e.printStackTrace();
+            } catch (SmackException.NotConnectedException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             userJID = config.getUsername().toString();
             ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
             try {

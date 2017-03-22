@@ -10,7 +10,7 @@
     <string name="textViewStart">Kezdete:</string>
     <string name="textViewEnd">Befejezés:</string>
     <string name="remainderText">Emlékeztető</string>
-    <string name="repaitText">Ismétlődés</string>
+    <string name="repeatText">Ismétlődés</string>
     <string name="placeHint">hely</string>
     <string name="eventDetails">Esemény részletező</string>
     <string name="event_edit">Esemény szerkesztése</string>
