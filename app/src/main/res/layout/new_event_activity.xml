@@ -102,6 +102,7 @@
             android:layout_weight="0.10"
             android:ems="10"
             android:inputType="date"
+            android:onClick="startDateSet"
             android:textAlignment="center"
             android:textAllCaps="true" />
 
@@ -112,6 +113,7 @@
             android:layout_weight="0.19"
             android:ems="5"
             android:inputType="time"
+            android:onClick="startTimeSet"
             android:textAlignment="center"
             android:textAllCaps="true" />
 
@@ -145,6 +147,7 @@
             android:layout_weight="0.10"
             android:ems="10"
             android:inputType="date"
+            android:onClick="endDateSet"
             android:textAlignment="center"
             android:textAllCaps="true" />
 
@@ -154,7 +157,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.19"
             android:ems="10"
-            android:inputType="time" />
+            android:inputType="time"
+            android:onClick="endTimeSet" />
     </LinearLayout>
 
     <LinearLayout

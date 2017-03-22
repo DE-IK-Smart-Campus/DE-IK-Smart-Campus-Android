@@ -33,10 +33,10 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     private EditText endDate;
     private EditText startTime;
     private EditText endTime;
-    private EditText repaitEditText;
+    private EditText repeatEditText;
 
-    private AlertDialog.Builder repaitDialog;
-    private String[] repaitOptionText;
+    private AlertDialog.Builder repeatDialog;
+    private String[] repeatOptionText;
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
@@ -55,7 +55,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.new_event_activity);
         setupVariables();
 
-        repaitOptionText = getApplicationContext().getResources().getStringArray(R.array.remainder_array_item);
+        repeatOptionText = getApplicationContext().getResources().getStringArray(R.array.remainder_array_item);
 
         dateFormatter = new SimpleDateFormat("yyyy.MMM dd.,EEE", Locale.getDefault());
         timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -102,14 +102,14 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         endTime.setInputType(InputType.TYPE_NULL);
         endTime.setFocusable(false);
 
-        repaitEditText = (EditText) findViewById(R.id.repaitText);
-        repaitEditText.setInputType(InputType.TYPE_NULL);
-        repaitEditText.setFocusable(false);
+        repeatEditText = (EditText) findViewById(R.id.repaitText);
+        repeatEditText.setInputType(InputType.TYPE_NULL);
+        repeatEditText.setFocusable(false);
     }
 
     private void repeatAndRemainderSetup() {
         Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
-        repaitEditText.setOnClickListener(this);
+        repeatEditText.setOnClickListener(this);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeats_array_item, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -132,29 +132,27 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
                 }
         );
 
-        ArrayList<String> selColors = new ArrayList<>();
+        ArrayList<String> repeatTimes = new ArrayList<>();
         final boolean[] _selections = {false, false, false, false, false, false, false, false, false, false, false, false, false, false};
-        repaitDialog = new AlertDialog.Builder(NewEventActivity.this);
-        repaitDialog.setTitle(R.string.context_choice);
+        repeatDialog = new AlertDialog.Builder(NewEventActivity.this);
+        repeatDialog.setTitle(R.string.context_choice);
 
-  /*      repaitDialog.setMultiChoiceItems(repaitOptionText, _selections, (dialogInterface, i, b) -> {
+  /*      repeatDialog.setMultiChoiceItems(repeatOptionText, _selections, (dialogInterface, i, b) -> {
             if (b) {
-                selColors.add(repaitOptionText[i]);
+                selColors.add(repeatOptionText[i]);
             } else {
-                selColors.remove(repaitOptionText[i]);
+                selColors.remove(repeatOptionText[i]);
             }
         });
 
-        repaitDialog.setPositiveButton(R.string.ok_button, (dialog, id) -> {
-            repaitEditText.setText(selColors.toString());
+        repeatDialog.setPositiveButton(R.string.ok_button, (dialog, id) -> {
+            repeatEditText.setText(selColors.toString());
         });
-        repaitDialog.setNegativeButton(R.string.cancel_button, (dialog, id) -> {
+        repeatDialog.setNegativeButton(R.string.cancel_button, (dialog, id) -> {
         });*/
     }
 
     private void setDateTimeField() {
-        startDate.setOnClickListener(this);
-        endDate.setOnClickListener(this);
         checkBoxOnOff();
 
         Calendar newCalendar = Calendar.getInstance();
@@ -169,7 +167,7 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
 
-        fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        toDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
@@ -179,9 +177,6 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setTimeField() {
-        startTime.setOnClickListener(this);
-        endTime.setOnClickListener(this);
-
         Calendar newCalendar = Calendar.getInstance();
         int round2 = newCalendar.get(Calendar.MINUTE) % 30;
         newCalendar.add(Calendar.MINUTE, round2 < 8 ? -round2 : (30 - round2));
@@ -215,18 +210,26 @@ public class NewEventActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    public void startDateSet(View view){
+        fromDatePickerDialog.show();
+    }
+
+    public void endDateSet(View view){
+        toDatePickerDialog.show();
+    }
+
+    public void startTimeSet(View view){
+        fromTimePickerDialog.show();
+    }
+
+    public void endTimeSet(View view){
+        toTimePickerDialog.show();
+    }
+
     @Override
     public void onClick(View view) {
-        if (view == startDate) {
-            fromDatePickerDialog.show();
-        } else if (view == endDate) {
-            toDatePickerDialog.show();
-        } else if (view == startTime) {
-            fromTimePickerDialog.show();
-        } else if (view == endTime) {
-            toTimePickerDialog.show();
-        } else if (view == repaitEditText) {
-            repaitDialog.show();
+        if (view == repeatEditText) {
+            repeatDialog.show();
         }
     }
 
