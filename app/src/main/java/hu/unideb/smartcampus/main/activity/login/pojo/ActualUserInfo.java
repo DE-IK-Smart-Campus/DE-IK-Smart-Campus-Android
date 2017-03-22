@@ -10,25 +10,25 @@ import java.util.List;
 //TODO roles
 public class ActualUserInfo {
 
-    String userName;
+    String username;
     String xmppPassword;
     List<Role> roles;
 
     public ActualUserInfo() {
     }
 
-    public ActualUserInfo(String userName, String xmppPassword, List<Role> roles) {
-        this.userName = userName;
+    public ActualUserInfo(String username, String xmppPassword, List<Role> roles) {
+        this.username = username;
         this.xmppPassword = xmppPassword;
         this.roles = roles;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getXmppPassword() {

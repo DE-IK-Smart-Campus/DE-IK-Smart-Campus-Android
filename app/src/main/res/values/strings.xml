@@ -57,8 +57,7 @@
     <string name="loginButtonText">Bejelentkezés</string>
     <string name="usernamePasswordNeed">Felhasználónév és jelszó megadása kötelező!</string>
     <string name="usernamePasswordWrong">Felhasználónév vagy jelszó helytelen!</string>
-    <string name="loginSucces">"Sikeresen bejeletkezve! "</string>
-    <string name="admin_user_jid">smartcampus@192.168.1.11</string>
+    <string name="login_succes">"Sikeresen bejeletkezve! "</string>
     <string name="eventNameHint">Esemény neve</string>
     <string name="eventDescriptionHint">Esemény leírása</string>
     <string name="saveButton">Mentés</string>
@@ -67,11 +66,13 @@
     <string name="textViewStart">Kezdete:</string>
     <string name="textViewEnd">Befejezés:</string>
     <string name="remainderText">Emlékeztető</string>
-    <string name="repaitText">Ismétlődés</string>
+    <string name="repeatText">Ismétlődés</string>
     <string name="placeHint">hely</string>
     <string name="eventDetails">Esemény részletező</string>
     <string name="event_edit">Esemény szerkesztése</string>
     <string name="event_delete">Esemény törlése</string>
+    <string name="login_try_again">Slow connection/or service not available , please try again</string>
+    <string name="login_failed">Login failed</string>
 
 
 </resources>

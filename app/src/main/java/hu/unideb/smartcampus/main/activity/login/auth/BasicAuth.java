@@ -21,12 +21,27 @@ import javax.net.ssl.X509TrustManager;
 
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 
+import static hu.unideb.smartcampus.xmpp.Connection.HTTP_BASIC_AUTH_PATH;
+
 /**
+ * BasicAuth gets the Username, Password for ejabberd login
+ * from restless call
+ *
+ * @see hu.unideb.smartcampus.activity.LoginActivity
+ * @see ActualUserInfo
+ * <p>
+ * <p>
+ * UnsafeOkHttpClient TODO
+ * <p>
  * Created by Headswitcher on 2017. 03. 16..
  */
 
 public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
 
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final int HTTP_OK_STATUS = 200;
+
+    //Unsafe! TODO
     private static OkHttpClient getUnsafeOkHttpClient() {
         try {
             final TrustManager[] trustAllCerts = new TrustManager[]{
@@ -54,6 +69,7 @@ public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
                     return true;
+                    // TODO !!!!!!!!!!
                 }
             });
 
@@ -65,34 +81,41 @@ public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
 
     @Override
     protected ActualUserInfo doInBackground(ActualUserInfo... params) {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        ActualUserInfo actualUserInfo = params[0];
         OkHttpClient httpClient = getUnsafeOkHttpClient();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        String toBase64 = actualUserInfo.getUserName() + ":" + actualUserInfo.getXmppPassword();
-        byte[] encodedBytes = Base64.encodeBase64(toBase64.getBytes());
+        ActualUserInfo actualUserInfo = params[0];
+        String toBase64 = actualUserInfo.getUsername() + ":" + actualUserInfo.getXmppPassword();
+
+        byte[] encodedUsernameAndPassword = Base64.encodeBase64(toBase64.getBytes());
         Request request = new Request.Builder()
-                .url("https://wt2.inf.unideb.hu/smartcampus-web/integration/login")
-                .header("Authorization", new String(encodedBytes))
+                .url(HTTP_BASIC_AUTH_PATH)
+                .header(AUTHORIZATION_HEADER, "Basic " + new String(encodedUsernameAndPassword))
                 .build();
-        Response response = null;
 
+        Response response = null;
         try {
             response = httpClient.newCall(request).execute();
-        } catch (Exception e) {
+            if (response.code() == HTTP_OK_STATUS) {
+                actualUserInfo = objectMapper.readValue(response.body().string(), ActualUserInfo.class);
+                return actualUserInfo;
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        if (!(response.code() == 404)) {
+        } finally {
             try {
-                actualUserInfo = objectMapper.readValue(response.body().toString(), ActualUserInfo.class);
+                if (response != null) {
+                    response.body().close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return actualUserInfo;
-        } else {
-            return new ActualUserInfo();
         }
+        return new ActualUserInfo();
+
     }
+
+
 }
 
