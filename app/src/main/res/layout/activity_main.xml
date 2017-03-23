@@ -20,7 +20,7 @@
         android:layout_gravity="start"
         android:background="@android:color/background_light"
         android:fitsSystemWindows="true"
-        app:insetForeground="@color/textColorBlack"
+        app:insetForeground="@color/colorPrimaryDark"
         app:itemBackground="@drawable/menu_background_color"
         app:itemTextColor="@color/textColorBlack"
         app:menu="@menu/activity_main_drawer" />

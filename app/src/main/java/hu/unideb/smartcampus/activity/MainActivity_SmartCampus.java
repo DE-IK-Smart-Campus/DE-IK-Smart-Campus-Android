@@ -1,14 +1,15 @@
 package hu.unideb.smartcampus.activity;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -81,9 +82,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
             }
         };
 
-        if (mPendingRunnable != null) {
-            mHandler.post(mPendingRunnable);
-        }
+        mHandler.post(mPendingRunnable);
 
         drawer.closeDrawers();
 
@@ -147,7 +146,10 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     }
 
     private void setToolbarTitle() {
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!= null) {
+            actionBar.setTitle(activityTitles[navItemIndex]);
+        }
     }
 
     private void selectNavMenu() {
@@ -158,7 +160,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
                     case R.id.home:
@@ -216,7 +218,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
             }
         };
 
-        drawer.setDrawerListener(actionBarDrawerToggle);
+        drawer.addDrawerListener(actionBarDrawerToggle);
 
         actionBarDrawerToggle.syncState();
     }

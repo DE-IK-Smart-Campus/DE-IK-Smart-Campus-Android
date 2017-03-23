@@ -75,19 +75,19 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         List<String> eventDetails = new ArrayList<>();
 
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(eventDate);
+
         Calendar fromTime = Calendar.getInstance();
         fromTime.setTimeInMillis(eventStartTime);
 
         Calendar toTime = Calendar.getInstance();
         toTime.setTimeInMillis(eventEndTime);
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(eventDate);
-
         eventDetails.add(getResources().getString(R.string.textEventName) + "\t " + eventName);
         eventDetails.add(getResources().getString(R.string.textEventDescription) + "\t " + eventDescription);
         eventDetails.add(getResources().getString(R.string.textEventPlace) + "\t " + eventPlace);
-        eventDetails.add(getResources().getString(R.string.date) + "\t " + DateFormat.getDateInstance(DateFormat.SHORT).format(cal.getTime()));
+        eventDetails.add(getResources().getString(R.string.date) + "\t " + DateFormat.getDateInstance(DateFormat.SHORT).format(date.getTime()));
         eventDetails.add(getResources().getString(R.string.textViewStart) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(fromTime.getTime()));
         eventDetails.add(getResources().getString(R.string.textViewEnd) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(toTime.getTime()));
 
@@ -98,7 +98,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 newDate.set(year, monthOfYear, dayOfMonth);
             }
 
-        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
 
         fromTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -147,10 +147,9 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private void editEventShowDialog(View view, String title) {
 
-        LayoutInflater li = LayoutInflater.from(getApplicationContext());
-        View eventDetailsDialog = li.inflate(R.layout.event_details_editing_dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                context);
+        LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
+        View eventDetailsDialog = layoutInflater.inflate(R.layout.event_details_editing_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
         alertDialogBuilder.setView(eventDetailsDialog);
         alertDialogBuilder.setTitle(title);
