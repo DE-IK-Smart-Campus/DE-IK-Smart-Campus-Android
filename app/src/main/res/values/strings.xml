@@ -8,6 +8,7 @@
 
     <string name="nav_home_name">Kezdőképernyő</string>
     <string name="nav_calendar_name">Naptár</string>
+    <string name="nav_classAttendence_name">Órai jelenlét</string>
     <string name="nav_consultingHours_name">Fogadóórák</string>
     <string name="nav_chat_name">Beszélgetés</string>
     <string name="nav_about_us_name">Rólunk</string>
@@ -16,6 +17,7 @@
     <string-array name="nav_item_activity_titles">
         <item> Kezdőképernyő</item>
         <item> Naptár</item>
+        <item> Órai jelenlét</item>
         <item> Fogadóórák</item>
         <item> Beszélgetés</item>
         <item> Rólunk</item>
@@ -74,6 +76,8 @@
     <string name="eventDetails">Esemény részletező</string>
     <string name="event_edit">Esemény szerkesztése</string>
     <string name="event_delete">Esemény törlése</string>
-
+    <string name="textEventName">Esemény neve:</string>
+    <string name="textEventDescription">Esemény leírása:</string>
+    <string name="textEventPlace">Esemény helye:</string>
 
 </resources>

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 android {
@@ -16,7 +17,7 @@ android {
         abortOnError false
     }
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "hu.unideb.smartcampus"
         minSdkVersion 16
@@ -32,6 +33,7 @@ android {
         }
     }
 }
+
 
 configurations {
     all*.exclude group: 'xpp3', module: 'xpp3'

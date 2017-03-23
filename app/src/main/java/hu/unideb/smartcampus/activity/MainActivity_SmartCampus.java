@@ -23,6 +23,7 @@ import java.util.List;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
+import hu.unideb.smartcampus.fragment.ClassAttendanceFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
@@ -36,6 +37,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     public static int navItemIndex = 0;
     private static final String TAG_HOME = "home";
     private static final String TAG_CALENDAR = "calendar";
+    private static final String TAG_CLASSATTENDANCE = "classattendance";
     private static final String TAG_OFFICEHOURS = "officeHours";
     private static final String TAG_CHAT = "chat";
     private static final String TAG_ABOUT = "about";
@@ -107,6 +109,15 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:
+                    ClassAttendanceFragment fragment1 = new ClassAttendanceFragment();
+                    FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction1.replace(R.id.frame, fragment1, CURRENT_TAG);
+                    fragmentTransaction1.commitAllowingStateLoss();
+                    //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
+                    break;
+                case 3:
                     OfficeHourHandler officeHour = new OfficeHourHandler(getSupportFragmentManager(), getApplicationContext());
                     ChatManager.getInstanceFor(Connection.getInstance().getXmppConnection()).removeListener(officeHour);
                     ChatManager.getInstanceFor(Connection.getInstance().getXmppConnection()).addIncomingListener(officeHour);
@@ -114,11 +125,11 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
 
                     break;
 
-                case 3:
+                case 4:
                     ChatFragment chatFragment = new ChatFragment();
                     //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
                     break;
-                case 4:
+                case 5:
                     AboutUsFragment aboutUsFragment = new AboutUsFragment();
                     FragmentTransaction fragmentTransactiona = getSupportFragmentManager().beginTransaction();
                     fragmentTransactiona.setCustomAnimations(android.R.anim.fade_in,
@@ -130,9 +141,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     break;
             }
 
-        } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SmackException.NotConnectedException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -160,16 +169,20 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_CALENDAR;
                         break;
-                    case R.id.nav_officeHours:
+                    case R.id.nav_classAttendence:
                         navItemIndex = 2;
+                        CURRENT_TAG = TAG_CLASSATTENDANCE;
+                        break;
+                    case R.id.nav_officeHours:
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_OFFICEHOURS;
                         break;
                     case R.id.nav_chat:
-                        navItemIndex = 3;
+                        navItemIndex = 4;
                         CURRENT_TAG = TAG_CHAT;
                         break;
                     case R.id.nav_about_us:
-                        navItemIndex = 4;
+                        navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUT;
                         break;
                     default:

@@ -32,7 +32,6 @@ public class NewEventActivity extends AppCompatActivity {
     private EditText endDate;
     private EditText startTime;
     private EditText endTime;
-    private EditText repeatEditText;
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
@@ -96,9 +95,6 @@ public class NewEventActivity extends AppCompatActivity {
         endTime.setInputType(InputType.TYPE_NULL);
         endTime.setFocusable(false);
 
-        repeatEditText = (EditText) findViewById(R.id.repaitText);
-        repeatEditText.setInputType(InputType.TYPE_NULL);
-        repeatEditText.setFocusable(false);
     }
 
     private void repeatSetup() {
@@ -126,6 +122,10 @@ public class NewEventActivity extends AppCompatActivity {
         );
     }
 
+    private void remainderSetup(){
+        Spinner remainderSpinner =(Spinner) findViewById(R.id.remainderSpinner);
+
+    }
 
     private void setDateTimeField() {
         checkBoxOnOff();
