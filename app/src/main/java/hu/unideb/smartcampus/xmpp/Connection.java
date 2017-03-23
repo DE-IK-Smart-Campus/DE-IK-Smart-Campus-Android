@@ -9,13 +9,12 @@ import android.util.Log;
 
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smackx.mam.MamManager;
+import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
@@ -45,6 +44,8 @@ public class Connection {
     public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu";
     public static final String HOSTNAME = "wt2.inf.unideb.hu";
     public static EntityJid adminEntityJID;
+
+    private EntityFullJid actualUserJid;
 
     private XMPPBOSHConnection xmppConnection;
     private Chat adminChat;
@@ -80,6 +81,7 @@ public class Connection {
                 xmppConnection.connect();
                 sleep(SmackConfiguration.getDefaultReplyTimeout());
                 xmppConnection.login();
+                actualUserJid = xmppConnection.getUser();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -96,18 +98,7 @@ public class Connection {
         xmppConnection = new XMPPBOSHConnection(config);
         checkConnection(actualContext);
         if (xmppConnection.isAuthenticated()) {
-            MamManager mamManager = MamManager.getInstanceFor(xmppConnection);
-            try {
-                Log.e("IS SUPPORTED", String.valueOf(mamManager.isSupportedByServer()));
-            } catch (SmackException.NoResponseException e) {
-                e.printStackTrace();
-            } catch (XMPPException.XMPPErrorException e) {
-                e.printStackTrace();
-            } catch (SmackException.NotConnectedException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
             userJID = config.getUsername().toString();
             ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
             try {
@@ -188,5 +179,13 @@ public class Connection {
 
     public ChatManager getChatManager() {
         return chatManager;
+    }
+
+    public EntityFullJid getActualUserJid() {
+        return actualUserJid;
+    }
+
+    public void setActualUserJid(EntityFullJid actualUserJid) {
+        this.actualUserJid = actualUserJid;
     }
 }
