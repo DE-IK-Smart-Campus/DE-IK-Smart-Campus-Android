@@ -27,7 +27,6 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.chat.adapter.ChatMemberAdapter;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatItem;
-import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 /**
@@ -79,8 +78,6 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
     }
 
     public List<ChatItem> getAllChat() {
-        SubjectsIqRequest iqRequest;
-
         //Get me List<Jid>
         //Mocked for now
         MamManager mamManager = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection());

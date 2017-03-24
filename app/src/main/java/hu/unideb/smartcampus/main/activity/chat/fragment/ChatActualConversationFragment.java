@@ -26,7 +26,7 @@ import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
@@ -48,63 +48,85 @@ import static hu.unideb.smartcampus.R.id.chat_text_edit_text;
 
 public class ChatActualConversationFragment extends Fragment implements OnBackPressedListener {
 
-    ChatHistory chatHistory;
-    boolean isItAfter = false;
-    int chatHistoryitemcount;
-    EntityBareJid selectedChatPartnerJid;
-    Chat chat;
-    ListView chatlistView;
-    View actualV;
+    private ChatHistory chatHistory;
+    private LinkedList<ChatConversationItem> chatConversationItems;
+    private MamManager mamManager;
+    private boolean isItAfter = false;
+    private int chatHistoryitemcount;
+    private EntityBareJid selectedChatPartnerJid;
+    private Chat chat;
+    private ListView chatlistView;
+    private View actualV;
+    private MamManager.MamQueryResult lastQueryResult;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        chatConversationItems = new LinkedList<>();
+        mamManager = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection());
+
+        final List<Forwarded> forwardedMessages;
+        try {
+            lastQueryResult = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryitemcount);
+            forwardedMessages = lastQueryResult.forwardedMessages;
+
+            for (int i = 0; i < forwardedMessages.size(); i++) {
+                ChatConversationItem tmpChatConversationItem = new ChatConversationItem();
+                Message tmpMsg = ((Message) forwardedMessages.get(i).getForwardedStanza());
+                tmpChatConversationItem.setMsg(tmpMsg.getBody());
+                tmpChatConversationItem.setFromUserJid(tmpMsg.getFrom());
+                chatConversationItems.addLast(tmpChatConversationItem);
+            }
+            chatHistory.setChatConversationItems(chatConversationItems);
+        } catch (XMPPException.XMPPErrorException e) {
+            e.printStackTrace();
+        } catch (SmackException.NotLoggedInException e) {
+            e.printStackTrace();
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (SmackException.NoResponseException e) {
+            e.printStackTrace();
+        }
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_chat_actual_conversation, container, false);
-
         final ChatManager chatManager = ChatManager.getInstanceFor(Connection.getInstance().getXmppConnection());
 
-        MamManager mamManager = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection());
-        chatHistory = new ChatHistory();
         chatHistoryitemcount = getArguments().getInt("CHAT_HISTORY_ITEM_COUNT");
-        chatHistory.setChatConversationItem(new ArrayList<ChatConversationItem>());
         final String toJid = getArguments().getString("SELECTED_CHAT_FROM");
+
         try {
             selectedChatPartnerJid = JidCreate.entityBareFrom(toJid);
             chat = chatManager.chatWith(selectedChatPartnerJid);
-            final List<Forwarded> forwardedMessages = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryitemcount).forwardedMessages;
+
+        /*    final List<Forwarded> forwardedMessages = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryitemcount).forwardedMessages;
 
             for (int i = 0; i < forwardedMessages.size(); i++) {
                 ChatConversationItem chatConversationItem = new ChatConversationItem();
                 chatConversationItem.setMsg(((Message) forwardedMessages.get(i).getForwardedStanza()).getBody());
                 chatConversationItem.setFromUserJid(((Message) forwardedMessages.get(i).getForwardedStanza()).getFrom());
-                chatHistory.getChatConversationItem().add(chatConversationItem);
-            }
+                chatHistory.getChatConversationItems().add(chatConversationItem);
+            }*/
 
         } catch (XmppStringprepException e) {
             e.printStackTrace();
-        } catch (SmackException.NotLoggedInException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (XMPPException.XMPPErrorException e) {
-            e.printStackTrace();
-        } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
-        } catch (SmackException.NoResponseException e) {
-            e.printStackTrace();
         }
-
         TextView textView = (TextView) view.findViewById(chat_name);
         Button button = (Button) view.findViewById(chat_send_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText editText = (EditText) actualV.findViewById(chat_text_edit_text);
-                chatHistory.getChatConversationItem().add(new ChatConversationItem(Connection.getInstance().getActualUserJid(), editText.getText().toString()));
+                chatHistory.getChatConversationItems().add(new ChatConversationItem(Connection.getInstance().getActualUserJid(), editText.getText().toString()));
                 ListView listView = (ListView) actualV.findViewById(chat_actual_conversation_list_view);
                 listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
-                listView.setSelection(chatHistory.getChatConversationItem().size() - 1);
+                listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
                 try {
                     chat.send(editText.getText().toString());
                 } catch (SmackException.NotConnectedException e) {
@@ -128,6 +150,8 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
 
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+                    final Fragment chatactual = getFragmentManager().findFragmentByTag("CHATACTUAL");
+
                     fragmentTransaction.replace(R.id.frame, fragment, "CHATACTUAL");
                     fragmentTransaction.addToBackStack("CHATACTUAL");
                     fragmentTransaction.commitAllowingStateLoss();
@@ -141,7 +165,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
         ListView listView = (ListView) view.findViewById(chat_actual_conversation_list_view);
 
         listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
-        listView.setSelection(chatHistory.getChatConversationItem().size() - 1);
+        listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
         actualV = view;
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -152,47 +176,49 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 {
-                    if (isItAfter && firstVisibleItem == 0) {
-                        Log.e(TAG, "onScroll:");
-                        isItAfter = false;
-                        chatHistoryitemcount += 20;
-                        Log.e(TAG, "onScroll:" + chatHistoryitemcount);
-                        MamManager mamManager = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection());
-                        final List<Forwarded> forwardedMessages;
-                        try {
-                            forwardedMessages = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryitemcount).forwardedMessages;
-                            Log.e(TAG, "onScroll: BEFORE");
-                            for (int i = 0; i < forwardedMessages.size(); i++) {
-                                ChatConversationItem chatConversationItem = new ChatConversationItem();
-                                chatConversationItem.setMsg(((Message) forwardedMessages.get(i).getForwardedStanza()).getBody());
-                                chatConversationItem.setFromUserJid(((Message) forwardedMessages.get(i).getForwardedStanza()).getFrom());
-                                chatHistory.getChatConversationItem().add(chatConversationItem);
+                    if (isItAfter && firstVisibleItem == 0 && (visibleItemCount != totalItemCount)) {
+                        if (!(chatHistoryitemcount > chatHistory.getChatConversationItems().size())) {
+                            Log.e(TAG, "onScroll:");
+                            isItAfter = false;
+                            chatHistoryitemcount += 20;
+                            Log.e(TAG, "onScroll:" + chatHistoryitemcount);
+                            MamManager mamManager = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection());
+                            final List<Forwarded> forwardedMessages;
+                            try {
+                                forwardedMessages = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryitemcount).forwardedMessages;
+                                Log.e(TAG, "onScroll: BEFORE");
+                                for (int i = 0; i < forwardedMessages.size(); i++) {
+                                    ChatConversationItem chatConversationItem = new ChatConversationItem();
+                                    chatConversationItem.setMsg(((Message) forwardedMessages.get(i).getForwardedStanza()).getBody());
+                                    chatConversationItem.setFromUserJid(((Message) forwardedMessages.get(i).getForwardedStanza()).getFrom());
+                                    chatHistory.getChatConversationItems().add(chatConversationItem);
 
+                                }
+
+                                Fragment fragment = new ChatActualConversationFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("SELECTED_CHAT_FROM", getArguments().getString("SELECTED_CHAT_FROM"));
+                                bundle.putInt("CHAT_HISTORY_ITEM_COUNT", chatHistoryitemcount);
+                                fragment.setArguments(bundle);
+                                Log.e(TAG, "onScroll: AFTER");
+                                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+                                fragmentTransaction.replace(R.id.frame, fragment, "CHATACTUAL");
+                                fragmentTransaction.addToBackStack("CHATACTUAL");
+                                fragmentTransaction.commitAllowingStateLoss();
+                            } catch (XMPPException.XMPPErrorException e) {
+                                e.printStackTrace();
+                            } catch (SmackException.NotLoggedInException e) {
+                                e.printStackTrace();
+                            } catch (SmackException.NotConnectedException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (SmackException.NoResponseException e) {
+                                e.printStackTrace();
                             }
-                            Fragment fragment = new ChatActualConversationFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("SELECTED_CHAT_FROM", getArguments().getString("SELECTED_CHAT_FROM"));
-                            bundle.putInt("CHAT_HISTORY_ITEM_COUNT", chatHistoryitemcount);
-                            fragment.setArguments(bundle);
-                            Log.e(TAG, "onScroll: AFTER");
-                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
-                            fragmentTransaction.replace(R.id.frame, fragment, "CHATACTUAL");
-                            fragmentTransaction.addToBackStack("CHATACTUAL");
-                            fragmentTransaction.commitAllowingStateLoss();
-                        } catch (XMPPException.XMPPErrorException e) {
-                            e.printStackTrace();
-                        } catch (SmackException.NotLoggedInException e) {
-                            e.printStackTrace();
-                        } catch (SmackException.NotConnectedException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (SmackException.NoResponseException e) {
-                            e.printStackTrace();
+
                         }
-
-
                     }
                 }
             }

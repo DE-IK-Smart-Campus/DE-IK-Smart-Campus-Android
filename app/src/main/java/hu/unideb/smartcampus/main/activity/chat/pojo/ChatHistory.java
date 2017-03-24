@@ -9,14 +9,14 @@ import java.util.List;
 public class ChatHistory {
 
     String chatName;
-    List<ChatConversationItem> ChatConversationItem;
+    List<ChatConversationItem> chatConversationItems;
 
     public ChatHistory() {
     }
 
-    public ChatHistory(String chatName, List<hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem> chatConversationItem) {
+    public ChatHistory(String chatName, List<hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem> chatConversationItems) {
         this.chatName = chatName;
-        ChatConversationItem = chatConversationItem;
+        this.chatConversationItems = chatConversationItems;
     }
 
     public String getChatName() {
@@ -27,11 +27,11 @@ public class ChatHistory {
         this.chatName = chatName;
     }
 
-    public List<hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem> getChatConversationItem() {
-        return ChatConversationItem;
+    public List<hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem> getChatConversationItems() {
+        return chatConversationItems;
     }
 
-    public void setChatConversationItem(List<hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem> chatConversationItem) {
-        ChatConversationItem = chatConversationItem;
+    public void setChatConversationItems(List<hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem> chatConversationItems) {
+        this.chatConversationItems = chatConversationItems;
     }
 }

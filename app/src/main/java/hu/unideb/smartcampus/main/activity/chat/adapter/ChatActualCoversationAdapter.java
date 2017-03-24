@@ -31,12 +31,12 @@ public class ChatActualCoversationAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return chatHistory.getChatConversationItem().size();
+        return chatHistory.getChatConversationItems().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return chatHistory.getChatConversationItem().get(position);
+        return chatHistory.getChatConversationItems().get(position);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class ChatActualCoversationAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        String msg = chatHistory.getChatConversationItem().get(position).getMsg();
-        Jid fromUserJid = chatHistory.getChatConversationItem().get(position).getFromUserJid();
+        String msg = chatHistory.getChatConversationItems().get(position).getMsg();
+        Jid fromUserJid = chatHistory.getChatConversationItems().get(position).getFromUserJid();
 
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context

@@ -16,8 +16,6 @@ import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.provider.ProviderManager;
-import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.Jid;
@@ -26,16 +24,11 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.concurrent.ExecutionException;
 
-import javax.xml.bind.JAXBException;
-
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.LoginActivity;
 import hu.unideb.smartcampus.activity.MainActivity_SmartCampus;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsProcessMessagePojo;
-import hu.unideb.smartcampus.shared.iq.provider.SubjectRequestIqProvider;
-import hu.unideb.smartcampus.shared.iq.request.BaseSmartCampusIq;
-import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
 import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
@@ -112,12 +105,8 @@ public class Connection {
         xmppConnection = new XMPPBOSHConnection(config);
         checkConnection(actualContext);
         if (xmppConnection.isAuthenticated()) {
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
-            try {
-                ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new SubjectRequestIqProvider());
-            } catch (JAXBException e) {
-                e.printStackTrace();
-            }
+            //   ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
+            //     ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new SubjectRequestIqProvider());
 
             userJID = config.getUsername().toString();
             ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);

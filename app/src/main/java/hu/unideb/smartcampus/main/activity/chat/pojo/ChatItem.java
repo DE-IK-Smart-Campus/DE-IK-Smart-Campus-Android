@@ -2,7 +2,6 @@ package hu.unideb.smartcampus.main.activity.chat.pojo;
 
 import org.jxmpp.jid.Jid;
 
-import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
 /**
  * Created by Headswitcher on 2017. 03. 21..
