@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,15 +21,14 @@ import java.io.IOException;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.main.activity.officehours.fragment.OfficeHourFragment;
-import hu.unideb.smartcampus.main.activity.officehours.json.MessageTypeUserId;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.AskInstructorConsultingHoursProcessMessagePojo;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsProcessMessagePojo;
+import hu.unideb.smartcampus.main.activity.officehours.task.SubjectsIqRequestTask;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTOR;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTORCONSULTINGHOURSPROCESSMESSAGERESPONSE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTS;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTSPROCESSMESSAGE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTSPROCESSMESSAGERESPONSE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO;
@@ -68,14 +66,7 @@ public class OfficeHourHandler implements IncomingChatMessageListener {
     }
 
     public void sendDefaultMsg() {
-        MessageTypeUserId messageTypeUserId = new MessageTypeUserId(ASKSUBJECTSPROCESSMESSAGE, Connection.getInstance().getUserJID());
-        try {
-            String request = objectMapper.writeValueAsString(messageTypeUserId);
-            Connection.getInstance().createLoadingDialog(request, fragmentManager, new Bundle());
-        } catch (JsonProcessingException e) {
-            Log.e("OfficeHourHandler()", messageTypeUserId.toString());
-            e.printStackTrace();
-        }
+        Connection.getInstance().createLoadingDialog(new SubjectsIqRequestTask(), new OfficeHourFragment(), fragmentManager, new Bundle());
     }
 
 
