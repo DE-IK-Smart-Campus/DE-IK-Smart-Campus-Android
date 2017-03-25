@@ -64,6 +64,7 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                         android.R.anim.fade_out);
                 fragmentTransaction.replace(R.id.frame, fragment, "CHATACTUAL");
+                fragmentTransaction.addToBackStack("CHATACTUAL");
                 fragmentTransaction.commitAllowingStateLoss();
             }
         });
@@ -84,7 +85,7 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
         List<Jid> jids = new ArrayList<>();
         try {
             jids.add(JidCreate.bareFrom("smartcampus@wt2.inf.unideb.hu/Smartcampus"));
-            jids.add(JidCreate.bareFrom("balikai@wt2.inf.unideb.hu/Smartcampus"));
+            //jids.add(JidCreate.bareFrom("balikai@wt2.inf.unideb.hu/Smartcampus"));
         } catch (XmppStringprepException e) {
             e.printStackTrace();
         }
