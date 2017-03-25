@@ -2,31 +2,37 @@ package hu.unideb.smartcampus.xmpp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smackx.mam.MamManager;
+import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.EntityJid;
+import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
+
+import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.LoginActivity;
 import hu.unideb.smartcampus.activity.MainActivity_SmartCampus;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsProcessMessagePojo;
 
 import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
 import static java.lang.Thread.sleep;
 import static org.jxmpp.jid.impl.JidCreate.entityBareFrom;
 
@@ -41,10 +47,12 @@ public class Connection {
     private static Context actualContext;
     private BOSHConfiguration config;
 
-    public static final String HTTP_BASIC_AUTH_PATH = "http://wt2.inf.unideb.hu/smartcampus-web/integration/retrieveUserData";
-    public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu";
+    public static final String HTTP_BASIC_AUTH_PATH = "http://wt2.inf.unideb.hu/smartcampus-backend/integration/retrieveUserData";
+    public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu/Smartcampus";
     public static final String HOSTNAME = "wt2.inf.unideb.hu";
     public static EntityJid adminEntityJID;
+
+    private EntityFullJid actualUserJid;
 
     private XMPPBOSHConnection xmppConnection;
     private Chat adminChat;
@@ -80,6 +88,7 @@ public class Connection {
                 xmppConnection.connect();
                 sleep(SmackConfiguration.getDefaultReplyTimeout());
                 xmppConnection.login();
+                actualUserJid = xmppConnection.getUser();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -96,18 +105,9 @@ public class Connection {
         xmppConnection = new XMPPBOSHConnection(config);
         checkConnection(actualContext);
         if (xmppConnection.isAuthenticated()) {
-            MamManager mamManager = MamManager.getInstanceFor(xmppConnection);
-            try {
-                Log.e("IS SUPPORTED", String.valueOf(mamManager.isSupportedByServer()));
-            } catch (SmackException.NoResponseException e) {
-                e.printStackTrace();
-            } catch (XMPPException.XMPPErrorException e) {
-                e.printStackTrace();
-            } catch (SmackException.NotConnectedException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            //   ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
+            //     ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new SubjectRequestIqProvider());
+
             userJID = config.getUsername().toString();
             ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
             try {
@@ -166,6 +166,51 @@ public class Connection {
         }
     }
 
+    public static <T extends AsyncTask<Jid, Integer, AskSubjectsProcessMessagePojo>> void createLoadingDialog(T asyncIqTask, Fragment fragment, FragmentManager fragmentManager, Bundle bundle) {
+        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (loadingDialogFragment != null) {
+            fragmentTransaction.remove(loadingDialogFragment);
+        } else {
+            loadingDialogFragment = new LoadingDialogFragment();
+
+        }
+
+        if (bundle == null) {
+            throw new NullPointerException("Bundle was null");
+        }
+
+        if (loadingDialogFragment.getArguments() != null) {
+            loadingDialogFragment.getArguments().putAll(bundle);
+        } else {
+            loadingDialogFragment.setArguments(bundle);
+        }
+        fragmentTransaction.commitNow();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOG_TAG);
+        fragmentTransaction.addToBackStack(DIALOG_TAG);
+        fragmentTransaction.commit();
+        Connection.getInstance().checkConnection(actualContext);
+
+        try {
+            AskSubjectsProcessMessagePojo messagePojo = asyncIqTask.execute(Connection.getInstance().getAdminEntityJID()).get();
+            bundle.putParcelable("asd", messagePojo);
+            fragment.setArguments(bundle);
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment, OFFICE_HOURS_TAG);
+            fragmentTransaction.commitAllowingStateLoss();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     public XMPPBOSHConnection getXmppConnection() {
         return xmppConnection;
     }
@@ -188,5 +233,13 @@ public class Connection {
 
     public ChatManager getChatManager() {
         return chatManager;
+    }
+
+    public EntityFullJid getActualUserJid() {
+        return actualUserJid;
+    }
+
+    public void setActualUserJid(EntityFullJid actualUserJid) {
+        this.actualUserJid = actualUserJid;
     }
 }

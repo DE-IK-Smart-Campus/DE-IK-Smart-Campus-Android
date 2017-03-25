@@ -1,54 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/chat_actual_conversation_list_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:paddingBottom="40dp"
-        android:layout_below="@+id/chat_name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/chat_send_button"
-        />
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:baselineAligned="false"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/chat_name"
+        <TextView
+            android:id="@+id/chat_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:ems="9"
+            android:gravity="center_horizontal"
+            android:text="Filtián"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <ListView
+            android:id="@+id/chat_actual_conversation_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:layout_above="@+id/chat_send_button"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/chat_name" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="9"
-        android:gravity="center_horizontal"
-        android:text="Filtián"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
-    <Button
-        android:id="@+id/chat_send_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="@color/colorAccent"
-        android:layout_alignBaseline="@+id/chat_text_edit_text"
-        android:text="SEND" />
+        <EditText
+            android:id="@+id/chat_text_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/chat_send_button"
+            android:layout_toStartOf="@+id/chat_send_button"
+            android:layout_weight="0.99"
+            android:ems="10"
+            android:inputType="textMultiLine" />
 
-    <EditText
-        android:id="@+id/chat_text_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/chat_send_button"
-        android:layout_toStartOf="@+id/chat_send_button" />
-</RelativeLayout>
+        <Button
+            android:id="@+id/chat_send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/chat_text_edit_text"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorAccent"
+            android:text="SEND" />
+    </LinearLayout>
+
+</LinearLayout>
