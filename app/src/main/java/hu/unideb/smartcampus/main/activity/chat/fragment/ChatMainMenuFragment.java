@@ -84,8 +84,8 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
         MamManager mamManager = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection());
         List<Jid> jids = new ArrayList<>();
         try {
+            jids.add(JidCreate.bareFrom("kfnorbi@wt2.inf.unideb.hu/Smartcampus"));
             jids.add(JidCreate.bareFrom("smartcampus@wt2.inf.unideb.hu/Smartcampus"));
-            //jids.add(JidCreate.bareFrom("balikai@wt2.inf.unideb.hu/Smartcampus"));
         } catch (XmppStringprepException e) {
             e.printStackTrace();
         }

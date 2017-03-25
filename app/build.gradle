@@ -17,7 +17,7 @@ android {
         abortOnError false
     }
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "hu.unideb.smartcampus"
         minSdkVersion 16

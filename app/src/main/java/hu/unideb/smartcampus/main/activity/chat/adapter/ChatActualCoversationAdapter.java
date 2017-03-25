@@ -73,7 +73,6 @@ public class ChatActualCoversationAdapter extends BaseAdapter {
             actualMsgTextView.setGravity(Gravity.LEFT);
             senderImg.setVisibility(View.GONE);
         }
-
         return convertView;
     }
 }
