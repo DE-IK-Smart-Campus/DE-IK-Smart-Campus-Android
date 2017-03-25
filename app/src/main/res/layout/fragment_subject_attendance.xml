@@ -3,4 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ExpandableListView
+        android:id="@+id/class_attendance_ExpandableListView"
+        android:layout_width="394dp"
+        android:layout_height="match_parent" />
 </LinearLayout>

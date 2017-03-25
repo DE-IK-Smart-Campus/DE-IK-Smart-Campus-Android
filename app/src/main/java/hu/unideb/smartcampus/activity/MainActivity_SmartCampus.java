@@ -24,7 +24,7 @@ import java.util.List;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
-import hu.unideb.smartcampus.fragment.ClassAttendanceFragment;
+import hu.unideb.smartcampus.main.activity.classattendance.fragment.AttendanceFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
@@ -108,7 +108,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:
-                    ClassAttendanceFragment fragment1 = new ClassAttendanceFragment();
+                    AttendanceFragment fragment1 = new AttendanceFragment();
                     FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
                             android.R.anim.fade_out);

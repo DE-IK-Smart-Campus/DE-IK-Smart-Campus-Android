@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +33,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
     private List<TimetableEventDate> calendarDates;
     private ListView listView;
     private Calendar selectedDate;
+    private TextView emptyText;
 
     public CalendarFragment() {
     }
@@ -48,6 +50,8 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         listView = (ListView) view.findViewById(R.id.calendar_event);
+
+        emptyText = (TextView) view.findViewById(android.R.id.empty);
 
         calendarDates = new ArrayList<>();
 
@@ -180,6 +184,9 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
             if (asd.getTimetableEventDate().equals(today.getTimeInMillis())) {
                 TimetableEventListAdapter adapter = new TimetableEventListAdapter(getContext(), asd.getTimetableEventList());
                 listView.setAdapter(adapter);
+                break;
+            } else {
+                listView.setEmptyView(emptyText);
             }
         }
         return view;
@@ -200,6 +207,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
                         break;
                     } else {
                         listView.setAdapter(null);
+                        listView.setEmptyView(emptyText);
                     }
                 }
             }

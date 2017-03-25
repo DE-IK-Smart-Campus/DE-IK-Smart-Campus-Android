@@ -65,7 +65,6 @@
     <string name="eventNameHint">Esemény neve</string>
     <string name="eventDescriptionHint">Esemény leírása</string>
     <string name="saveButton">Mentés</string>
-    <string name="cancelButtonText">Mégse</string>
     <string name="allDayEventText">Egész napos esemény</string>
     <string name="date">Dátum:</string>
     <string name="textViewStart">Kezdete:</string>
@@ -78,6 +77,8 @@
     <string name="event_delete">Esemény törlése</string>
     <string name="textEventName">Esemény neve:</string>
     <string name="textEventDescription">Esemény leírása:</string>
-    <string name="textEventPlace">Esemény helye:</string>
+    <string name="textEventEdit">Esemény Szerkesztése:</string>
+    <string name="notEditEventText">Nem történt módosítás!</string>
+    <string name="noEventThisDay">Nincs esemény</string>
 
 </resources>

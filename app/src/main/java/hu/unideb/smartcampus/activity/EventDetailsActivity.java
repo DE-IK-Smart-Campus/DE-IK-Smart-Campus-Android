@@ -1,21 +1,22 @@
 package hu.unideb.smartcampus.activity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,6 +43,9 @@ public class EventDetailsActivity extends AppCompatActivity {
     private Long eventStartTime;
     private Long eventEndTime;
 
+    private ArrayAdapter<String> eventDetailsAdapter;
+    private List<String> eventDetails;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +56,11 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         getDataAnotherScreen();
 
-        ArrayAdapter<String> eventDetailsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventDetailsListSetUp());
+        eventDetailsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventDetailsListSetUp());
 
         eventDetailsListView.setAdapter(eventDetailsAdapter);
 
         eventDetailsListViewClick();
-
     }
 
     public void getDataAnotherScreen() {
@@ -73,7 +76,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     public List<String> eventDetailsListSetUp() {
 
-        List<String> eventDetails = new ArrayList<>();
+        eventDetails = new ArrayList<>();
 
         Calendar date = Calendar.getInstance();
         date.setTimeInMillis(eventDate);
@@ -84,9 +87,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         Calendar toTime = Calendar.getInstance();
         toTime.setTimeInMillis(eventEndTime);
 
-        eventDetails.add(getResources().getString(R.string.textEventName) + "\t " + eventName);
-        eventDetails.add(getResources().getString(R.string.textEventDescription) + "\t " + eventDescription);
-        eventDetails.add(getResources().getString(R.string.textEventPlace) + "\t " + eventPlace);
+        eventDetails.add(eventName);
+        eventDetails.add(eventDescription);
+        eventDetails.add(eventPlace);
         eventDetails.add(getResources().getString(R.string.date) + "\t " + DateFormat.getDateInstance(DateFormat.SHORT).format(date.getTime()));
         eventDetails.add(getResources().getString(R.string.textViewStart) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(fromTime.getTime()));
         eventDetails.add(getResources().getString(R.string.textViewEnd) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(toTime.getTime()));
@@ -132,47 +135,39 @@ public class EventDetailsActivity extends AppCompatActivity {
                 } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textViewEnd))) {
                     toTimePickerDialog.show();
                 } else {
-                    if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textEventName))) {
-                        editEventShowDialog(view, getResources().getString(R.string.textEventName));
-                    } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textEventDescription))) {
-                        editEventShowDialog(view, getResources().getString(R.string.textEventDescription));
-                    } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textEventPlace))) {
-                        editEventShowDialog(view, getResources().getString(R.string.textEventPlace));
-                    }
+                    showInputBox(eventDetailsListView.getItemAtPosition(position).toString(), position);
                 }
                 return true;
             }
         });
     }
 
-    private void editEventShowDialog(View view, String title) {
+    public void showInputBox(String oldItem, final int index) {
+        final Dialog dialog = new Dialog(EventDetailsActivity.this);
+        dialog.setContentView(R.layout.event_details_editing_dialog);
+        TextView txtMessage = (TextView) dialog.findViewById(R.id.event_details_edit_textview);
+        txtMessage.setText(getResources().getText(R.string.textEventEdit));
+        final EditText editText = (EditText) dialog.findViewById(R.id.editTextInput);
+        editText.setText(oldItem);
+        Button buttonDone = (Button) dialog.findViewById(R.id.btdone);
+        Button buttonCancel = (Button) dialog.findViewById(R.id.btnCancel);
+        buttonDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventDetails.set(index, editText.getText().toString());
+                eventDetailsAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), getResources().getText(R.string.notEditEventText), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
 
-        LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
-        View eventDetailsDialog = layoutInflater.inflate(R.layout.event_details_editing_dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-        alertDialogBuilder.setView(eventDetailsDialog);
-        alertDialogBuilder.setTitle(title);
-
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton(getResources().getText(R.string.ok_button),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int id) {
-                            }
-                        })
-                .setNegativeButton(getResources().getText(R.string.cancel_button),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        alertDialog.show();
+        dialog.show();
     }
 
     @Override
@@ -186,11 +181,9 @@ public class EventDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
         if (id == R.id.action_delete_event) {
             Toast.makeText(getApplicationContext(), "Töröl", Toast.LENGTH_SHORT).show();
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
