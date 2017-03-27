@@ -21,11 +21,10 @@ import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.officehours.adapter.InstructorOfficeHourExpandableListAdapter;
 import hu.unideb.smartcampus.main.activity.officehours.adapter.SubjectInstructorExpandableListAdapter;
 import hu.unideb.smartcampus.main.activity.officehours.json.MessageTypeInstructorIdUserId;
-import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsProcessMessagePojo;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsPojo;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Instructor;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.OfficeHour;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Subject;
-import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.activity.MainActivity_SmartCampus.CURRENT_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTOR;
@@ -58,10 +57,10 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
         ExpandableListView expandableListViewList = (ExpandableListView) view.findViewById(R.id.consulting_hours_ExpandableListView);
 
         if (StringUtils.equals(getArguments().getString(STATUSOFCONSULTINGHOURS), ASKSUBJECTS)) {
-            AskSubjectsProcessMessagePojo askSubjectsProcessMessagePojo = getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO);
+            AskSubjectsPojo askSubjectsPojo = getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO);
             final ExpandableListAdapter ClassChildTeacherListAdapter;
-            if (askSubjectsProcessMessagePojo != null) {
-                ClassChildTeacherListAdapter = new SubjectInstructorExpandableListAdapter(getContext(), askSubjectsProcessMessagePojo.getSubjects());
+            if (askSubjectsPojo != null) {
+                ClassChildTeacherListAdapter = new SubjectInstructorExpandableListAdapter(getContext(), askSubjectsPojo.getSubjects());
                 expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
                 expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskSubjects());
             } else {
@@ -70,14 +69,14 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
         }
 
         if (StringUtils.equals(getArguments().getString(STATUSOFCONSULTINGHOURS), ASKINSTRUCTOR)) {
-            AskSubjectsProcessMessagePojo askSubjectsProcessMessagePojo = getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO);
+            AskSubjectsPojo askSubjectsPojo = getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO);
             int instructorPos = getArguments().getInt(INSTRUCTORPOS);
             int subjectPos = getArguments().getInt(SUBJECTPOS);
             final ExpandableListAdapter ClassChildTeacherListAdapter;
-            if (askSubjectsProcessMessagePojo != null) {
+            if (askSubjectsPojo != null) {
                 ClassChildTeacherListAdapter = new InstructorOfficeHourExpandableListAdapter(getContext(),
                         Collections.singletonList(
-                                askSubjectsProcessMessagePojo.getSubjects().get(subjectPos).getInstructors().get(instructorPos)));
+                                askSubjectsPojo.getSubjects().get(subjectPos).getInstructors().get(instructorPos)));
 
                 expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
                 expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
@@ -107,7 +106,7 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             String request = null;
             try {
                 request = objectMapper.writeValueAsString(messageTypeInstructorIdUserId);
-                Connection.getInstance().createLoadingDialog(request, getFragmentManager(), bundle);
+       //         Connection.getInstance().createLoadingDialog(request, getFragmentManager(), bundle);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

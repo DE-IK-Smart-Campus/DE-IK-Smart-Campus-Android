@@ -2,53 +2,49 @@ package hu.unideb.smartcampus.main.activity.officehours.task;
 
 import android.os.AsyncTask;
 
-import org.jxmpp.jid.Jid;
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaCollector;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.IQ;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
 
-import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsProcessMessagePojo;
+import hu.unideb.smartcampus.main.activity.officehours.converter.OfficeHourConverter;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsPojo;
+import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
+import hu.unideb.smartcampus.xmpp.Connection;
+
+import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 
 /**
  * Created by Headswitcher on 2017. 03. 24..
+ * //TODO
  */
 
-public class SubjectsIqRequestTask extends AsyncTask<Jid, Integer, AskSubjectsProcessMessagePojo> {
+public class SubjectsIqRequestTask extends AsyncTask<String, Integer, AskSubjectsPojo> {
 
 
     @Override
-    protected AskSubjectsProcessMessagePojo doInBackground(Jid... params) {
-   /*     SubjectsIqRequest iq = new SubjectsIqRequest();
-        iq.setStudent("adamkai");
-        iq.setType(IQ.Type.get);
+    protected AskSubjectsPojo doInBackground(String... params) {
         try {
+
+            SubjectsIqRequest iq = new SubjectsIqRequest();
+            iq.setStudent("adamkai");
+            iq.setType(IQ.Type.get);
             iq.setTo(JidCreate.from(ADMINJID));
 
-            final StanzaCollector stanzaCollectorAndSend;
-            stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
+            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
+            final SubjectsIqRequest subjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
+            return OfficeHourConverter.convertToAskSubjectsProcessMessagePojo(subjectsIqRequest);
 
-            final SubjectsIqRequest stanza = stanzaCollectorAndSend.nextResultOrThrow(5000);
-            Log.e(TAG, "doInBackground: Got stanza : " + stanza.getSubjects());
-            AskSubjectsProcessMessagePojo askSubjectsProcessMessagePojo = new AskSubjectsProcessMessagePojo();
-            Subject subj = new Subject();
-            subj.setName(stanza.getSubjects().get(0).getSubjectName());
-            subj.setInstructors(new ArrayList<Instructor>());
-            List<Subject> ge = new ArrayList<>();
-            ge.add(subj);
-            askSubjectsProcessMessagePojo.setSubjects(ge);
-            Log.e(TAG, "doInBackground: return mockpojo");
-            return askSubjectsProcessMessagePojo;
 
-        } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (
-                XmppStringprepException e) {
-            e.printStackTrace();
-        } catch (XMPPException.XMPPErrorException e) {
-            e.printStackTrace();
-        } catch (SmackException.NoResponseException e) {
+        } catch (SmackException.NotConnectedException
+                | XMPPException.XMPPErrorException
+                | SmackException.NoResponseException
+                | XmppStringprepException
+                | InterruptedException e) {
             e.printStackTrace();
         }
-        return new AskSubjectsProcessMessagePojo();*/
-        return null;
+        return new AskSubjectsPojo();
     }
 }

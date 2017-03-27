@@ -17,12 +17,13 @@ import org.jivesoftware.smack.packet.Message;
 import org.jxmpp.jid.EntityBareJid;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.main.activity.officehours.fragment.OfficeHourFragment;
-import hu.unideb.smartcampus.main.activity.officehours.pojo.AskInstructorConsultingHoursProcessMessagePojo;
-import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsProcessMessagePojo;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.AskInstructorOfficeHourPojo;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsPojo;
 import hu.unideb.smartcampus.main.activity.officehours.task.SubjectsIqRequestTask;
 import hu.unideb.smartcampus.xmpp.Connection;
 
@@ -52,7 +53,7 @@ import static hu.unideb.smartcampus.xmpp.Connection.adminEntityJID;
 
 public class OfficeHourHandler implements IncomingChatMessageListener {
 
-    private AskSubjectsProcessMessagePojo askSubjectsProcessMessagePojo;
+    private AskSubjectsPojo askSubjectsPojo;
     private FragmentManager fragmentManager;
     private ObjectMapper objectMapper;
     private Context context;
@@ -60,13 +61,30 @@ public class OfficeHourHandler implements IncomingChatMessageListener {
     public OfficeHourHandler(FragmentManager fragmentManager, Context context) throws SmackException.NotConnectedException, InterruptedException {
         super();
         this.context = context;
-        this.askSubjectsProcessMessagePojo = new AskSubjectsProcessMessagePojo();
+        this.askSubjectsPojo = new AskSubjectsPojo();
         this.objectMapper = new ObjectMapper();
         this.fragmentManager = fragmentManager;
     }
 
     public void sendDefaultMsg() {
-        Connection.getInstance().createLoadingDialog(new SubjectsIqRequestTask(), new OfficeHourFragment(), fragmentManager, new Bundle());
+        try {
+            fragmentManager = Connection.getInstance().createLoadingDialog(fragmentManager, new Bundle());
+            AskSubjectsPojo askSubjectsPojo = Connection.getInstance().createLoadingDialog(new SubjectsIqRequestTask(), fragmentManager);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(STATUSOFCONSULTINGHOURS, ASKSUBJECTS);
+            bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsPojo);
+            changeToOfficeFragmentView(bundle);
+
+            LoadingDialogFragment fragmentByTag = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
+
+//            fragmentByTag.nDialog.dismiss();
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -88,12 +106,12 @@ public class OfficeHourHandler implements IncomingChatMessageListener {
             if (message.getBody().contains(ASKSUBJECTSPROCESSMESSAGERESPONSE)) {
                 LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
                 try {
-                    askSubjectsProcessMessagePojo = objectMapper.readValue(body, AskSubjectsProcessMessagePojo.class);
+                    askSubjectsPojo = objectMapper.readValue(body, AskSubjectsPojo.class);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsProcessMessagePojo);
+                bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsPojo);
                 bundle.putString(STATUSOFCONSULTINGHOURS, ASKSUBJECTS);
                 changeToOfficeFragmentView(bundle);
                 loadingDialogFragment.nDialog.dismiss();
@@ -104,8 +122,8 @@ public class OfficeHourHandler implements IncomingChatMessageListener {
                 int instructorPos = loadingDialogFragment.getArguments().getInt(INSTRUCTORPOS);
                 int subjectPos = loadingDialogFragment.getArguments().getInt(SUBJECTPOS);
                 try {
-                    AskInstructorConsultingHoursProcessMessagePojo chInstructorPojo = objectMapper.readValue(body, AskInstructorConsultingHoursProcessMessagePojo.class);
-                    askSubjectsProcessMessagePojo.getSubjects().get(subjectPos).getInstructors().get(instructorPos).setConsultingHoursList(chInstructorPojo.getConsultingHours());
+                    AskInstructorOfficeHourPojo chInstructorPojo = objectMapper.readValue(body, AskInstructorOfficeHourPojo.class);
+                    askSubjectsPojo.getSubjects().get(subjectPos).getInstructors().get(instructorPos).setConsultingHoursList(chInstructorPojo.getConsultingHours());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -113,7 +131,7 @@ public class OfficeHourHandler implements IncomingChatMessageListener {
                 Bundle bundle = new Bundle();
                 bundle.putInt(INSTRUCTORPOS, instructorPos);
                 bundle.putInt(SUBJECTPOS, subjectPos);
-                bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsProcessMessagePojo);
+                bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsPojo);
                 bundle.putString(STATUSOFCONSULTINGHOURS, ASKINSTRUCTOR);
                 changeToOfficeFragmentView(bundle);
                 loadingDialogFragment.nDialog.dismiss();
