@@ -64,8 +64,8 @@ public class LoginActivity extends AppCompatActivity {
                 public void run() {
                     BOSHConfiguration config = null;
                     try {
+                        //.setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
                         config = BOSHConfiguration.builder()
-                                //.setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
                                 .setUsernameAndPassword("testuser", "admin")
                                 .setXmppDomain(HOSTNAME)
                                 .setHost(HOSTNAME)

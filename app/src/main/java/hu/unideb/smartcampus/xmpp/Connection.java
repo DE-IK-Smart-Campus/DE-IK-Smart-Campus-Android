@@ -4,35 +4,39 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import org.jivesoftware.smack.SmackConfiguration;
-import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
-import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.provider.ProviderManager;
+import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.EntityJid;
-import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.LoginActivity;
 import hu.unideb.smartcampus.activity.MainActivity_SmartCampus;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
-import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsProcessMessagePojo;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.BasePojo;
+import hu.unideb.smartcampus.shared.iq.provider.InstructorConsultingDateIqProvider;
+import hu.unideb.smartcampus.shared.iq.provider.SubjectRequestIqProvider;
+import hu.unideb.smartcampus.shared.iq.request.BaseSmartCampusIq;
+import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
 import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
 import static java.lang.Thread.sleep;
 import static org.jxmpp.jid.impl.JidCreate.entityBareFrom;
 
@@ -105,8 +109,12 @@ public class Connection {
         xmppConnection = new XMPPBOSHConnection(config);
         checkConnection(actualContext);
         if (xmppConnection.isAuthenticated()) {
-            //   ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
-            //     ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new SubjectRequestIqProvider());
+
+
+            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(InstructorConsultingDatesIqRequest.ELEMENT);
+            ProviderManager.addIQProvider(InstructorConsultingDatesIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new InstructorConsultingDateIqProvider());
+            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
+            ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new SubjectRequestIqProvider());
 
             userJID = config.getUsername().toString();
             ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
@@ -122,6 +130,7 @@ public class Connection {
         Log.e(TAG, "startBoshConnection: " + xmppConnection.isConnected());
     }
 
+
     public Chat getAdminChat() {
         if (adminChat != null)
 
@@ -132,16 +141,18 @@ public class Connection {
         }
     }
 
-    public void createLoadingDialog(String toAdminMsg, FragmentManager fragmentManager, Bundle bundle) {
+    //// TODO: 2017. 03. 28. We need an unbreakable dialog
+
+    public FragmentManager createLoadingDialog(FragmentManager fragmentManager, Bundle bundle) {
         LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (loadingDialogFragment != null) {
             fragmentTransaction.remove(loadingDialogFragment);
+            fragmentTransaction.commitNow();
         } else {
             loadingDialogFragment = new LoadingDialogFragment();
 
         }
-
         if (bundle == null) {
             throw new NullPointerException("Bundle was null");
         }
@@ -151,64 +162,28 @@ public class Connection {
         } else {
             loadingDialogFragment.setArguments(bundle);
         }
-        fragmentTransaction.commitNow();
+
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOG_TAG);
         fragmentTransaction.addToBackStack(DIALOG_TAG);
         fragmentTransaction.commit();
-        Log.d(TAG, "Sent MSG: " + toAdminMsg);
-        Connection.getInstance().checkConnection(actualContext);
-        try {
-            adminChat.send(new Message(ADMINJID, toAdminMsg));
-        } catch (SmackException.NotConnectedException | XmppStringprepException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        return fragmentManager;
     }
 
-    public static <T extends AsyncTask<Jid, Integer, AskSubjectsProcessMessagePojo>> void createLoadingDialog(T asyncIqTask, Fragment fragment, FragmentManager fragmentManager, Bundle bundle) {
-        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (loadingDialogFragment != null) {
-            fragmentTransaction.remove(loadingDialogFragment);
-        } else {
-            loadingDialogFragment = new LoadingDialogFragment();
+    public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P extends BasePojo>
+    P createLoadingDialog(T asyncIqTask, FragmentManager fragmentManager, HashMap<String, String> params) throws ExecutionException, InterruptedException {
 
+        HashMap<String, String> asyncTaskParams = new HashMap<>();
+        asyncTaskParams.put("ADMINJID", "Connection.getInstance().getAdminEntityJID().toString()");
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            asyncTaskParams.put(entry.getKey(), entry.getValue());
         }
 
-        if (bundle == null) {
-            throw new NullPointerException("Bundle was null");
-        }
+        P pojoClass = asyncIqTask.execute(asyncTaskParams).get();
 
-        if (loadingDialogFragment.getArguments() != null) {
-            loadingDialogFragment.getArguments().putAll(bundle);
-        } else {
-            loadingDialogFragment.setArguments(bundle);
-        }
-        fragmentTransaction.commitNow();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOG_TAG);
-        fragmentTransaction.addToBackStack(DIALOG_TAG);
-        fragmentTransaction.commit();
-        Connection.getInstance().checkConnection(actualContext);
-
-        try {
-            AskSubjectsProcessMessagePojo messagePojo = asyncIqTask.execute(Connection.getInstance().getAdminEntityJID()).get();
-            bundle.putParcelable("asd", messagePojo);
-            fragment.setArguments(bundle);
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, OFFICE_HOURS_TAG);
-            fragmentTransaction.commitAllowingStateLoss();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-
+        return pojoClass;
     }
 
     public XMPPBOSHConnection getXmppConnection() {

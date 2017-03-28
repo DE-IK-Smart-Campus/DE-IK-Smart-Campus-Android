@@ -12,8 +12,8 @@ import org.jxmpp.stringprep.XmppStringprepException;
 import java.util.HashMap;
 
 import hu.unideb.smartcampus.main.activity.officehours.converter.OfficeHourConverter;
-import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsPojo;
-import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.Instructor;
+import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
@@ -23,21 +23,21 @@ import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
  * //TODO
  */
 
-public class SubjectsIqRequestTask extends AsyncTask<HashMap<String, String>, Integer, AskSubjectsPojo> {
+public class InstructorConsultingDatesIqRequestTask extends AsyncTask<HashMap<String, String>, Integer, Instructor> {
 
 
     @Override
-    protected AskSubjectsPojo doInBackground(HashMap<String, String>... params) {
+    protected Instructor doInBackground(HashMap<String, String>... params) {
         try {
-            SubjectsIqRequest iq = new SubjectsIqRequest();
-            //iq.setStudent(params[0].get("ACTUAL_USER_JID"));
-            iq.setStudent("adamkai");
+            InstructorConsultingDatesIqRequest iq = new InstructorConsultingDatesIqRequest();
+
+            iq.setInstructorId(params[0].get("INSTRUCTOR_ID"));
             iq.setType(IQ.Type.get);
             iq.setTo(JidCreate.from(ADMINJID));
 
             final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
-            final SubjectsIqRequest subjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
-            return OfficeHourConverter.convertToAskSubjectsProcessMessagePojo(subjectsIqRequest);
+            final InstructorConsultingDatesIqRequest iqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
+            return OfficeHourConverter.convertToAskInstructorOfficeHourPojo(iqRequest);
 
         } catch (SmackException.NotConnectedException
                 | XMPPException.XMPPErrorException
@@ -46,6 +46,6 @@ public class SubjectsIqRequestTask extends AsyncTask<HashMap<String, String>, In
                 | InterruptedException e) {
             e.printStackTrace();
         }
-        return new AskSubjectsPojo();
+        return new Instructor();
     }
 }

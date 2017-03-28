@@ -10,7 +10,7 @@ import java.util.List;
  * <p>
  * The university will have instructors this the pojo class for it.
  * <p>
- * The Instructor will have an {@code Long instructorId , String name} and a list of {@code consultingHoursList}
+ * The Instructor will have an {@code Long instructorId , String name} and a list of {@code officeHourList}
  *
  * @see OfficeHour
  * @see Parcelable
@@ -18,31 +18,31 @@ import java.util.List;
  * Created by Headswitcher on 2017. 03. 08..
  */
 
-public class Instructor implements Parcelable {
+public class Instructor extends BasePojo implements Parcelable {
     private Long instructorId;
     private String name;
-    private List<OfficeHour> consultingHoursList;
+    private List<OfficeHour> officeHourList;
 
     public Instructor() {
     }
 
-    public Instructor(Long instructorId, String name, List<OfficeHour> consultingHoursList) {
+    public Instructor(Long instructorId, String name, List<OfficeHour> officeHourList) {
         this.instructorId = instructorId;
         this.name = name;
-        this.consultingHoursList = consultingHoursList;
+        this.officeHourList = officeHourList;
     }
 
     protected Instructor(Parcel in) {
         instructorId = in.readLong();
         name = in.readString();
-        consultingHoursList = in.createTypedArrayList(OfficeHour.CREATOR);
+        officeHourList = in.createTypedArrayList(OfficeHour.CREATOR);
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(instructorId);
         dest.writeString(name);
-        dest.writeTypedList(consultingHoursList);
+        dest.writeTypedList(officeHourList);
     }
 
     @Override
@@ -78,11 +78,11 @@ public class Instructor implements Parcelable {
         this.name = name;
     }
 
-    public List<OfficeHour> getConsultingHoursList() {
-        return consultingHoursList;
+    public List<OfficeHour> getOfficeHourList() {
+        return officeHourList;
     }
 
-    public void setConsultingHoursList(List<OfficeHour> consultingHoursList) {
-        this.consultingHoursList = consultingHoursList;
+    public void setOfficeHourList(List<OfficeHour> officeHourList) {
+        this.officeHourList = officeHourList;
     }
 }

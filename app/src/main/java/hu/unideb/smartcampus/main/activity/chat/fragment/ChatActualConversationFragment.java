@@ -98,6 +98,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
         chatHistoryItemCount = getArguments().getInt("CHAT_HISTORY_ITEM_COUNT");
         chat = chatManager.chatWith(selectedChatPartnerJid);
 
+
         TextView textView = (TextView) view.findViewById(chat_name);
         textView.setText(selectedChatPartnerJid.getLocalpart().toString());
 
