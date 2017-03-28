@@ -3,12 +3,15 @@ package hu.unideb.smartcampus.main.activity.officehours.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.unideb.smartcampus.main.activity.officehours.pojo.AskInstructorOfficeHourPojo;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsPojo;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.FromToDatesInLong;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Instructor;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.OfficeHour;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Subject;
 import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.element.ConsultingDateIqElement;
+import hu.unideb.smartcampus.shared.iq.request.element.FromToDateIqElement;
 import hu.unideb.smartcampus.shared.iq.request.element.InstructorIqElement;
 import hu.unideb.smartcampus.shared.iq.request.element.SubjectIqElement;
 
@@ -19,15 +22,23 @@ import hu.unideb.smartcampus.shared.iq.request.element.SubjectIqElement;
 
 public class OfficeHourConverter {
 
-    public static AskInstructorOfficeHourPojo convertToAskSubjectsProcessMessagePojo(InstructorConsultingDatesIqRequest instructorConsultingDatesIqRequest) {
-    /*
+    public static Instructor convertToAskInstructorOfficeHourPojo(InstructorConsultingDatesIqRequest instructorConsultingDatesIqRequest) {
+
         Instructor instructor = new Instructor();
+        instructor.setName(""); // TODO
+        instructor.setInstructorId(Long.valueOf(instructorConsultingDatesIqRequest.getInstructorId()));
 
-        instructorConsultingDatesIqRequest.getInstructorId();
-        instructorConsultingDatesIqRequest.getConsultingDates();
-    */
-        return null;
+        List<OfficeHour> officeHourList = new ArrayList<>();
 
+        for (ConsultingDateIqElement consultingDateIqElement : instructorConsultingDatesIqRequest.getConsultingDates()) {
+            FromToDateIqElement fromToDates = consultingDateIqElement.getFromToDates();
+            FromToDatesInLong fromToDatesInLong = new FromToDatesInLong(fromToDates.getFrom(), fromToDates.getTo());
+            officeHourList.add(new OfficeHour(consultingDateIqElement.getConsultingDateId(), fromToDatesInLong, 0L));
+        }
+
+        instructor.setOfficeHourList(officeHourList);
+
+        return instructor;
     }
 
     public static AskSubjectsPojo convertToAskSubjectsProcessMessagePojo(SubjectsIqRequest subjectsIqRequest) {

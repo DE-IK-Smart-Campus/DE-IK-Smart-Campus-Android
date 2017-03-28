@@ -20,6 +20,8 @@ import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
@@ -27,8 +29,10 @@ import hu.unideb.smartcampus.activity.LoginActivity;
 import hu.unideb.smartcampus.activity.MainActivity_SmartCampus;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.BasePojo;
+import hu.unideb.smartcampus.shared.iq.provider.InstructorConsultingDateIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.SubjectRequestIqProvider;
 import hu.unideb.smartcampus.shared.iq.request.BaseSmartCampusIq;
+import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
 import static android.content.ContentValues.TAG;
@@ -107,6 +111,8 @@ public class Connection {
         if (xmppConnection.isAuthenticated()) {
 
 
+            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(InstructorConsultingDatesIqRequest.ELEMENT);
+            ProviderManager.addIQProvider(InstructorConsultingDatesIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new InstructorConsultingDateIqProvider());
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
             ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new SubjectRequestIqProvider());
 
@@ -165,9 +171,18 @@ public class Connection {
         return fragmentManager;
     }
 
-    public <T extends AsyncTask<String, Integer, P>, P extends BasePojo>
-    P createLoadingDialog(T asyncIqTask, FragmentManager fragmentManager) throws ExecutionException, InterruptedException {
-        P pojoClass = asyncIqTask.execute(Connection.getInstance().getAdminEntityJID().toString()).get();
+    public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P extends BasePojo>
+    P createLoadingDialog(T asyncIqTask, FragmentManager fragmentManager, HashMap<String, String> params) throws ExecutionException, InterruptedException {
+
+        HashMap<String, String> asyncTaskParams = new HashMap<>();
+        asyncTaskParams.put("ADMINJID", "Connection.getInstance().getAdminEntityJID().toString()");
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            asyncTaskParams.put(entry.getKey(), entry.getValue());
+        }
+
+        P pojoClass = asyncIqTask.execute(asyncTaskParams).get();
+
         return pojoClass;
     }
 

@@ -3,32 +3,33 @@ package hu.unideb.smartcampus.main.activity.officehours.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.officehours.adapter.InstructorOfficeHourExpandableListAdapter;
 import hu.unideb.smartcampus.main.activity.officehours.adapter.SubjectInstructorExpandableListAdapter;
-import hu.unideb.smartcampus.main.activity.officehours.json.MessageTypeInstructorIdUserId;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsPojo;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Instructor;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.OfficeHour;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Subject;
+import hu.unideb.smartcampus.main.activity.officehours.task.InstructorConsultingDatesIqRequestTask;
+import hu.unideb.smartcampus.xmpp.Connection;
 
+import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.activity.MainActivity_SmartCampus.CURRENT_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTOR;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTORCONSULTINGHOURSPROCESSMESSAGE;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTS;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_FROM_UNTIL_DATES;
@@ -41,6 +42,9 @@ import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHou
 /**
  * One of the main fatures for Smart campus is the Office hours.
  * This class responsible for showing view
+ *
+ * //TODO LOADING DIALOG
+ *
  */
 public class OfficeHourFragment extends Fragment implements OnBackPressedListener {
 
@@ -99,17 +103,26 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             Subject parentListAdapterGroup = (Subject) parent.getExpandableListAdapter().getGroup(groupPosition);
             bundle.putInt(INSTRUCTORPOS, childPosition);
             bundle.putInt(SUBJECTPOS, groupPosition);
-
-            MessageTypeInstructorIdUserId messageTypeInstructorIdUserId
-                    = new MessageTypeInstructorIdUserId(ASKINSTRUCTORCONSULTINGHOURSPROCESSMESSAGE, parentListAdapterGroup.getInstructors().get(childPosition).getInstructorId().toString());
-            ObjectMapper objectMapper = new ObjectMapper();
-            String request = null;
+            HashMap<String, String> params = new HashMap<>();
+            final Instructor selectedInstructor = parentListAdapterGroup.getInstructors().get(childPosition);
+            params.put("INSTRUCTOR_ID", selectedInstructor.getInstructorId().toString());
+            Instructor instructor = null;
             try {
-                request = objectMapper.writeValueAsString(messageTypeInstructorIdUserId);
-       //         Connection.getInstance().createLoadingDialog(request, getFragmentManager(), bundle);
-            } catch (JsonProcessingException e) {
+                instructor = Connection.getInstance().createLoadingDialog(new InstructorConsultingDatesIqRequestTask(), getFragmentManager(), params);
+                instructor.setName(selectedInstructor.getName());
+                Log.e(TAG, "onChildClick: " + instructor);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            ExpandableListAdapter listAdapter = new InstructorOfficeHourExpandableListAdapter(getContext(),
+                    Collections.singletonList(instructor));
+            parent.setAdapter(listAdapter);
+            parent.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
+            parent.expandGroup(0);
+
+//            fragmentByTag.nDialog.dismiss();
 
             return true;
         }
@@ -123,7 +136,7 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
             Instructor parentListAdapterGroup = (Instructor) parent.getExpandableListAdapter().getGroup(groupPosition);
-            final OfficeHour officeHour = parentListAdapterGroup.getConsultingHoursList().get(childPosition);
+            final OfficeHour officeHour = parentListAdapterGroup.getOfficeHourList().get(childPosition);
 
             //We add the information insted of a new one, so the reserver can use onBack without a problem
             //Bundle bundle = new Bundle();

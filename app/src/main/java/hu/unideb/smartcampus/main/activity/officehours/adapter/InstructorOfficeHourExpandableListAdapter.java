@@ -38,7 +38,7 @@ public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableLis
 
     @Override
     public int getChildrenCount(int classAt) {
-        return instructor.get(classAt).getConsultingHoursList().size();
+        return instructor.get(classAt).getOfficeHourList().size();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableLis
 
     @Override
     public Object getChild(int instructorAt, int consultingHoursAt) {
-        return instructor.get(instructorAt).getConsultingHoursList().get(consultingHoursAt);
+        return instructor.get(instructorAt).getOfficeHourList().get(consultingHoursAt);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableLis
     public View getChildView(int instructorAt, int consultingHoursAt, boolean isExpanded, View view, ViewGroup viewGroup) {
 
         //will change with 1.8 TODO
-        final FromToDatesInLong dates = instructor.get(instructorAt).getConsultingHoursList().get(consultingHoursAt).getFromToDates();
+        final FromToDatesInLong dates = instructor.get(instructorAt).getOfficeHourList().get(consultingHoursAt).getFromToDates();
         final String dateDisplayName = DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getFrom())
                 + "  -  "
                 + DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getTo());

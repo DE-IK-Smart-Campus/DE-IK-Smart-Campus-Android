@@ -13,25 +13,24 @@ import java.util.List;
  * Created by Headswitcher on 2017. 03. 10..
  */
 
-public class AskInstructorOfficeHourPojo implements Parcelable {
+public class AskInstructorOfficeHourPojo extends BasePojo implements Parcelable {
 
-    private List<OfficeHour> officeHours;
-
+    private List<Instructor> instructorList;
 
     public AskInstructorOfficeHourPojo() {
     }
 
-    public AskInstructorOfficeHourPojo(List<OfficeHour> officeHours) {
-        this.officeHours = officeHours;
+    public AskInstructorOfficeHourPojo(List<Instructor> instructorList) {
+        this.instructorList = instructorList;
     }
 
     protected AskInstructorOfficeHourPojo(Parcel in) {
-        officeHours = in.createTypedArrayList(OfficeHour.CREATOR);
+        instructorList = in.createTypedArrayList(Instructor.CREATOR);
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(officeHours);
+        dest.writeTypedList(instructorList);
     }
 
     @Override
@@ -51,11 +50,11 @@ public class AskInstructorOfficeHourPojo implements Parcelable {
         }
     };
 
-    public List<OfficeHour> getOfficeHours() {
-        return officeHours;
+    public List<Instructor> getInstructorList() {
+        return instructorList;
     }
 
-    public void setOfficeHours(List<OfficeHour> officeHours) {
-        this.officeHours = officeHours;
+    public void setInstructorList(List<Instructor> instructorList) {
+        this.instructorList = instructorList;
     }
 }
