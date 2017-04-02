@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.chat2.ChatManager;
 
 import java.util.List;
 
@@ -25,11 +24,12 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
+
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
+import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
-import hu.unideb.smartcampus.xmpp.Connection;
 
 public class MainActivity_SmartCampus extends AppCompatActivity {
     private NavigationView navigationView;
@@ -118,14 +118,18 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     break;
                 case 3:
                     OfficeHourHandler officeHour = new OfficeHourHandler(getSupportFragmentManager(), getApplicationContext());
-                    ChatManager.getInstanceFor(Connection.getInstance().getXmppConnection()).removeListener(officeHour);
-                    ChatManager.getInstanceFor(Connection.getInstance().getXmppConnection()).addIncomingListener(officeHour);
                     officeHour.sendDefaultMsg();
 
                     break;
 
-                case 4:
-                    ChatFragment chatFragment = new ChatFragment();
+
+                case 3:
+                    ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.frame, chatFragment, CURRENT_TAG);
+                    fragmentTransaction.commitAllowingStateLoss();
                     //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
                     break;
                 case 5:

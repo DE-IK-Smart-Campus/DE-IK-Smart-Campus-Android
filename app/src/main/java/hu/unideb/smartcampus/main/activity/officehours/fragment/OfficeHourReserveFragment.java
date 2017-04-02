@@ -14,8 +14,10 @@ import java.text.DateFormat;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
+import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.FromToDatesInLong;
 
+import static hu.unideb.smartcampus.activity.MainActivity_SmartCampus.CURRENT_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_FROM_UNTIL_DATES;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SELECTED_OFFICE_HOUR_ID;
@@ -51,36 +53,28 @@ public class OfficeHourReserveFragment extends Fragment implements OnBackPressed
 
 
             Button reserveButton = (Button) view.findViewById(R.id.consulting_hour_reserve_button);
-          /*  reserveButton.setOnClickListener(v -> {
-                TextView reasonView = (TextView) getView().findViewById(R.id.consulting_hours_reason_editText);
-                if (reasonView == null) {
-                    throw new NullPointerException("reasonView is null");
-                }
-                TextView durationView = (TextView) getView().findViewById(R.id.consulting_hours_duration_editText);
-                if (durationView == null) {
-                    throw new NullPointerException("durationView is null");
-                }
-                //TODO builder
-                MessageTypeConsultingHourIdReasonDuration toJson = new
-                        MessageTypeConsultingHourIdReasonDuration(
-                        SIGNUPFORCONSULTINGHOURPROCESSMESSAGE,
-                        selectedOfficeHourId.toString(),
-                        reasonView.getText().toString(),
-                        durationView.getText().toString(),
-                        Connection.getInstance().getUserJID());
+
+            reserveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TextView reasonView = (TextView) getView().findViewById(R.id.consulting_hours_reason_editText);
+                    if (reasonView == null) {
+                        throw new NullPointerException("reasonView is null");
+                    }
+                    TextView durationView = (TextView) getView().findViewById(R.id.consulting_hours_duration_editText);
+                    if (durationView == null) {
+                        throw new NullPointerException("durationView is null");
+                    }
+                    CalendarFragment fragment = new CalendarFragment();
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+                    fragmentTransaction.commitAllowingStateLoss();
 
 
-                ObjectMapper objectMapper = new ObjectMapper();
-                String request = null;
-                try {
-                    request = objectMapper.writeValueAsString(toJson);
-                    Connection.getInstance().createLoadingDialog(request, getFragmentManager(), new Bundle());
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
                 }
-
             });
-            */
         } else {
             throw new NullPointerException("getArguments().getLong(SELECTED_OFFICE_HOUR_ID) IS NULL");
         }
