@@ -6,13 +6,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 
 import org.jivesoftware.smack.SmackConfiguration;
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
-import org.jivesoftware.smack.chat2.Chat;
-import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jxmpp.jid.EntityFullJid;
@@ -20,6 +20,7 @@ import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -35,10 +36,8 @@ import hu.unideb.smartcampus.shared.iq.request.BaseSmartCampusIq;
 import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
-import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
 import static java.lang.Thread.sleep;
-import static org.jxmpp.jid.impl.JidCreate.entityBareFrom;
 
 /**
  * Created by Erdei Krisztián on 2017.03.03..
@@ -46,21 +45,16 @@ import static org.jxmpp.jid.impl.JidCreate.entityBareFrom;
  */
 
 public class Connection {
-
     private static Connection instance = null;
     private static Context actualContext;
-    private BOSHConfiguration config;
-
     public static final String HTTP_BASIC_AUTH_PATH = "http://wt2.inf.unideb.hu/smartcampus-backend/integration/retrieveUserData";
     public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu/Smartcampus";
     public static final String HOSTNAME = "wt2.inf.unideb.hu";
     public static EntityJid adminEntityJID;
 
+    private BOSHConfiguration config;
     private EntityFullJid actualUserJid;
-
     private XMPPBOSHConnection xmppConnection;
-    private Chat adminChat;
-    private ChatManager chatManager;
     private String userJID;
 
     public static Context getActualContext() {
@@ -86,66 +80,56 @@ public class Connection {
         return instance;
     }
 
-    private void checkConnection(Context actualContext) {
-        if (!xmppConnection.isConnected()) {
-            try {
-                xmppConnection.connect();
-                sleep(SmackConfiguration.getDefaultReplyTimeout());
-                xmppConnection.login();
-                actualUserJid = xmppConnection.getUser();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Intent intent = new Intent(actualContext, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            actualContext.startActivity(intent);
+    private boolean checkConnection(Context actualContext) {
+        boolean returnBool = true;
+        this.actualContext = actualContext;
+        xmppConnection = new XMPPBOSHConnection(config);
+        if (!xmppConnection.isConnected()) try {
+            xmppConnection.connect();
+            sleep(SmackConfiguration.getDefaultReplyTimeout());
+            xmppConnection.login();
+            actualUserJid = xmppConnection.getUser();
+        } catch (InterruptedException | IOException | SmackException | XMPPException e) {
+            returnBool = false;
+            e.printStackTrace();
+        } finally {
+            if (!xmppConnection.isAuthenticated())
+                xmppConnection.disconnect();
         }
+        return returnBool;
+    }
+
+    public void newActivity(Class<? extends AppCompatActivity> toActivity) {
+        Intent intent = new Intent(actualContext, toActivity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        actualContext.startActivity(intent);
     }
 
 
     public void startBoshConnection(BOSHConfiguration config, Context actualContext) {
         this.actualContext = actualContext;
-        xmppConnection = new XMPPBOSHConnection(config);
-        checkConnection(actualContext);
-        if (xmppConnection.isAuthenticated()) {
-
-
+        this.config = config;
+        if (checkConnection(actualContext) && xmppConnection.isAuthenticated()) {
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(InstructorConsultingDatesIqRequest.ELEMENT);
             ProviderManager.addIQProvider(InstructorConsultingDatesIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new InstructorConsultingDateIqProvider());
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
             ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new SubjectRequestIqProvider());
 
             userJID = config.getUsername().toString();
-            ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
-            try {
-                adminChat = chatManager.chatWith(entityBareFrom(ADMINJID));
-            } catch (XmppStringprepException e) {
-                e.printStackTrace();
-            }
-            Intent intent = new Intent(actualContext, MainActivity_SmartCampus.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            actualContext.startActivity(intent);
-        }
-        Log.e(TAG, "startBoshConnection: " + xmppConnection.isConnected());
-    }
 
-
-    public Chat getAdminChat() {
-        if (adminChat != null)
-
-            return adminChat;
-
-        else {
-            throw new RuntimeException();
+            newActivity(MainActivity_SmartCampus.class);
+        } else {
+            newActivity(LoginActivity.class);
         }
     }
+
 
     //// TODO: 2017. 03. 28. We need an unbreakable dialog
 
     public FragmentManager createLoadingDialog(FragmentManager fragmentManager, Bundle bundle) {
         LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         if (loadingDialogFragment != null) {
             fragmentTransaction.remove(loadingDialogFragment);
             fragmentTransaction.commitNow();
@@ -153,8 +137,9 @@ public class Connection {
             loadingDialogFragment = new LoadingDialogFragment();
 
         }
+
         if (bundle == null) {
-            throw new NullPointerException("Bundle was null");
+            throw new NullPointerException("Bundle can not be null");
         }
 
         if (loadingDialogFragment.getArguments() != null) {
@@ -204,10 +189,6 @@ public class Connection {
 
     public EntityJid getAdminEntityJID() {
         return adminEntityJID;
-    }
-
-    public ChatManager getChatManager() {
-        return chatManager;
     }
 
     public EntityFullJid getActualUserJid() {

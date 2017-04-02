@@ -9,18 +9,24 @@ import org.jxmpp.jid.Jid;
 
 public class ChatItem {
 
+
+    public enum Type {
+        MUC,
+        SINGLE,
+    }
+
     Jid from;
     String chatName;
+    ChatItem.Type Type;
     String lastMsg;
-
 
     public ChatItem() {
     }
 
-    public ChatItem(Jid from, String chatName, String lastMsg) {
-
+    public ChatItem(Jid from, String chatName, ChatItem.Type type, String lastMsg) {
         this.from = from;
         this.chatName = chatName;
+        Type = type;
         this.lastMsg = lastMsg;
     }
 
@@ -38,6 +44,14 @@ public class ChatItem {
 
     public void setChatName(String chatName) {
         this.chatName = chatName;
+    }
+
+    public ChatItem.Type getType() {
+        return Type;
+    }
+
+    public void setType(ChatItem.Type type) {
+        Type = type;
     }
 
     public String getLastMsg() {
