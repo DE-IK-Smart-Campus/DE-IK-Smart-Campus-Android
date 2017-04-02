@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.main.activity.classattendance.fragment;
+package hu.unideb.smartcampus.main.activity.attendance.fragment;
 
 
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
-import hu.unideb.smartcampus.main.activity.classattendance.adapter.SubjectDateExpandableListAdaper;
-import hu.unideb.smartcampus.main.activity.classattendance.pojo.Subject;
-import hu.unideb.smartcampus.main.activity.classattendance.pojo.SubjectDate;
+import hu.unideb.smartcampus.main.activity.attendance.adapter.SubjectDateExpandableListAdaper;
+import hu.unideb.smartcampus.main.activity.attendance.pojo.Subject;
+import hu.unideb.smartcampus.main.activity.attendance.pojo.SubjectDate;
 
 public class AttendanceFragment extends Fragment implements OnBackPressedListener {
 
@@ -54,19 +54,17 @@ public class AttendanceFragment extends Fragment implements OnBackPressedListene
 
         final ExpandableListAdapter SubjectChildDateListAdapter = new SubjectDateExpandableListAdaper(subjects, getContext());
         expandableListViewList.setAdapter(SubjectChildDateListAdapter);
-        expandableListViewList.setOnChildClickListener(new OnChildClcikListeneron());
+        expandableListViewList.setOnChildClickListener(new OnChildClicikListenerOnStatusAskDates());
 
         return view;
     }
 
-    private class OnChildClcikListeneron implements ExpandableListView.OnChildClickListener {
+    private class OnChildClicikListenerOnStatusAskDates implements ExpandableListView.OnChildClickListener {
 
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
             Subject parentList = (Subject) parent.getExpandableListAdapter().getGroup(groupPosition);
             final SubjectDate subjectDate = parentList.getSubjectDates().get(childPosition);
-
-
 
             return true;
         }

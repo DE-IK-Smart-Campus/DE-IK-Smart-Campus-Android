@@ -24,7 +24,7 @@ import java.util.List;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
 import hu.unideb.smartcampus.fragment.ChatFragment;
-import hu.unideb.smartcampus.main.activity.classattendance.fragment.AttendanceFragment;
+import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;

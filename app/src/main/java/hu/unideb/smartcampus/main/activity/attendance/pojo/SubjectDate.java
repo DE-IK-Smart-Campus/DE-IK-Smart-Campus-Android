@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.main.activity.classattendance.pojo;
+package hu.unideb.smartcampus.main.activity.attendance.pojo;
 
 public class SubjectDate {
 

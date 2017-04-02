@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.main.activity.classattendance.adapter;
+package hu.unideb.smartcampus.main.activity.attendance.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -13,7 +13,7 @@ import java.text.DateFormat;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.main.activity.classattendance.pojo.Subject;
+import hu.unideb.smartcampus.main.activity.attendance.pojo.Subject;
 
 public class SubjectDateExpandableListAdaper extends BaseExpandableListAdapter {
 
@@ -63,7 +63,7 @@ public class SubjectDateExpandableListAdaper extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = subjectsList.get(groupPosition).getName();
-        if(convertView == null) {
+        if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_subject, null);
         }
@@ -76,13 +76,14 @@ public class SubjectDateExpandableListAdaper extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         Long dateL = subjectsList.get(groupPosition).getSubjectDates().get(childPosition).getDate();
-        if(convertView == null) {
+        if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.list_subject_date,null);
+            convertView = layoutInflater.inflate(R.layout.list_subject_date, null);
         }
 
-        CheckBox dateListText = (CheckBox) convertView.findViewById(R.id.subjectDate);
-        dateListText.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(dateL));
+        CheckBox dateList = (CheckBox) convertView.findViewById(R.id.subjectDate);
+        dateList.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(dateL));
+
         return convertView;
     }
 

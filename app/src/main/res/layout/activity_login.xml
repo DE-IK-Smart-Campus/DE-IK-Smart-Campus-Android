@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
@@ -14,12 +15,13 @@
         android:text="@string/loginButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_below="@+id/passwordId"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
         android:gravity="center_vertical"
         android:onClick="loginOnClick"
-        android:textAppearance="@style/TextAppearance.AppCompat" />
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:id="@+id/button2"
+        android:layout_below="@+id/passwordId"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -32,7 +34,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/passwordId"
         android:layout_alignStart="@+id/passwordId"
-        android:layout_marginTop="52dp" />
+        android:layout_marginTop="47dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -42,7 +44,8 @@
         android:id="@+id/passwordId"
         android:hint="@string/passwordHint"
         android:textAlignment="center"
+        android:layout_marginTop="25dp"
         android:layout_below="@+id/usernameId"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp" />
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

@@ -90,18 +90,19 @@ public class EventDetailsActivity extends AppCompatActivity {
         eventDetails.add(eventName);
         eventDetails.add(eventDescription);
         eventDetails.add(eventPlace);
+        Toast.makeText(context, eventDate.toString(), Toast.LENGTH_SHORT).show();
         eventDetails.add(getResources().getString(R.string.date) + "\t " + DateFormat.getDateInstance(DateFormat.SHORT).format(date.getTime()));
         eventDetails.add(getResources().getString(R.string.textViewStart) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(fromTime.getTime()));
         eventDetails.add(getResources().getString(R.string.textViewEnd) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(toTime.getTime()));
 
-        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-            }
-
-        }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+//        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//
+//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                Calendar newDate = Calendar.getInstance();
+//                newDate.set(year, monthOfYear, dayOfMonth);
+//            }
+//
+//        }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
 
         fromTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
