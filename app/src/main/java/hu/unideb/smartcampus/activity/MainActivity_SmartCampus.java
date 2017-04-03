@@ -22,7 +22,6 @@ import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
-import hu.unideb.smartcampus.fragment.ChatFragment;
 import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
 
 import hu.unideb.smartcampus.fragment.HomeFragment;
@@ -123,7 +122,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     break;
 
 
-                case 3:
+                case 4:
                     ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,

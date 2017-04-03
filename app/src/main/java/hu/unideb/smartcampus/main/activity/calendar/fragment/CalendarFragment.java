@@ -38,10 +38,10 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
     public TimetableEventSQLiteHelper dbb() {
         TimetableEventSQLiteHelper db = new TimetableEventSQLiteHelper(this.getContext());
         db.onUpgrade(db.getWritableDatabase(), 1, 2);
-        db.createEvent(new TimetableEvent(Long.parseLong("1491087600000"), "1", "1", "1", 1487674800000L, 1487682000000L));
-        db.createEvent(new TimetableEvent(Long.parseLong("1491087600000"), "2", "2", "2", 1487674800000L, 1487682000000L));
-        db.createEvent(new TimetableEvent(Long.parseLong("1491087600000"), "3", "3", "3", 1487674800000L, 1487682000000L));
-        db.createEvent(new TimetableEvent(Long.parseLong("1491087600000"), "4", "Dr. Papp Zoltán Lajos", "IK-INK.HÁZ 2.28", 1487674800000L, 1487682000000L));
+        db.createEvent(new TimetableEvent(Long.parseLong("1491084000000"), "1", "1", "1", 1487674800000L, 1487682000000L));
+        db.createEvent(new TimetableEvent(Long.parseLong("1491084000000"), "2", "2", "2", 1487674800000L, 1487682000000L));
+        db.createEvent(new TimetableEvent(Long.parseLong("1491084000000"), "3", "3", "3", 1487674800000L, 1487682000000L));
+        db.createEvent(new TimetableEvent(Long.parseLong("1491084000000"), "4", "Dr. Papp Zoltán Lajos", "IK-INK.HÁZ 2.28", 1487674800000L, 1487682000000L));
 
         return db;
     }
