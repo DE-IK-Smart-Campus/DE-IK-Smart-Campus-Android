@@ -1,14 +1,15 @@
 package hu.unideb.smartcampus.activity;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,9 @@ import org.jivesoftware.smack.SmackException;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.fragment.AboutUsFragment;
+import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
+
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
@@ -33,8 +37,10 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     public static int navItemIndex = 0;
     private static final String TAG_HOME = "home";
     private static final String TAG_CALENDAR = "calendar";
+    private static final String TAG_CLASSATTENDANCE = "classattendance";
     private static final String TAG_OFFICEHOURS = "officeHours";
     private static final String TAG_CHAT = "chat";
+    private static final String TAG_ABOUT = "about";
     public static String CURRENT_TAG = TAG_HOME;
 
     private String[] activityTitles;
@@ -75,9 +81,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
             }
         };
 
-        if (mPendingRunnable != null) {
-            mHandler.post(mPendingRunnable);
-        }
+        mHandler.post(mPendingRunnable);
 
         drawer.closeDrawers();
 
@@ -103,12 +107,22 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
                     break;
                 case 2:
+                    AttendanceFragment fragment1 = new AttendanceFragment();
+                    FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction1.replace(R.id.frame, fragment1, CURRENT_TAG);
+                    fragmentTransaction1.commitAllowingStateLoss();
+                    //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
+                    break;
+                case 3:
                     OfficeHourHandler officeHour = new OfficeHourHandler(getSupportFragmentManager(), getApplicationContext());
                     officeHour.sendDefaultMsg();
 
                     break;
 
-                case 3:
+
+                case 4:
                     ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
@@ -117,19 +131,28 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     fragmentTransaction.commitAllowingStateLoss();
                     //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
                     break;
+                case 5:
+                    AboutUsFragment aboutUsFragment = new AboutUsFragment();
+                    FragmentTransaction fragmentTransactiona = getSupportFragmentManager().beginTransaction();
+                    fragmentTransactiona.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransactiona.replace(R.id.frame, aboutUsFragment, CURRENT_TAG);
+                    fragmentTransactiona.commitAllowingStateLoss();
+                    break;
                 default:
                     break;
             }
 
-        } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SmackException.NotConnectedException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     private void setToolbarTitle() {
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!= null) {
+            actionBar.setTitle(activityTitles[navItemIndex]);
+        }
     }
 
     private void selectNavMenu() {
@@ -140,7 +163,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
                     case R.id.home:
@@ -151,18 +174,22 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_CALENDAR;
                         break;
-                    case R.id.nav_officeHours:
+                    case R.id.nav_classAttendence:
                         navItemIndex = 2;
+                        CURRENT_TAG = TAG_CLASSATTENDANCE;
+                        break;
+                    case R.id.nav_officeHours:
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_OFFICEHOURS;
                         break;
                     case R.id.nav_chat:
-                        navItemIndex = 3;
+                        navItemIndex = 4;
                         CURRENT_TAG = TAG_CHAT;
                         break;
                     case R.id.nav_about_us:
-                        startActivity(new Intent(MainActivity_SmartCampus.this, AboutUsActivity.class));
-                        drawer.closeDrawers();
-                        return true;
+                        navItemIndex = 5;
+                        CURRENT_TAG = TAG_ABOUT;
+                        break;
                     default:
                         navItemIndex = 0;
                 }
@@ -194,7 +221,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
             }
         };
 
-        drawer.setDrawerListener(actionBarDrawerToggle);
+        drawer.addDrawerListener(actionBarDrawerToggle);
 
         actionBarDrawerToggle.syncState();
     }

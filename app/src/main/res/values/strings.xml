@@ -8,6 +8,7 @@
 
     <string name="nav_home_name">Kezdőképernyő</string>
     <string name="nav_calendar_name">Naptár</string>
+    <string name="nav_classAttendence_name">Órai jelenlét</string>
     <string name="nav_consultingHours_name">Fogadóórák</string>
     <string name="nav_chat_name">Beszélgetés</string>
     <string name="nav_about_us_name">Rólunk</string>
@@ -16,8 +17,10 @@
     <string-array name="nav_item_activity_titles">
         <item> Kezdőképernyő</item>
         <item> Naptár</item>
+        <item> Órai jelenlét</item>
         <item> Fogadóórák</item>
         <item> Beszélgetés</item>
+        <item> Rólunk</item>
     </string-array>
 
     <string-array name="repeats_array_item">
@@ -61,8 +64,8 @@
     <string name="eventNameHint">Esemény neve</string>
     <string name="eventDescriptionHint">Esemény leírása</string>
     <string name="saveButton">Mentés</string>
-    <string name="cancelButtonText">Mégse</string>
     <string name="allDayEventText">Egész napos esemény</string>
+    <string name="date">Dátum:</string>
     <string name="textViewStart">Kezdete:</string>
     <string name="textViewEnd">Befejezés:</string>
     <string name="remainderText">Emlékeztető</string>
@@ -71,8 +74,13 @@
     <string name="eventDetails">Esemény részletező</string>
     <string name="event_edit">Esemény szerkesztése</string>
     <string name="event_delete">Esemény törlése</string>
+    <string name="textEventName">Esemény neve:</string>
+    <string name="textEventDescription">Esemény leírása:</string>
+    <string name="textEventEdit">Esemény Szerkesztése:</string>
+    <string name="notEditEventText">Nem történt módosítás!</string>
+    <string name="noEventThisDay">Nincs esemény</string>
+
     <string name="login_try_again">Slow connection/or service not available , please try again</string>
     <string name="login_failed">Login failed</string>
-
 
 </resources>

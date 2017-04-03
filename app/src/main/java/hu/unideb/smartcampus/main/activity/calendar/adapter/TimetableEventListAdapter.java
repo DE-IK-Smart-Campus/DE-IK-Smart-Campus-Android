@@ -8,30 +8,29 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.main.activity.calendar.pojo.TimetableEvent;
+import hu.unideb.smartcampus.main.activity.calendar.sqllite.db.TimetableEvent;
 
 public class TimetableEventListAdapter extends BaseAdapter {
 
-    private List<TimetableEvent> timetableEventList;
-    private LayoutInflater layoutInflater;
+    private Context context;
+    private List<TimetableEvent> list;
 
-    public TimetableEventListAdapter(Context context, List<TimetableEvent> timetableEvents){
-        this.timetableEventList = timetableEvents;
-        layoutInflater = LayoutInflater.from(context);
+    public TimetableEventListAdapter(Context context, List<TimetableEvent> events) {
+        this.context = context;
+        this.list = events;
     }
 
     @Override
     public int getCount() {
-        return timetableEventList.size();
+        return list.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return timetableEventList.get(position);
+        return list.get(position);
     }
 
     @Override
@@ -39,24 +38,23 @@ public class TimetableEventListAdapter extends BaseAdapter {
         return position;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-       ViewHolder viewHolder;
-        if(convertView == null){
-            convertView = layoutInflater.inflate(R.layout.event_list_row,null);
-            viewHolder = new ViewHolder();
-            viewHolder.eventNameAndStartTimeText = (TextView) convertView.findViewById(R.id.event_name_and_start_time);
-            viewHolder.placeText = (TextView) convertView.findViewById(R.id.place);
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-
-            Date startTime = new Date(timetableEventList.get(position).getTimetableStartTime());
-            Date endTime = new Date(timetableEventList.get(position).getTimetableEndTime());
-
-            viewHolder.eventNameAndStartTimeText.setText(timetableEventList.get(position).getTimetableEventName() + " : " + DateFormat.getTimeInstance(DateFormat.SHORT).format(startTime) + " - " + DateFormat.getTimeInstance(DateFormat.SHORT).format(endTime));
-            viewHolder.placeText.setText(timetableEventList.get(position).getTimetableEventPlace());
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.event_list_row, parent, false);
         }
+
+        TimetableEvent currentItem = (TimetableEvent) getItem(position);
+
+        TextView event_name_and_start_time = (TextView) convertView.findViewById(R.id.event_name_and_start_time);
+        TextView place = (TextView) convertView.findViewById(R.id.place);
+
+        String t = currentItem.getTimetableEventDate().toString();
+
+        event_name_and_start_time.setText(currentItem.getTimetableEventName() + " : " + DateFormat.getTimeInstance(DateFormat.SHORT).format(currentItem.getTimetableEventStartTime()) + " - " + DateFormat.getTimeInstance(DateFormat.SHORT).format(currentItem.getTimetableEventEndTime()));
+        place.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(Long.parseLong(t)));
+
         return convertView;
     }
 }

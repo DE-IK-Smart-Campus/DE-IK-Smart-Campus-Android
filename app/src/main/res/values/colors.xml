@@ -6,5 +6,6 @@
     <color name="textColorBlack">#000000</color>
     <color name="LightSkyBlue">#87cefa</color>
     <color name="selection_navigation_view">#18AB70</color>
+
     <color name="colorAccentOp">#2828da93</color>
 </resources>
