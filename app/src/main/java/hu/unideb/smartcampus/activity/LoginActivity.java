@@ -11,8 +11,13 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
+import hu.unideb.smartcampus.main.activity.login.auth.BasicAuth;
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 import hu.unideb.smartcampus.xmpp.Connection;
 
@@ -51,22 +56,21 @@ public class LoginActivity extends AppCompatActivity {
             if (actualUserInfo.getUsername() == null) {
                 Toast.makeText(getApplicationContext(), R.string.login_failed, Toast.LENGTH_SHORT).show();
             } else {
-*/
-            Toast.makeText(getApplicationContext(), R.string.login_succes, Toast.LENGTH_SHORT).show();
 
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
             fragmentTransaction.commitAllowingStateLoss();
-
-            final ActualUserInfo finalActualUserInfo = actualUserInfo;
+                Toast.makeText(getApplicationContext(), R.string.login_succes, Toast.LENGTH_SHORT).show();
+*/
+                final ActualUserInfo finalActualUserInfo = actualUserInfo;
             new Thread(new Runnable() {
                 public void run() {
                     BOSHConfiguration config = null;
                     try {
-                        //.setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
                         config = BOSHConfiguration.builder()
-                                .setUsernameAndPassword("testuser", "admin")
+                             //   .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
+                                .setUsernameAndPassword("testuser","admin")
                                 .setXmppDomain(HOSTNAME)
                                 .setHost(HOSTNAME)
                                 .setPort(80)
@@ -82,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }).start();
         }
-//        }
+ //      }
     }
 
     public void loginOnClick(View v) {
@@ -95,4 +99,3 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 }
-

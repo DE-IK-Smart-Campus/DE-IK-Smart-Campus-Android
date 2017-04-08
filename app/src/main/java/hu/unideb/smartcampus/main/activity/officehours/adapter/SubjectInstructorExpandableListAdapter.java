@@ -13,12 +13,6 @@ import java.util.List;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Subject;
 
-/**
- * @see SubjectInstructorExpandableListAdapter
- *
- * Created by Headswitcher on 2017. 02. 24..
- */
-
 public class SubjectInstructorExpandableListAdapter extends BaseExpandableListAdapter {
 
     private List<Subject> subjectList;
@@ -74,7 +68,7 @@ public class SubjectInstructorExpandableListAdapter extends BaseExpandableListAd
         }
         TextView classTextView = (TextView) view
                 .findViewById(R.id.classListId);
-        classTextView.setTypeface(null, Typeface.BOLD);
+//        classTextView.setTypeface(null, Typeface.BOLD);
         classTextView.setText(headerTitle);
 
         return view;

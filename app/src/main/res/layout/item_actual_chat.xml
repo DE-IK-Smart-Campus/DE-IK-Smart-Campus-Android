@@ -36,7 +36,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/circle"
-            android:backgroundTint="@color/colorAccentOp"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:ellipsize="marquee"
             android:gravity="center"
             android:marqueeRepeatLimit="marquee_forever"
