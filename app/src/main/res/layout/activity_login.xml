@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="hu.unideb.smartcampus.activity.LoginActivity"
-    android:background="@color/backgroundColor">
+    android:background="@drawable/gradinet_color_background">
 
     <LinearLayout
         android:layout_width="match_parent"
