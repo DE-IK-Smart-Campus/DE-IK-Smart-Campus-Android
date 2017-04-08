@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else {
-/*
+
             try {
                 actualUserInfo = new BasicAuth().execute(new ActualUserInfo
                         (username.getText().toString(), password.getText().toString(), null))
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
             fragmentTransaction.commitAllowingStateLoss();
                 Toast.makeText(getApplicationContext(), R.string.login_succes, Toast.LENGTH_SHORT).show();
-*/
+
                 final ActualUserInfo finalActualUserInfo = actualUserInfo;
             new Thread(new Runnable() {
                 public void run() {
