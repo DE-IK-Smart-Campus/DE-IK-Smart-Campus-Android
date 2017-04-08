@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/selection_navigation_view"
+    android:background="@color/colorAccent"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -11,9 +11,8 @@
         android:id="@+id/subjectDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:buttonTint="@color/textColorBlack"
+        android:buttonTint="@android:color/white"
         android:textColor="@color/textColorBlack"
         android:textColorLink="@color/textColorBlack"
-        android:textStyle="italic"
-        app:buttonTint="@color/textColorBlack" />
+        android:textStyle="italic" />
 </LinearLayout>
