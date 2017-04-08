@@ -66,7 +66,7 @@
             android:layout_alignBaseline="@+id/chat_text_edit_text"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimaryDark"
             android:text="SEND" />
     </LinearLayout>
 

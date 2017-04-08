@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#bababa</color>
-    <color name="colorPrimaryDark">#8c8c8c</color>
-    <color name="colorAccent">#28da93</color>
+    <color name="colorPrimary">#28a4ef</color>
+    <color name="colorPrimaryDark">#28a4ef</color>
     <color name="textColorBlack">#000000</color>
-    <color name="LightSkyBlue">#87cefa</color>
-    <color name="selection_navigation_view">#18AB70</color>
-    <color name="colorAccentOp">#2828da93</color>
-    <color name="splashScreenColor">#3ca2e0</color>
+    <color name="colorAccent">#52baf9</color>
+    <color name="selection_navigation_view">#ffff</color>
+    <color name="backgroundColor">#3ca2e0</color>
 </resources>
