@@ -8,6 +8,22 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/chat_name_and_date_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:text="Norbi 2016/06/19 13:54" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
@@ -25,7 +41,7 @@
             android:adjustViewBounds="false"
             android:minWidth="30dp"
             android:visibility="visible"
-            app:srcCompat="?android:attr/listChoiceIndicatorSingle" />
+            app:srcCompat="@drawable/ic_classattendance" />
 
         <TextView
             android:id="@+id/actual_msg"
@@ -36,7 +52,6 @@
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/circle"
-            android:backgroundTint="@color/colorPrimaryDark"
             android:ellipsize="marquee"
             android:gravity="center"
             android:marqueeRepeatLimit="marquee_forever"
@@ -53,7 +68,7 @@
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:minWidth="30dp"
-            app:srcCompat="?android:attr/listChoiceIndicatorSingle" />
+            app:srcCompat="@drawable/ic_classattendance" />
     </LinearLayout>
 
 </LinearLayout>

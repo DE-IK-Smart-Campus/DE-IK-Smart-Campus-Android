@@ -137,6 +137,8 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
             e.printStackTrace();
         }
 
+        ///////////////////////////
+
         for (int i = 0; i < multiUserChat.size(); i++) {
             final XMPPBOSHConnection connection = Connection.getInstance().getXmppConnection();
             try {

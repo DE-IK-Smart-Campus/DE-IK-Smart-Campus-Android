@@ -67,7 +67,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:background="@color/colorPrimaryDark"
-            android:text="SEND" />
+            android:text="Küldés" />
     </LinearLayout>
 
 </LinearLayout>

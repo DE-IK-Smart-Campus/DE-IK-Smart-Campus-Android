@@ -26,10 +26,11 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.forward.packet.Forwarded;
 import org.jivesoftware.smackx.mam.MamManager;
 import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.vcardtemp.VCardManager;
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
-import org.jxmpp.util.XmppStringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +43,6 @@ import hu.unideb.smartcampus.main.activity.chat.pojo.ChatHistory;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatItem;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static android.R.id.message;
 import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.R.id.chat_actual_conversation_list_view;
 import static hu.unideb.smartcampus.R.id.chat_name;
@@ -66,7 +66,8 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
     private View actualV;
     private ChatManager chatManager;
     private String chatType;
-
+    private VCard userVCard;
+    private VCard partnerVCard;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,6 +76,22 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
         chatManager = ChatManager.getInstanceFor(xmppboshConnection);
         mamManager = MamManager.getInstanceFor(xmppboshConnection);
         String toJid = getArguments().getString("SELECTED_CHAT_FROM");
+        try {
+            userVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(JidCreate.entityBareFrom(toJid));
+            partnerVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(xmppboshConnection.getUser().asEntityBareJidIfPossible());
+        } catch (SmackException.NoResponseException e) {
+            e.printStackTrace();
+        } catch (XMPPException.XMPPErrorException e) {
+            e.printStackTrace();
+        } catch (SmackException.NotConnectedException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+
+
         chatType = getArguments().getString("SELECTED_CHAT_TYPE");
         chatConversationItems = new LinkedList<>();
         chatHistoryItemCount = getArguments().getInt("CHAT_HISTORY_ITEM_COUNT");
@@ -103,7 +120,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                 EditText editText = (EditText) actualV.findViewById(chat_text_edit_text);
                 chatHistory.getChatConversationItems().add(new ChatConversationItem(Connection.getInstance().getActualUserJid(), editText.getText().toString()));
                 ListView listView = (ListView) actualV.findViewById(chat_actual_conversation_list_view);
-                listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
+                listView.setAdapter(new ChatActualCoversationAdapter(chatHistory,partnerVCard,userVCard, getContext()));
                 listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
                 try {
                     chat.send(editText.getText().toString());
@@ -141,8 +158,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                             chatConversationItems = new LinkedList<>();
                             setChatHistory(forwardedMessages);
                             chatHistory.setChatConversationItems(chatConversationItems);
-                            view.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
-
+                            view.setAdapter(new ChatActualCoversationAdapter(chatHistory,partnerVCard,userVCard, getContext()));
                             view.setSelection(19);
                             view.smoothScrollBy(0, 0);
 
@@ -194,7 +210,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                 }
             }
         });
-        listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
+        listView.setAdapter(new ChatActualCoversationAdapter(chatHistory,partnerVCard,userVCard, getContext()));
         listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
 
         actualV = view;

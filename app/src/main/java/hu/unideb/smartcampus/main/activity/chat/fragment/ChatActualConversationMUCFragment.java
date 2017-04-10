@@ -20,32 +20,24 @@ import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
-import org.jivesoftware.smack.chat2.Chat;
-import org.jivesoftware.smack.chat2.ChatManager;
-import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.ExtensionElement;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.forward.packet.Forwarded;
 import org.jivesoftware.smackx.mam.MamManager;
 import org.jivesoftware.smackx.muc.MucEnterConfiguration;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatException;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
-import org.jivesoftware.smackx.muclight.MultiUserChatLight;
-import org.jivesoftware.smackx.muclight.MultiUserChatLightManager;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
-import hu.unideb.smartcampus.main.activity.chat.adapter.ChatActualCoversationAdapter;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatHistory;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -169,7 +161,7 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
                 EditText editText = (EditText) actualV.findViewById(chat_text_edit_text);
                 chatHistory.getChatConversationItems().add(new ChatConversationItem(Connection.getInstance().getActualUserJid(), editText.getText().toString()));
                 ListView listView = (ListView) actualV.findViewById(chat_actual_conversation_list_view);
-                listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
+        //        listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
                 listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
                 try {
                     chat.sendMessage(editText.getText().toString());
@@ -210,7 +202,7 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
                             chatConversationItems = new LinkedList<>();
                             setChatHistory(forwardedMessages);
                             chatHistory.setChatConversationItems(chatConversationItems);
-                            view.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
+                      //      view.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
 
                             view.setSelection(19);
                             view.smoothScrollBy(0, 0);
@@ -232,7 +224,7 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
         //      MultiUserChatLight multiUserChatLight = multiUserChatLightManager.getMultiUserChatLight(selectedChatPartnerJid);
 
 
-        listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
+      //  listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
         listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
 
         actualV = view;
