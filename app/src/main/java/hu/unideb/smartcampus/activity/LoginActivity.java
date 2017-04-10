@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else {
-
+/*
             try {
                 actualUserInfo = new BasicAuth().execute(new ActualUserInfo
                         (username.getText().toString(), password.getText().toString(), null))
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             if (actualUserInfo.getUsername() == null) {
                 Toast.makeText(getApplicationContext(), R.string.login_failed, Toast.LENGTH_SHORT).show();
             } else {
-
+*/
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
@@ -69,8 +69,8 @@ public class LoginActivity extends AppCompatActivity {
                     BOSHConfiguration config = null;
                     try {
                         config = BOSHConfiguration.builder()
-                                .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
-                             //   .setUsernameAndPassword("testuser","admin")
+                             //   .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
+                                .setUsernameAndPassword("testuser","admin")
                                 .setXmppDomain(HOSTNAME)
                                 .setHost(HOSTNAME)
                                 .setPort(80)
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }).start();
         }
-      }
+ //     }
     }
 
     public void loginOnClick(View v) {
