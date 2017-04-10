@@ -1,5 +1,6 @@
 package hu.unideb.smartcampus.main.activity.chat.pojo;
 
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.Jid;
 
 
@@ -15,6 +16,7 @@ public class ChatItem {
         SINGLE,
     }
 
+    VCard vCard;
     Jid from;
     String chatName;
     ChatItem.Type Type;
@@ -23,11 +25,20 @@ public class ChatItem {
     public ChatItem() {
     }
 
-    public ChatItem(Jid from, String chatName, ChatItem.Type type, String lastMsg) {
+    public ChatItem(VCard vCard, Jid from, String chatName, ChatItem.Type type, String lastMsg) {
+        this.vCard = vCard;
         this.from = from;
         this.chatName = chatName;
         Type = type;
         this.lastMsg = lastMsg;
+    }
+
+    public VCard getvCard() {
+        return vCard;
+    }
+
+    public void setvCard(VCard vCard) {
+        this.vCard = vCard;
     }
 
     public Jid getFrom() {

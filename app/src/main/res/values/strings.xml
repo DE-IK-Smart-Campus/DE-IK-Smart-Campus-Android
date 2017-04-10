@@ -82,5 +82,6 @@
 
     <string name="login_try_again">Slow connection/or service not available , please try again</string>
     <string name="login_failed">Login failed</string>
+    <string name="chatMe">Én:</string>
 
 </resources>

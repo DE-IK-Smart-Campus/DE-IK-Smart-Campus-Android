@@ -54,8 +54,10 @@
                 android:id="@+id/chat_menu_history_listview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="5dp"
                 android:paddingLeft="10dp"
-                />
+                android:paddingTop="10dp" />
         </LinearLayout>
 
     </RelativeLayout>
