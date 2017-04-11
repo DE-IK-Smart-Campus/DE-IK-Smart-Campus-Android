@@ -29,5 +29,14 @@
             android:icon="@drawable/ic_about"
             android:title="@string/nav_about_us_name" />
     </group>
+
+    <!--<item>-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/test"-->
+                <!--android:title="Test"/>-->
+        <!--</menu>-->
+
+    <!--</item>-->
     
 </menu>

@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">SmartCampus</string>
+
+    <string name="usernamehint">username</string>
+    <string name="passwordHint">password</string>
+    <string name="loginButtonText">Login</string>
+    <string name="login_try_again">Slow connection or service not available , please try again!</string>
+    <string name="login_failed">Login failed!</string>
+    <string name="login_succes">Login successful!</string>
+    <string name="allDayEventText">All day event</string>
+    <string name="cancelButtonText">Cancel</string>
+    <string name="aboutUs">About us</string>
+    <string name="closeDrawer">drawer_close</string>
+    <string name="editCustomEvent">Event edit</string>
+    <string name="eventDescriptionHint">Event description</string>
+    <string name="eventDetails">Event details</string>
+    <string name="eventNameHint">Event name</string>
+    <string name="event_delete">Event delete</string>
+    <string name="event_edit">Event edit</string>
+    <string name="howLong">For how long</string>
+    <string name="nav_about_us_name">About us</string>
+    <string name="nav_calendar_name">Calendar</string>
+    <string name="nav_chat_name">Chat</string>
+    <string name="nav_classAttendence_name">Attendance</string>
+    <string name="nav_consultingHours_name">Consulting hours</string>
+    <string name="nav_home_name">Home</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="new_event_add">New event</string>
+    <string name="noEventThisDay">No events</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="sendButtonText">Send</string>
+    <string name="usernamePasswordNeed">Username or password is required!</string>
+    <string name="reason">Reason:</string>
+    <string name="placeHint">place</string>
+    <string name="textViewStart">From:</string>
+    <string name="textViewEnd">To:</string>
+    <string name="reserveButtonText">Reserve</string>
+    <string name="saveButtonText">Save</string>
+    <string name="remainderText">Remainder</string>
+    <string name="repeatText">Repeat</string>
+
+    <string-array name="nav_item_activity_titles">
+        <item> Home</item>
+        <item> Calendar</item>
+        <item> Attendance</item>
+        <item> Office hours</item>
+        <item> Chat</item>
+        <item> About us</item>
+    </string-array>
+
+    <string-array name="repeats_array_item">
+        <item>One-time event</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Every two weeks</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+
+</resources>

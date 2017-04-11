@@ -36,8 +36,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Search..." />
+                android:inputType="textPersonName" />
 
         </LinearLayout>
 

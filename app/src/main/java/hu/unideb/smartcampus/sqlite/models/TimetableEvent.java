@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.main.activity.calendar.sqllite.db;
+package hu.unideb.smartcampus.sqlite.models;
 
 import java.text.DateFormat;
 

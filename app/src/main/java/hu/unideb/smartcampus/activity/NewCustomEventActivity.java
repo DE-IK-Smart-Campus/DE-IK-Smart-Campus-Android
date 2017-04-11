@@ -22,7 +22,7 @@ import java.util.Locale;
 
 import hu.unideb.smartcampus.R;
 
-public class NewEventActivity extends AppCompatActivity {
+public class NewCustomEventActivity extends AppCompatActivity {
 
     private EditText eventName;
     private EditText eventDescription;

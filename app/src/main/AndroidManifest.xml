@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hu.unideb.smartcampus">
+    package="hu.unideb.smartcampus"
+    android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,32 +15,28 @@
             android:name=".activity.SplashScreenActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
-        <intent-filter>
+            android:theme="@android:style/Theme.Light.NoTitleBar">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity"
+        <activity
+            android:name=".activity.LoginActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MainActivity_SmartCampus"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.NewEventActivity"
+            android:name=".activity.NewCustomEventActivity"
             android:label="@string/new_event_add"
             android:screenOrientation="portrait" />
         <activity
-            android:name="main.activity.chat.MainChatMenu"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+            android:name=".activity.EditCustomEventActivity"
+            android:label="@string/editCustomEvent"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.EventDetailsActivity"
             android:label="@string/eventDetails"

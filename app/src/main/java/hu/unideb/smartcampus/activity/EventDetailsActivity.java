@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -60,7 +61,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         eventDetailsListView.setAdapter(eventDetailsAdapter);
 
-        eventDetailsListViewClick();
+//        eventDetailsListViewClick();
     }
 
     public void getDataAnotherScreen() {
@@ -91,9 +92,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         eventDetails.add(eventDescription);
         eventDetails.add(eventPlace);
         Toast.makeText(context, eventDate.toString(), Toast.LENGTH_SHORT).show();
-        eventDetails.add(getResources().getString(R.string.date) + "\t " + DateFormat.getDateInstance(DateFormat.SHORT).format(date.getTime()));
-        eventDetails.add(getResources().getString(R.string.textViewStart) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(fromTime.getTime()));
-        eventDetails.add(getResources().getString(R.string.textViewEnd) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(toTime.getTime()));
+//        eventDetails.add(getResources().getString(R.string.date) + "\t " + DateFormat.getDateInstance(DateFormat.SHORT).format(date.getTime()));
+//        eventDetails.add(getResources().getString(R.string.textViewStart) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(fromTime.getTime()));
+//        eventDetails.add(getResources().getString(R.string.textViewEnd) + "\t " + DateFormat.getTimeInstance(DateFormat.SHORT).format(toTime.getTime()));
 
 //        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 //
@@ -123,53 +124,53 @@ public class EventDetailsActivity extends AppCompatActivity {
         return eventDetails;
     }
 
-    public void eventDetailsListViewClick() {
-
-        eventDetailsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.date))) {
-                    datePickerDialog.show();
-                } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textViewStart))) {
-                    fromTimePickerDialog.show();
-                } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textViewEnd))) {
-                    toTimePickerDialog.show();
-                } else {
-                    showInputBox(eventDetailsListView.getItemAtPosition(position).toString(), position);
-                }
-                return true;
-            }
-        });
-    }
-
-    public void showInputBox(String oldItem, final int index) {
-        final Dialog dialog = new Dialog(EventDetailsActivity.this);
-        dialog.setContentView(R.layout.event_details_editing_dialog);
-        TextView txtMessage = (TextView) dialog.findViewById(R.id.event_details_edit_textview);
-        txtMessage.setText(getResources().getText(R.string.textEventEdit));
-        final EditText editText = (EditText) dialog.findViewById(R.id.editTextInput);
-        editText.setText(oldItem);
-        Button buttonDone = (Button) dialog.findViewById(R.id.btdone);
-        Button buttonCancel = (Button) dialog.findViewById(R.id.btnCancel);
-        buttonDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                eventDetails.set(index, editText.getText().toString());
-                eventDetailsAdapter.notifyDataSetChanged();
-                dialog.dismiss();
-            }
-        });
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), getResources().getText(R.string.notEditEventText), Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
+//    public void eventDetailsListViewClick() {
+//
+//        eventDetailsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.date))) {
+//                    datePickerDialog.show();
+//                } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textViewStart))) {
+//                    fromTimePickerDialog.show();
+//                } else if (eventDetailsListView.getItemAtPosition(position).toString().contains(getResources().getString(R.string.textViewEnd))) {
+//                    toTimePickerDialog.show();
+//                } else {
+//                    showInputBox(eventDetailsListView.getItemAtPosition(position).toString(), position);
+//                }
+//                return true;
+//            }
+//        });
+//    }
+//
+//    public void showInputBox(String oldItem, final int index) {
+//        final Dialog dialog = new Dialog(EventDetailsActivity.this);
+//        dialog.setContentView(R.layout.event_details_editing_dialog);
+//        TextView txtMessage = (TextView) dialog.findViewById(R.id.event_details_edit_textview);
+//        txtMessage.setText(getResources().getText(R.string.textEventEdit));
+//        final EditText editText = (EditText) dialog.findViewById(R.id.editTextInput);
+//        editText.setText(oldItem);
+//        Button buttonDone = (Button) dialog.findViewById(R.id.btdone);
+//        Button buttonCancel = (Button) dialog.findViewById(R.id.btnCancel);
+//        buttonDone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                eventDetails.set(index, editText.getText().toString());
+//                eventDetailsAdapter.notifyDataSetChanged();
+//                dialog.dismiss();
+//            }
+//        });
+//        buttonCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), getResources().getText(R.string.notEditEventText), Toast.LENGTH_SHORT).show();
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -182,6 +183,12 @@ public class EventDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+        if (id == R.id.action_edit_event) {
+            Intent i = new Intent(getApplicationContext(), EditCustomEventActivity.class);
+            startActivity(i);
+            Toast.makeText(getApplicationContext(), "Szerkeszt", Toast.LENGTH_SHORT).show();
+        }
+
         if (id == R.id.action_delete_event) {
             Toast.makeText(getApplicationContext(), "Töröl", Toast.LENGTH_SHORT).show();
         }

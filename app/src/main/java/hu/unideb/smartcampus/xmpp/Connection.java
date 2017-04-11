@@ -29,9 +29,11 @@ import hu.unideb.smartcampus.activity.LoginActivity;
 import hu.unideb.smartcampus.activity.MainActivity_SmartCampus;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.BasePojo;
+import hu.unideb.smartcampus.shared.iq.provider.CalendarSubjectsIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.InstructorConsultingDateIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.SubjectRequestIqProvider;
-import hu.unideb.smartcampus.shared.iq.request.BaseSmartCampusIq;
+import hu.unideb.smartcampus.shared.iq.request.BaseSmartCampusIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.CalendarSubjectsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
@@ -112,9 +114,12 @@ public class Connection {
 
 
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(InstructorConsultingDatesIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(InstructorConsultingDatesIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new InstructorConsultingDateIqProvider());
+            ProviderManager.addIQProvider(InstructorConsultingDatesIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new InstructorConsultingDateIqProvider());
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIq.BASE_NAMESPACE, new SubjectRequestIqProvider());
+            ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new SubjectRequestIqProvider());
+
+            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(CalendarSubjectsIqRequest.ELEMENT);
+            ProviderManager.addIQProvider(CalendarSubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new CalendarSubjectsIqProvider());
 
             userJID = config.getUsername().toString();
             ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);

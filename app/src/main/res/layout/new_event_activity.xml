@@ -180,11 +180,11 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/repaitTextView"
+            android:id="@+id/repeatTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:text="@string/repaitText" />
+            android:text="@string/repeatText" />
     </LinearLayout>
 
     <LinearLayout
@@ -254,7 +254,7 @@
             android:layout_marginRight="15dp"
             android:layout_weight="0.27"
             android:onClick="saveOnClick"
-            android:text="@string/saveButton" />
+            android:text="@string/saveButtonText" />
     </LinearLayout>
 
 </LinearLayout>

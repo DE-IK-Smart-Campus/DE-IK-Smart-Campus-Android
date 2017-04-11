@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.main.activity.officehours.task;
+package hu.unideb.smartcampus.main.activity.calendar.task;
 
 import android.os.AsyncTask;
 
@@ -11,32 +11,27 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.HashMap;
 
-import hu.unideb.smartcampus.main.activity.officehours.converter.OfficeHourConverter;
-import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsPojo;
-import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
+import hu.unideb.smartcampus.main.activity.calendar.converter.TimetableEventConverter;
+import hu.unideb.smartcampus.main.activity.calendar.pojo.AskTimetableEventPojo;
+import hu.unideb.smartcampus.shared.iq.request.CalendarSubjectsIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 
-/**
- * Created by Headswitcher on 2017. 03. 24..
- * //TODO
- */
 
-public class SubjectsIqRequestTask extends AsyncTask<HashMap<String, String>, Integer, AskSubjectsPojo> {
-
+public class TimetableIqRequestTask extends AsyncTask<HashMap<String, String>, Integer, AskTimetableEventPojo> {
 
     @Override
-    protected AskSubjectsPojo doInBackground(HashMap<String, String>... params) {
+    protected AskTimetableEventPojo doInBackground(HashMap<String, String>... params) {
         try {
-            SubjectsIqRequest iq = new SubjectsIqRequest();
+            CalendarSubjectsIqRequest iq = new CalendarSubjectsIqRequest();
             iq.setStudent(Connection.getInstance().getUserJID());
             iq.setType(IQ.Type.get);
             iq.setTo(JidCreate.from(ADMINJID));
 
             final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
-            final SubjectsIqRequest subjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
-            return OfficeHourConverter.convertToAskSubjectsProcessMessagePojo(subjectsIqRequest);
+            final CalendarSubjectsIqRequest calendarSubjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
+            return TimetableEventConverter.convertToAskTimeTableEventPojo(calendarSubjectsIqRequest);
 
         } catch (SmackException.NotConnectedException
                 | XMPPException.XMPPErrorException
@@ -45,6 +40,9 @@ public class SubjectsIqRequestTask extends AsyncTask<HashMap<String, String>, In
                 | InterruptedException e) {
             e.printStackTrace();
         }
-        return new AskSubjectsPojo();
+
+        return new AskTimetableEventPojo();
+
     }
 }
+

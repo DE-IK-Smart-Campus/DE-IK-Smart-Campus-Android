@@ -1,6 +1,7 @@
 package hu.unideb.smartcampus.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragmen
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
+import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
 import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 
@@ -91,24 +93,33 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     private void setListenerForSelectedMenu() {
         try {
 
-
+            FragmentTransaction fragmentTransaction1;
             switch (navItemIndex) {
 
                 case 0:
-                    HomeFragment homeFragment = new HomeFragment();
+                    HomeFragment chatFragment1= new HomeFragment();
+//                    FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction1.replace(R.id.frame, chatFragment1, CURRENT_TAG);
+                    fragmentTransaction1.commitAllowingStateLoss();
                     break;
                 case 1:
-                    CalendarFragment fragment = new CalendarFragment();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
+//                    CalendarFragment fragment = new CalendarFragment();
+//                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+//                            android.R.anim.fade_out);
+//                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+//                    fragmentTransaction.commitAllowingStateLoss();
                     //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
+                    TimetableEventHandler timetableEventHandler = new TimetableEventHandler(getSupportFragmentManager(), getApplicationContext());
+                    timetableEventHandler.sendDefaultMesg();
                     break;
                 case 2:
                     AttendanceFragment fragment1 = new AttendanceFragment();
-                    FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+//                    FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
                             android.R.anim.fade_out);
                     fragmentTransaction1.replace(R.id.frame, fragment1, CURRENT_TAG);
@@ -124,11 +135,11 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
 
                 case 4:
                     ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
                             android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, chatFragment, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
+                    fragmentTransaction1.replace(R.id.frame, chatFragment, CURRENT_TAG);
+                    fragmentTransaction1.commitAllowingStateLoss();
                     //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
                     break;
                 case 5:
@@ -163,7 +174,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
                     case R.id.home:
@@ -190,6 +201,10 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                         navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUT;
                         break;
+//                    case R.id.test:
+//                        Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+//                        startActivity(i);
+//                        break;
                     default:
                         navItemIndex = 0;
                 }

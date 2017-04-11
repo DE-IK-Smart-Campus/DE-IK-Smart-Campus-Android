@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:text="TEST"
         android:textColor="@color/textColorBlack"
         android:textSize="30sp" />
 
@@ -19,7 +18,6 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:paddingLeft="5dp"
-        android:text="TEST"
         android:textColor="@android:color/darker_gray" />
 
 </LinearLayout>
