@@ -1,6 +1,8 @@
 package hu.unideb.smartcampus.main.activity.chat.fragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -66,8 +68,9 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
     private View actualV;
     private ChatManager chatManager;
     private String chatType;
-    private VCard userVCard;
-    private VCard partnerVCard;
+    private Bitmap userAvatarInBitmap;
+    private Bitmap partnerAvatarInBitmap;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,17 +80,25 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
         mamManager = MamManager.getInstanceFor(xmppboshConnection);
         String toJid = getArguments().getString("SELECTED_CHAT_FROM");
         try {
-            userVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(JidCreate.entityBareFrom(toJid));
-            partnerVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(xmppboshConnection.getUser().asEntityBareJidIfPossible());
-        } catch (SmackException.NoResponseException e) {
-            e.printStackTrace();
-        } catch (XMPPException.XMPPErrorException e) {
-            e.printStackTrace();
-        } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (XmppStringprepException e) {
+            VCard userVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(xmppboshConnection.getUser().asEntityBareJidIfPossible());
+            VCard partnerVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(JidCreate.entityBareFrom(toJid));
+
+            if (userVCard.getAvatar() != null) {
+                final byte[] userVCardAvatar = userVCard.getAvatar();
+                userAvatarInBitmap = BitmapFactory.decodeByteArray(userVCardAvatar, 0, userVCardAvatar.length);
+            } else {
+                userAvatarInBitmap = null;
+            }
+
+            if (partnerVCard.getAvatar() != null) {
+                final byte[] partnerVCardAvatar = partnerVCard.getAvatar();
+                partnerAvatarInBitmap = BitmapFactory.decodeByteArray(partnerVCardAvatar, 0, partnerVCardAvatar.length);
+            } else {
+                partnerAvatarInBitmap = null;
+            }
+
+
+        } catch (SmackException.NoResponseException | XMPPException.XMPPErrorException | InterruptedException | SmackException.NotConnectedException | XmppStringprepException e) {
             e.printStackTrace();
         }
 
@@ -120,7 +131,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                 EditText editText = (EditText) actualV.findViewById(chat_text_edit_text);
                 chatHistory.getChatConversationItems().add(new ChatConversationItem(Connection.getInstance().getActualUserJid(), editText.getText().toString()));
                 ListView listView = (ListView) actualV.findViewById(chat_actual_conversation_list_view);
-                listView.setAdapter(new ChatActualCoversationAdapter(chatHistory,partnerVCard,userVCard, getContext()));
+                listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, partnerAvatarInBitmap, userAvatarInBitmap, getContext()));
                 listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
                 try {
                     chat.send(editText.getText().toString());
@@ -158,7 +169,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                             chatConversationItems = new LinkedList<>();
                             setChatHistory(forwardedMessages);
                             chatHistory.setChatConversationItems(chatConversationItems);
-                            view.setAdapter(new ChatActualCoversationAdapter(chatHistory,partnerVCard,userVCard, getContext()));
+                            view.setAdapter(new ChatActualCoversationAdapter(chatHistory, partnerAvatarInBitmap, userAvatarInBitmap, getContext()));
                             view.setSelection(19);
                             view.smoothScrollBy(0, 0);
 
@@ -210,7 +221,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                 }
             }
         });
-        listView.setAdapter(new ChatActualCoversationAdapter(chatHistory,partnerVCard,userVCard, getContext()));
+        listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, partnerAvatarInBitmap, userAvatarInBitmap, getContext()));
         listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
 
         actualV = view;
@@ -234,7 +245,8 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
     private void setChatHistory(XMPPBOSHConnection xmppboshConnection, String toJid) {
         try {
 
-            selectedChatPartnerJid = JidCreate.entityBareFrom(toJid);
+            final EntityBareJid jid = JidCreate.entityBareFrom(toJid);
+            selectedChatPartnerJid = jid;
 
             if (chatType == ChatItem.Type.SINGLE.name()) {
                 MamManager.MamQueryResult lastQueryResult = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryItemCount);
