@@ -12,15 +12,15 @@ import java.util.Map;
 public class MucChatHistory {
 
     private String chatName;
-    private Map<String, Bitmap> nameAvatarMap;
-    private LinkedList<ChatConversationItem> chatConversationItems;
+    private Map<String, Bitmap> resourceAvatarMap;
+    private LinkedList<MucChatConversationItem> chatConversationItems;
 
     public MucChatHistory() {
     }
 
-    public MucChatHistory(String chatName, Map<String, Bitmap> nameAvatarMap, LinkedList<ChatConversationItem> chatConversationItems) {
+    public MucChatHistory(String chatName, Map<String, Bitmap> resourceAvatarMap, LinkedList<MucChatConversationItem> chatConversationItems) {
         this.chatName = chatName;
-        this.nameAvatarMap = nameAvatarMap;
+        this.resourceAvatarMap = resourceAvatarMap;
         this.chatConversationItems = chatConversationItems;
     }
 
@@ -32,19 +32,19 @@ public class MucChatHistory {
         this.chatName = chatName;
     }
 
-    public Map<String, Bitmap> getNameAvatarMap() {
-        return nameAvatarMap;
+    public Map<String, Bitmap> getResourceAvatarMap() {
+        return resourceAvatarMap;
     }
 
-    public void setNameAvatarMap(Map<String, Bitmap> nameAvatarMap) {
-        this.nameAvatarMap = nameAvatarMap;
+    public void setResourceAvatarMap(Map<String, Bitmap> resourceAvatarMap) {
+        this.resourceAvatarMap = resourceAvatarMap;
     }
 
-    public LinkedList<ChatConversationItem> getChatConversationItems() {
+    public LinkedList<MucChatConversationItem> getChatConversationItems() {
         return chatConversationItems;
     }
 
-    public void setChatConversationItems(LinkedList<ChatConversationItem> chatConversationItems) {
+    public void setChatConversationItems(LinkedList<MucChatConversationItem> chatConversationItems) {
         this.chatConversationItems = chatConversationItems;
     }
 }

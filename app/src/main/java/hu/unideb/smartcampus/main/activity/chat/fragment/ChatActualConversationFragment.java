@@ -26,7 +26,6 @@ import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.forward.packet.Forwarded;
 import org.jivesoftware.smackx.mam.MamManager;
-import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.EntityBareJid;
@@ -41,7 +40,6 @@ import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.chat.adapter.ChatActualCoversationAdapter;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatHistory;
-import hu.unideb.smartcampus.main.activity.chat.pojo.ChatItem;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.R.id.chat_actual_conversation_list_view;
@@ -50,7 +48,6 @@ import static hu.unideb.smartcampus.R.id.chat_send_button;
 import static hu.unideb.smartcampus.R.id.chat_text_edit_text;
 import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.CHAT_HISTORY_ITEM_COUNT;
 import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.SELECTED_CHAT_FROM;
-import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.SELECTED_CHAT_TYPE;
 
 /**
  * Created by Headswitcher on 2017. 03. 21..
@@ -65,10 +62,8 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
     private int chatHistoryItemCount;
     private EntityBareJid selectedChatPartnerJid;
     private Chat chat;
-    private MultiUserChat mucChat;
     private View actualV;
     private ChatManager chatManager;
-    private String chatType;
     private Bitmap userAvatarInBitmap;
     private Bitmap partnerAvatarInBitmap;
 
@@ -102,9 +97,6 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
         } catch (SmackException.NoResponseException | XMPPException.XMPPErrorException | InterruptedException | SmackException.NotConnectedException | XmppStringprepException e) {
             e.printStackTrace();
         }
-
-
-        chatType = getArguments().getString(SELECTED_CHAT_TYPE);
         chatConversationItems = new LinkedList<>();
         chatHistoryItemCount = getArguments().getInt(CHAT_HISTORY_ITEM_COUNT);
         chatHistory = new ChatHistory();
@@ -246,19 +238,9 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
             final EntityBareJid jid = JidCreate.entityBareFrom(toJid);
             selectedChatPartnerJid = jid;
 
-            if (chatType == ChatItem.Type.SINGLE.name()) {
-                MamManager.MamQueryResult lastQueryResult = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryItemCount);
-                List<Forwarded> forwardedMessages = lastQueryResult.forwardedMessages;
-                setChatHistory(forwardedMessages);
-            }
-
-            if (chatType == ChatItem.Type.MUC.name()) {
-                MamManager mamManagerForMultiChat = MamManager.getInstanceFor(xmppboshConnection, selectedChatPartnerJid);
-                MamManager.MamQueryResult lastQueryResult = mamManagerForMultiChat.queryArchive(chatHistoryItemCount);
-
-                List<Forwarded> forwardedMessages = lastQueryResult.forwardedMessages;
-                setChatHistory(forwardedMessages);
-            }
+            MamManager.MamQueryResult lastQueryResult = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryItemCount);
+            List<Forwarded> forwardedMessages = lastQueryResult.forwardedMessages;
+            setChatHistory(forwardedMessages);
 
         } catch (XMPPException.XMPPErrorException
                 | XmppStringprepException

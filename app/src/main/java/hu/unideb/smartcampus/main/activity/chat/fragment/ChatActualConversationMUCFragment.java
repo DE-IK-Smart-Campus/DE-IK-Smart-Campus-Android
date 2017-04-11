@@ -1,6 +1,8 @@
 package hu.unideb.smartcampus.main.activity.chat.fragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,18 +30,24 @@ import org.jivesoftware.smackx.muc.MucEnterConfiguration;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatException;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
+import org.jivesoftware.smackx.vcardtemp.VCardManager;
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
+import org.jxmpp.util.XmppStringUtils;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
-import hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem;
-import hu.unideb.smartcampus.main.activity.chat.pojo.ChatHistory;
+import hu.unideb.smartcampus.main.activity.chat.adapter.MucChatActualCoversationAdapter;
+import hu.unideb.smartcampus.main.activity.chat.pojo.MucChatConversationItem;
+import hu.unideb.smartcampus.main.activity.chat.pojo.MucChatHistory;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static android.content.ContentValues.TAG;
@@ -47,6 +55,9 @@ import static hu.unideb.smartcampus.R.id.chat_actual_conversation_list_view;
 import static hu.unideb.smartcampus.R.id.chat_name;
 import static hu.unideb.smartcampus.R.id.chat_send_button;
 import static hu.unideb.smartcampus.R.id.chat_text_edit_text;
+import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.CHAT_HISTORY_ITEM_COUNT;
+import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.SELECTED_CHAT_FROM;
+import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
 
 /**
  * Created by Erdei Krisztián on 2017.04.09..
@@ -54,12 +65,12 @@ import static hu.unideb.smartcampus.R.id.chat_text_edit_text;
 
 public class ChatActualConversationMUCFragment extends Fragment implements OnBackPressedListener {
 
-    private ChatHistory chatHistory;
-    private LinkedList<ChatConversationItem> chatConversationItems;
-    private MamManager mamManager;
+    private MucChatHistory chatHistory;
+    private LinkedList<MucChatConversationItem> chatConversationItems;
+    private Map<String, Bitmap> resourceAvatarMap;
     private boolean afterViewCreate = false;
     private int chatHistoryItemCount;
-    private EntityBareJid selectedChatPartnerJid;
+    private EntityBareJid mucRoomJid; // Need better placement TODO
     private MultiUserChat chat;
     private MultiUserChatManager chatManager;
     private View actualV;
@@ -69,11 +80,11 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
         super.onCreate(savedInstanceState);
         final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().getXmppConnection();
         chatManager = MultiUserChatManager.getInstanceFor(xmppboshConnection);
-        mamManager = MamManager.getInstanceFor(xmppboshConnection);
-        String toJid = getArguments().getString("SELECTED_CHAT_FROM");
+        String toJid = getArguments().getString(SELECTED_CHAT_FROM);
         chatConversationItems = new LinkedList<>();
-        chatHistoryItemCount = getArguments().getInt("CHAT_HISTORY_ITEM_COUNT");
-        chatHistory = new ChatHistory();
+        resourceAvatarMap = new HashMap<>();
+        chatHistoryItemCount = getArguments().getInt(CHAT_HISTORY_ITEM_COUNT);
+        chatHistory = new MucChatHistory();
         setChatHistory(xmppboshConnection, toJid);
     }
 
@@ -83,16 +94,13 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_actual_conversation, container, false);
         final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().getXmppConnection();
-        chatHistoryItemCount = getArguments().getInt("CHAT_HISTORY_ITEM_COUNT");
-
-        chat = chatManager.getMultiUserChat(selectedChatPartnerJid);
+        chatHistoryItemCount = getArguments().getInt(CHAT_HISTORY_ITEM_COUNT);
+        chat = chatManager.getMultiUserChat(mucRoomJid);
         try {
             MucEnterConfiguration.Builder enterConfigurationBuilder = chat.getEnterConfigurationBuilder(Resourcepart.from(xmppboshConnection.getUser().getLocalpart().toString()));
-            MucEnterConfiguration.Builder builder = enterConfigurationBuilder.requestMaxStanzasHistory(500);
+            MucEnterConfiguration.Builder builder = enterConfigurationBuilder.requestNoHistory();
             MucEnterConfiguration build = builder.build();
-            //-
             chat.createOrJoin(build);
-            //chat.join(Resourcepart.from(xmppboshConnection.getUser().getLocalpart().toString()));
             chat.addMessageListener(new MessageListener() {
                 @Override
                 public void processMessage(Message message) {
@@ -115,10 +123,10 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
                         }
                     }
                     if (message.getBody() != null && !message.getBody().isEmpty() && message.getExtension("urn:xmpp:delay") == null) {
-                        ChatConversationItem tmpChatConversationItem = new ChatConversationItem();
+                        MucChatConversationItem tmpChatConversationItem = new MucChatConversationItem();
                         tmpChatConversationItem.setMsg(message.getBody());
-                        tmpChatConversationItem.setFromUserJid(message.getFrom());
-                        LinkedList<ChatConversationItem> chatConversationItems2 = chatHistory.getChatConversationItems();
+                        tmpChatConversationItem.setResourceName(message.getFrom().getResourceOrThrow().toString());
+                        LinkedList<MucChatConversationItem> chatConversationItems2 = chatHistory.getChatConversationItems();
                         chatConversationItems2.addLast(tmpChatConversationItem);
                         chatHistory.setChatConversationItems(chatConversationItems2);
 
@@ -133,25 +141,13 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
                 }
             });
             //chat.join(Resourcepart.from(xmppboshConnection.getUser().getLocalpart().toString()));
-        } catch (SmackException.NoResponseException e) {
-            e.printStackTrace();
-        } catch (XMPPException.XMPPErrorException e) {
-            e.printStackTrace();
-        } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (MultiUserChatException.NotAMucServiceException e) {
-            e.printStackTrace();
-        } catch (XmppStringprepException e) {
-            e.printStackTrace();
-        } catch (MultiUserChatException.MucAlreadyJoinedException e) {
+        } catch (SmackException.NoResponseException | XMPPException.XMPPErrorException | InterruptedException | SmackException.NotConnectedException | XmppStringprepException | MultiUserChatException.NotAMucServiceException | MultiUserChatException.MucAlreadyJoinedException e) {
             e.printStackTrace();
         }
 
 
         TextView textView = (TextView) view.findViewById(chat_name);
-        textView.setText(selectedChatPartnerJid.getLocalpart().toString());
+        textView.setText(mucRoomJid.getLocalpart().toString());
 
         Button sendButton = (Button) view.findViewById(chat_send_button);
 
@@ -159,9 +155,33 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
             @Override
             public void onClick(View v) {
                 EditText editText = (EditText) actualV.findViewById(chat_text_edit_text);
-                chatHistory.getChatConversationItems().add(new ChatConversationItem(Connection.getInstance().getActualUserJid(), editText.getText().toString()));
+                final XMPPBOSHConnection xmppConnection = Connection.getInstance().getXmppConnection();
+
+                if (resourceAvatarMap.get(xmppConnection.getUser().getLocalpartOrThrow().toString()) == null) {
+
+                    try {
+                        VCard currentUserVcard = VCardManager.getInstanceFor(xmppConnection)
+                                .loadVCard(xmppConnection.getUser().asEntityBareJid());
+                        if (currentUserVcard.getAvatar() != null) {
+                            final byte[] vCardAvatar = currentUserVcard.getAvatar();
+                            Bitmap userVCardAvatarInBitmap = BitmapFactory.decodeByteArray(vCardAvatar, 0, vCardAvatar.length);
+                            resourceAvatarMap.put(xmppConnection.getUser().getLocalpart().toString(), userVCardAvatarInBitmap);
+                        } else {
+                            resourceAvatarMap.put(xmppConnection.getUser().getLocalpart().toString(), null);
+                        }
+                    } catch (SmackException.NoResponseException | XMPPException.XMPPErrorException | InterruptedException | SmackException.NotConnectedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                chatHistory.getChatConversationItems().add
+                        (new MucChatConversationItem(
+                                Connection.getInstance().getActualUserJid().getLocalpart().toString()
+                                , editText.getText().toString()));
+
+
                 ListView listView = (ListView) actualV.findViewById(chat_actual_conversation_list_view);
-        //        listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
+                listView.setAdapter(new MucChatActualCoversationAdapter(mucRoomJid, xmppConnection.getUser(), chatHistory, getContext()));
                 listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
                 try {
                     chat.sendMessage(editText.getText().toString());
@@ -194,16 +214,14 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
                         chatHistoryItemCount += 20;
                         List<Forwarded> forwardedMessages;
                         try {
-
-                            MamManager mamManagerForMultiChat = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection(), selectedChatPartnerJid);
+                            final XMPPBOSHConnection xmppConnection = Connection.getInstance().getXmppConnection();
+                            MamManager mamManagerForMultiChat = MamManager.getInstanceFor(xmppConnection, mucRoomJid);
                             MamManager.MamQueryResult lastQueryResult = mamManagerForMultiChat.mostRecentPage(null, chatHistoryItemCount);
                             forwardedMessages = lastQueryResult.forwardedMessages;
-                            setChatHistory(forwardedMessages);
                             chatConversationItems = new LinkedList<>();
                             setChatHistory(forwardedMessages);
                             chatHistory.setChatConversationItems(chatConversationItems);
-                      //      view.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
-
+                            view.setAdapter(new MucChatActualCoversationAdapter(mucRoomJid, xmppConnection.getUser(), chatHistory, getContext()));
                             view.setSelection(19);
                             view.smoothScrollBy(0, 0);
 
@@ -220,11 +238,8 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
             }
         });
 
-//        MultiUserChatLightManager multiUserChatLightManager = MultiUserChatLightManager.getInstanceFor(xmppboshConnection);
-        //      MultiUserChatLight multiUserChatLight = multiUserChatLightManager.getMultiUserChatLight(selectedChatPartnerJid);
 
-
-      //  listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
+        listView.setAdapter(new MucChatActualCoversationAdapter(mucRoomJid, xmppboshConnection.getUser(), chatHistory, getContext()));
         listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
 
         actualV = view;
@@ -236,19 +251,37 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
 
     private void setChatHistory(List<Forwarded> forwardedMessages) {
         for (int i = 0; i < forwardedMessages.size(); i++) {
-            ChatConversationItem tmpChatConversationItem = new ChatConversationItem();
+            MucChatConversationItem tmpChatConversationItem = new MucChatConversationItem();
             final Message tmpMsg = ((Message) forwardedMessages.get(i).getForwardedStanza());
             tmpChatConversationItem.setMsg(tmpMsg.getBody());
-            tmpChatConversationItem.setFromUserJid(tmpMsg.getFrom());
+            final String resourceName = tmpMsg.getFrom().getResourceOrThrow().toString();
+            tmpChatConversationItem.setResourceName(resourceName);
+            if (resourceAvatarMap.get(resourceName) == null) {
+                try {
+                    VCard userVcard = VCardManager.getInstanceFor(Connection.getInstance().getXmppConnection())
+                            .loadVCard(JidCreate.entityBareFrom(XmppStringUtils.completeJidFrom(resourceName, HOSTNAME)));
+                    if (userVcard.getAvatar() != null) {
+                        final byte[] vCardAvatar = userVcard.getAvatar();
+                        Bitmap userVCardAvatarInBitmap = BitmapFactory.decodeByteArray(vCardAvatar, 0, vCardAvatar.length);
+                        resourceAvatarMap.put(resourceName, userVCardAvatarInBitmap);
+                    } else {
+                        resourceAvatarMap.put(resourceName, null);
+                    }
+                } catch (SmackException.NoResponseException | XMPPException.XMPPErrorException | InterruptedException | SmackException.NotConnectedException | XmppStringprepException e) {
+                    e.printStackTrace();
+                }
+            }
+
             chatConversationItems.addLast(tmpChatConversationItem);
         }
+        chatHistory.setResourceAvatarMap(resourceAvatarMap);
         chatHistory.setChatConversationItems(chatConversationItems);
     }
 
     private void setChatHistory(XMPPBOSHConnection xmppboshConnection, String toJid) {
         try {
-            selectedChatPartnerJid = JidCreate.entityBareFrom(toJid);
-            MamManager mamManagerForMultiChat = MamManager.getInstanceFor(xmppboshConnection, selectedChatPartnerJid);
+            mucRoomJid = JidCreate.entityBareFrom(toJid);
+            MamManager mamManagerForMultiChat = MamManager.getInstanceFor(xmppboshConnection, mucRoomJid);
             MamManager.MamQueryResult lastQueryResult = mamManagerForMultiChat.mostRecentPage(null, chatHistoryItemCount);
             List<Forwarded> forwardedMessages = lastQueryResult.forwardedMessages;
             setChatHistory(forwardedMessages);
