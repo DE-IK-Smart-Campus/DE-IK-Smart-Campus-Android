@@ -2,13 +2,13 @@ package hu.unideb.smartcampus.main.activity.chat.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,8 +17,6 @@ import org.jxmpp.jid.Jid;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.chat.pojo.MucChatConversationItem;
 import hu.unideb.smartcampus.main.activity.chat.pojo.MucChatHistory;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Headswitcher on 2017. 03. 21..
@@ -77,11 +75,13 @@ public class MucChatActualCoversationAdapter extends BaseAdapter {
         ImageView senderImg = (ImageView) convertView.findViewById(R.id.img_sender);
         reciverImg.setVisibility(View.VISIBLE);
         senderImg.setVisibility(View.VISIBLE);
+        LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.chat_actual_item_msg_layout);
 
         if (StringUtils.equals(resourceName, currentUserJid.getLocalpartOrThrow().toString())) {
             actualMsgTextView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
             nameAndDate.setGravity(Gravity.END);
             reciverImg.setVisibility(View.GONE);
+            linearLayout.setGravity(Gravity.END);
 
             Bitmap localUserAvatarInBitmap = chatHistory.getResourceAvatarMap().get(currentUserJid.getLocalpartOrNull().toString());
             if (localUserAvatarInBitmap != null) {
@@ -91,6 +91,8 @@ public class MucChatActualCoversationAdapter extends BaseAdapter {
             actualMsgTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             nameAndDate.setGravity(Gravity.START);
             senderImg.setVisibility(View.GONE);
+            linearLayout.setGravity(Gravity.START);
+
             Bitmap partnerAvatarInBitmap = chatHistory.getResourceAvatarMap().get(resourceName);
             if (partnerAvatarInBitmap != null) {
                 reciverImg.setImageBitmap(partnerAvatarInBitmap);

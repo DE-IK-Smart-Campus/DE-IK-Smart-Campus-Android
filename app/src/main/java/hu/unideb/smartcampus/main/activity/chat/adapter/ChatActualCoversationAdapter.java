@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.jxmpp.jid.Jid;
@@ -72,11 +73,13 @@ public class ChatActualCoversationAdapter extends BaseAdapter {
         ImageView senderImg = (ImageView) convertView.findViewById(R.id.img_sender);
         reciverImg.setVisibility(View.VISIBLE);
         senderImg.setVisibility(View.VISIBLE);
+        LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.chat_actual_item_msg_layout);
 
         if (fromUserJid.asBareJid().equals(Connection.getInstance().getActualUserJid().asBareJid())) {
             actualMsgTextView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
             nameAndDate.setGravity(Gravity.END);
             reciverImg.setVisibility(View.GONE);
+            linearLayout.setGravity(Gravity.END);
             if (localUserAvatarInBitmap != null) {
                 senderImg.setImageBitmap(localUserAvatarInBitmap);
             }
@@ -84,6 +87,7 @@ public class ChatActualCoversationAdapter extends BaseAdapter {
             actualMsgTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             nameAndDate.setGravity(Gravity.START);
             senderImg.setVisibility(View.GONE);
+            linearLayout.setGravity(Gravity.START);
             if (partnerAvatarInBitmap != null) {
                 reciverImg.setImageBitmap(partnerAvatarInBitmap);
             }

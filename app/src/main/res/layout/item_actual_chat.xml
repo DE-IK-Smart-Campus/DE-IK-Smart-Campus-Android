@@ -32,43 +32,66 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
-        <ImageView
-            android:id="@+id/img_receiver"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:adjustViewBounds="false"
-            android:minWidth="30dp"
-            android:visibility="visible"
-            app:srcCompat="@drawable/ic_classattendance" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/actual_msg"
+            <ImageView
+                android:id="@+id/img_receiver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="false"
+                android:minWidth="50dp"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_classattendance" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/chat_actual_item_msg_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/circle"
-            android:ellipsize="marquee"
-            android:gravity="center"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="actual msg"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
-
-        <ImageView
-            android:id="@+id/img_sender"
-            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:minWidth="30dp"
-            app:srcCompat="@drawable/ic_classattendance" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/actual_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/circle"
+                android:ellipsize="marquee"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="actual msg"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_sender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:minWidth="50dp"
+                app:srcCompat="@drawable/ic_classattendance" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
