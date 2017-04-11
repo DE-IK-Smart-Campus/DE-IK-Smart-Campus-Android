@@ -181,7 +181,7 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
 
 
                 ListView listView = (ListView) actualV.findViewById(chat_actual_conversation_list_view);
-                listView.setAdapter(new MucChatActualCoversationAdapter(mucRoomJid, xmppConnection.getUser(), chatHistory, getContext()));
+                listView.setAdapter(new MucChatActualCoversationAdapter(xmppConnection.getUser(), chatHistory, getContext()));
                 listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
                 try {
                     chat.sendMessage(editText.getText().toString());
@@ -221,7 +221,7 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
                             chatConversationItems = new LinkedList<>();
                             setChatHistory(forwardedMessages);
                             chatHistory.setChatConversationItems(chatConversationItems);
-                            view.setAdapter(new MucChatActualCoversationAdapter(mucRoomJid, xmppConnection.getUser(), chatHistory, getContext()));
+                            view.setAdapter(new MucChatActualCoversationAdapter(xmppConnection.getUser(), chatHistory, getContext()));
                             view.setSelection(19);
                             view.smoothScrollBy(0, 0);
 
@@ -239,7 +239,7 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
         });
 
 
-        listView.setAdapter(new MucChatActualCoversationAdapter(mucRoomJid, xmppboshConnection.getUser(), chatHistory, getContext()));
+        listView.setAdapter(new MucChatActualCoversationAdapter(xmppboshConnection.getUser(), chatHistory, getContext()));
         listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
 
         actualV = view;

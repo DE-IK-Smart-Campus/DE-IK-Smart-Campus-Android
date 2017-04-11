@@ -66,7 +66,8 @@ public class ChatActualCoversationAdapter extends BaseAdapter {
                 .findViewById(R.id.actual_msg);
         actualMsgTextView.setText(msg);
         TextView nameAndDate = (TextView) convertView.findViewById(R.id.chat_name_and_date_text);
-        nameAndDate.setText(fromUserJid.getLocalpartOrNull());
+        String captilaziedName = org.apache.commons.lang3.StringUtils.capitalize(fromUserJid.getLocalpartOrThrow().toString());
+        nameAndDate.setText(captilaziedName);
         ImageView reciverImg = (ImageView) convertView.findViewById(R.id.img_receiver);
         ImageView senderImg = (ImageView) convertView.findViewById(R.id.img_sender);
         reciverImg.setVisibility(View.VISIBLE);
