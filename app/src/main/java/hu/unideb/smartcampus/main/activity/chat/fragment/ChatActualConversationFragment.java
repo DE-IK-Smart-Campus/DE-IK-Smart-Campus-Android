@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +44,13 @@ import hu.unideb.smartcampus.main.activity.chat.pojo.ChatHistory;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatItem;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.R.id.chat_actual_conversation_list_view;
 import static hu.unideb.smartcampus.R.id.chat_name;
 import static hu.unideb.smartcampus.R.id.chat_send_button;
 import static hu.unideb.smartcampus.R.id.chat_text_edit_text;
+import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.CHAT_HISTORY_ITEM_COUNT;
+import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.SELECTED_CHAT_FROM;
+import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.SELECTED_CHAT_TYPE;
 
 /**
  * Created by Headswitcher on 2017. 03. 21..
@@ -78,7 +79,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
         final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().getXmppConnection();
         chatManager = ChatManager.getInstanceFor(xmppboshConnection);
         mamManager = MamManager.getInstanceFor(xmppboshConnection);
-        String toJid = getArguments().getString("SELECTED_CHAT_FROM");
+        String toJid = getArguments().getString(SELECTED_CHAT_FROM);
         try {
             VCard userVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(xmppboshConnection.getUser().asEntityBareJidIfPossible());
             VCard partnerVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(JidCreate.entityBareFrom(toJid));
@@ -103,9 +104,9 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
         }
 
 
-        chatType = getArguments().getString("SELECTED_CHAT_TYPE");
+        chatType = getArguments().getString(SELECTED_CHAT_TYPE);
         chatConversationItems = new LinkedList<>();
-        chatHistoryItemCount = getArguments().getInt("CHAT_HISTORY_ITEM_COUNT");
+        chatHistoryItemCount = getArguments().getInt(CHAT_HISTORY_ITEM_COUNT);
         chatHistory = new ChatHistory();
         setChatHistory(xmppboshConnection, toJid);
     }
@@ -115,7 +116,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_actual_conversation, container, false);
-        chatHistoryItemCount = getArguments().getInt("CHAT_HISTORY_ITEM_COUNT");
+        chatHistoryItemCount = getArguments().getInt(CHAT_HISTORY_ITEM_COUNT);
 
         chat = chatManager.chatWith(selectedChatPartnerJid);
 
@@ -185,7 +186,6 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                 }
             }
         });
-
         chatManager.addIncomingListener(new IncomingChatMessageListener() {
             @Override
             public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
@@ -212,8 +212,6 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
                     Fragment chatactual = new ChatActualConversationFragment();
                     chatactual.setArguments(getArguments());
-                    Log.e(TAG, "newIncomingMessage:" + chatactual);
-
                     fragmentTransaction.replace(R.id.frame, chatactual);
                     afterViewCreate = false;
                     fragmentTransaction.commit();

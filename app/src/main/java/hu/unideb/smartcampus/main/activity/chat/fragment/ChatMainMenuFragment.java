@@ -40,6 +40,11 @@ import hu.unideb.smartcampus.xmpp.Connection;
 
 public class ChatMainMenuFragment extends Fragment implements OnBackPressedListener {
 
+    public static final String CHAT_HISTORY_ITEM_COUNT = "CHAT_HISTORY_ITEM_COUNT";
+    public static final int DEFAULT_CHAT_HISTORY_ITEM_COUNT = 20;
+    public static final String SELECTED_CHAT_TYPE = "SELECTED_CHAT_TYPE";
+    public static final String SELECTED_CHAT_FROM = "SELECTED_CHAT_FROM";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +83,9 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
                 if (ChatItem.Type.SINGLE == selectedChat.getType()) {
                     Fragment singleFragment = new ChatActualConversationFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("CHAT_HISTORY_ITEM_COUNT", 20);
-                    bundle.putString("SELECTED_CHAT_FROM", selectedChat.getFrom().toString());
-                    bundle.putString("SELECTED_CHAT_TYPE", selectedChat.getType().name());
+                    bundle.putInt(CHAT_HISTORY_ITEM_COUNT, DEFAULT_CHAT_HISTORY_ITEM_COUNT);
+                    bundle.putString(SELECTED_CHAT_FROM, selectedChat.getFrom().toString());
+                    bundle.putString(SELECTED_CHAT_TYPE, selectedChat.getType().name());
                     singleFragment.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
@@ -92,9 +97,9 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
                 if (ChatItem.Type.MUC == selectedChat.getType()) {
                     Fragment mucFragment = new ChatActualConversationMUCFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("CHAT_HISTORY_ITEM_COUNT", 20);
-                    bundle.putString("SELECTED_CHAT_FROM", selectedChat.getFrom().toString());
-                    bundle.putString("SELECTED_CHAT_TYPE", selectedChat.getType().name());
+                    bundle.putInt(CHAT_HISTORY_ITEM_COUNT, DEFAULT_CHAT_HISTORY_ITEM_COUNT);
+                    bundle.putString(SELECTED_CHAT_FROM, selectedChat.getFrom().toString());
+                    bundle.putString(SELECTED_CHAT_TYPE, selectedChat.getType().name());
                     mucFragment.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
