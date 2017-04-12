@@ -158,7 +158,7 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
                 twoUserChatJids.add(JidCreate.entityBareFrom(userJidInString));
             }
             for (String userJidInString : listUserChatsIqRequestPojo.getMucChatList()) {
-                twoUserChatJids.add(JidCreate.entityBareFrom(userJidInString));
+                multiUserChat.add(JidCreate.entityBareFrom(userJidInString));
             }
 
 

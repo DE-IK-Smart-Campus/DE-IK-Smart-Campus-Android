@@ -29,13 +29,11 @@ import org.jivesoftware.smackx.search.UserSearchManager;
 import org.jivesoftware.smackx.xdata.Form;
 import org.jxmpp.jid.DomainBareJid;
 import org.jxmpp.jid.EntityBareJid;
-import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 import org.jxmpp.util.XmppStringUtils;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,6 +51,8 @@ import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
  * <p>
  * We check the editfield, if every jid there is valid,
  * if thats the case we create a chat (Muc if theres more then one jid with the separator character <code>,</code>)
+ * <p>
+ * TODO needs refactor, transaction handle , exception handle
  */
 
 public class ChatNewConversation extends Fragment implements OnBackPressedListener {
@@ -81,7 +81,8 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
             @Override
             public void afterTextChanged(Editable s) {
                 EditText groupNameEditText = (EditText) getView().findViewById(R.id.chat_new_group_name_editText);
-                if (s.toString().contains(",")) {
+                final int length = StringUtils.split(s.toString(), ",").length;
+                if (s.toString().contains(",") && length > 1) {
                     groupNameEditText.setVisibility(View.VISIBLE);
                 } else {
                     groupNameEditText.setVisibility(View.GONE);
@@ -108,25 +109,7 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
                     if (partnerBareJid.contains(",")) {
                         EditText groupNameEditText = (EditText) getView().findViewById(R.id.chat_new_group_name_editText);
                         String[] partnerBareJids = StringUtils.split(partnerBareJid, ",");
-                        List<Jid> ownerList = new ArrayList<Jid>();
-                        for (int i = 0; i < partnerBareJids.length; i++) {
-                            if ((partnerBareJids[i].length() > 0)) {
-                                isValidUsername = checkUserIsExists(xmppConnection, userSearchManager, partnerBareJids[i]);
-                                if (isValidUsername) {
-                                    try {
-                                        ownerList.add(JidCreate.entityBareFrom(XmppStringUtils.completeJidFrom(partnerBareJid, "wt2.inf.undideb.hu", "Smartcampus")));
-                                    } catch (XmppStringprepException e) {
-                                        e.printStackTrace();
-                                    }
-                                } else {
-                                    final String toastText = getString(R.string.can_not_find) + " " + partnerBareJids[i] + " " + getString(R.string.user_with_this_name);
-                                    Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
-                                    isValidUsername = false;
-                                    break;
-                                }
-                            }
-                        }
-                        ownerList.add(xmppConnection.getUser());
+                        isValidUsername = checkIfUsernameIsValid(v, xmppConnection, userSearchManager, partnerBareJids);
                         if (isValidUsername) {
                             if (groupNameEditText.getText().length() != 0) {
                                 MultiUserChat createChat = null;
@@ -138,15 +121,16 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
                                     createChat = MultiUserChatManager.
                                             getInstanceFor(xmppboshConnection).
                                             getMultiUserChat(JidCreate.entityBareFrom(groupnameInJid));
-                                    createChat.create(Resourcepart.from(xmppboshConnection.getUser().getLocalpart().toString())).
-                                            getConfigFormManager().
-                                            setRoomOwners(ownerList);
                                     final Form configurationForm = createChat.getConfigurationForm();
                                     final Form answerForm = configurationForm.createAnswerForm();
                                     answerForm.setAnswer("muc#roomconfig_persistentroom", true);
                                     answerForm.setAnswer("mam", true);
                                     answerForm.setAnswer("muc#roomconfig_publicroom", true);
                                     createChat.sendConfigurationForm(answerForm);
+
+                                    createChat.join(Resourcepart.from(xmppboshConnection.getUser().getLocalpartOrNull().toString()));
+                                    createChat.sendMessage(newMsgText);
+                                    createChat.leave();
 
                                     AddMucChatIqRequest addMucChatIqRequest = new AddMucChatIqRequest();
                                     addMucChatIqRequest.setStudent(xmppConnection.getUser().getLocalpartOrThrow().toString());
@@ -164,7 +148,7 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
                                             android.R.anim.fade_out);
                                     fragmentTransaction.replace(R.id.frame, fragment);
                                     fragmentTransaction.commitAllowingStateLoss();
-                                } catch (XmppStringprepException | MultiUserChatException.MucAlreadyJoinedException | MultiUserChatException.MissingMucCreationAcknowledgeException | SmackException.NotConnectedException | MultiUserChatException.NotAMucServiceException | XMPPException.XMPPErrorException | SmackException.NoResponseException | InterruptedException | MultiUserChatException.MucConfigurationNotSupportedException e) {
+                                } catch (XmppStringprepException | SmackException.NotConnectedException | XMPPException.XMPPErrorException | SmackException.NoResponseException | InterruptedException | MultiUserChatException.NotAMucServiceException e) {
                                     e.printStackTrace();
                                 }
                             } else {
@@ -188,6 +172,22 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
         });
         return view;
 
+    }
+
+    private boolean checkIfUsernameIsValid(View v, XMPPBOSHConnection xmppConnection, UserSearchManager userSearchManager, String[] partnerBareJids) {
+        boolean isValidUsername = true;
+        for (int i = 0; i < partnerBareJids.length; i++) {
+            if ((partnerBareJids[i].length() > 0)) {
+                isValidUsername = checkUserIsExists(xmppConnection, userSearchManager, partnerBareJids[i]);
+                if (!isValidUsername) {
+                    final String toastText = getString(R.string.can_not_find) + " " + partnerBareJids[i] + " " + getString(R.string.user_with_this_name);
+                    Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
+                    isValidUsername = false;
+                    break;
+                }
+            }
+        }
+        return isValidUsername;
     }
 
     private void createSingleChat(XMPPBOSHConnection xmppConnection, String partnerBareJid, String newMsg) {
