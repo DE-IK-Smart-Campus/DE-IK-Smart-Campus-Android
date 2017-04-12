@@ -21,10 +21,10 @@
             android:layout_marginTop="5dp"
             android:ems="9"
             android:gravity="center_horizontal"
-            android:text="Filtián"
+            android:text="@string/roomName"
             android:textAlignment="center"
             android:textColor="@android:color/black"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <ListView
@@ -32,10 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"
-            android:layout_above="@+id/chat_send_button"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="false"
-            android:layout_below="@+id/chat_name" />
+          />
 
     </LinearLayout>
 
@@ -50,11 +47,6 @@
             android:id="@+id/chat_text_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/chat_send_button"
-            android:layout_toStartOf="@+id/chat_send_button"
             android:layout_weight="0.99"
             android:ems="10"
             android:inputType="textMultiLine" />
@@ -63,11 +55,8 @@
             android:id="@+id/chat_send_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/chat_text_edit_text"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:background="@color/colorPrimaryDark"
-            android:text="SEND" />
+            android:text="@string/sendChatMsg" />
     </LinearLayout>
 
 </LinearLayout>

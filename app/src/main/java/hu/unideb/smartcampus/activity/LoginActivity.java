@@ -57,35 +57,37 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.login_failed, Toast.LENGTH_SHORT).show();
             } else {
 
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
-            fragmentTransaction.commitAllowingStateLoss();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
+                fragmentTransaction.commitAllowingStateLoss();
                 Toast.makeText(getApplicationContext(), R.string.login_succes, Toast.LENGTH_SHORT).show();
 
                 final ActualUserInfo finalActualUserInfo = actualUserInfo;
-            new Thread(new Runnable() {
-                public void run() {
-                    BOSHConfiguration config = null;
-                    try {
-                        config = BOSHConfiguration.builder()
-                                .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
-                                .setXmppDomain(HOSTNAME)
-                                .setHost(HOSTNAME)
-                                .setPort(80)
-                                .setFile("/http-bind/")
-                                .setResource("Smartcampus")
-                                .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-                                .setDebuggerEnabled(false)
-                                .build();
-                    } catch (XmppStringprepException e) {
-                        e.printStackTrace();
+                new Thread(new Runnable() {
+                    public void run() {
+                        BOSHConfiguration config = null;
+                        try {
+                            config = BOSHConfiguration.builder()
+                                    .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
+                                    //.setUsernameAndPassword("holi60", "758c8a8d-c549-40e9-acb2-6dc97cd0c00f")
+                                    //.setUsernameAndPassword("testuser", "admin")
+                                    .setXmppDomain(HOSTNAME)
+                                    .setHost(HOSTNAME)
+                                    .setPort(80)
+                                    .setFile("/http-bind/")
+                                    .setResource("Smartcampus")
+                                    .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
+                                    .setDebuggerEnabled(false)
+                                    .build();
+                        } catch (XmppStringprepException e) {
+                            e.printStackTrace();
+                        }
+                        Connection.getInstance().startBoshConnection(config, getApplicationContext());
                     }
-                    Connection.getInstance().startBoshConnection(config, getApplicationContext());
-                }
-            }).start();
+                }).start();
+            }
         }
-       }
     }
 
     public void loginOnClick(View v) {

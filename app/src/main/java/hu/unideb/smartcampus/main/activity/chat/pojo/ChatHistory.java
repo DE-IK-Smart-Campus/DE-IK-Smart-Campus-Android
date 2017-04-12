@@ -8,15 +8,10 @@ import java.util.LinkedList;
 
 public class ChatHistory {
 
-    String chatName;
-    LinkedList<ChatConversationItem> chatConversationItems;
+    private String chatName;
+    private LinkedList<ChatConversationItem> chatConversationItems;
 
     public ChatHistory() {
-    }
-
-    public ChatHistory(String chatName, LinkedList<hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem> chatConversationItems) {
-        this.chatName = chatName;
-        this.chatConversationItems = chatConversationItems;
     }
 
     public String getChatName() {
@@ -27,11 +22,11 @@ public class ChatHistory {
         this.chatName = chatName;
     }
 
-    public LinkedList<hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem> getChatConversationItems() {
+    public LinkedList<ChatConversationItem> getChatConversationItems() {
         return chatConversationItems;
     }
 
-    public void setChatConversationItems(LinkedList<hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem> chatConversationItems) {
+    public void setChatConversationItems(LinkedList<ChatConversationItem> chatConversationItems) {
         this.chatConversationItems = chatConversationItems;
     }
 }
