@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
@@ -114,7 +115,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
 
 
         TextView textView = (TextView) view.findViewById(chat_name);
-        textView.setText(selectedChatPartnerJid.getLocalpart().toString());
+        textView.setText(StringUtils.capitalize(selectedChatPartnerJid.getLocalpart().toString()));
 
         Button sendButton = (Button) view.findViewById(chat_send_button);
 
@@ -255,6 +256,11 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
 
     @Override
     public void onBackPressed() {
-
+        Fragment fragment = new ChatMainMenuFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame, fragment);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 }

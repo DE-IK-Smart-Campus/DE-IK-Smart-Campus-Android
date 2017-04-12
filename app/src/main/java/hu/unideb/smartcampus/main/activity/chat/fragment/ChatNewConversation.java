@@ -3,25 +3,30 @@ package hu.unideb.smartcampus.main.activity.chat.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaCollector;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
+import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
+import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatException;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.search.ReportedData;
 import org.jivesoftware.smackx.search.UserSearchManager;
 import org.jivesoftware.smackx.xdata.Form;
-import org.jivesoftware.smackx.xdata.FormField;
 import org.jxmpp.jid.DomainBareJid;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.Jid;
@@ -36,9 +41,12 @@ import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
+import hu.unideb.smartcampus.shared.iq.request.AddMucChatIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.AddUserChatIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static android.content.ContentValues.TAG;
+import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
+import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
 
 /**
  * Created by Headswitcher on 2017. 03. 31..
@@ -58,10 +66,34 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_chat, container, false);
+
+        final EditText editText = (EditText) view.findViewById(R.id.chat_new_partnerJids_edittext);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                EditText groupNameEditText = (EditText) getView().findViewById(R.id.chat_new_group_name_editText);
+                if (s.toString().contains(",")) {
+                    groupNameEditText.setVisibility(View.VISIBLE);
+                } else {
+                    groupNameEditText.setVisibility(View.GONE);
+                }
+            }
+
+        });
+
         final Button createNewChat = (Button) view.findViewById(R.id.chat_new_create_button);
-        createNewChat.setOnClickListener(new View.OnClickListener() {
+        createNewChat.setOnClickListener(new View.OnClickListener()
 
-
+        {
             @Override
             public void onClick(View v) {
 
@@ -74,6 +106,7 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
                 if (!partnerBareJid.isEmpty() && !newMsgText.isEmpty()) {
                     boolean isValidUsername = true;
                     if (partnerBareJid.contains(",")) {
+                        EditText groupNameEditText = (EditText) getView().findViewById(R.id.chat_new_group_name_editText);
                         String[] partnerBareJids = StringUtils.split(partnerBareJid, ",");
                         List<Jid> ownerList = new ArrayList<Jid>();
                         for (int i = 0; i < partnerBareJids.length; i++) {
@@ -85,55 +118,71 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
                                     } catch (XmppStringprepException e) {
                                         e.printStackTrace();
                                     }
+                                } else {
+                                    final String toastText = getString(R.string.can_not_find) + " " + partnerBareJids[i] + " " + getString(R.string.user_with_this_name);
+                                    Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
+                                    isValidUsername = false;
+                                    break;
                                 }
-
-
-                            } else {
-                                break;
-                                //wrongusername
                             }
                         }
+                        ownerList.add(xmppConnection.getUser());
                         if (isValidUsername) {
-                            MultiUserChat createChat = null;
-                            try {
+                            if (groupNameEditText.getText().length() != 0) {
+                                MultiUserChat createChat = null;
+                                try {
+                                    final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().
+                                            getXmppConnection();
+                                    final String groupnameInString = groupNameEditText.getText().toString();
+                                    final String groupnameInJid = groupnameInString + "@conference." + HOSTNAME;
+                                    createChat = MultiUserChatManager.
+                                            getInstanceFor(xmppboshConnection).
+                                            getMultiUserChat(JidCreate.entityBareFrom(groupnameInJid));
+                                    createChat.create(Resourcepart.from(xmppboshConnection.getUser().getLocalpart().toString())).
+                                            getConfigFormManager().
+                                            setRoomOwners(ownerList);
+                                    final Form configurationForm = createChat.getConfigurationForm();
+                                    final Form answerForm = configurationForm.createAnswerForm();
+                                    answerForm.setAnswer("muc#roomconfig_persistentroom", true);
+                                    answerForm.setAnswer("mam", true);
+                                    answerForm.setAnswer("muc#roomconfig_publicroom", true);
+                                    createChat.sendConfigurationForm(answerForm);
 
-                                final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().
-                                        getXmppConnection();
-                                createChat = MultiUserChatManager.
-                                        getInstanceFor(xmppboshConnection).
-                                        getMultiUserChat(JidCreate.entityBareFrom("Szobabev" + "@conference.wt2.inf.unideb.hu"));
+                                    AddMucChatIqRequest addMucChatIqRequest = new AddMucChatIqRequest();
+                                    addMucChatIqRequest.setStudent(xmppConnection.getUser().getLocalpartOrThrow().toString());
+                                    addMucChatIqRequest.setMuc(groupnameInJid);
+                                    addMucChatIqRequest.setType(IQ.Type.set);
+                                    addMucChatIqRequest.setFrom(xmppConnection.getUser());
+                                    addMucChatIqRequest.setTo(JidCreate.from(ADMINJID));
+                                    final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(addMucChatIqRequest);
+                                    stanzaCollectorAndSend.nextResultOrThrow(5000);
 
-                                createChat.create(Resourcepart.from("Szobanev")).
-                                        getConfigFormManager().
-                                        setRoomOwners(ownerList);
-                                final Form configurationForm = createChat.getConfigurationForm();
-                                final Form answerForm = configurationForm.createAnswerForm();
-                                final List<FormField> fields = answerForm.getFields();
-                                answerForm.setAnswer("muc#roomconfig_persistentroom", true);
-                                answerForm.setAnswer("mam", true);
-                                answerForm.setAnswer("muc#roomconfig_publicroom",true);
-                                createChat.sendConfigurationForm(answerForm);
-                            } catch (XmppStringprepException | MultiUserChatException.MucAlreadyJoinedException | MultiUserChatException.MissingMucCreationAcknowledgeException | SmackException.NotConnectedException | MultiUserChatException.NotAMucServiceException | XMPPException.XMPPErrorException | SmackException.NoResponseException | InterruptedException | MultiUserChatException.MucConfigurationNotSupportedException e) {
-                                e.printStackTrace();
+                                    //TODO
+                                    Fragment fragment = new ChatMainMenuFragment();
+                                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                                            android.R.anim.fade_out);
+                                    fragmentTransaction.replace(R.id.frame, fragment);
+                                    fragmentTransaction.commitAllowingStateLoss();
+                                } catch (XmppStringprepException | MultiUserChatException.MucAlreadyJoinedException | MultiUserChatException.MissingMucCreationAcknowledgeException | SmackException.NotConnectedException | MultiUserChatException.NotAMucServiceException | XMPPException.XMPPErrorException | SmackException.NoResponseException | InterruptedException | MultiUserChatException.MucConfigurationNotSupportedException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(v.getContext(), R.string.please_give_me_group_name, Toast.LENGTH_SHORT).show();
                             }
                         }
 
-                        //if (isValidUsername){createMultiChat();
-                        //
-                        //}
                     } else {
                         isValidUsername = checkUserIsExists(xmppConnection, userSearchManager, partnerBareJid);
                         if (isValidUsername) {
                             createSingleChat(xmppConnection, partnerBareJid, newMsgText);
                         } else {
-                            //wrongusername
+                            final String toastText = getString(R.string.can_not_find) + partnerBareJid + getString(R.string.user_with_this_name);
+                            Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
                         }
                     }
-
-                } else
-
-                {
-                    //TOAST
+                } else {
+                    Toast.makeText(v.getContext(), R.string.please_fill_out_every_field, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -145,10 +194,24 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
         ChatManager chatManager = ChatManager.getInstanceFor(xmppConnection);
         try {
             final EntityBareJid partnerJid = JidCreate.entityBareFrom(XmppStringUtils.completeJidFrom(partnerBareJid, xmppConnection.getServiceName()));
-            Log.e(TAG, "createSingleChat: " + partnerJid.toString());
-            Log.e(TAG, "createSingleChat: " + newMsg);
-            chatManager.chatWith(partnerJid).send(newMsg);
-        } catch (XmppStringprepException | InterruptedException | SmackException.NotConnectedException e) {
+            final Chat chat = chatManager.chatWith(partnerJid);
+            AddUserChatIqRequest addUserChatIqRequest = new AddUserChatIqRequest();
+            addUserChatIqRequest.setStudent(xmppConnection.getUser().getLocalpartOrThrow().toString());
+            addUserChatIqRequest.setChat(partnerJid.toString());
+            addUserChatIqRequest.setType(IQ.Type.set);
+            addUserChatIqRequest.setFrom(xmppConnection.getUser());
+            addUserChatIqRequest.setTo(JidCreate.from(ADMINJID));
+            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(addUserChatIqRequest);
+            stanzaCollectorAndSend.nextResultOrThrow(5000);
+            chat.send(newMsg);
+            //TODO
+            Fragment fragment = new ChatMainMenuFragment();
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment);
+            fragmentTransaction.commitAllowingStateLoss();
+        } catch (XmppStringprepException | InterruptedException | SmackException.NotConnectedException | SmackException.NoResponseException | XMPPException.XMPPErrorException e) {
             e.printStackTrace();
         }
 
@@ -182,6 +245,11 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
 
     @Override
     public void onBackPressed() {
-
+        Fragment fragment = new ChatMainMenuFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame, fragment);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 }

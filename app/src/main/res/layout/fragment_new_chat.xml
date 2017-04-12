@@ -21,6 +21,15 @@
             android:minHeight="80dp" />
 
         <EditText
+            android:id="@+id/chat_new_group_name_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Csoport neve"
+            android:inputType="textPersonName"
+            android:visibility="gone" />
+
+        <EditText
             android:id="@+id/chat_new_msg_edittext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -26,13 +27,19 @@ import org.jxmpp.stringprep.XmppStringprepException;
 import org.jxmpp.util.XmppStringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.chat.adapter.ChatMemberAdapter;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatItem;
+import hu.unideb.smartcampus.main.activity.chat.pojo.ListUserChatsIqRequestPojo;
+import hu.unideb.smartcampus.main.activity.chat.task.ListUserChatsIqRequestTask;
 import hu.unideb.smartcampus.xmpp.Connection;
+
+import static hu.unideb.smartcampus.main.activity.chat.task.ListUserChatsIqRequestTask.STUDENT_PARAM_KEY;
 
 /**
  * Created by Headswitcher on 2017. 02. 22..
@@ -56,6 +63,7 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
 
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         ListView chatRoomsList = (ListView) view.findViewById(R.id.chat_menu_history_listview);
+        LinearLayout backgroundLayout = (LinearLayout) view.findViewById(R.id.chat_menu_background_layoutId);
 
         Button newChatButton = (Button) view.findViewById(R.id.chat_new_conversation);
         newChatButton.setOnClickListener(new View.OnClickListener() {
@@ -72,8 +80,15 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
             }
         });
 
-
-        final ListAdapter listAdapter = new ChatMemberAdapter(getAllChat(), getContext());
+        final List<ChatItem> chatItemList = getAllChat();
+        final ListAdapter listAdapter = new ChatMemberAdapter(chatItemList, getContext());
+        if (chatItemList.isEmpty()) {
+            chatRoomsList.setVisibility(View.GONE);
+            backgroundLayout.setVisibility(View.VISIBLE);
+        } else {
+            chatRoomsList.setVisibility(View.VISIBLE);
+            backgroundLayout.setVisibility(View.GONE);
+        }
         chatRoomsList.setAdapter(listAdapter);
         chatRoomsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -126,28 +141,35 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
         List<ChatItem> chatItemList = new ArrayList<>();
         Message message;
         MamManager mamManager = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection());
-        List<Jid> TwoUserChatJids = new ArrayList<>();
+        List<Jid> twoUserChatJids = new ArrayList<>();
         List<Jid> multiUserChat = new ArrayList<>();
+
+//            multiUserChat.add(JidCreate.entityBareFrom("TesztFromAndroid@conference.wt2.inf.unideb.hu"));
+
+        final Connection connection = Connection.getInstance();
+        HashMap<String, String> param = new HashMap<>();
+        param.put(STUDENT_PARAM_KEY, connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
+        //UserChatListIqProvider
+        //ListUserChatsIqRequest listUserChatsIqRequest = new ();
         try {
-            TwoUserChatJids.add(JidCreate.bareFrom("kfnorbi@wt2.inf.unideb.hu/Smartcampus"));
-            TwoUserChatJids.add(JidCreate.bareFrom("holi60@wt2.inf.unideb.hu/Smartcampus"));
-            TwoUserChatJids.add(JidCreate.bareFrom("smartcampus@wt2.inf.unideb.hu/Smartcampus"));
-        } catch (XmppStringprepException e) {
+            final ListUserChatsIqRequestPojo listUserChatsIqRequestPojo = connection.createLoadingDialog(new ListUserChatsIqRequestTask(), getFragmentManager(), param);
+
+            for (String userJidInString : listUserChatsIqRequestPojo.getChatList()) {
+                twoUserChatJids.add(JidCreate.entityBareFrom(userJidInString));
+            }
+            for (String userJidInString : listUserChatsIqRequestPojo.getMucChatList()) {
+                twoUserChatJids.add(JidCreate.entityBareFrom(userJidInString));
+            }
+
+
+        } catch (ExecutionException | InterruptedException | XmppStringprepException e) {
             e.printStackTrace();
         }
-
-        try {
-            multiUserChat.add(JidCreate.entityBareFrom("TesztFromAndroid@conference.wt2.inf.unideb.hu"));
-        } catch (XmppStringprepException e) {
-            e.printStackTrace();
-        }
-
-        ///////////////////////////
 
         for (int i = 0; i < multiUserChat.size(); i++) {
-            final XMPPBOSHConnection connection = Connection.getInstance().getXmppConnection();
+            final XMPPBOSHConnection xmppConnection = Connection.getInstance().getXmppConnection();
             try {
-                MamManager mamManagerForMultiChat = MamManager.getInstanceFor(connection, multiUserChat.get(i));
+                MamManager mamManagerForMultiChat = MamManager.getInstanceFor(xmppConnection, multiUserChat.get(i));
                 message = (Message) mamManagerForMultiChat.queryArchive(1).forwardedMessages.get(0).getForwardedStanza();
                 chatItemList.add(new ChatItem(
                         new VCard(),
@@ -162,10 +184,10 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
 
         //Mocked for now
         //Get all chat jid from Backend
-        for (int i = 0; i < TwoUserChatJids.size(); i++) {
+        for (int i = 0; i < twoUserChatJids.size(); i++) {
             try {
 
-                message = (Message) mamManager.mostRecentPage(TwoUserChatJids.get(i), 1).forwardedMessages.get(0).getForwardedStanza();
+                message = (Message) mamManager.mostRecentPage(twoUserChatJids.get(i), 1).forwardedMessages.get(0).getForwardedStanza();
                 VCardManager vCardManager = VCardManager.getInstanceFor(Connection.getInstance().getXmppConnection());
                 VCard vCard;
 
@@ -178,8 +200,8 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
                 }
                 chatItemList.add(new ChatItem(
                         vCard,
-                        TwoUserChatJids.get(i),
-                        XmppStringUtils.parseBareJid(TwoUserChatJids.get(i).getLocalpartOrNull().toString()),
+                        twoUserChatJids.get(i),
+                        XmppStringUtils.parseBareJid(twoUserChatJids.get(i).getLocalpartOrNull().toString()),
                         ChatItem.Type.SINGLE, messageForMeaddition));
             } catch (XMPPException.XMPPErrorException | SmackException.NotLoggedInException | InterruptedException | SmackException.NotConnectedException | SmackException.NoResponseException e) {
                 e.printStackTrace();

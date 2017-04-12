@@ -30,10 +30,16 @@ import hu.unideb.smartcampus.activity.LoginActivity;
 import hu.unideb.smartcampus.activity.MainActivity_SmartCampus;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.BasePojo;
+import hu.unideb.smartcampus.shared.iq.provider.AddMucChatIqProvider;
+import hu.unideb.smartcampus.shared.iq.provider.AddUserChatIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.InstructorConsultingDateIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.SubjectRequestIqProvider;
+import hu.unideb.smartcampus.shared.iq.provider.UserChatListIqProvider;
+import hu.unideb.smartcampus.shared.iq.request.AddMucChatIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.AddUserChatIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.BaseSmartCampusIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.ListUserChatsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
@@ -113,8 +119,14 @@ public class Connection {
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(InstructorConsultingDatesIqRequest.ELEMENT);
             ProviderManager.addIQProvider(InstructorConsultingDatesIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new InstructorConsultingDateIqProvider());
 
-            //ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(ListUserChatIqRequest.ELEMENT);
-            //ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(ListUserMucIqRequest.ELEMENT);
+            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddMucChatIqRequest.ELEMENT);
+            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddUserChatIqRequest.ELEMENT);
+            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(ListUserChatsIqRequest.ELEMENT);
+
+            ProviderManager.addIQProvider(AddMucChatIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new AddMucChatIqProvider());
+            ProviderManager.addIQProvider(AddUserChatIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new AddUserChatIqProvider());
+            ProviderManager.addIQProvider(ListUserChatsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new UserChatListIqProvider());
+
 
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
             ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new SubjectRequestIqProvider());

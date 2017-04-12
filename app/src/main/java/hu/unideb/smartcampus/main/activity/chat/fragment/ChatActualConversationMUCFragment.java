@@ -140,15 +140,14 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
                     }
                 }
             });
-            //chat.join(Resourcepart.from(xmppboshConnection.getUser().getLocalpart().toString()));
         } catch (SmackException.NoResponseException | XMPPException.XMPPErrorException | InterruptedException | SmackException.NotConnectedException | XmppStringprepException | MultiUserChatException.NotAMucServiceException | MultiUserChatException.MucAlreadyJoinedException e) {
             e.printStackTrace();
         }
 
 
         TextView textView = (TextView) view.findViewById(chat_name);
-        textView.setText(mucRoomJid.getLocalpart().toString());
-
+        String roomName = getString(R.string.roomString) + mucRoomJid.getLocalpart().toString();
+        textView.setText(roomName);
         Button sendButton = (Button) view.findViewById(chat_send_button);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -301,10 +300,16 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
     public void onBackPressed() {
         try {
             chat.leave();
-        } catch (SmackException.NotConnectedException e) {
+
+        } catch (SmackException.NotConnectedException | InterruptedException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } finally {
+            Fragment fragment = new ChatMainMenuFragment();
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out);
+            fragmentTransaction.replace(R.id.frame, fragment);
+            fragmentTransaction.commitAllowingStateLoss();
         }
     }
 }

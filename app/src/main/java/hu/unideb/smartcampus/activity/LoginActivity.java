@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else {
-/*
+
             try {
                 actualUserInfo = new BasicAuth().execute(new ActualUserInfo
                         (username.getText().toString(), password.getText().toString(), null))
@@ -56,37 +56,38 @@ public class LoginActivity extends AppCompatActivity {
             if (actualUserInfo.getUsername() == null) {
                 Toast.makeText(getApplicationContext(), R.string.login_failed, Toast.LENGTH_SHORT).show();
             } else {
-*/
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
-            fragmentTransaction.commitAllowingStateLoss();
+
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
+                fragmentTransaction.commitAllowingStateLoss();
                 Toast.makeText(getApplicationContext(), R.string.login_succes, Toast.LENGTH_SHORT).show();
 
                 final ActualUserInfo finalActualUserInfo = actualUserInfo;
-            new Thread(new Runnable() {
-                public void run() {
-                    BOSHConfiguration config = null;
-                    try {
-                        config = BOSHConfiguration.builder()
-                             //   .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
-                                .setUsernameAndPassword("testuser","admin")
-                                .setXmppDomain(HOSTNAME)
-                                .setHost(HOSTNAME)
-                                .setPort(80)
-                                .setFile("/http-bind/")
-                                .setResource("Smartcampus")
-                                .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-                                .setDebuggerEnabled(false)
-                                .build();
-                    } catch (XmppStringprepException e) {
-                        e.printStackTrace();
+                new Thread(new Runnable() {
+                    public void run() {
+                        BOSHConfiguration config = null;
+                        try {
+                            config = BOSHConfiguration.builder()
+                                     .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
+                                    //   .setUsernameAndPassword("holi60","419c3f80-0cc9-48be-b16d-eccbd95e991b")
+                                    //.setUsernameAndPassword("testuser", "admin")
+                                    .setXmppDomain(HOSTNAME)
+                                    .setHost(HOSTNAME)
+                                    .setPort(80)
+                                    .setFile("/http-bind/")
+                                    .setResource("Smartcampus")
+                                    .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
+                                    .setDebuggerEnabled(false)
+                                    .build();
+                        } catch (XmppStringprepException e) {
+                            e.printStackTrace();
+                        }
+                        Connection.getInstance().startBoshConnection(config, getApplicationContext());
                     }
-                    Connection.getInstance().startBoshConnection(config, getApplicationContext());
-                }
-            }).start();
+                }).start();
+            }
         }
- //     }
     }
 
     public void loginOnClick(View v) {
