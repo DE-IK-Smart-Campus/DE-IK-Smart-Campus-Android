@@ -109,7 +109,17 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
                     if (partnerBareJid.contains(",")) {
                         EditText groupNameEditText = (EditText) getView().findViewById(R.id.chat_new_group_name_editText);
                         String[] partnerBareJids = StringUtils.split(partnerBareJid, ",");
-                        isValidUsername = checkIfUsernameIsValid(v, xmppConnection, userSearchManager, partnerBareJids);
+                        for (int i = 0; i < partnerBareJids.length; i++) {
+                            if ((partnerBareJids[i].length() > 0)) {
+                                isValidUsername = checkUserIsExists(xmppConnection, userSearchManager, partnerBareJids[i]);
+                                if (!isValidUsername) {
+                                    final String toastText = getString(R.string.can_not_find) + " " + partnerBareJids[i] + " " + getString(R.string.user_with_this_name);
+                                    Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
+                                    isValidUsername = false;
+                                    break;
+                                }
+                            }
+                        }
                         if (isValidUsername) {
                             if (groupNameEditText.getText().length() != 0) {
                                 MultiUserChat createChat = null;
@@ -117,6 +127,7 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
                                     final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().
                                             getXmppConnection();
                                     final String groupnameInString = groupNameEditText.getText().toString();
+                                    StringUtils.remove(groupnameInString, " ");
                                     final String groupnameInJid = groupnameInString + "@conference." + HOSTNAME;
                                     createChat = MultiUserChatManager.
                                             getInstanceFor(xmppboshConnection).
@@ -172,22 +183,6 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
         });
         return view;
 
-    }
-
-    private boolean checkIfUsernameIsValid(View v, XMPPBOSHConnection xmppConnection, UserSearchManager userSearchManager, String[] partnerBareJids) {
-        boolean isValidUsername = true;
-        for (int i = 0; i < partnerBareJids.length; i++) {
-            if ((partnerBareJids[i].length() > 0)) {
-                isValidUsername = checkUserIsExists(xmppConnection, userSearchManager, partnerBareJids[i]);
-                if (!isValidUsername) {
-                    final String toastText = getString(R.string.can_not_find) + " " + partnerBareJids[i] + " " + getString(R.string.user_with_this_name);
-                    Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
-                    isValidUsername = false;
-                    break;
-                }
-            }
-        }
-        return isValidUsername;
     }
 
     private void createSingleChat(XMPPBOSHConnection xmppConnection, String partnerBareJid, String newMsg) {

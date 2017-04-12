@@ -153,7 +153,7 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText editText = (EditText) actualV.findViewById(chat_text_edit_text);
+                EditText newMsgText = (EditText) actualV.findViewById(chat_text_edit_text);
                 final XMPPBOSHConnection xmppConnection = Connection.getInstance().getXmppConnection();
 
                 if (resourceAvatarMap.get(xmppConnection.getUser().getLocalpartOrThrow().toString()) == null) {
@@ -176,15 +176,15 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
                 chatHistory.getChatConversationItems().add
                         (new MucChatConversationItem(
                                 Connection.getInstance().getActualUserJid().getLocalpart().toString()
-                                , editText.getText().toString()));
+                                , newMsgText.getText().toString()));
 
 
                 ListView listView = (ListView) actualV.findViewById(chat_actual_conversation_list_view);
                 listView.setAdapter(new MucChatActualCoversationAdapter(xmppConnection.getUser(), chatHistory, getContext()));
                 listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
                 try {
-                    chat.sendMessage(editText.getText().toString());
-                    editText.setText("");
+                    chat.sendMessage(newMsgText.getText().toString());
+                    newMsgText.setText("");
                     //Hide Keyboard
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(actualV.getWindowToken(), 0);
@@ -300,7 +300,6 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
     public void onBackPressed() {
         try {
             chat.leave();
-
         } catch (SmackException.NotConnectedException | InterruptedException e) {
             e.printStackTrace();
         } finally {
