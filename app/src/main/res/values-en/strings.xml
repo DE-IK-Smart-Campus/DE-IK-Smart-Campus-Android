@@ -39,6 +39,8 @@
     <string name="saveButtonText">Save</string>
     <string name="remainderText">Remainder</string>
     <string name="repeatText">Repeat</string>
+    <string name="loadingText">Loading..</string>
+    <string name="settingsTitle">Settings</string>
 
     <string-array name="nav_item_activity_titles">
         <item> Home</item>

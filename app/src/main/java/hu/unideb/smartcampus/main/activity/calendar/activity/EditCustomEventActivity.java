@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.activity;
+package hu.unideb.smartcampus.main.activity.calendar.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -28,6 +28,7 @@ import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragmen
 import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
+import hu.unideb.smartcampus.main.activity.calendar.handler.CustomEventHandler;
 import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
 import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
@@ -97,7 +98,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
             switch (navItemIndex) {
 
                 case 0:
-                    HomeFragment chatFragment1= new HomeFragment();
+                    HomeFragment chatFragment1 = new HomeFragment();
 //                    FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
@@ -106,15 +107,16 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     fragmentTransaction1.commitAllowingStateLoss();
                     break;
                 case 1:
-//                    CalendarFragment fragment = new CalendarFragment();
-//                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-//                            android.R.anim.fade_out);
-//                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-//                    fragmentTransaction.commitAllowingStateLoss();
-                    //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
-                    TimetableEventHandler timetableEventHandler = new TimetableEventHandler(getSupportFragmentManager(), getApplicationContext());
-                    timetableEventHandler.sendDefaultMesg();
+                    CalendarFragment fragment = new CalendarFragment();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+                    fragmentTransaction.commitAllowingStateLoss();
+//                    CustomEventHandler customEventHandler = new CustomEventHandler(getSupportFragmentManager(), getApplicationContext());
+//                    customEventHandler.sendDefaultMesg1();
+//                    TimetableEventHandler timetableEventHandler = new TimetableEventHandler(getSupportFragmentManager(), getApplicationContext());
+//                    timetableEventHandler.sendDefaultMesg();
                     break;
                 case 2:
                     AttendanceFragment fragment1 = new AttendanceFragment();
@@ -161,7 +163,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
 
     private void setToolbarTitle() {
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar!= null) {
+        if (actionBar != null) {
             actionBar.setTitle(activityTitles[navItemIndex]);
         }
     }
@@ -201,10 +203,10 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                         navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUT;
                         break;
-//                    case R.id.test:
-//                        Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-//                        startActivity(i);
-//                        break;
+                    case R.id.settingsActivity:
+                        startActivity(new Intent(MainActivity_SmartCampus.this, SettingsActivity.class));
+                        drawer.closeDrawers();
+                        return true;
                     default:
                         navItemIndex = 0;
                 }

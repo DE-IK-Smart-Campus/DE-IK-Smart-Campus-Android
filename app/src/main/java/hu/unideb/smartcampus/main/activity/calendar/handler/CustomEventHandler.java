@@ -1,6 +1,5 @@
 package hu.unideb.smartcampus.main.activity.calendar.handler;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,33 +15,38 @@ import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
+import hu.unideb.smartcampus.main.activity.calendar.pojo.AskCustomEventPojo;
 import hu.unideb.smartcampus.main.activity.calendar.pojo.AskTimetableEventPojo;
+import hu.unideb.smartcampus.main.activity.calendar.task.CustomEventIqRequestTask;
 import hu.unideb.smartcampus.main.activity.calendar.task.TimetableIqRequestTask;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-public class TimetableEventHandler {
+public class CustomEventHandler {
 
-    private AskTimetableEventPojo askTimetableEventPojo;
+    private AskCustomEventPojo askCustomEventPojo;
     private FragmentManager fragmentManager;
     private ObjectMapper objectMapper;
     private Context context;
 
-    public TimetableEventHandler(FragmentManager fragmentManager,Context context)throws SmackException.NotConnectedException, InterruptedException {
-        super();
-        this.askTimetableEventPojo = new AskTimetableEventPojo();
+    public CustomEventHandler(FragmentManager fragmentManager,Context context)throws SmackException.NotConnectedException, InterruptedException {
+        this.askCustomEventPojo = new AskCustomEventPojo();
         this.fragmentManager = fragmentManager;
         this.objectMapper = new ObjectMapper();
         this.context = context;
     }
 
-    public void sendDefaultMesg() {
+    public void sendDefaultMesg1() {
 
         try{
 
             HashMap<String, String> param = new HashMap<>();
-            AskTimetableEventPojo askTimetableEventPojo = Connection.getInstance().createLoadingDialog(new TimetableIqRequestTask(), fragmentManager,param);
+            AskCustomEventPojo askCustomEventPojo = Connection.getInstance().createLoadingDialog(new CustomEventIqRequestTask(), fragmentManager, param);
+
+//            AskTimetableEventPojo askTimetableEventPojo = Connection.getInstance().createLoadingDialog(new TimetableIqRequestTask(), fragmentManager,param);
 
             Bundle bundle = new Bundle();
+
+            askCustomEventPojo.getCustomEvents().toString();
 //
 //            askTimetableEventPojo.getTimetableEvents();
 //

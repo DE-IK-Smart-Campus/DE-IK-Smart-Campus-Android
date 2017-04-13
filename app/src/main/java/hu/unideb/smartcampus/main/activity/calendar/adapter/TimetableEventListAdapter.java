@@ -11,7 +11,7 @@ import java.text.DateFormat;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.sqlite.models.TimetableEvent;
+import hu.unideb.smartcampus.sqlite.model.TimetableEvent;
 
 public class TimetableEventListAdapter extends BaseAdapter {
 

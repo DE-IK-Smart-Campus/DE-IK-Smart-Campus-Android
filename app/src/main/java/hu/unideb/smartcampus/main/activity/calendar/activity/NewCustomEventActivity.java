@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.activity;
+package hu.unideb.smartcampus.main.activity.calendar.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -15,12 +15,31 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaCollector;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
+import org.jivesoftware.smack.packet.IQ;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
+import java.util.UUID;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.main.activity.calendar.handler.AddCustomEventHandler;
+import hu.unideb.smartcampus.shared.iq.provider.AddCustomEventIqProvider;
+import hu.unideb.smartcampus.shared.iq.request.AddCustomEventIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.CalendarSubjectsIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.element.CustomEventIqElement;
+import hu.unideb.smartcampus.xmpp.Connection;
+
+import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 
 public class NewCustomEventActivity extends AppCompatActivity {
 
@@ -31,6 +50,9 @@ public class NewCustomEventActivity extends AppCompatActivity {
     private EditText endDate;
     private EditText startTime;
     private EditText endTime;
+
+    Calendar newCalendar ;
+
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
@@ -121,24 +143,45 @@ public class NewCustomEventActivity extends AppCompatActivity {
         );
     }
 
-    private void remainderSetup(){
-        Spinner remainderSpinner =(Spinner) findViewById(R.id.remainderSpinner);
+    private void remainderSetup() {
+        Spinner remainderSpinner = (Spinner) findViewById(R.id.remainderSpinner);
 
     }
 
     private void setDateTimeField() {
         checkBoxOnOff();
 
-        Calendar newCalendar = Calendar.getInstance();
+//        final Calendar newCalendar = Calendar.getInstance();
+
+//        fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                Calendar newDate = Calendar.getInstance();
+//                newDate.set(year, monthOfYear, dayOfMonth);
+//                newDate.getTimeInMillis();
+//                DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(newDate.getTime());
+//                startDate.setText(dateFormatter.format(newDate.getTime()));
+//                endDate.setText(startDate.getText());
+//            }
+//        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+
+        newCalendar = Calendar.getInstance();
+//        newCalendar.setTimeZone(TimeZone.getTimeZone("Europe/Budapest"));
+        newCalendar.set(Calendar.HOUR_OF_DAY,0);
+        newCalendar.set(Calendar.MINUTE, 0);
+        newCalendar.set(Calendar.SECOND,0);
+        newCalendar.set(Calendar.MILLISECOND,0);
 
         fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                startDate.setText(dateFormatter.format(newDate.getTime()));
+                newCalendar.set(year, monthOfYear, dayOfMonth,0,0,0);
+                DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(newDate.getTime());
+                startDate.setText(dateFormatter.format(newCalendar.getTime()));
                 endDate.setText(startDate.getText());
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
 
 
         toDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -150,7 +193,7 @@ public class NewCustomEventActivity extends AppCompatActivity {
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public void roundingThirtyMinutes(Calendar calendar) {
+    private void roundingThirtyMinutes(Calendar calendar) {
         int rounding = calendar.get(Calendar.MINUTE) % 30;
         calendar.add(Calendar.MINUTE, rounding < 8 ? -rounding : (30 - rounding));
     }
@@ -238,5 +281,9 @@ public class NewCustomEventActivity extends AppCompatActivity {
     }
 
     public void saveOnClick(View view) {
+        String uuid = UUID.randomUUID().toString();
+
+        AddCustomEventHandler.add(uuid, eventName.getText().toString(), eventDescription.getText().toString(), eventPlace.getText().toString(), newCalendar.getTimeInMillis(),newCalendar.getTimeInMillis() );
+
     }
 }

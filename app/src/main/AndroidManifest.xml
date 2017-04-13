@@ -24,22 +24,30 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.MainActivity_SmartCampus"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.NewCustomEventActivity"
+            android:name=".main.activity.calendar.activity.NewCustomEventActivity"
             android:label="@string/new_event_add"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.EditCustomEventActivity"
+            android:name=".main.activity.calendar.activity.EditCustomEventActivity"
             android:label="@string/editCustomEvent"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.EventDetailsActivity"
+            android:name=".main.activity.calendar.activity.EventDetailsActivity"
             android:label="@string/eventDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/settingsTitle"
             android:screenOrientation="portrait" />
     </application>
 

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.unideb.smartcampus.main.activity.calendar.pojo.AskTimetableEventPojo;
-import hu.unideb.smartcampus.sqlite.models.TimetableEvent;
 import hu.unideb.smartcampus.shared.iq.request.CalendarSubjectsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.element.AppointmentTimeIqElement;
 import hu.unideb.smartcampus.shared.iq.request.element.CalendarSubjectIqElement;
+import hu.unideb.smartcampus.sqlite.model.TimetableEvent;
 
 public class TimetableEventConverter {
 
@@ -21,13 +21,13 @@ public class TimetableEventConverter {
         for(int i = 0; i<calendarSubjectsIqRequest.getSubjectEvents().size(); i++) {
             timetableEvent = new TimetableEvent();
             CalendarSubjectIqElement calendarSubjectIqElement = calendarSubjectsIqRequest.getSubjectEvents().get(0);
-            AppointmentTimeIqElement calendarT = calendarSubjectIqElement.getAppointmentTimes().get(0);
-            timetableEvent.setTimetableEventDate(calendarT.getWhen());
+            AppointmentTimeIqElement calendarTimeIqElement = calendarSubjectIqElement.getAppointmentTimes().get(0);
+            timetableEvent.setTimetableEventDate(calendarTimeIqElement.getWhen());
             timetableEvent.setTimetableEventName(calendarSubjectIqElement.getSubjectName());
             timetableEvent.setTimetableEventDescription(calendarSubjectIqElement.getDescription());
             timetableEvent.setTimetableEventPlace(calendarSubjectIqElement.getWhere());
-            timetableEvent.setTimetableEventStartTime(calendarT.getFrom());
-            timetableEvent.setTimetableEventEndTime(calendarT.getTo());
+            timetableEvent.setTimetableEventStartTime(calendarTimeIqElement.getFrom());
+            timetableEvent.setTimetableEventEndTime(calendarTimeIqElement.getTo());
             timetableEventsList.add(timetableEvent);
         }
 

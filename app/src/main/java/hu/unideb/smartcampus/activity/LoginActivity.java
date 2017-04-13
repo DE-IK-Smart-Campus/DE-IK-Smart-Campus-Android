@@ -43,7 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         hunFlagImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeLocale(Locale.getDefault());
+                Locale hunLocale = new Locale("hu");
+                changeLocale(hunLocale);
             }
         });
         enFlagImage.setOnClickListener(new View.OnClickListener() {
