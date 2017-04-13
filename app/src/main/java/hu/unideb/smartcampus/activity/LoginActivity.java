@@ -11,13 +11,8 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
-import hu.unideb.smartcampus.main.activity.login.auth.BasicAuth;
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 import hu.unideb.smartcampus.xmpp.Connection;
 
@@ -41,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else {
-
+/*
             try {
                 actualUserInfo = new BasicAuth().execute(new ActualUserInfo
                         (username.getText().toString(), password.getText().toString(), null))
@@ -56,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
             if (actualUserInfo.getUsername() == null) {
                 Toast.makeText(getApplicationContext(), R.string.login_failed, Toast.LENGTH_SHORT).show();
             } else {
-
+*/
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                 fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
@@ -69,8 +64,8 @@ public class LoginActivity extends AppCompatActivity {
                         BOSHConfiguration config = null;
                         try {
                             config = BOSHConfiguration.builder()
-                                    .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
-                                    //.setUsernameAndPassword("holi60", "758c8a8d-c549-40e9-acb2-6dc97cd0c00f")
+                                   // .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
+                                    .setUsernameAndPassword("holi60", "758c8a8d-c549-40e9-acb2-6dc97cd0c00f")
                                     //.setUsernameAndPassword("testuser", "admin")
                                     .setXmppDomain(HOSTNAME)
                                     .setHost(HOSTNAME)
@@ -87,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }).start();
             }
-        }
+    //    }
     }
 
     public void loginOnClick(View v) {
