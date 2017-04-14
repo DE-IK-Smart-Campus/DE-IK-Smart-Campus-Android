@@ -42,8 +42,6 @@
             android:label="@string/eventDetails"
             android:screenOrientation="portrait" />
 
-        <receiver android:name=".activity.LocationSender"></receiver>
-
 
         <receiver android:name=".scheduler.LocationAlarmReceiver"></receiver>
 
