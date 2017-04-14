@@ -117,6 +117,7 @@ public class LocationSenderService extends IntentService implements GoogleApiCli
                 final StanzaCollector stanzaCollectorAndSend = xmppConnection.createStanzaCollectorAndSend(userLocationIqRequest);
                 stanzaCollectorAndSend.nextResultOrThrow(5000);
                 xmppConnection.disconnect();
+                Log.i(TAG, "getLocationForService: SUCCES");
             } catch (XmppStringprepException | InterruptedException | SmackException.NotConnectedException | SmackException.NoResponseException | XMPPException.XMPPErrorException e) {
                 Log.e(TAG, "getLocationForService: ERROR ");
                 e.printStackTrace();

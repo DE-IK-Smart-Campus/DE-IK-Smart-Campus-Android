@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -38,7 +39,6 @@ public class MainActivity_SmartCampus extends AppCompatActivity{
 
     LocationAlarmReceiver locationAlarmReceiver = new LocationAlarmReceiver();
 
-    public static final int MY_REQUEST_CODE = 115;
     private NavigationView navigationView;
     private DrawerLayout drawer;
     public Toolbar toolbar;
@@ -58,15 +58,9 @@ public class MainActivity_SmartCampus extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-            }, MY_REQUEST_CODE);
-            return;
-        }
         if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
         {
+            Log.i(TAG_HOME, "onCreate: Setalarm");
             locationAlarmReceiver.setAlarm(this);
         }
 
