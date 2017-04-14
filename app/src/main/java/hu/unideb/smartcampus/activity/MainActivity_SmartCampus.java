@@ -52,6 +52,7 @@ import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragmen
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
+import hu.unideb.smartcampus.scheduler.SampleAlarmReceiver;
 import hu.unideb.smartcampus.shared.iq.request.UserLocationIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
@@ -63,6 +64,9 @@ import static java.lang.Thread.sleep;
 
 
 public class MainActivity_SmartCampus extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    SampleAlarmReceiver alarm = new SampleAlarmReceiver();
+
     public static final int MY_REQUEST_CODE = 115;
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -93,7 +97,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity implements Googl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        alarm.setAlarm(this);
         Intent intent = new Intent(getApplicationContext(), LocationSender.class);
         alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
 

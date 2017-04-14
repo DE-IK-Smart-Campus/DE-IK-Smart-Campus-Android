@@ -5,7 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -43,6 +44,18 @@
 
         <receiver android:name=".activity.LocationSender"></receiver>
 
+
+        <receiver android:name=".scheduler.SampleAlarmReceiver"></receiver>
+
+        <receiver
+            android:name=".scheduler.SampleBootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".scheduler.LocationSenderService" />
 
     </application>
 

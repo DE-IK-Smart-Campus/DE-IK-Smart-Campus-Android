@@ -96,7 +96,6 @@ public class Connection {
                 xmppConnection.connect();
                 sleep(SmackConfiguration.getDefaultReplyTimeout());
                 xmppConnection.login();
-                xmppConnection.getUser();
             } else if (!xmppConnection.isAuthenticated()) {
                 xmppConnection.login();
             }
