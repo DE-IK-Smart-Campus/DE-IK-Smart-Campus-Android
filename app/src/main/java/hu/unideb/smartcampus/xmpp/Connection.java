@@ -86,21 +86,21 @@ public class Connection {
         return instance;
     }
 
-    private boolean checkConnection(Context actualContext) {
+    public boolean maintainConnection(Context actualContext) {
         boolean returnBool = true;
         this.actualContext = actualContext;
         xmppConnection = new XMPPBOSHConnection(config);
-        if (!xmppConnection.isConnected()) try {
-            xmppConnection.connect();
-            sleep(SmackConfiguration.getDefaultReplyTimeout());
-            xmppConnection.login();
-            actualUserJid = xmppConnection.getUser();
+        try {
+            if (!xmppConnection.isConnected()) {
+
+                xmppConnection.connect();
+                sleep(SmackConfiguration.getDefaultReplyTimeout());
+                xmppConnection.login();
+            } else if (!xmppConnection.isAuthenticated()) {
+                xmppConnection.login();
+            }
         } catch (InterruptedException | IOException | SmackException | XMPPException e) {
-            returnBool = false;
             e.printStackTrace();
-        } finally {
-            if (!xmppConnection.isAuthenticated())
-                xmppConnection.disconnect();
         }
         return returnBool;
     }
@@ -115,7 +115,7 @@ public class Connection {
     public void startBoshConnection(BOSHConfiguration config, Context actualContext) {
         this.actualContext = actualContext;
         this.config = config;
-        if (checkConnection(actualContext) && xmppConnection.isAuthenticated()) {
+        if (maintainConnection(actualContext) && xmppConnection.isAuthenticated()) {
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(InstructorConsultingDatesIqRequest.ELEMENT);
             ProviderManager.addIQProvider(InstructorConsultingDatesIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new InstructorConsultingDateIqProvider());
 
@@ -139,7 +139,7 @@ public class Connection {
     }
 
 
-    //// TODO: 2017. 03. 28. We need an unbreakable dialog
+//// TODO: 2017. 03. 28. We need an unbreakable dialog
 
     public FragmentManager createLoadingDialog(FragmentManager fragmentManager, Bundle bundle) {
         LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);

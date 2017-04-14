@@ -3,6 +3,10 @@
     package="hu.unideb.smartcampus">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -14,17 +18,17 @@
             android:name=".activity.SplashScreenActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
-        <intent-filter>
+            android:theme="@android:style/Theme.Light.NoTitleBar">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity"
+        <activity
+            android:name=".activity.LoginActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MainActivity_SmartCampus"
             android:screenOrientation="portrait"
@@ -34,16 +38,23 @@
             android:label="@string/new_event_add"
             android:screenOrientation="portrait" />
         <activity
-            android:name="main.activity.chat.MainChatMenu"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".activity.EventDetailsActivity"
             android:label="@string/eventDetails"
             android:screenOrientation="portrait" />
+
+
+        <receiver android:name=".scheduler.LocationAlarmReceiver"></receiver>
+
+        <receiver
+            android:name=".scheduler.LocationBootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".scheduler.LocationSenderService" />
+
     </application>
 
 </manifest>
