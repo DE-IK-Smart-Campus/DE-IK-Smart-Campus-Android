@@ -13,7 +13,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
  * When the alarm fires, this WakefulBroadcastReceiver receives the broadcast Intent 
  * and then starts the IntentService {@code LocationSenderService} to do some work.
  */
-public class SampleAlarmReceiver extends WakefulBroadcastReceiver {
+public class LocationAlarmReceiver extends WakefulBroadcastReceiver {
     // The app's AlarmManager, which provides access to the system alarm services.
     private AlarmManager alarmMgr;
     // The pending intent that is triggered when the alarm fires.
@@ -52,7 +52,7 @@ public class SampleAlarmReceiver extends WakefulBroadcastReceiver {
      */
     public void setAlarm(Context context) {
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, SampleAlarmReceiver.class);
+        Intent intent = new Intent(context, LocationAlarmReceiver.class);
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
        // Calendar calendar = Calendar.getInstance();
@@ -102,36 +102,14 @@ public class SampleAlarmReceiver extends WakefulBroadcastReceiver {
                 SystemClock.elapsedRealtime() + (1 * 60 * 1000),
                 1 * 60 * 1000, alarmIntent);
 
-        // Enable {@code SampleBootReceiver} to automatically restart the alarm when the
+        // Enable {@code LocationBootReceiver} to automatically restart the alarm when the
         // device is rebooted.
-        ComponentName receiver = new ComponentName(context, SampleBootReceiver.class);
+        ComponentName receiver = new ComponentName(context, LocationBootReceiver.class);
         PackageManager pm = context.getPackageManager();
 
         pm.setComponentEnabledSetting(receiver,
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);           
-    }
-    // END_INCLUDE(set_alarm)
-
-    /**
-     * Cancels the alarm.
-     * @param context
-     */
-    // BEGIN_INCLUDE(cancel_alarm)
-    public void cancelAlarm(Context context) {
-        // If the alarm has been set, cancel it.
-        if (alarmMgr!= null) {
-            alarmMgr.cancel(alarmIntent);
-        }
-        
-        // Disable {@code SampleBootReceiver} so that it doesn't automatically restart the 
-        // alarm when the device is rebooted.
-        ComponentName receiver = new ComponentName(context, SampleBootReceiver.class);
-        PackageManager pm = context.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
     }
-    // END_INCLUDE(cancel_alarm)
+    // END_INCLUDE(set_alarm)
 }

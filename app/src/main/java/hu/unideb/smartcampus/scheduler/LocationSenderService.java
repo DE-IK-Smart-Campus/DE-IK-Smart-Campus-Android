@@ -39,33 +39,25 @@ import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
 import static java.lang.Thread.sleep;
 
-/**
- * This {@code IntentService} does the app's actual work.
- * {@code SampleAlarmReceiver} (a {@code WakefulBroadcastReceiver}) holds a
- * partial wake lock for this service while the service does its work. When the
- * service is finished, it calls {@code completeWakefulIntent()} to release the
- * wake lock.
- */
 public class LocationSenderService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     public LocationSenderService() {
         super("SchedulingService");
     }
 
+    XMPPBOSHConnection xmppConnection;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     public static final String TAG = "LocationService";
-    // An ID used to post the notification.
 
     @Override
     protected void onHandleIntent(Intent intent) {
         // BEGIN_INCLUDE(service_onhandle)
-        Log.e(TAG, "sendNotification: ALARM");
-
         BOSHConfiguration config = null;
-        XMPPBOSHConnection xmppConnection = null;
+        xmppConnection = null;
         try {
             config = BOSHConfiguration.builder()
                     // .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
+                    //TODO READ FROM DB
                     .setUsernameAndPassword("headswitcher", "39a35530-0ff3-48f1-a9cb-36ff3c4315e2")
                     //.setUsernameAndPassword("testuser", "admin")
                     .setXmppDomain(HOSTNAME)
@@ -89,14 +81,12 @@ public class LocationSenderService extends IntentService implements GoogleApiCli
                     .build();
             mGoogleApiClient.connect();
 
-            xmppConnection.disconnect();
         } catch (InterruptedException | IOException | SmackException | XMPPException e) {
+            Log.e(TAG, "onHandleIntent: ERROR");
             e.printStackTrace();
-        } finally {
-            xmppConnection.disconnect();
         }
 
-        SampleAlarmReceiver.completeWakefulIntent(intent);
+        LocationAlarmReceiver.completeWakefulIntent(intent);
         // END_INCLUDE(service_onhandle)
     }
 
@@ -106,7 +96,14 @@ public class LocationSenderService extends IntentService implements GoogleApiCli
             try {
                 sleep(SmackConfiguration.getDefaultReplyTimeout());
                 UserLocationIqRequest userLocationIqRequest = new UserLocationIqRequest();
-                final EntityFullJid user = Connection.getInstance().getXmppConnection().getUser();
+                EntityFullJid user = null;
+
+                //TODO Read from db
+                if (Connection.getInstance().getXmppConnection() != null && Connection.getInstance().getXmppConnection().isAuthenticated()) {
+                    user = Connection.getInstance().getXmppConnection().getUser();
+                } else {
+                    user = xmppConnection.getUser();
+                }
                 userLocationIqRequest.setUsername(user.getLocalpartOrThrow().toString());
                 userLocationIqRequest.setAccuracy((double) mLastLocation.getAccuracy());
                 userLocationIqRequest.setLatitude(mLastLocation.getLatitude());
@@ -117,10 +114,11 @@ public class LocationSenderService extends IntentService implements GoogleApiCli
                 userLocationIqRequest.setType(IQ.Type.set);
                 userLocationIqRequest.setFrom(user);
 
-                final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(userLocationIqRequest);
+                final StanzaCollector stanzaCollectorAndSend = xmppConnection.createStanzaCollectorAndSend(userLocationIqRequest);
                 stanzaCollectorAndSend.nextResultOrThrow(5000);
-
+                xmppConnection.disconnect();
             } catch (XmppStringprepException | InterruptedException | SmackException.NotConnectedException | SmackException.NoResponseException | XMPPException.XMPPErrorException e) {
+                Log.e(TAG, "getLocationForService: ERROR ");
                 e.printStackTrace();
             }
         }

@@ -45,10 +45,10 @@
         <receiver android:name=".activity.LocationSender"></receiver>
 
 
-        <receiver android:name=".scheduler.SampleAlarmReceiver"></receiver>
+        <receiver android:name=".scheduler.LocationAlarmReceiver"></receiver>
 
         <receiver
-            android:name=".scheduler.SampleBootReceiver"
+            android:name=".scheduler.LocationBootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>

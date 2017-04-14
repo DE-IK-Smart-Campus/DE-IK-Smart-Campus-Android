@@ -16,7 +16,7 @@ public class LocationSender extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
 
-        Log.e("alarm", "onReceive: OI" );
+        Log.e("locationAlarmReceiver", "onReceive: OI" );
         final Connection connection = Connection.getInstance();
         connection.maintainConnection(context);
 
