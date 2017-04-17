@@ -1,9 +1,8 @@
 package hu.unideb.smartcampus.activity;
 
 
-
-import android.content.Intent;
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,16 +26,11 @@ import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
-
-import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
-import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
-import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
-import hu.unideb.smartcampus.main.activity.home.fragment.HomeFragment;
-import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
+import hu.unideb.smartcampus.main.activity.home.fragment.HomeFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 import hu.unideb.smartcampus.scheduler.LocationAlarmReceiver;
 
