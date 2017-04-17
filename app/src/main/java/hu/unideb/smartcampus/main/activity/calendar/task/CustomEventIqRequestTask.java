@@ -35,8 +35,8 @@ public class CustomEventIqRequestTask extends AsyncTask<HashMap<String, String>,
             iq.setTo(JidCreate.from(ADMINJID));
 
             final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
-            final ListCustomEventIqRequest calendarSubjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
-            return CustomEventConverter.convertToAskCustomEventPojo(calendarSubjectsIqRequest);
+            final ListCustomEventIqRequest listCustomEventIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
+            return CustomEventConverter.convertToAskCustomEventPojo(listCustomEventIqRequest);
 
         } catch (SmackException.NotConnectedException
                 | XMPPException.XMPPErrorException

@@ -1,26 +1,24 @@
 package hu.unideb.smartcampus.activity;
 
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
+import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
 import hu.unideb.smartcampus.main.activity.login.auth.BasicAuth;
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -37,22 +35,22 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ImageView hunFlagImage = (ImageView) findViewById(R.id.hunFlag);
-        ImageView enFlagImage = (ImageView) findViewById(R.id.enFlag);
-
-        hunFlagImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Locale hunLocale = new Locale("hu");
-                changeLocale(hunLocale);
-            }
-        });
-        enFlagImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeLocale(Locale.ENGLISH);
-            }
-        });
+//        ImageView hunFlagImage = (ImageView) findViewById(R.id.hunFlag);
+//        ImageView enFlagImage = (ImageView) findViewById(R.id.enFlag);
+//
+//        hunFlagImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Locale hunLocale = new Locale("hu");
+//                changeLocale(hunLocale);
+//            }
+//        });
+//        enFlagImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                changeLocale(Locale.ENGLISH);
+//            }
+//        });
     }
 
     private void login() {
@@ -99,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                                     .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                                     .setDebuggerEnabled(false)
                                     .build();
+
                         } catch (XmppStringprepException e) {
                             e.printStackTrace();
                         }
@@ -118,12 +117,12 @@ public class LoginActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.passwordId);
     }
 
-    private void changeLocale(final Locale locale) {
-        final Resources res = getApplicationContext().getResources();
-        final Configuration config = res.getConfiguration();
-        config.locale = locale;
-        final Resources resources = getResources();
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
-        recreate();
-    }
+//    private void changeLocale(final Locale locale) {
+//        final Resources res = getApplicationContext().getResources();
+//        final Configuration config = res.getConfiguration();
+//        config.locale = locale;
+//        final Resources resources = getResources();
+//        resources.updateConfiguration(config, resources.getDisplayMetrics());
+//        recreate();
+//    }
 }

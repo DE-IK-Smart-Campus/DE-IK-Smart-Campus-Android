@@ -60,4 +60,21 @@
         <item>Yearly</item>
     </string-array>
 
+    <string-array name="remainder_array_item">
+        <item> 5 minute</item>
+        <item>10 minute</item>
+        <item>15 minute</item>
+        <item>20 minute</item>
+        <item>25 minute</item>
+        <item>30 minute</item>
+        <item>45 minute</item>
+        <item> 1 hour</item>
+        <item> 2 hour</item>
+        <item> 3 hour</item>
+        <item>12 hour</item>
+        <item>24 hour</item>
+        <item> 2 hour</item>
+        <item> 1 hour</item>
+    </string-array>
+
 </resources>

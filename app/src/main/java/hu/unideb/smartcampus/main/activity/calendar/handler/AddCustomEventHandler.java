@@ -8,8 +8,6 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import java.util.UUID;
-
 import hu.unideb.smartcampus.shared.iq.request.AddCustomEventIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.element.CustomEventIqElement;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -18,23 +16,29 @@ import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 
 public class AddCustomEventHandler {
 
-    public static void add(String uuid,String eventName, String eventDescription, String eventPlace, Long eventStart, Long eventEnd) {
+    public static void add(String uuid,Long eventWhen,String eventName, String eventDescription, String eventPlace, Long eventStart, Long eventEnd,String repeat, String remainder) {
         XMPPBOSHConnection xmppboshConnection = Connection.getInstance().getXmppConnection();
         try {
             AddCustomEventIqRequest addCustomEventIqRequest = new AddCustomEventIqRequest();
             addCustomEventIqRequest.setStudent(xmppboshConnection.getUser().getLocalpartOrThrow().toString());
             CustomEventIqElement myCustomEventIqElement = new CustomEventIqElement();
+
             myCustomEventIqElement.setGuid(uuid);
+            myCustomEventIqElement.setEventWhen(eventWhen);
             myCustomEventIqElement.setEventName(eventName);
             myCustomEventIqElement.setEventDescription(eventDescription);
             myCustomEventIqElement.setEventPlace(eventPlace);
             myCustomEventIqElement.setEventStart(eventStart);
             myCustomEventIqElement.setEventEnd(eventEnd);
-            myCustomEventIqElement.setEventRepeat("0");
+            myCustomEventIqElement.setEventRepeat(repeat);
+            myCustomEventIqElement.setReminder(remainder);
+
             addCustomEventIqRequest.setCustomEvent(myCustomEventIqElement);
+
             addCustomEventIqRequest.setType(IQ.Type.set);
             addCustomEventIqRequest.setTo(JidCreate.from(ADMINJID));
             addCustomEventIqRequest.setFrom(xmppboshConnection.getUser());
+
             final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(addCustomEventIqRequest);
             stanzaCollectorAndSend.nextResultOrThrow(5000);
 

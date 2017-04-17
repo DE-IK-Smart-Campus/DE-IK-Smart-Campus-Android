@@ -41,6 +41,8 @@
     <string name="repeatText">Ismétlődés</string>
     <string name="loadingText">Betöltés..</string>
     <string name="settingsTitle">Beállítások</string>
+    <string name="timetableTab">Órák</string>
+    <string name="customTab">Saját</string>
 
     <string-array name="nav_item_activity_titles">
         <item> Kezdőképernyő</item>
@@ -58,6 +60,23 @@
         <item>Kéthetente</item>
         <item>Havonta</item>
         <item>Évente</item>
+    </string-array>
+
+    <string-array name="remainder_array_item">
+        <item> 5 perc</item>
+        <item>10 perc</item>
+        <item>15 perc</item>
+        <item>20 perc</item>
+        <item>25 perc</item>
+        <item>30 perc</item>
+        <item>45 perc</item>
+        <item> 1 óra</item>
+        <item> 2 óra</item>
+        <item> 3 óra</item>
+        <item>12 óra</item>
+        <item>24 óra</item>
+        <item> 2 nap</item>
+        <item> 1 hét</item>
     </string-array>
 
 </resources>

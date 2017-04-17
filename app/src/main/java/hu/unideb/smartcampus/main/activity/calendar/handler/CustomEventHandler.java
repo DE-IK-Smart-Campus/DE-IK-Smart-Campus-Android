@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jivesoftware.smack.SmackException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
@@ -19,6 +20,7 @@ import hu.unideb.smartcampus.main.activity.calendar.pojo.AskCustomEventPojo;
 import hu.unideb.smartcampus.main.activity.calendar.pojo.AskTimetableEventPojo;
 import hu.unideb.smartcampus.main.activity.calendar.task.CustomEventIqRequestTask;
 import hu.unideb.smartcampus.main.activity.calendar.task.TimetableIqRequestTask;
+import hu.unideb.smartcampus.sqlite.model.CustomEvent;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 public class CustomEventHandler {
@@ -46,10 +48,12 @@ public class CustomEventHandler {
 
             Bundle bundle = new Bundle();
 
-            askCustomEventPojo.getCustomEvents().toString();
-//
-//            askTimetableEventPojo.getTimetableEvents();
-//
+            List<CustomEvent> c = askCustomEventPojo.getCustomEvents();
+
+            for(CustomEvent t : c) {
+
+            }
+
             changeToCalndarFragmentView(bundle);
 
         } catch (ExecutionException e) {

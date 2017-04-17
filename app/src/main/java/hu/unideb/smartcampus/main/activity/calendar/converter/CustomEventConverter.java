@@ -18,23 +18,23 @@ public class CustomEventConverter {
         List<CustomEvent> customEvents = new ArrayList<>();
         for (int i = 0; i < listCustomEventIqRequest.getCustomEvents().size(); i++) {
             customEvent = new CustomEvent();
-            CustomEventIqElement customEventIqElement = listCustomEventIqRequest.getCustomEvents().get(0);
+            CustomEventIqElement customEventIqElement = listCustomEventIqRequest.getCustomEvents().get(i);
 
             customEvent.setUuid(customEventIqElement.getGuid());
             customEvent.setEventName(customEventIqElement.getEventName());
             customEvent.setEventDescription(customEventIqElement.getEventDescription());
             customEvent.setEventPlace(customEventIqElement.getEventPlace());
-            customEvent.setEventStartDate(customEventIqElement.getEventStart());
+            customEvent.setEventStartDate(customEventIqElement.getEventWhen());
             customEvent.setEventEndDate(customEventIqElement.getEventEnd());
             customEvent.setEventStartTime(customEventIqElement.getEventStart());
             customEvent.setEventEndTime(customEventIqElement.getEventEnd());
-            customEvent.setEvenetRepait(customEventIqElement.getEventRepeat());
+            customEvent.setEvenetRepeat(customEventIqElement.getEventRepeat());
             customEvent.setEventReminder(customEventIqElement.getReminder());
 
             customEvents.add(customEvent);
         }
 
-//        askCustomEventPojo.setCustomEvents(customEvents);
+        askCustomEventPojo.setCustomEvents(customEvents);
         return askCustomEventPojo;
 
     }

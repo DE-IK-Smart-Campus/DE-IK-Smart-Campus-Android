@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
-    maven { url "http://wt2.inf.unideb.hu/artifactory/libs-release-local" }
+//    maven { url "http://wt2.inf.unideb.hu/artifactory/libs-release-local" }
     maven { url "http://wt2.inf.unideb.hu/artifactory/libs-snapshot-local" }
 }
 
@@ -26,6 +26,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -67,4 +68,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.7.5'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
+
+
 }

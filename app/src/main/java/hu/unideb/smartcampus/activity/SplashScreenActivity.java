@@ -6,10 +6,11 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.sqlite.manager.DatabaseManager;
 
 public class SplashScreenActivity extends Activity {
 
-    private static int SPLASH_SCREEN_TIME_OUT = 3000;
+    private static int SPLASH_SCREEN_TIME_OUT = 2500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

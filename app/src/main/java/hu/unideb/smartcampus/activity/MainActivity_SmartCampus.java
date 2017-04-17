@@ -4,7 +4,6 @@ package hu.unideb.smartcampus.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -25,11 +24,10 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
 import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
 
-import hu.unideb.smartcampus.fragment.HomeFragment;
-import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
-import hu.unideb.smartcampus.main.activity.calendar.handler.CustomEventHandler;
 import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
+import hu.unideb.smartcampus.main.activity.home.fragment.HomeFragment;
+import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 
@@ -107,16 +105,17 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     fragmentTransaction1.commitAllowingStateLoss();
                     break;
                 case 1:
-                    CalendarFragment fragment = new CalendarFragment();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
+
+//                    CalendarFragment fragment = new CalendarFragment();
+//                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+//                            android.R.anim.fade_out);
+//                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+//                    fragmentTransaction.commitAllowingStateLoss();
 //                    CustomEventHandler customEventHandler = new CustomEventHandler(getSupportFragmentManager(), getApplicationContext());
 //                    customEventHandler.sendDefaultMesg1();
-//                    TimetableEventHandler timetableEventHandler = new TimetableEventHandler(getSupportFragmentManager(), getApplicationContext());
-//                    timetableEventHandler.sendDefaultMesg();
+                    TimetableEventHandler timetableEventHandler = new TimetableEventHandler(getSupportFragmentManager(), getApplicationContext());
+                    timetableEventHandler.sendDefaultMesg();
                     break;
                 case 2:
                     AttendanceFragment fragment1 = new AttendanceFragment();

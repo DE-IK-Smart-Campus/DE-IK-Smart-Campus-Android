@@ -217,20 +217,6 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_weight="0.16"
-        android:orientation="vertical"
-        android:weightSum="1">
-
-        <Spinner
-            android:id="@+id/remainderSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:layout_marginTop="5dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:layout_weight="0.15"

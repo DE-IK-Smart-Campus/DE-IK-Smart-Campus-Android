@@ -17,11 +17,14 @@ public class TimetableEventConverter {
         TimetableEvent timetableEvent;
 
         List<TimetableEvent> timetableEventsList = new ArrayList<>();
-
         for(int i = 0; i<calendarSubjectsIqRequest.getSubjectEvents().size(); i++) {
+            CalendarSubjectIqElement calendarSubjectIqElement = calendarSubjectsIqRequest.getSubjectEvents().get(i);
+
+            for(int j = 0;  j< calendarSubjectIqElement.getAppointmentTimes().size(); j++){
+
             timetableEvent = new TimetableEvent();
-            CalendarSubjectIqElement calendarSubjectIqElement = calendarSubjectsIqRequest.getSubjectEvents().get(0);
-            AppointmentTimeIqElement calendarTimeIqElement = calendarSubjectIqElement.getAppointmentTimes().get(0);
+
+            AppointmentTimeIqElement calendarTimeIqElement = calendarSubjectIqElement.getAppointmentTimes().get(j);
             timetableEvent.setTimetableEventDate(calendarTimeIqElement.getWhen());
             timetableEvent.setTimetableEventName(calendarSubjectIqElement.getSubjectName());
             timetableEvent.setTimetableEventDescription(calendarSubjectIqElement.getDescription());
@@ -29,8 +32,8 @@ public class TimetableEventConverter {
             timetableEvent.setTimetableEventStartTime(calendarTimeIqElement.getFrom());
             timetableEvent.setTimetableEventEndTime(calendarTimeIqElement.getTo());
             timetableEventsList.add(timetableEvent);
+            }
         }
-
         askTimetableEventPojo.setTimetableEvents(timetableEventsList);
 
         return askTimetableEventPojo;

@@ -6,6 +6,7 @@ import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.StanzaCollector;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.IQ;
+import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
@@ -18,15 +19,18 @@ import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 
-
 public class TimetableIqRequestTask extends AsyncTask<HashMap<String, String>, Integer, AskTimetableEventPojo> {
 
     @Override
     protected AskTimetableEventPojo doInBackground(HashMap<String, String>... params) {
         try {
             CalendarSubjectsIqRequest iq = new CalendarSubjectsIqRequest();
-            iq.setStudent(Connection.getInstance().getUserJID());
+            EntityFullJid user = Connection.getInstance().getXmppConnection().getUser();
+            iq.setStudent(user.getLocalpartOrThrow().toString());
+            iq.setStartPeriod(1485813600L);
+            iq.setEndPeriod(1496181600L);
             iq.setType(IQ.Type.get);
+            iq.setFrom(user);
             iq.setTo(JidCreate.from(ADMINJID));
 
             final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
@@ -35,8 +39,8 @@ public class TimetableIqRequestTask extends AsyncTask<HashMap<String, String>, I
 
         } catch (SmackException.NotConnectedException
                 | XMPPException.XMPPErrorException
-                | SmackException.NoResponseException
                 | XmppStringprepException
+                | SmackException.NoResponseException
                 | InterruptedException e) {
             e.printStackTrace();
         }
