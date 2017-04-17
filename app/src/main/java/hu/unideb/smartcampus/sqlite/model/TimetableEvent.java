@@ -1,9 +1,8 @@
-package hu.unideb.smartcampus.main.activity.calendar.sqllite.db;
+package hu.unideb.smartcampus.sqlite.model;
 
 import java.text.DateFormat;
 
 public class TimetableEvent {
-
     private int id;
     private Long timetableEventDate;
     private String timetableEventName;
@@ -78,19 +77,6 @@ public class TimetableEvent {
 
     public void setTimetableEventEndTime(Long timetableEventEndTime) {
         this.timetableEventEndTime = timetableEventEndTime;
-    }
-
-    @Override
-    public String toString() {
-        return "TimetableEvent{" +
-                "id=" + id +
-                ", timetableEventDate=" + DateFormat.getDateInstance(DateFormat.SHORT).format(timetableEventDate) +
-                ", timetableEventName='" + timetableEventName + '\'' +
-                ", timetableEventDescription='" + timetableEventDescription + '\'' +
-                ", timetableEventPlace='" + timetableEventPlace + '\'' +
-                ", timetableEventStartTime=" + DateFormat.getTimeInstance(DateFormat.SHORT).format(timetableEventStartTime) +
-                ", timetableEventEndTime=" + DateFormat.getTimeInstance(DateFormat.SHORT).format(timetableEventEndTime) +
-                '}';
     }
 }
 

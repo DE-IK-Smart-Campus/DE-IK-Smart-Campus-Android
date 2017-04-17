@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
-        android:text="TextView"
+        android:id="@+id/selected_consulting_hour_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/selected_consulting_hour_editText"
         android:textAlignment="center"
         android:textSize="30sp" />
 
@@ -17,21 +16,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="30dp"
-        android:text="Oka:" />
+        android:text="@string/reason" />
 
     <EditText
+        android:id="@+id/consulting_hours_reason_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/consulting_hours_reason_editText" />
+        android:inputType="textPersonName" />
 
     <TextView
         android:id="@+id/reserve_during_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="30dp"
-        android:text="Meddig" />
+        android:text="@string/howLong" />
 
     <EditText
         android:id="@+id/consulting_hours_duration_editText"
@@ -41,10 +40,9 @@
         android:inputType="textPersonName" />
 
     <Button
-        android:text="Foglalás"
+        android:id="@+id/consulting_hour_reserve_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/consulting_hour_reserve_button"
         android:layout_marginTop="40dp"
-        android:onClick="onReserveClick" />
+        android:text="@string/reserveButtonText" />
 </LinearLayout>

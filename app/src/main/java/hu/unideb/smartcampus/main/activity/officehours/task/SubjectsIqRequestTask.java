@@ -30,8 +30,7 @@ public class SubjectsIqRequestTask extends AsyncTask<HashMap<String, String>, In
     protected AskSubjectsPojo doInBackground(HashMap<String, String>... params) {
         try {
             SubjectsIqRequest iq = new SubjectsIqRequest();
-            //iq.setStudent(params[0].get("ACTUAL_USER_JID"));
-            iq.setStudent("adamkai");
+            iq.setStudent(Connection.getInstance().getUserJID());
             iq.setType(IQ.Type.get);
             iq.setTo(JidCreate.from(ADMINJID));
 

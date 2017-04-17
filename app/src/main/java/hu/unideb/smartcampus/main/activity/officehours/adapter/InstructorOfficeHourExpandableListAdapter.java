@@ -88,7 +88,7 @@ public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableLis
 
         //will change with 1.8 TODO
         final FromToDatesInLong dates = instructor.get(instructorAt).getOfficeHourList().get(consultingHoursAt).getFromToDates();
-        final String dateDisplayName = DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getFrom())
+        final String dateDisplayName = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(dates.getFrom())
                 + "  -  "
                 + DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getTo());
         if (view == null) {
