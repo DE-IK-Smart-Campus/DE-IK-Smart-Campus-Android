@@ -79,4 +79,26 @@
         <item> 1 hét</item>
     </string-array>
 
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Mégse</string>
+
+    <string name="other_name">Egyéb</string>
+    <string name="activity_title_about_us">Rólunk</string>
+    
+    <string name="saveButton">Mentés</string>
+    <string name="date">Dátum:</string>
+    <string name="textEventName">Esemény neve:</string>
+    <string name="textEventDescription">Esemény leírása:</string>
+    <string name="textEventEdit">Esemény Szerkesztése:</string>
+    <string name="notEditEventText">Nem történt módosítás!</string>
+    <string name="chatMe">Én:</string>
+    <string name="roomName">Szoba Név</string>
+    <string name="sendChatMsg">Küldés</string>
+    <string name="roomString">Szoba:</string>
+    <string name="can_not_find">Nem található</string>
+    <string name="user_with_this_name">nevű felhasználó</string>
+    <string name="please_fill_out_every_field">Kérlek tölsd ki az összes mezőt! :)</string>
+    <string name="please_give_me_group_name">Kérlek add meg a csoportnevet.</string>
+    <string name="create_chat">Chat létrehozása</string>
+
 </resources>

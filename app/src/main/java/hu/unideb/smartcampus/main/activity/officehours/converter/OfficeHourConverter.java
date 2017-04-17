@@ -53,12 +53,14 @@ public class OfficeHourConverter {
         for (int i = 0; i < subjectsIqRequest.getSubjects().size(); i++) {
             SubjectIqElement subjectIqElement = subjectsIqRequest.getSubjects().get(i);
             subject = new Subject();
-            for (int j = 0; j < subjectIqElement.getInstructors().size(); j++) {
-                InstructorIqElement instructorIqElement = subjectIqElement.getInstructors().get(j);
-                instructor = new Instructor();
-                instructor.setName(instructorIqElement.getName());
-                instructor.setInstructorId(instructorIqElement.getInstructorId());
-                instructors.add(instructor);
+            if (subjectIqElement.getInstructors() != null) {
+                for (int j = 0; j < subjectIqElement.getInstructors().size(); j++) {
+                    InstructorIqElement instructorIqElement = subjectIqElement.getInstructors().get(j);
+                    instructor = new Instructor();
+                    instructor.setName(instructorIqElement.getName());
+                    instructor.setInstructorId(instructorIqElement.getInstructorId());
+                    instructors.add(instructor);
+                }
             }
             subject.setInstructors(instructors);
             subject.setName(subjectIqElement.getSubjectName());

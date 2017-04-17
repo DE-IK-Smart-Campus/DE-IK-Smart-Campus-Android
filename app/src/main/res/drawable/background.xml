@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="top|center"
+    android:src="@drawable/smartcampus_logo_wu_text_and_darker_2" />

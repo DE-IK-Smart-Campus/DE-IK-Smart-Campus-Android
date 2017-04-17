@@ -1,6 +1,9 @@
 package hu.unideb.smartcampus.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,6 +29,7 @@ import hu.unideb.smartcampus.xmpp.Connection;
 import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
 
 public class LoginActivity extends AppCompatActivity {
+    public static final int MY_REQUEST_CODE = 115;
 
     private EditText username;
     private EditText password;
@@ -89,6 +93,9 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             config = BOSHConfiguration.builder()
                                     .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
+                                   // .setUsernameAndPassword("holi60", "758c8a8d-c549-40e9-acb2-6dc97cd0c00f")
+                                    //.setUsernameAndPassword("testuser", "admin")
+
                                     .setXmppDomain(HOSTNAME)
                                     .setHost(HOSTNAME)
                                     .setPort(80)
@@ -97,7 +104,6 @@ public class LoginActivity extends AppCompatActivity {
                                     .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                                     .setDebuggerEnabled(false)
                                     .build();
-
                         } catch (XmppStringprepException e) {
                             e.printStackTrace();
                         }
@@ -106,9 +112,20 @@ public class LoginActivity extends AppCompatActivity {
                 }).start();
             }
         }
+
+            }}
+
     }
 
     public void loginOnClick(View v) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            }, MY_REQUEST_CODE);
+            return;
+        }
+
         login();
     }
 

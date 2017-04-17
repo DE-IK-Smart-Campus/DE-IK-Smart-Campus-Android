@@ -1,10 +1,14 @@
 package hu.unideb.smartcampus.activity;
 
 
+
 import android.content.Intent;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +17,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -22,16 +27,24 @@ import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
-import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
 
+import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
+import hu.unideb.smartcampus.fragment.HomeFragment;
+import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
+import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
 import hu.unideb.smartcampus.main.activity.home.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
+import hu.unideb.smartcampus.scheduler.LocationAlarmReceiver;
 
-public class MainActivity_SmartCampus extends AppCompatActivity {
+
+public class MainActivity_SmartCampus extends AppCompatActivity{
+
+    LocationAlarmReceiver locationAlarmReceiver = new LocationAlarmReceiver();
+
     private NavigationView navigationView;
     private DrawerLayout drawer;
     public Toolbar toolbar;
@@ -50,6 +63,14 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
+        {
+            Log.i(TAG_HOME, "onCreate: Setalarm");
+            locationAlarmReceiver.setAlarm(this);
+        }
+
+
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -1,11 +1,16 @@
 package hu.unideb.smartcampus.main.activity.chat.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
 import java.util.List;
 
@@ -44,8 +49,11 @@ public class ChatMemberAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        String chatName = chatItemList.get(position).getChatName();
-        String lastMsg = chatItemList.get(position).getLastMsg();
+        final ChatItem chatItem = chatItemList.get(position);
+        String chatName = chatItem.getChatName();
+        String lastMsg = chatItem.getLastMsg();
+
+        VCard vCard = chatItem.getvCard();
 
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context
@@ -60,6 +68,18 @@ public class ChatMemberAdapter extends BaseAdapter {
                 .findViewById(R.id.chat_last_message);
         lastMsgTextView.setText(lastMsg);
 
+        ImageView imageView = (ImageView) convertView
+                .findViewById(R.id.chat_image);
+
+        if (chatItem.getType() == ChatItem.Type.MUC) {
+            imageView.setImageResource(R.drawable.ic_chat);
+        }
+
+        if (chatItem.getType() == ChatItem.Type.SINGLE && vCard.getAvatar() != null) {
+            final byte[] vCardAvatar = vCard.getAvatar();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(vCardAvatar, 0, vCardAvatar.length);
+            imageView.setImageBitmap(bitmap);
+        }
         return convertView;
     }
 }

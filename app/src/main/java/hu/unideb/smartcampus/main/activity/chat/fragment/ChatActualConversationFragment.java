@@ -1,11 +1,12 @@
 package hu.unideb.smartcampus.main.activity.chat.fragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
@@ -25,6 +27,8 @@ import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.forward.packet.Forwarded;
 import org.jivesoftware.smackx.mam.MamManager;
+import org.jivesoftware.smackx.vcardtemp.VCardManager;
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
@@ -39,11 +43,12 @@ import hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatHistory;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.R.id.chat_actual_conversation_list_view;
 import static hu.unideb.smartcampus.R.id.chat_name;
 import static hu.unideb.smartcampus.R.id.chat_send_button;
 import static hu.unideb.smartcampus.R.id.chat_text_edit_text;
+import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.CHAT_HISTORY_ITEM_COUNT;
+import static hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment.SELECTED_CHAT_FROM;
 
 /**
  * Created by Headswitcher on 2017. 03. 21..
@@ -60,6 +65,8 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
     private Chat chat;
     private View actualV;
     private ChatManager chatManager;
+    private Bitmap userAvatarInBitmap;
+    private Bitmap partnerAvatarInBitmap;
 
 
     @Override
@@ -68,53 +75,62 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
         final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().getXmppConnection();
         chatManager = ChatManager.getInstanceFor(xmppboshConnection);
         mamManager = MamManager.getInstanceFor(xmppboshConnection);
-        String toJid = getArguments().getString("SELECTED_CHAT_FROM");
-        chatConversationItems = new LinkedList<>();
-        chatHistoryItemCount = getArguments().getInt("CHAT_HISTORY_ITEM_COUNT");
+        String toJid = getArguments().getString(SELECTED_CHAT_FROM);
         try {
-            selectedChatPartnerJid = JidCreate.entityBareFrom(toJid);
-            MamManager.MamQueryResult lastQueryResult = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryItemCount);
-            List<Forwarded> forwardedMessages = lastQueryResult.forwardedMessages;
+            VCard userVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(xmppboshConnection.getUser().asEntityBareJidIfPossible());
+            VCard partnerVCard = VCardManager.getInstanceFor(xmppboshConnection).loadVCard(JidCreate.entityBareFrom(toJid));
 
-            setChatHistory(forwardedMessages);
+            if (userVCard.getAvatar() != null) {
+                final byte[] userVCardAvatar = userVCard.getAvatar();
+                userAvatarInBitmap = BitmapFactory.decodeByteArray(userVCardAvatar, 0, userVCardAvatar.length);
+            } else {
+                userAvatarInBitmap = null;
+            }
 
-            chatHistory = new ChatHistory();
-            chatHistory.setChatConversationItems(chatConversationItems);
+            if (partnerVCard.getAvatar() != null) {
+                final byte[] partnerVCardAvatar = partnerVCard.getAvatar();
+                partnerAvatarInBitmap = BitmapFactory.decodeByteArray(partnerVCardAvatar, 0, partnerVCardAvatar.length);
+            } else {
+                partnerAvatarInBitmap = null;
+            }
 
-        } catch (XMPPException.XMPPErrorException
-                | XmppStringprepException
-                | SmackException.NotLoggedInException
-                | InterruptedException
-                | SmackException.NotConnectedException
-                | SmackException.NoResponseException e) {
+
+        } catch (SmackException.NoResponseException | XMPPException.XMPPErrorException | InterruptedException | SmackException.NotConnectedException | XmppStringprepException e) {
             e.printStackTrace();
         }
+        chatConversationItems = new LinkedList<>();
+        chatHistoryItemCount = getArguments().getInt(CHAT_HISTORY_ITEM_COUNT);
+        chatHistory = new ChatHistory();
+        setChatHistory(xmppboshConnection, toJid);
     }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_actual_conversation, container, false);
-        chatHistoryItemCount = getArguments().getInt("CHAT_HISTORY_ITEM_COUNT");
+        chatHistoryItemCount = getArguments().getInt(CHAT_HISTORY_ITEM_COUNT);
+
         chat = chatManager.chatWith(selectedChatPartnerJid);
 
 
         TextView textView = (TextView) view.findViewById(chat_name);
-        textView.setText(selectedChatPartnerJid.getLocalpart().toString());
+        textView.setText(StringUtils.capitalize(selectedChatPartnerJid.getLocalpart().toString()));
 
-        Button button = (Button) view.findViewById(chat_send_button);
+        Button sendButton = (Button) view.findViewById(chat_send_button);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText editText = (EditText) actualV.findViewById(chat_text_edit_text);
                 chatHistory.getChatConversationItems().add(new ChatConversationItem(Connection.getInstance().getActualUserJid(), editText.getText().toString()));
                 ListView listView = (ListView) actualV.findViewById(chat_actual_conversation_list_view);
-                listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
+                listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, partnerAvatarInBitmap, userAvatarInBitmap, getContext()));
                 listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
                 try {
                     chat.send(editText.getText().toString());
                     editText.setText("");
+                    //Hide Keyboard
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(actualV.getWindowToken(), 0);
                 } catch (SmackException.NotConnectedException | InterruptedException e) {
@@ -147,8 +163,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                             chatConversationItems = new LinkedList<>();
                             setChatHistory(forwardedMessages);
                             chatHistory.setChatConversationItems(chatConversationItems);
-                            view.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
-
+                            view.setAdapter(new ChatActualCoversationAdapter(chatHistory, partnerAvatarInBitmap, userAvatarInBitmap, getContext()));
                             view.setSelection(19);
                             view.smoothScrollBy(0, 0);
 
@@ -164,7 +179,6 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                 }
             }
         });
-
         chatManager.addIncomingListener(new IncomingChatMessageListener() {
             @Override
             public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
@@ -191,17 +205,14 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
                     Fragment chatactual = new ChatActualConversationFragment();
                     chatactual.setArguments(getArguments());
-                    Log.e(TAG, "newIncomingMessage:" + chatactual);
-
                     fragmentTransaction.replace(R.id.frame, chatactual);
                     afterViewCreate = false;
                     fragmentTransaction.commit();
                     chatManager.removeListener(this);
-                    Log.e(TAG, "newIncomingMessage: levettem");
                 }
             }
         });
-        listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, getContext()));
+        listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, partnerAvatarInBitmap, userAvatarInBitmap, getContext()));
         listView.setSelection(chatHistory.getChatConversationItems().size() - 1);
 
         actualV = view;
@@ -219,11 +230,37 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
             tmpChatConversationItem.setFromUserJid(tmpMsg.getFrom());
             chatConversationItems.addLast(tmpChatConversationItem);
         }
+        chatHistory.setChatConversationItems(chatConversationItems);
+    }
+
+    private void setChatHistory(XMPPBOSHConnection xmppboshConnection, String toJid) {
+        try {
+
+            final EntityBareJid jid = JidCreate.entityBareFrom(toJid);
+            selectedChatPartnerJid = jid;
+
+            MamManager.MamQueryResult lastQueryResult = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryItemCount);
+            List<Forwarded> forwardedMessages = lastQueryResult.forwardedMessages;
+            setChatHistory(forwardedMessages);
+
+        } catch (XMPPException.XMPPErrorException
+                | XmppStringprepException
+                | SmackException.NotLoggedInException
+                | InterruptedException
+                | SmackException.NotConnectedException
+                | SmackException.NoResponseException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Override
     public void onBackPressed() {
-
+        Fragment fragment = new ChatMainMenuFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame, fragment);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 }
