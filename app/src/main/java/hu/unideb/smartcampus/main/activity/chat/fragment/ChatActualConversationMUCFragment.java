@@ -175,7 +175,7 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
                 }
                 chatHistory.getChatConversationItems().add
                         (new MucChatConversationItem(
-                                Connection.getInstance().getActualUserJid().getLocalpart().toString()
+                                Connection.getInstance().getXmppConnection().getUser().getLocalpart().toString()
                                 , newMsgText.getText().toString()));
 
 

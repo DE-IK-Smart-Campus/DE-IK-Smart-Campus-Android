@@ -75,7 +75,7 @@ public class ChatActualCoversationAdapter extends BaseAdapter {
         senderImg.setVisibility(View.VISIBLE);
         LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.chat_actual_item_msg_layout);
 
-        if (fromUserJid.asBareJid().equals(Connection.getInstance().getActualUserJid().asBareJid())) {
+        if (fromUserJid.asBareJid().equals(Connection.getInstance().getXmppConnection().getUser().asBareJid())) {
             actualMsgTextView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
             nameAndDate.setGravity(Gravity.END);
             reciverImg.setVisibility(View.GONE);

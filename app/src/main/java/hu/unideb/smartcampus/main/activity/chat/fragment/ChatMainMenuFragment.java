@@ -41,7 +41,7 @@ import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.main.activity.chat.task.ListUserChatsIqRequestTask.STUDENT_PARAM_KEY;
 
-/**
+/** // TODO DIALOG / BACKTRACE
  * Created by Headswitcher on 2017. 02. 22..
  */
 
@@ -125,9 +125,7 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
                 }
             }
         });
-
         return view;
-
     }
 
     @Override
@@ -136,21 +134,16 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
     }
 
     public List<ChatItem> getAllChat() {
-        //Get me List<Jid>
-        //Mocked for now
+
         List<ChatItem> chatItemList = new ArrayList<>();
         Message message;
         MamManager mamManager = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection());
         List<Jid> twoUserChatJids = new ArrayList<>();
         List<Jid> multiUserChat = new ArrayList<>();
 
-//            multiUserChat.add(JidCreate.entityBareFrom("TesztFromAndroid@conference.wt2.inf.unideb.hu"));
-
         final Connection connection = Connection.getInstance();
         HashMap<String, String> param = new HashMap<>();
         param.put(STUDENT_PARAM_KEY, connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
-        //UserChatListIqProvider
-        //ListUserChatsIqRequest listUserChatsIqRequest = new ();
         try {
             final ListUserChatsIqRequestPojo listUserChatsIqRequestPojo = connection.runAsyncTask(new ListUserChatsIqRequestTask(), param);
 
@@ -167,42 +160,62 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
         }
 
         for (int i = 0; i < multiUserChat.size(); i++) {
+            message = null;
             final XMPPBOSHConnection xmppConnection = Connection.getInstance().getXmppConnection();
             try {
                 MamManager mamManagerForMultiChat = MamManager.getInstanceFor(xmppConnection, multiUserChat.get(i));
-                message = (Message) mamManagerForMultiChat.queryArchive(1).forwardedMessages.get(0).getForwardedStanza();
-                chatItemList.add(new ChatItem(
-                        new VCard(),
-                        multiUserChat.get(i),
-                        XmppStringUtils.parseBareJid(multiUserChat.get(i).getLocalpartOrNull().toString()),
-                        ChatItem.Type.MUC,
-                        message.getBody()));
+                MamManager.MamQueryResult queryResult = mamManagerForMultiChat.queryArchive(1);
+                if (queryResult.forwardedMessages.size() > 0) {
+                    message = (Message) queryResult.forwardedMessages.get(0).getForwardedStanza();
+                    chatItemList.add(new ChatItem(
+                            new VCard(),
+                            multiUserChat.get(i),
+                            XmppStringUtils.parseBareJid(multiUserChat.get(i).getLocalpartOrNull().toString()),
+                            ChatItem.Type.MUC,
+                            message.getBody()));
+                } else {
+                    chatItemList.add(new ChatItem(
+                            new VCard(),
+                            multiUserChat.get(i),
+                            XmppStringUtils.parseBareJid(multiUserChat.get(i).getLocalpartOrNull().toString()),
+                            ChatItem.Type.MUC,
+                            ""));
+                }
             } catch (XMPPException.XMPPErrorException | SmackException.NotLoggedInException | SmackException.NotConnectedException | SmackException.NoResponseException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        //Mocked for now
-        //Get all chat jid from Backend
         for (int i = 0; i < twoUserChatJids.size(); i++) {
             try {
-
-                message = (Message) mamManager.mostRecentPage(twoUserChatJids.get(i), 1).forwardedMessages.get(0).getForwardedStanza();
+                message = null;
+                MamManager.MamQueryResult queryResult = mamManager.mostRecentPage(twoUserChatJids.get(i), 1);
+                if (queryResult.forwardedMessages.size() > 0) {
+                    message = (Message) queryResult.forwardedMessages.get(0).getForwardedStanza();
+                }
                 VCardManager vCardManager = VCardManager.getInstanceFor(Connection.getInstance().getXmppConnection());
                 VCard vCard;
-
-                String messageForMeaddition = message.getBody();
-                if (StringUtils.equals(message.getFrom().asBareJid(), Connection.getInstance().getXmppConnection().getUser().asBareJid())) {
-                    messageForMeaddition = getString(R.string.chatMe) + messageForMeaddition;
-                    vCard = vCardManager.loadVCard(message.getTo().asEntityBareJidIfPossible());
+                if (message != null) {
+                    String messageForMeaddition = message.getBody();
+                    if (StringUtils.equals(message.getFrom().asBareJid(), Connection.getInstance().getXmppConnection().getUser().asBareJid())) {
+                        messageForMeaddition = getString(R.string.chatMe) + messageForMeaddition;
+                        vCard = vCardManager.loadVCard(message.getTo().asEntityBareJidOrThrow());
+                    } else {
+                        vCard = vCardManager.loadVCard(message.getFrom().asEntityBareJidOrThrow());
+                    }
+                    chatItemList.add(new ChatItem(
+                            vCard,
+                            twoUserChatJids.get(i),
+                            XmppStringUtils.parseBareJid(twoUserChatJids.get(i).getLocalpartOrThrow().toString()),
+                            ChatItem.Type.SINGLE, messageForMeaddition));
                 } else {
-                    vCard = vCardManager.loadVCard(message.getFrom().asEntityBareJidIfPossible());
+                    vCard = vCardManager.loadVCard(twoUserChatJids.get(i).asEntityBareJidOrThrow());
+                    chatItemList.add(new ChatItem(
+                            vCard,
+                            twoUserChatJids.get(i),
+                            XmppStringUtils.parseBareJid(twoUserChatJids.get(i).getLocalpartOrThrow().toString()),
+                            ChatItem.Type.SINGLE, ""));
                 }
-                chatItemList.add(new ChatItem(
-                        vCard,
-                        twoUserChatJids.get(i),
-                        XmppStringUtils.parseBareJid(twoUserChatJids.get(i).getLocalpartOrNull().toString()),
-                        ChatItem.Type.SINGLE, messageForMeaddition));
             } catch (XMPPException.XMPPErrorException | SmackException.NotLoggedInException | InterruptedException | SmackException.NotConnectedException | SmackException.NoResponseException e) {
                 e.printStackTrace();
             }

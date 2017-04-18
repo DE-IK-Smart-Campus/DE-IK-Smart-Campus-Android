@@ -4,11 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.unideb.smartcampus.shared.iq.request.element.StudentIqElement;
 import hu.unideb.smartcampus.sqlite.helper.DatabaseHelper;
 import hu.unideb.smartcampus.sqlite.model.CustomEvent;
 import hu.unideb.smartcampus.sqlite.model.TimetableEvent;
@@ -35,19 +35,19 @@ public class DatabaseManager {
         return this;
     }
 
-    public void close(){
+    public void close() {
         dbHelper.close();
     }
 
     public void insertTimetableEvent(TimetableEvent timetableEvent) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.TIMETABLEEVENT_DATE, timetableEvent.getTimetableEventDate());
-        contentValues.put(DatabaseHelper.TIMETABLEEVENT_NAME,timetableEvent.getTimetableEventName());
+        contentValues.put(DatabaseHelper.TIMETABLEEVENT_NAME, timetableEvent.getTimetableEventName());
         contentValues.put(DatabaseHelper.TIMETABLEEVENT_DESCRIPTION, timetableEvent.getTimetableEventDescription());
-        contentValues.put(DatabaseHelper.TIMETABLEEVENT_PLACE,timetableEvent.getTimetableEventPlace());
-        contentValues.put(DatabaseHelper.TIMETABLEEVENT_STARTTIME,timetableEvent.getTimetableEventStartTime());
-        contentValues.put(DatabaseHelper.TIMETABLEEVENT_ENDTIME,timetableEvent.getTimetableEventEndTime());
-        database.insert(TABLE_TIMETABLEEVENT,null,contentValues);
+        contentValues.put(DatabaseHelper.TIMETABLEEVENT_PLACE, timetableEvent.getTimetableEventPlace());
+        contentValues.put(DatabaseHelper.TIMETABLEEVENT_STARTTIME, timetableEvent.getTimetableEventStartTime());
+        contentValues.put(DatabaseHelper.TIMETABLEEVENT_ENDTIME, timetableEvent.getTimetableEventEndTime());
+        database.insert(TABLE_TIMETABLEEVENT, null, contentValues);
     }
 
     public void insertCustomEvent(CustomEvent customEvent) {
@@ -62,18 +62,18 @@ public class DatabaseManager {
         contentValues.put(DatabaseHelper.CUSTOMEVENT_ENDTIME, customEvent.getEventEndTime());
         contentValues.put(DatabaseHelper.CUSTOMEVENT_REPEAT, customEvent.getEvenetRepeat());
         contentValues.put(DatabaseHelper.CUSTOMEVENT_REMAINDER, customEvent.getEventReminder());
-        database.insert(TABLE_CUSTOMEVENT,null,contentValues);
+        database.insert(TABLE_CUSTOMEVENT, null, contentValues);
     }
 
-    public List<TimetableEvent> getAllTimetableEvent(){
+    public List<TimetableEvent> getAllTimetableEvent() {
         List<TimetableEvent> timetableEvents = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_TIMETABLEEVENT;
 
 
         Cursor cursor = database.rawQuery(selectQuery, null);
 
-        if(cursor.moveToFirst()) {
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 TimetableEvent timetableEvent = new TimetableEvent();
                 timetableEvent.setId(cursor.getInt(0));
                 timetableEvent.setTimetableEventDate(cursor.getLong(1));
@@ -91,13 +91,19 @@ public class DatabaseManager {
         return timetableEvents;
     }
 
-    public List<CustomEvent> getAllCustomEvent(){
+    public void getAllSubjects() {
+        String selectQuery = "SELECT * FROM subjects";
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        Log.i("TAG", "getAllSubjects: macska");
+    }
+
+    public List<CustomEvent> getAllCustomEvent() {
         List<CustomEvent> customEvents = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_CUSTOMEVENT;
 
-        Cursor cursor = database.rawQuery(selectQuery,null);
+        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             do {
                 CustomEvent customEvent = new CustomEvent();
                 customEvent.setUuid(cursor.getString(0));
@@ -124,10 +130,10 @@ public class DatabaseManager {
 
         String selectQuery = "SELECT * FROM " + TABLE_TIMETABLEEVENT + " WHERE " + TIMETABLEEVENT_DATE + " = " + selectedDate;
 
-        Cursor cursor = database.rawQuery(selectQuery,null);
+        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        if(cursor.moveToFirst()) {
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 TimetableEvent timetableEvent = new TimetableEvent();
                 timetableEvent.setId(cursor.getInt(0));
                 timetableEvent.setTimetableEventDate(cursor.getLong(1));
@@ -142,6 +148,6 @@ public class DatabaseManager {
             cursor.close();
         }
 
-        return  resultTimetableEvents;
+        return resultTimetableEvents;
     }
 }
