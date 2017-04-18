@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
@@ -18,9 +20,11 @@ import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.FromToDatesInLong;
 
 import static hu.unideb.smartcampus.activity.MainActivity_SmartCampus.CURRENT_TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_FROM_UNTIL_DATES;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SELECTED_OFFICE_HOUR_ID;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.EXTRA_FROM_UNTIL_DATES;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.OFFICE_HOURS_TAG;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.SELECTED_INSTRUCTOR_NAME;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.SELECTED_OFFICE_HOUR_ID;
 
 /**
  * This is where the user will reserve the selected office hour.
@@ -30,54 +34,87 @@ import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHou
 
 public class OfficeHourReserveFragment extends Fragment implements OnBackPressedListener {
 
-    Long selectedOfficeHourId;
+    //Long ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.activity_reserve_consultation, container, false);
-        selectedOfficeHourId = getArguments().getLong(SELECTED_OFFICE_HOUR_ID);
+        View view = inflater.inflate(R.layout.activity_reserve_office_hour, container, false);
+        Long selectedOfficeHourId = getArguments().getLong(SELECTED_OFFICE_HOUR_ID);
         FromToDatesInLong fromUntilDates = getArguments().getParcelable(EXTRA_FROM_UNTIL_DATES);
+        Long reservedSum = getArguments().getLong(SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM);
+        String teacherName = getArguments().getString(SELECTED_INSTRUCTOR_NAME);
+        TextView fromUntilDatesTextView = (TextView) view.findViewById(R.id.selected_office_hours_editText);
 
         //Show selected office hour times
-        TextView fromUntilDatesTextView = (TextView) view.findViewById(R.id.selected_consulting_hour_editText);
+        if (reservedSum != null) {
+            TextView reservedTextView = (TextView) view.findViewById(R.id.reserved_sum_textview);
+            String reservedSumString = reservedTextView.getText() + reservedSum.toString();
+            reservedTextView.setText(reservedSumString);
+        }
         if (fromUntilDates != null) {
+
+            Date d = new Date(fromUntilDates.getFrom());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+            String sDate = sdf.format(d);
+            StringBuilder builder = new StringBuilder();
+            builder.append(teacherName)
+                    .append("\n")
+                    .append(sDate).
+                    append(" ").
+                    append(DateFormat.getTimeInstance(DateFormat.SHORT).format(fromUntilDates.getFrom())).
+                    append("  -  ").
+                    append(DateFormat.getTimeInstance(DateFormat.SHORT).format(fromUntilDates.getTo()));
+            final String dateDisplayName = builder.toString();
+
             fromUntilDatesTextView.
-                    setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(fromUntilDates.getFrom())
-                            + "-"
-                            + DateFormat.getTimeInstance(DateFormat.SHORT).format(fromUntilDates.getTo()));
+                    setText(dateDisplayName);
         } else {
             throw new NullPointerException("getArguments().getParcelable(EXTRA_FROM_UNTIL_DATES) IS NULL");
         }
-        if (selectedOfficeHourId != null) {
 
+        Button reserveButton = (Button) view.findViewById(R.id.office_hours_reserve_button);
 
-            Button reserveButton = (Button) view.findViewById(R.id.consulting_hour_reserve_button);
-
-            reserveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TextView reasonView = (TextView) getView().findViewById(R.id.consulting_hours_reason_editText);
-                    if (reasonView == null) {
-                        throw new NullPointerException("reasonView is null");
-                    }
-                    TextView durationView = (TextView) getView().findViewById(R.id.consulting_hours_duration_editText);
-                    if (durationView == null) {
-                        throw new NullPointerException("durationView is null");
-                    }
-                    CalendarFragment fragment = new CalendarFragment();
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
-
-
+        reserveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView reasonView = (TextView) getView().findViewById(R.id.office_hours_reason_editText);
+                if (reasonView == null) {
+                    throw new NullPointerException("reasonView is null");
                 }
-            });
-        } else {
-            throw new NullPointerException("getArguments().getLong(SELECTED_OFFICE_HOUR_ID) IS NULL");
-        }
+                TextView durationView = (TextView) getView().findViewById(R.id.office_hours_duration_editText);
+                if (durationView == null) {
+                    throw new NullPointerException("durationView is null");
+                }
+                CalendarFragment fragment = new CalendarFragment();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+                fragmentTransaction.commitAllowingStateLoss();
+
+
+            }
+        });
+     /*     TextView reasonView = (TextView) view.findViewById(R.id.office_hours_reason_editText);
+        reasonView.setOnFocusChangeListener(new View.OnFocusChangeListener()
+
+      {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    getView().findViewById(R.id.office_hours_duration_editText).setVisibility(View.GONE);
+                    getView().findViewById(R.id.reserved_sum_textview).setVisibility(View.GONE);
+                    getView().findViewById(R.id.reserve_during_label).setVisibility(View.GONE);
+                }
+                else {
+                    getView().findViewById(R.id.office_hours_duration_editText).setVisibility(View.VISIBLE);
+                    getView().findViewById(R.id.reserved_sum_textview).setVisibility(View.VISIBLE);
+                    getView().findViewById(R.id.reserve_during_label).setVisibility(View.VISIBLE);
+                }
+            }
+        });
+*/
         return view;
     }
 

@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jxmpp.stringprep.XmppStringprepException;
 
@@ -21,9 +20,9 @@ import java.util.concurrent.TimeoutException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
-import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
 import hu.unideb.smartcampus.main.activity.login.auth.BasicAuth;
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
+import hu.unideb.smartcampus.sqlite.manager.DatabaseManager;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
@@ -86,6 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                 fragmentTransaction.commitAllowingStateLoss();
                 Toast.makeText(getApplicationContext(), R.string.login_succes, Toast.LENGTH_SHORT).show();
 
+
+                DatabaseManager databaseManager = new DatabaseManager(getApplicationContext());
+                databaseManager.open();
+
                 final ActualUserInfo finalActualUserInfo = actualUserInfo;
                 new Thread(new Runnable() {
                     public void run() {
@@ -93,8 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             config = BOSHConfiguration.builder()
                                     .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
-                                   // .setUsernameAndPassword("holi60", "758c8a8d-c549-40e9-acb2-6dc97cd0c00f")
-                                    //.setUsernameAndPassword("testuser", "admin")
 
                                     .setXmppDomain(HOSTNAME)
                                     .setHost(HOSTNAME)
@@ -113,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
-            }
+    }
 
     public void loginOnClick(View v) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

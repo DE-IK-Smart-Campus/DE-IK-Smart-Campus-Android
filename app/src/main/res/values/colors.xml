@@ -6,4 +6,5 @@
     <color name="colorAccent">#52baf9</color>
     <color name="selection_navigation_view">#ffff</color>
     <color name="backgroundColor">#3ca2e0</color>
+    <color name="veryLightBackgroundColor">#143ca2e0</color>
 </resources>

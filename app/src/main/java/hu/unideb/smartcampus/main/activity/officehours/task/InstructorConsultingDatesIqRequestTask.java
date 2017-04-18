@@ -26,12 +26,14 @@ import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 public class InstructorConsultingDatesIqRequestTask extends AsyncTask<HashMap<String, String>, Integer, Instructor> {
 
 
+    public static final String INSTRUCTOR_ID = "INSTRUCTOR_ID";
+
     @Override
     protected Instructor doInBackground(HashMap<String, String>... params) {
         try {
             InstructorConsultingDatesIqRequest iq = new InstructorConsultingDatesIqRequest();
 
-            iq.setInstructorId(params[0].get("INSTRUCTOR_ID"));
+            iq.setInstructorId(params[0].get(INSTRUCTOR_ID));
             iq.setType(IQ.Type.get);
             iq.setTo(JidCreate.from(ADMINJID));
 

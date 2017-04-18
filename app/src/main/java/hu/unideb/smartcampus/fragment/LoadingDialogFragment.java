@@ -33,8 +33,7 @@ public class LoadingDialogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         nDialog.show();
-        View rootView = inflater.inflate(R.layout.fragment_dialog, container,
+        return inflater.inflate(R.layout.fragment_dialog, container,
                 false);
-        return rootView;
     }
 }

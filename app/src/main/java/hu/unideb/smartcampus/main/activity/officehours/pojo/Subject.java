@@ -18,6 +18,7 @@ import java.util.List;
 
 
 public class Subject implements Parcelable {
+    private Integer id;
     private String name;
     private List<Instructor> instructors;
 
@@ -71,6 +72,14 @@ public class Subject implements Parcelable {
 
     public void setInstructors(List<Instructor> instructors) {
         this.instructors = instructors;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
 

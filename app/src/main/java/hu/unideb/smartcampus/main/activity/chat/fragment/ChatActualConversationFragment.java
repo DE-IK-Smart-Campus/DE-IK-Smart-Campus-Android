@@ -123,7 +123,7 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
             @Override
             public void onClick(View v) {
                 EditText editText = (EditText) actualV.findViewById(chat_text_edit_text);
-                chatHistory.getChatConversationItems().add(new ChatConversationItem(Connection.getInstance().getActualUserJid(), editText.getText().toString()));
+                chatHistory.getChatConversationItems().add(new ChatConversationItem(Connection.getInstance().getXmppConnection().getUser(), editText.getText().toString()));
                 ListView listView = (ListView) actualV.findViewById(chat_actual_conversation_list_view);
                 listView.setAdapter(new ChatActualCoversationAdapter(chatHistory, partnerAvatarInBitmap, userAvatarInBitmap, getContext()));
                 listView.setSelection(chatHistory.getChatConversationItems().size() - 1);

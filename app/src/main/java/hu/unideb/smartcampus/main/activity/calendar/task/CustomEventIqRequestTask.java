@@ -6,17 +6,13 @@ import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.StanzaCollector;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.IQ;
-import org.jivesoftware.smack.util.CollectionUtil;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.HashMap;
 
 import hu.unideb.smartcampus.main.activity.calendar.converter.CustomEventConverter;
-import hu.unideb.smartcampus.main.activity.calendar.converter.TimetableEventConverter;
 import hu.unideb.smartcampus.main.activity.calendar.pojo.AskCustomEventPojo;
-import hu.unideb.smartcampus.main.activity.calendar.pojo.AskTimetableEventPojo;
-import hu.unideb.smartcampus.shared.iq.request.CalendarSubjectsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.ListCustomEventIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
@@ -30,7 +26,7 @@ public class CustomEventIqRequestTask extends AsyncTask<HashMap<String, String>,
         try {
 
             ListCustomEventIqRequest iq = new ListCustomEventIqRequest();
-            iq.setStudent(Connection.getInstance().getUserJID());
+            iq.setStudent(Connection.getInstance().getXmppConnection().getUser().getLocalpartOrThrow().toString());
             iq.setType(IQ.Type.get);
             iq.setTo(JidCreate.from(ADMINJID));
 

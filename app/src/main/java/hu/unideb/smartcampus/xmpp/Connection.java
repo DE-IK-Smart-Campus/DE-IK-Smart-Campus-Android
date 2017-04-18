@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
@@ -15,7 +16,6 @@ import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
-import org.jxmpp.jid.EntityFullJid;
 import org.jxmpp.jid.EntityJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
@@ -31,32 +31,26 @@ import hu.unideb.smartcampus.activity.MainActivity_SmartCampus;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.BasePojo;
 import hu.unideb.smartcampus.shared.iq.provider.AddCustomEventIqProvider;
-import hu.unideb.smartcampus.shared.iq.provider.CalendarSubjectsIqProvider;
-import hu.unideb.smartcampus.shared.iq.provider.DeleteCustomEventIqProvider;
-
 import hu.unideb.smartcampus.shared.iq.provider.AddMucChatIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.AddUserChatIqProvider;
-
+import hu.unideb.smartcampus.shared.iq.provider.CalendarSubjectsIqProvider;
+import hu.unideb.smartcampus.shared.iq.provider.DeleteCustomEventIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.InstructorConsultingDateIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.ListCustomEventIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.SubjectRequestIqProvider;
-
+import hu.unideb.smartcampus.shared.iq.provider.UserChatListIqProvider;
 import hu.unideb.smartcampus.shared.iq.request.AddCustomEventIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.AddMucChatIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.AddUserChatIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.BaseSmartCampusIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.CalendarSubjectsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.DeleteCustomEventIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.ListCustomEventIqRequest;
-
-import hu.unideb.smartcampus.shared.iq.provider.UserChatListIqProvider;
-import hu.unideb.smartcampus.shared.iq.request.AddMucChatIqRequest;
-import hu.unideb.smartcampus.shared.iq.request.AddUserChatIqRequest;
-import hu.unideb.smartcampus.shared.iq.request.BaseSmartCampusIqRequest;
-import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.ListUserChatsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.DIALOG_TAG;
 import static java.lang.Thread.sleep;
 
 /**
@@ -65,6 +59,7 @@ import static java.lang.Thread.sleep;
  */
 
 public class Connection {
+    public static final String CONNECTION_TAG = "Connection";
     private static Connection instance = null;
     private static Context actualContext;
     public static final String HTTP_BASIC_AUTH_PATH = "http://wt2.inf.unideb.hu/smartcampus-backend/integration/retrieveUserData";
@@ -73,7 +68,6 @@ public class Connection {
     public static EntityJid adminEntityJID;
 
     private BOSHConfiguration config;
-    private EntityFullJid actualUserJid;
     private XMPPBOSHConnection xmppConnection;
     private String userJID;
 
@@ -140,13 +134,13 @@ public class Connection {
             ProviderManager.addIQProvider(CalendarSubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new CalendarSubjectsIqProvider());
 
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(ListCustomEventIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(ListCustomEventIqRequest.ELEMENT,BaseSmartCampusIqRequest.BASE_NAMESPACE,new ListCustomEventIqProvider());
+            ProviderManager.addIQProvider(ListCustomEventIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new ListCustomEventIqProvider());
 
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddCustomEventIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(AddCustomEventIqRequest.ELEMENT,BaseSmartCampusIqRequest.BASE_NAMESPACE,new AddCustomEventIqProvider());
+            ProviderManager.addIQProvider(AddCustomEventIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new AddCustomEventIqProvider());
 
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(DeleteCustomEventIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(DeleteCustomEventIqRequest.ELEMENT,BaseSmartCampusIqRequest.BASE_NAMESPACE, new DeleteCustomEventIqProvider());
+            ProviderManager.addIQProvider(DeleteCustomEventIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new DeleteCustomEventIqProvider());
 
 
             ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddMucChatIqRequest.ELEMENT);
@@ -169,9 +163,7 @@ public class Connection {
     }
 
 
-//// TODO: 2017. 03. 28. We need an unbreakable dialog
-
-    public FragmentManager createLoadingDialog(FragmentManager fragmentManager, Bundle bundle) {
+    public FragmentManager createLoadingDialogFragment(FragmentManager fragmentManager, Bundle bundle) {
         LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -180,7 +172,6 @@ public class Connection {
             fragmentTransaction.commitNow();
         } else {
             loadingDialogFragment = new LoadingDialogFragment();
-
         }
 
         if (bundle == null) {
@@ -198,14 +189,14 @@ public class Connection {
         fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOG_TAG);
         fragmentTransaction.addToBackStack(DIALOG_TAG);
         fragmentTransaction.commit();
+        Log.i(CONNECTION_TAG, "createLoadingDialogFragment: Replaced!");
         return fragmentManager;
     }
 
     public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P extends BasePojo>
-    P createLoadingDialog(T asyncIqTask, FragmentManager fragmentManager, HashMap<String, String> params) throws ExecutionException, InterruptedException {
+    P runAsyncTask(T asyncIqTask, HashMap<String, String> params) throws ExecutionException, InterruptedException {
 
         HashMap<String, String> asyncTaskParams = new HashMap<>();
-        asyncTaskParams.put("ADMINJID", "Connection.getInstance().getAdminEntityJID().toString()");
 
         for (Map.Entry<String, String> entry : params.entrySet()) {
             asyncTaskParams.put(entry.getKey(), entry.getValue());
@@ -220,27 +211,4 @@ public class Connection {
         return xmppConnection;
     }
 
-    public String getUserJID() {
-        return userJID;
-    }
-
-    public void setUserJID(String userJID) {
-        this.userJID = userJID;
-    }
-
-    public static String getADMINJID() {
-        return ADMINJID;
-    }
-
-    public EntityJid getAdminEntityJID() {
-        return adminEntityJID;
-    }
-
-    public EntityFullJid getActualUserJid() {
-        return actualUserJid;
-    }
-
-    public void setActualUserJid(EntityFullJid actualUserJid) {
-        this.actualUserJid = actualUserJid;
-    }
 }
