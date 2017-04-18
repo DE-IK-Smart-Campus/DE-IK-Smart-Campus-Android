@@ -19,9 +19,6 @@ import hu.unideb.smartcampus.main.activity.officehours.task.InstructorConsulting
 import hu.unideb.smartcampus.main.activity.officehours.task.SubjectsIqRequestTask;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_FROM_UNTIL_DATES;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SELECTED_OFFICE_HOUR_ID;
 import static hu.unideb.smartcampus.main.activity.officehours.task.InstructorConsultingDatesIqRequestTask.INSTRUCTOR_ID;
 import static hu.unideb.smartcampus.main.activity.officehours.task.SubjectsIqRequestTask.PARAM_ACTUAL_USER_JID;
 
@@ -31,6 +28,11 @@ import static hu.unideb.smartcampus.main.activity.officehours.task.SubjectsIqReq
 
 public class OfficeHourHandler {
 
+    public static final String SELECTED_OFFICE_HOUR_ID = "selectedOfficeHourId";
+    public static final String EXTRA_FROM_UNTIL_DATES = "EXTRA_FROM_UNTIL_DATES";
+    public static final String DIALOG_TAG = "DIALOG_TAG";
+    public static final String OFFICE_HOURS_TAG = "OFFICE_HOURS_TAG";
+    public static final String SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM = "SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM";
 
     public enum Status {
         ASKSUBJECTS,
@@ -100,6 +102,7 @@ public class OfficeHourHandler {
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_FROM_UNTIL_DATES, selectedOfficeHour.getFromToDates());
         bundle.putLong(SELECTED_OFFICE_HOUR_ID, selectedOfficeHour.getConsultingHourId());
+        bundle.putLong(SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM, selectedOfficeHour.getReservedSum());
         Fragment fragment = new OfficeHourReserveFragment();
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

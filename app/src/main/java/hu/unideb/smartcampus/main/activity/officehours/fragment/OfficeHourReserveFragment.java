@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
@@ -18,9 +20,10 @@ import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.FromToDatesInLong;
 
 import static hu.unideb.smartcampus.activity.MainActivity_SmartCampus.CURRENT_TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_FROM_UNTIL_DATES;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SELECTED_OFFICE_HOUR_ID;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.EXTRA_FROM_UNTIL_DATES;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.OFFICE_HOURS_TAG;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.SELECTED_OFFICE_HOUR_ID;
 
 /**
  * This is where the user will reserve the selected office hour.
@@ -35,20 +38,38 @@ public class OfficeHourReserveFragment extends Fragment implements OnBackPressed
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.activity_reserve_consultation, container, false);
+        View view = inflater.inflate(R.layout.activity_reserve_office_hour, container, false);
         selectedOfficeHourId = getArguments().getLong(SELECTED_OFFICE_HOUR_ID);
         FromToDatesInLong fromUntilDates = getArguments().getParcelable(EXTRA_FROM_UNTIL_DATES);
+        Long reservedSum = getArguments().getLong(SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM);
+        TextView fromUntilDatesTextView = (TextView) view.findViewById(R.id.selected_consulting_hour_editText);
 
         //Show selected office hour times
-        TextView fromUntilDatesTextView = (TextView) view.findViewById(R.id.selected_consulting_hour_editText);
+        if (reservedSum != null) {
+            TextView reservedTextView = (TextView) view.findViewById(R.id.reserved_sum_textview);
+            String reservedSumString = reservedTextView.getText() + reservedSum.toString();
+            reservedTextView.setText(reservedSumString);
+        }
         if (fromUntilDates != null) {
+
+            Date d = new Date(fromUntilDates.getFrom());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+            String sDate = sdf.format(d);
+            StringBuilder builder = new StringBuilder();
+            builder.append(sDate).
+                    append(" ").
+                    append(DateFormat.getTimeInstance(DateFormat.SHORT).format(fromUntilDates.getFrom())).
+                    append("  -  ").
+                    append(DateFormat.getTimeInstance(DateFormat.SHORT).format(fromUntilDates.getTo()));
+            final String dateDisplayName = builder.toString();
+
             fromUntilDatesTextView.
-                    setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(fromUntilDates.getFrom())
-                            + "-"
-                            + DateFormat.getTimeInstance(DateFormat.SHORT).format(fromUntilDates.getTo()));
+                    setText(dateDisplayName);
         } else {
             throw new NullPointerException("getArguments().getParcelable(EXTRA_FROM_UNTIL_DATES) IS NULL");
         }
+
+
         if (selectedOfficeHourId != null) {
 
 

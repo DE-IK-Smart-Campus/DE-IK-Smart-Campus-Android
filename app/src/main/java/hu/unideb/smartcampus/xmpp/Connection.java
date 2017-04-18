@@ -43,7 +43,7 @@ import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqReques
 import hu.unideb.smartcampus.shared.iq.request.ListUserChatsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.DIALOG_TAG;
 import static java.lang.Thread.sleep;
 
 /**

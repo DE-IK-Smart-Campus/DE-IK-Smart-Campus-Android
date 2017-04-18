@@ -22,7 +22,8 @@ import hu.unideb.smartcampus.main.activity.officehours.pojo.OfficeHour;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Subject;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.DIALOG_TAG;
+
 
 /**
  * One of the features in Smartcampus is the Office hours.
@@ -39,7 +40,7 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_consulting_hour, container, false);
+        View view = inflater.inflate(R.layout.fragment_office_hour, container, false);
 
         ExpandableListView expandableListViewList = (ExpandableListView) view.findViewById(R.id.consulting_hours_ExpandableListView);
 
