@@ -79,18 +79,27 @@ public class OfficeHourHandler {
         }
     }
 
-    public void askSubjects(FragmentManager fragmentManager) {
+    public void askSubjects(FragmentManager fragmentManager, final Context context) {
         try {
             isNetworkFinished = false;
-
-
-
             final Connection connection = Connection.getInstance();
             this.fragmentManager = fragmentManager;
             status = Status.ASKSUBJECTS;
             HashMap<String, String> param = new HashMap<>();
             param.put(PARAM_ACTUAL_USER_JID, connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
             askSubjectsPojo = connection.runAsyncTask(new SubjectsIqRequestTask(), param);
+
+         /*   new Thread(new Runnable() {
+                public void run() {
+                    DatabaseManager databaseManager = new DatabaseManager(context);
+                    databaseManager.open();
+                    databaseManager.setAllSubjectAndInstructor(askSubjectsPojo.getSubjects());
+                    databaseManager.close();
+                    Log.e("DatebaseThread", "run: Finished!!");
+                }
+            }).start();
+        */
+
             isNetworkFinished = true;
             changeToOfficeFragmentView(new Bundle());
         } catch (ExecutionException | InterruptedException e) {

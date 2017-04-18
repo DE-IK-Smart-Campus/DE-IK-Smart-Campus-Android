@@ -4,13 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import hu.unideb.smartcampus.xmpp.Connection;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_NAME = "smartcampus.db" + Connection.getInstance().getXmppConnection().getUser().getLocalpartOrThrow().toString();
+    private static final String DATABASE_NAME = "smartcampus.db";
 
     public static final String TABLE_TIMETABLEEVENT = "timetableevent";
     public static final String TABLE_CUSTOMEVENT = "customevent";
@@ -44,8 +42,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SUBJECT_ID_PK = "SUBJECTID";
 
     public static final String OFFICE_HOUR_ID_PK = "officehourid";
-    public static final String OFFICE_HOUR_FROM = "from";
-    public static final String OFFICE_HOUR_TO = "to";
+    public static final String OFFICE_HOUR_FROM = "officehourfrom";
+    public static final String OFFICE_HOUR_TO = "officehourto";
     public static final String OFFICE_HOUR_RESERVED_SUM = "reservedsum";
 
     public DatabaseHelper(Context context) {
@@ -57,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     private static final String CREATE_SUBJECTS_TABLE = "CREATE TABLE " + TABLE_SUBJECTS + "(" +
-            SUBJECT_ID_PK + " LONG PRIMARY KEY AUTOINCREMENT," +
+            SUBJECT_ID_PK + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             SUBJECTS_NAME_COL + " TEXT NOT NULL)";
 
     private static final String CREATE_INSTRUCTORS_TABLE = "CREATE TABLE " + TABLE_INSTRUCTORS + "(" +
@@ -67,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "FOREIGN KEY(" + SUBJECT_ID_PK + ") REFERENCES " + TABLE_SUBJECTS + "(" + SUBJECT_ID_PK + "))";
 
     private static final String CREATE_OFFICE_HOURS_TABLE = "CREATE TABLE " + TABLE_OFFICE_HOURS + "(" +
-            OFFICE_HOUR_ID_PK + " LONG PRIMARY NOT NULL," +
+            OFFICE_HOUR_ID_PK + " LONG PRIMARY KEY NOT NULL," +
             OFFICE_HOUR_FROM + " LONG NOT NULL," +
             OFFICE_HOUR_TO + " LONG NOT NULL," +
             OFFICE_HOUR_RESERVED_SUM + " LONG NOT NULL," +
@@ -78,9 +76,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_TIMETABLEEVENT_TABLE);
         sqLiteDatabase.execSQL(CREATE_CUSTOMEVENT_TABLE);
-        sqLiteDatabase.execSQL(CREATE_SUBJECTS_TABLE);
-        sqLiteDatabase.execSQL(CREATE_INSTRUCTORS_TABLE);
-        sqLiteDatabase.execSQL(CREATE_OFFICE_HOURS_TABLE);
+        //sqLiteDatabase.execSQL(CREATE_SUBJECTS_TABLE);
+        //sqLiteDatabase.execSQL(CREATE_INSTRUCTORS_TABLE);
+        //sqLiteDatabase.execSQL(CREATE_OFFICE_HOURS_TABLE);
     }
 
     @Override

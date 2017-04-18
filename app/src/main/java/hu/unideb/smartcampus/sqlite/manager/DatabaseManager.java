@@ -42,11 +42,12 @@ public class DatabaseManager {
         dbHelper.close();
     }
 
-    public void insertSubject(String subjectName) {
+    public long insertSubject(String subjectName) {
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.SUBJECTS_NAME_COL, subjectName);
-        sqLiteDatabase.insert(DatabaseHelper.TABLE_SUBJECTS, null, contentValues);
+        final long insert = sqLiteDatabase.insert(DatabaseHelper.TABLE_SUBJECTS, null, contentValues);
+        return insert;
     }
 
     public void insertInstructor(String subjectName, String instructorName) {
@@ -114,14 +115,15 @@ public class DatabaseManager {
     public void setAllSubjectAndInstructor(List<Subject> subjectList) {
         for (Subject subject : subjectList) {
             insertSubject(subject.getName());
+            final Integer subjectId = getSubjectByName(subject.getName());
             List<Instructor> instructorList = subject.getInstructors();
             for (Instructor instructor : instructorList) {
-                insertInstructor(subject.getId(), instructor);
+                insertInstructor(subjectId, instructor);
             }
         }
     }
 
-    private void insertInstructor(Long subjectId, Instructor instructor) {
+    private void insertInstructor(int subjectId, Instructor instructor) {
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.INSTRUCTOR_ID_PK, instructor.getInstructorId());
@@ -139,7 +141,7 @@ public class DatabaseManager {
         return allSubject;
     }
 
-    public List<Instructor> getInstructorsBySubjectId(Long subjectId) {
+    public List<Instructor> getInstructorsBySubjectId(Integer subjectId) {
         SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
         String[] cols = {
                 DatabaseHelper.INSTRUCTOR_ID_PK,
@@ -205,7 +207,7 @@ public class DatabaseManager {
         if (cursor.moveToFirst()) {
             do {
                 final Subject subject = new Subject();
-                subject.setId(cursor.getLong(0));
+                subject.setId(cursor.getInt(0));
                 subject.setName(cursor.getString(1));
                 subjectList.add(subject);
             } while (cursor.moveToNext());

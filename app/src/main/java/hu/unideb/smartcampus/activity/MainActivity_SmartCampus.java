@@ -144,16 +144,17 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     new Thread(new Runnable() {
                         public void run() {
                             OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
-                            officeHourHandler.askSubjects(getSupportFragmentManager());
+                            officeHourHandler.askSubjects(getSupportFragmentManager(), getApplicationContext());
                         }
                     }).start();
 
-                    new Thread(new Runnable() {
+                    /*new Thread(new Runnable() {
                         public void run() {
                             OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
-                            officeHourHandler.askSubjects(getSupportFragmentManager());
+                            officeHourHandler.askSubjectsFromDb(getSupportFragmentManager());
                         }
                     }).start();
+                    */
                     break;
                 case 4:
                     ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
