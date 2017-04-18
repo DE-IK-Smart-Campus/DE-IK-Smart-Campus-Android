@@ -25,13 +25,13 @@ import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 
 public class SubjectsIqRequestTask extends AsyncTask<HashMap<String, String>, Integer, AskSubjectsPojo> {
 
+    public static final String PARAM_ACTUAL_USER_JID = "ACTUAL_USER_JID";
 
     @Override
     protected AskSubjectsPojo doInBackground(HashMap<String, String>... params) {
         try {
             SubjectsIqRequest iq = new SubjectsIqRequest();
-            //iq.setStudent(params[0].get("ACTUAL_USER_JID"));
-            iq.setStudent("adamkai");
+            iq.setStudent(params[0].get(PARAM_ACTUAL_USER_JID));
             iq.setType(IQ.Type.get);
             iq.setTo(JidCreate.from(ADMINJID));
 

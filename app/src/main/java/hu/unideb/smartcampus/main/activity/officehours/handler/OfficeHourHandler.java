@@ -6,67 +6,87 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jivesoftware.smack.SmackException;
-
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.officehours.fragment.OfficeHourFragment;
+import hu.unideb.smartcampus.main.activity.officehours.fragment.OfficeHourReserveFragment;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsPojo;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.Instructor;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.OfficeHour;
+import hu.unideb.smartcampus.main.activity.officehours.task.InstructorConsultingDatesIqRequestTask;
 import hu.unideb.smartcampus.main.activity.officehours.task.SubjectsIqRequestTask;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTS;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_FROM_UNTIL_DATES;
 import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.STATUSOFCONSULTINGHOURS;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SELECTED_OFFICE_HOUR_ID;
+import static hu.unideb.smartcampus.main.activity.officehours.task.InstructorConsultingDatesIqRequestTask.INSTRUCTOR_ID;
+import static hu.unideb.smartcampus.main.activity.officehours.task.SubjectsIqRequestTask.PARAM_ACTUAL_USER_JID;
 
 /**
- * TODO REFACTOR
+ * This is the controller class for the OfficeFragment
  */
 
 public class OfficeHourHandler {
 
-    private AskSubjectsPojo askSubjectsPojo;
-    private FragmentManager fragmentManager;
-    private ObjectMapper objectMapper;
-    private Context context;
 
-    public OfficeHourHandler(FragmentManager fragmentManager, Context context) throws SmackException.NotConnectedException, InterruptedException {
-        super();
-        this.context = context;
-        this.askSubjectsPojo = new AskSubjectsPojo();
-        this.objectMapper = new ObjectMapper();
-        this.fragmentManager = fragmentManager;
+    public enum Status {
+        ASKSUBJECTS,
+        ASKINSTRUCTOROFFICEHOURS,
     }
 
-    public void sendDefaultMsg() {
+    private Status status;
+
+    private AskSubjectsPojo askSubjectsPojo;
+    private FragmentManager fragmentManager;
+    private Instructor selectedInstructor;
+    private Context context;
+
+    static OfficeHourHandler instance;
+
+    public static OfficeHourHandler getInstance() {
+        if (instance == null) {
+            instance = new OfficeHourHandler();
+        }
+        return instance;
+    }
+
+    public OfficeHourHandler() {
+        status = Status.ASKSUBJECTS;
+    }
+
+    public void askSubjects(FragmentManager fragmentManager) {
         try {
-         //   fragmentManager = Connection.getInstance().createLoadingDialog(fragmentManager, new Bundle());
+            final Connection connection = Connection.getInstance();
+            this.fragmentManager = fragmentManager;
+            status = Status.ASKSUBJECTS;
             HashMap<String, String> param = new HashMap<>();
-            AskSubjectsPojo askSubjectsPojo = Connection.getInstance().createLoadingDialog(new SubjectsIqRequestTask(), fragmentManager, param);
-
-            Bundle bundle = new Bundle();
-            bundle.putString(STATUSOFCONSULTINGHOURS, ASKSUBJECTS);
-            bundle.putParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsPojo);
-            changeToOfficeFragmentView(bundle);
-
-            //TODO LOADING DIALOG
-            //LoadingDialogFragment fragmentByTag = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
-            //fragmentByTag.nDialog.dismiss();
-
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+            param.put(PARAM_ACTUAL_USER_JID, connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
+            askSubjectsPojo = connection.runAsyncTask(new SubjectsIqRequestTask(), param);
+            changeToOfficeFragmentView(new Bundle());
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    public void askInstructorOfficehours(FragmentManager fragmentManager, Instructor selectedInstructor) {
+        HashMap<String, String> params = new HashMap<>();
+        final String selectedInstructorId = selectedInstructor.getInstructorId().toString();
+        params.put(INSTRUCTOR_ID, selectedInstructorId);
+        try {
+            this.selectedInstructor = Connection.getInstance().runAsyncTask(new InstructorConsultingDatesIqRequestTask(), params);
+            this.selectedInstructor.setName(selectedInstructor.getName());
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        this.fragmentManager = fragmentManager;
+        status = Status.ASKINSTRUCTOROFFICEHOURS;
+        changeToOfficeFragmentView(new Bundle());
+    }
 
-    private void changeToOfficeFragmentView(Bundle bundle) {
+    public void changeToOfficeFragmentView(Bundle bundle) {
         Fragment fragment = new OfficeHourFragment();
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -76,5 +96,45 @@ public class OfficeHourHandler {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
+    public void changeToOfficeReserveActivity(OfficeHour selectedOfficeHour) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(EXTRA_FROM_UNTIL_DATES, selectedOfficeHour.getFromToDates());
+        bundle.putLong(SELECTED_OFFICE_HOUR_ID, selectedOfficeHour.getConsultingHourId());
+        Fragment fragment = new OfficeHourReserveFragment();
+        fragment.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame, fragment, OFFICE_HOURS_TAG);
+        fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    public void onBackPressed() {
+        status = Status.ASKSUBJECTS;
+    }
+
+    public Instructor getSelectedInstructor() {
+        return selectedInstructor;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public AskSubjectsPojo getAskSubjectsPojo() {
+        return askSubjectsPojo;
+    }
+
+    public FragmentManager getFragmentManager() {
+        return fragmentManager;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 }
 

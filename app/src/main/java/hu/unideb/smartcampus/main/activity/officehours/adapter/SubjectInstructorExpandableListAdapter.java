@@ -1,7 +1,6 @@
 package hu.unideb.smartcampus.main.activity.officehours.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +67,6 @@ public class SubjectInstructorExpandableListAdapter extends BaseExpandableListAd
         }
         TextView classTextView = (TextView) view
                 .findViewById(R.id.classListId);
-//        classTextView.setTypeface(null, Typeface.BOLD);
         classTextView.setText(headerTitle);
 
         return view;

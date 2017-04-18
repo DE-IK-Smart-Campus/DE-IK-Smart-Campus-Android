@@ -152,7 +152,7 @@ public class ChatMainMenuFragment extends Fragment implements OnBackPressedListe
         //UserChatListIqProvider
         //ListUserChatsIqRequest listUserChatsIqRequest = new ();
         try {
-            final ListUserChatsIqRequestPojo listUserChatsIqRequestPojo = connection.createLoadingDialog(new ListUserChatsIqRequestTask(), getFragmentManager(), param);
+            final ListUserChatsIqRequestPojo listUserChatsIqRequestPojo = connection.runAsyncTask(new ListUserChatsIqRequestTask(), param);
 
             for (String userJidInString : listUserChatsIqRequestPojo.getChatList()) {
                 twoUserChatJids.add(JidCreate.entityBareFrom(userJidInString));

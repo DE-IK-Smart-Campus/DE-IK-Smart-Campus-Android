@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
@@ -51,6 +52,7 @@ import static java.lang.Thread.sleep;
  */
 
 public class Connection {
+    public static final String CONNECTION_TAG = "Connection";
     private static Connection instance = null;
     private static Context actualContext;
     public static final String HTTP_BASIC_AUTH_PATH = "http://wt2.inf.unideb.hu/smartcampus-backend/integration/retrieveUserData";
@@ -139,9 +141,7 @@ public class Connection {
     }
 
 
-//// TODO: 2017. 03. 28. We need an unbreakable dialog
-
-    public FragmentManager createLoadingDialog(FragmentManager fragmentManager, Bundle bundle) {
+    public FragmentManager createLoadingDialogFragment(FragmentManager fragmentManager, Bundle bundle) {
         LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -150,7 +150,6 @@ public class Connection {
             fragmentTransaction.commitNow();
         } else {
             loadingDialogFragment = new LoadingDialogFragment();
-
         }
 
         if (bundle == null) {
@@ -168,14 +167,14 @@ public class Connection {
         fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOG_TAG);
         fragmentTransaction.addToBackStack(DIALOG_TAG);
         fragmentTransaction.commit();
+        Log.i(CONNECTION_TAG, "createLoadingDialogFragment: Replaced!");
         return fragmentManager;
     }
 
     public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P extends BasePojo>
-    P createLoadingDialog(T asyncIqTask, FragmentManager fragmentManager, HashMap<String, String> params) throws ExecutionException, InterruptedException {
+    P runAsyncTask(T asyncIqTask, HashMap<String, String> params) throws ExecutionException, InterruptedException {
 
         HashMap<String, String> asyncTaskParams = new HashMap<>();
-        asyncTaskParams.put("ADMINJID", "Connection.getInstance().getAdminEntityJID().toString()");
 
         for (Map.Entry<String, String> entry : params.entrySet()) {
             asyncTaskParams.put(entry.getKey(), entry.getValue());

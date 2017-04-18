@@ -2,54 +2,37 @@ package hu.unideb.smartcampus.main.activity.officehours.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.officehours.adapter.InstructorOfficeHourExpandableListAdapter;
 import hu.unideb.smartcampus.main.activity.officehours.adapter.SubjectInstructorExpandableListAdapter;
+import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.AskSubjectsPojo;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Instructor;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.OfficeHour;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.Subject;
-import hu.unideb.smartcampus.main.activity.officehours.task.InstructorConsultingDatesIqRequestTask;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static android.content.ContentValues.TAG;
-import static hu.unideb.smartcampus.activity.MainActivity_SmartCampus.CURRENT_TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKINSTRUCTOR;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.ASKSUBJECTS;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.EXTRA_FROM_UNTIL_DATES;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.INSTRUCTORPOS;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.OFFICE_HOURS_TAG;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SELECTED_OFFICE_HOUR_ID;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.STATUSOFCONSULTINGHOURS;
-import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.SUBJECTPOS;
+import static hu.unideb.smartcampus.main.activity.officehours.constant.OfficeHourConstant.DIALOG_TAG;
 
 /**
- * One of the main fatures for Smart campus is the Office hours.
- * This class responsible for showing view
- *
- * //TODO LOADING DIALOG
- *
+ * One of the features in Smartcampus is the Office hours.
+ * This class responsible for showing view and OfficeHourHandler is the controller.
  */
 public class OfficeHourFragment extends Fragment implements OnBackPressedListener {
 
     /**
-     * Will create view for OfficeHourFragment witch depends on the STATUSOFCONSULTINGHOURS.
+     * Will create view for OfficeHourFragment witch depends on the OfficeHourHandler.Status.
+     * There's two status ASKSUBJECTS , ASKINSTRUCTOROFFICEHOURS:
      *
      * @see hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler
      */
@@ -60,35 +43,27 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
 
         ExpandableListView expandableListViewList = (ExpandableListView) view.findViewById(R.id.consulting_hours_ExpandableListView);
 
-        if (StringUtils.equals(getArguments().getString(STATUSOFCONSULTINGHOURS), ASKSUBJECTS)) {
-            AskSubjectsPojo askSubjectsPojo = getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO);
-            final ExpandableListAdapter ClassChildTeacherListAdapter;
-            if (askSubjectsPojo != null) {
-                ClassChildTeacherListAdapter = new SubjectInstructorExpandableListAdapter(getContext(), askSubjectsPojo.getSubjects());
-                expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
-                expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskSubjects());
-            } else {
-                throw new NullPointerException("getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO IS NULL");
-            }
+        final OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+
+        if (officeHourHandler.getStatus().equals(OfficeHourHandler.Status.ASKSUBJECTS)) {
+            AskSubjectsPojo askSubjectsPojo = officeHourHandler.getAskSubjectsPojo();
+            final ExpandableListAdapter ClassChildTeacherListAdapter =
+                    new SubjectInstructorExpandableListAdapter(getContext(), askSubjectsPojo.getSubjects());
+            expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
+            expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskSubjects());
         }
 
-        if (StringUtils.equals(getArguments().getString(STATUSOFCONSULTINGHOURS), ASKINSTRUCTOR)) {
-            AskSubjectsPojo askSubjectsPojo = getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO);
-            int instructorPos = getArguments().getInt(INSTRUCTORPOS);
-            int subjectPos = getArguments().getInt(SUBJECTPOS);
+        if (officeHourHandler.getStatus().equals(OfficeHourHandler.Status.ASKINSTRUCTOROFFICEHOURS)) {
             final ExpandableListAdapter ClassChildTeacherListAdapter;
-            if (askSubjectsPojo != null) {
-                ClassChildTeacherListAdapter = new InstructorOfficeHourExpandableListAdapter(getContext(),
-                        Collections.singletonList(
-                                askSubjectsPojo.getSubjects().get(subjectPos).getInstructors().get(instructorPos)));
-
-                expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
-                expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
-                expandableListViewList.expandGroup(0);
-            } else {
-                throw new NullPointerException("getArguments().getParcelable(EXTRA_ASK_SUBJECTS_PROCESS_MESSAGE_POJO) IS NULL");
-            }
+            ClassChildTeacherListAdapter = new InstructorOfficeHourExpandableListAdapter(getContext(),
+                    Collections.singletonList(
+                            officeHourHandler.getSelectedInstructor()));
+            expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
+            expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
+            expandableListViewList.expandGroup(0);
         }
+        LoadingDialogFragment fragmentByTag = (LoadingDialogFragment) getFragmentManager().findFragmentByTag(DIALOG_TAG);
+        fragmentByTag.nDialog.dismiss();
         return view;
     }
 
@@ -98,32 +73,16 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
     private class OnChildClickListenerOnStatusAskSubjects implements ExpandableListView.OnChildClickListener {
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            Bundle bundle = new Bundle();
-            bundle.putString(STATUSOFCONSULTINGHOURS, ASKINSTRUCTOR);
-            Subject parentListAdapterGroup = (Subject) parent.getExpandableListAdapter().getGroup(groupPosition);
-            bundle.putInt(INSTRUCTORPOS, childPosition);
-            bundle.putInt(SUBJECTPOS, groupPosition);
-            HashMap<String, String> params = new HashMap<>();
-            final Instructor selectedInstructor = parentListAdapterGroup.getInstructors().get(childPosition);
-            params.put("INSTRUCTOR_ID", selectedInstructor.getInstructorId().toString());
-            Instructor instructor = null;
-            try {
-                instructor = Connection.getInstance().createLoadingDialog(new InstructorConsultingDatesIqRequestTask(), getFragmentManager(), params);
-                instructor.setName(selectedInstructor.getName());
-                Log.e(TAG, "onChildClick: " + instructor);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            ExpandableListAdapter listAdapter = new InstructorOfficeHourExpandableListAdapter(getContext(),
-                    Collections.singletonList(instructor));
-            parent.setAdapter(listAdapter);
-            parent.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
-            parent.expandGroup(0);
 
-//            fragmentByTag.nDialog.dismiss();
-
+            Connection.getInstance().createLoadingDialogFragment(getFragmentManager(), new Bundle());
+            final Subject parentListAdapterGroup = (Subject) parent.getExpandableListAdapter().getGroup(groupPosition);
+            final int childPositionToNewThread = childPosition;
+            new Thread(new Runnable() {
+                public void run() {
+                    final OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+                    officeHourHandler.askInstructorOfficehours(getFragmentManager(), parentListAdapterGroup.getInstructors().get(childPositionToNewThread));
+                }
+            }).start();
             return true;
         }
     }
@@ -135,35 +94,22 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
 
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            Instructor parentListAdapterGroup = (Instructor) parent.getExpandableListAdapter().getGroup(groupPosition);
-            final OfficeHour officeHour = parentListAdapterGroup.getOfficeHourList().get(childPosition);
-
-            //We add the information insted of a new one, so the reserver can use onBack without a problem
-            //Bundle bundle = new Bundle();
-            Bundle bundle = getArguments();
-            bundle.putParcelable(EXTRA_FROM_UNTIL_DATES, officeHour.getFromToDates());
-            bundle.putLong(SELECTED_OFFICE_HOUR_ID, officeHour.getConsultingHourId());
-            Fragment fragment = new OfficeHourReserveFragment();
-            fragment.setArguments(bundle);
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, OFFICE_HOURS_TAG);
-            fragmentTransaction.commitAllowingStateLoss();
+            final OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+            Instructor selectedInstructor = (Instructor) parent.getExpandableListAdapter().getGroup(groupPosition);
+            final OfficeHour selectedOfficeHour = selectedInstructor.getOfficeHourList().get(childPosition);
+            officeHourHandler.changeToOfficeReserveActivity(selectedOfficeHour);
             return true;
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (StringUtils.equals(getArguments().getString(STATUSOFCONSULTINGHOURS), ASKSUBJECTS)) {
-            Fragment fragment = new OfficeHourFragment();
-            fragment.setArguments(getArguments());
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-            fragmentTransaction.commitAllowingStateLoss();
+        final OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+        if (officeHourHandler.getStatus().equals(OfficeHourHandler.Status.ASKINSTRUCTOROFFICEHOURS)) {
+            officeHourHandler.onBackPressed();
+            officeHourHandler.changeToOfficeFragmentView(new Bundle());
         }
     }
+
+
 }

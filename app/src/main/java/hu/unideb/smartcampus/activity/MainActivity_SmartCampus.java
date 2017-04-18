@@ -20,8 +20,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.jivesoftware.smack.SmackException;
-
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
@@ -33,9 +31,10 @@ import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 import hu.unideb.smartcampus.scheduler.LocationAlarmReceiver;
+import hu.unideb.smartcampus.xmpp.Connection;
 
 
-public class MainActivity_SmartCampus extends AppCompatActivity{
+public class MainActivity_SmartCampus extends AppCompatActivity {
 
     LocationAlarmReceiver locationAlarmReceiver = new LocationAlarmReceiver();
 
@@ -58,8 +57,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
-        {
+        if (!(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             Log.i(TAG_HOME, "onCreate: Setalarm");
             locationAlarmReceiver.setAlarm(this);
         }
@@ -105,63 +103,68 @@ public class MainActivity_SmartCampus extends AppCompatActivity{
     }
 
     private void setListenerForSelectedMenu() {
-        try {
 
 
-            switch (navItemIndex) {
+        switch (navItemIndex) {
 
-                case 0:
-                    HomeFragment homeFragment = new HomeFragment();
-                    break;
-                case 1:
-                    CalendarFragment fragment = new CalendarFragment();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
-                    //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
-                    break;
-                case 2:
-                    AttendanceFragment fragment1 = new AttendanceFragment();
-                    FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction1.replace(R.id.frame, fragment1, CURRENT_TAG);
-                    fragmentTransaction1.commitAllowingStateLoss();
-                    //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
-                    break;
-                case 3:
-                    OfficeHourHandler officeHour = new OfficeHourHandler(getSupportFragmentManager(), getApplicationContext());
-                    officeHour.sendDefaultMsg();
+            case 0:
+                HomeFragment homeFragment = new HomeFragment();
+                break;
+            case 1:
+                CalendarFragment fragment = new CalendarFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+                fragmentTransaction.commitAllowingStateLoss();
+                //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
+                break;
+            case 2:
+                AttendanceFragment fragment1 = new AttendanceFragment();
+                FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction1.replace(R.id.frame, fragment1, CURRENT_TAG);
+                fragmentTransaction1.commitAllowingStateLoss();
+                //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
+                break;
+            case 3:
 
-                    break;
+                Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
 
 
-                case 4:
-                    ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, chatFragment, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
-                    //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
-                    break;
-                case 5:
-                    AboutUsFragment aboutUsFragment = new AboutUsFragment();
-                    FragmentTransaction fragmentTransactiona = getSupportFragmentManager().beginTransaction();
-                    fragmentTransactiona.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransactiona.replace(R.id.frame, aboutUsFragment, CURRENT_TAG);
-                    fragmentTransactiona.commitAllowingStateLoss();
-                    break;
-                default:
-                    break;
-            }
+                new Thread(new Runnable() {
+                    public void run() {
+                        OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+                        officeHourHandler.askSubjects(getSupportFragmentManager());
+                    }
+                }).start();
 
-        } catch (SmackException.NotConnectedException | InterruptedException e) {
-            e.printStackTrace();
+
+                break;
+
+
+            case 4:
+                ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, chatFragment, CURRENT_TAG);
+                fragmentTransaction.commitAllowingStateLoss();
+                //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
+                break;
+            case 5:
+                AboutUsFragment aboutUsFragment = new AboutUsFragment();
+                FragmentTransaction fragmentTransactiona = getSupportFragmentManager().beginTransaction();
+                fragmentTransactiona.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransactiona.replace(R.id.frame, aboutUsFragment, CURRENT_TAG);
+                fragmentTransactiona.commitAllowingStateLoss();
+                break;
+            default:
+                break;
         }
+
     }
 
     private void setToolbarTitle() {
