@@ -1,18 +1,48 @@
 <resources>
     <string name="app_name">SmartCampus</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="openDrawer">open_drawer</string>
-    <string name="closeDrawer">close_drawer</string>
-
+    <string name="usernamehint">felhasználónév</string>
+    <string name="passwordHint">jelszó</string>
+    <string name="loginButtonText">Bejelentkezés</string>
+    <string name="usernamePasswordNeed">Felhasználónév vagy jelszó megadása kötelező!</string>
+    <string name="login_try_again">Lassú kapcsolat vagy a szolgáltatás nem elérhető, próbáld újra!</string>
+    <string name="login_failed">Nem sikerült bejeletkezni!</string>
+    <string name="login_succes">"Sikeresen bejeletkezve!"</string>
+    <string name="aboutUs">Rólunk</string>
     <string name="nav_home_name">Kezdőképernyő</string>
     <string name="nav_calendar_name">Naptár</string>
     <string name="nav_classAttendence_name">Órai jelenlét</string>
     <string name="nav_consultingHours_name">Fogadóórák</string>
     <string name="nav_chat_name">Beszélgetés</string>
     <string name="nav_about_us_name">Rólunk</string>
+    <string name="cancelButtonText">Mégse</string>
+    <string name="saveButtonText">Mentés</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">drawer_close</string>
     <string name="new_event_add">Új Esemény</string>
+    <string name="eventNameHint">Esemény neve</string>
+    <string name="eventDescriptionHint">Esemény leírása</string>
+    <string name="allDayEventText">Egész napos esemény</string>
+    <string name="textViewStart">Kezdet:</string>
+    <string name="textViewEnd">Befejezés:</string>
+    <string name="remainderText">Emlékeztető</string>
+    <string name="placeHint">hely</string>
+    <string name="eventDetails">Esemény részletező</string>
+    <string name="event_delete">Esemény törlése</string>
+    <string name="reserveButtonText">Foglalás</string>
+    <string name="reason">Oka:</string>
+    <string name="howLong">Meddig</string>
+    <string name="event_edit">Esemény szerkesztése</string>
+    <string name="editCustomEvent">Esemény szerkesztése</string>
+    <string name="sendButtonText">Küldés</string>
+    <string name="noEventThisDay">Nincs esemény</string>
+    <string name="repeatText">Ismétlődés</string>
+    <string name="loadingText">Betöltés..</string>
+    <string name="settingsTitle">Beállítások</string>
+    <string name="timetableTab">Órák</string>
+    <string name="customTab">Saját</string>
 
     <string-array name="nav_item_activity_titles">
         <item> Kezdőképernyő</item>
@@ -32,7 +62,6 @@
         <item>Évente</item>
     </string-array>
 
-    <string name="context_choice">Emlékezető</string>
     <string-array name="remainder_array_item">
         <item> 5 perc</item>
         <item>10 perc</item>
@@ -55,33 +84,13 @@
 
     <string name="other_name">Egyéb</string>
     <string name="activity_title_about_us">Rólunk</string>
-    <string name="usernamehint">felhasználónév</string>
-    <string name="passwordHint">jelszó</string>
-    <string name="loginButtonText">Bejelentkezés</string>
-    <string name="usernamePasswordNeed">Felhasználónév és jelszó megadása kötelező!</string>
-    <string name="usernamePasswordWrong">Felhasználónév vagy jelszó helytelen!</string>
-    <string name="login_succes">"Sikeresen bejeletkezve! "</string>
-    <string name="eventNameHint">Esemény neve</string>
-    <string name="eventDescriptionHint">Esemény leírása</string>
+    
     <string name="saveButton">Mentés</string>
-    <string name="allDayEventText">Egész napos esemény</string>
     <string name="date">Dátum:</string>
-    <string name="textViewStart">Kezdete:</string>
-    <string name="textViewEnd">Befejezés:</string>
-    <string name="remainderText">Emlékeztető</string>
-    <string name="repeatText">Ismétlődés</string>
-    <string name="placeHint">hely</string>
-    <string name="eventDetails">Esemény részletező</string>
-    <string name="event_edit">Esemény szerkesztése</string>
-    <string name="event_delete">Esemény törlése</string>
     <string name="textEventName">Esemény neve:</string>
     <string name="textEventDescription">Esemény leírása:</string>
     <string name="textEventEdit">Esemény Szerkesztése:</string>
     <string name="notEditEventText">Nem történt módosítás!</string>
-    <string name="noEventThisDay">Nincs esemény</string>
-
-    <string name="login_try_again">Slow connection/or service not available , please try again</string>
-    <string name="login_failed">Login failed</string>
     <string name="chatMe">Én:</string>
     <string name="roomName">Szoba Név</string>
     <string name="sendChatMsg">Küldés</string>

@@ -11,7 +11,7 @@ import java.text.DateFormat;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.main.activity.calendar.sqllite.db.TimetableEvent;
+import hu.unideb.smartcampus.sqlite.model.TimetableEvent;
 
 public class TimetableEventListAdapter extends BaseAdapter {
 
@@ -42,18 +42,17 @@ public class TimetableEventListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.event_list_row, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.timetable_event_list_row, parent, false);
         }
 
-        TimetableEvent currentItem = (TimetableEvent) getItem(position);
+        TimetableEvent timetableEvent = (TimetableEvent) getItem(position);
+
 
         TextView event_name_and_start_time = (TextView) convertView.findViewById(R.id.event_name_and_start_time);
         TextView place = (TextView) convertView.findViewById(R.id.place);
 
-        String t = currentItem.getTimetableEventDate().toString();
-
-        event_name_and_start_time.setText(currentItem.getTimetableEventName() + " : " + DateFormat.getTimeInstance(DateFormat.SHORT).format(currentItem.getTimetableEventStartTime()) + " - " + DateFormat.getTimeInstance(DateFormat.SHORT).format(currentItem.getTimetableEventEndTime()));
-        place.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(Long.parseLong(t)));
+        event_name_and_start_time.setText(timetableEvent.getTimetableEventName() + " : " + DateFormat.getTimeInstance(DateFormat.SHORT).format(timetableEvent.getTimetableEventStartTime()) + " - " + DateFormat.getTimeInstance(DateFormat.SHORT).format(timetableEvent.getTimetableEventEndTime()));
+        place.setText(timetableEvent.getTimetableEventPlace());
 
         return convertView;
     }

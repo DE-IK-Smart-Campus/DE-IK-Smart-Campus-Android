@@ -2,10 +2,10 @@ package hu.unideb.smartcampus.activity;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -20,15 +20,17 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.jivesoftware.smack.SmackException;
+
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
-import hu.unideb.smartcampus.fragment.HomeFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
-import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
+import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
 import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
+import hu.unideb.smartcampus.main.activity.home.fragment.HomeFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 import hu.unideb.smartcampus.scheduler.LocationAlarmReceiver;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -103,72 +105,78 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     }
 
     private void setListenerForSelectedMenu() {
+        try {
+            FragmentTransaction fragmentTransaction;
+            switch (navItemIndex) {
 
+                case 0:
+                    HomeFragment homeFragment = new HomeFragment();
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.frame, homeFragment, CURRENT_TAG);
+                    fragmentTransaction.commitAllowingStateLoss();
+                    break;
+                case 1:
 
-        switch (navItemIndex) {
+//                    CalendarFragment fragment = new CalendarFragment();
+//                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+//                            android.R.anim.fade_out);
+//                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+//                    fragmentTransaction.commitAllowingStateLoss();
+//                    CustomEventHandler customEventHandler = new CustomEventHandler(getSupportFragmentManager(), getApplicationContext());
+//                    customEventHandler.sendDefaultMesg1();
+                    TimetableEventHandler timetableEventHandler = new TimetableEventHandler(getSupportFragmentManager(), getApplicationContext());
+                    timetableEventHandler.sendDefaultMesg();
+                    break;
+                case 2:
+                    AttendanceFragment fragment1 = new AttendanceFragment();
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.frame, fragment1, CURRENT_TAG);
+                    fragmentTransaction.commitAllowingStateLoss();
+                    break;
+                case 3:
+                    Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
 
-            case 0:
-                HomeFragment homeFragment = new HomeFragment();
-                break;
-            case 1:
-                CalendarFragment fragment = new CalendarFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();
-                //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
-                break;
-            case 2:
-                AttendanceFragment fragment1 = new AttendanceFragment();
-                FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction1.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransaction1.replace(R.id.frame, fragment1, CURRENT_TAG);
-                fragmentTransaction1.commitAllowingStateLoss();
-                //adminChat.addMessageListener(new CalandarHandler(getSupportFragmentManager()));
-                break;
-            case 3:
+                    new Thread(new Runnable() {
+                        public void run() {
+                            OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+                            officeHourHandler.askSubjects(getSupportFragmentManager());
+                        }
+                    }).start();
 
-                Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
-                        officeHourHandler.askSubjects(getSupportFragmentManager());
-                    }
-                }).start();
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
-                        officeHourHandler.askSubjects(getSupportFragmentManager());
-                    }
-                }).start();
-
-
-                break;
-
-
-            case 4:
-                ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, chatFragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();
-                //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
-                break;
-            case 5:
-                AboutUsFragment aboutUsFragment = new AboutUsFragment();
-                FragmentTransaction fragmentTransactiona = getSupportFragmentManager().beginTransaction();
-                fragmentTransactiona.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransactiona.replace(R.id.frame, aboutUsFragment, CURRENT_TAG);
-                fragmentTransactiona.commitAllowingStateLoss();
-                break;
-            default:
-                break;
+                    new Thread(new Runnable() {
+                        public void run() {
+                            OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+                            officeHourHandler.askSubjects(getSupportFragmentManager());
+                        }
+                    }).start();
+                    break;
+                case 4:
+                    ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.frame, chatFragment, CURRENT_TAG);
+                    fragmentTransaction.commitAllowingStateLoss();
+                    //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
+                    break;
+                case 5:
+                    AboutUsFragment aboutUsFragment = new AboutUsFragment();
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                    fragmentTransaction.replace(R.id.frame, aboutUsFragment, CURRENT_TAG);
+                    fragmentTransaction.commitAllowingStateLoss();
+                    break;
+                default:
+                    break;
+            }
+        } catch (SmackException.NotConnectedException | InterruptedException e) {
+            e.printStackTrace();
         }
 
     }
@@ -188,7 +196,7 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
                     case R.id.home:
@@ -215,6 +223,10 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                         navItemIndex = 5;
                         CURRENT_TAG = TAG_ABOUT;
                         break;
+                    case R.id.settingsActivity:
+                        startActivity(new Intent(MainActivity_SmartCampus.this, SettingsActivity.class));
+                        drawer.closeDrawers();
+                        return true;
                     default:
                         navItemIndex = 0;
                 }
@@ -270,3 +282,4 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
         }
     }
 }
+

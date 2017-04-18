@@ -8,10 +8,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_weight="10"
         android:baselineAligned="false"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/chat_name"
@@ -31,25 +31,24 @@
             android:id="@+id/chat_actual_conversation_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@null"
-          />
+
+            android:divider="@null"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
         android:orientation="horizontal"
         android:weightSum="1">
 
         <EditText
             android:id="@+id/chat_text_edit_text"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.99"
             android:ems="10"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:layout_width="wrap_content" />
 
         <Button
             android:id="@+id/chat_send_button"
@@ -57,6 +56,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
             android:text="@string/sendChatMsg" />
+
     </LinearLayout>
 
 </LinearLayout>

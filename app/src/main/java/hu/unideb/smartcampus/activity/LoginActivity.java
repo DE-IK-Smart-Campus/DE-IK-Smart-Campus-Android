@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jxmpp.stringprep.XmppStringprepException;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeoutException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
+import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
 import hu.unideb.smartcampus.main.activity.login.auth.BasicAuth;
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -36,6 +38,23 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+//        ImageView hunFlagImage = (ImageView) findViewById(R.id.hunFlag);
+//        ImageView enFlagImage = (ImageView) findViewById(R.id.enFlag);
+//
+//        hunFlagImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Locale hunLocale = new Locale("hu");
+//                changeLocale(hunLocale);
+//            }
+//        });
+//        enFlagImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                changeLocale(Locale.ENGLISH);
+//            }
+//        });
     }
 
     private void login() {
@@ -74,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             config = BOSHConfiguration.builder()
                                     .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
+
                                     .setXmppDomain(HOSTNAME)
                                     .setHost(HOSTNAME)
                                     .setPort(80)
@@ -88,8 +108,10 @@ public class LoginActivity extends AppCompatActivity {
                         Connection.getInstance().startBoshConnection(config, getApplicationContext());
                     }
                 }).start();
-            }}
-    }
+            }
+        }
+
+            }
 
     public void loginOnClick(View v) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -108,4 +130,12 @@ public class LoginActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.passwordId);
     }
 
+//    private void changeLocale(final Locale locale) {
+//        final Resources res = getApplicationContext().getResources();
+//        final Configuration config = res.getConfiguration();
+//        config.locale = locale;
+//        final Resources resources = getResources();
+//        resources.updateConfiguration(config, resources.getDisplayMetrics());
+//        recreate();
+//    }
 }

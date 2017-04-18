@@ -1,7 +1,9 @@
-package hu.unideb.smartcampus.activity;
+package hu.unideb.smartcampus.main.activity.calendar.activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -12,17 +14,25 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
+import java.util.UUID;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.main.activity.calendar.handler.AddCustomEventHandler;
 
-public class NewEventActivity extends AppCompatActivity {
+public class NewCustomEventActivity extends AppCompatActivity {
 
     private EditText eventName;
     private EditText eventDescription;
@@ -41,7 +51,13 @@ public class NewEventActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
 
-    Calendar newTime = Calendar.getInstance();
+    private Calendar startDateCalendar;
+    private Calendar endDateCalendar;
+    private Calendar startTimeCalendar;
+    private Calendar endTimeCalendar;
+
+    private String repeatSelect;
+    private String remainderSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +86,7 @@ public class NewEventActivity extends AppCompatActivity {
         setDateTimeField();
         setTimeField();
         repeatSetup();
+        remainderSetup();
     }
 
     private void setupVariables() {
@@ -96,93 +113,77 @@ public class NewEventActivity extends AppCompatActivity {
 
     }
 
-    private void repeatSetup() {
-        Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeats_array_item, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        repeatSpinner.setAdapter(adapter);
-
-        repeatSpinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view1,
-                                               int pos, long id) {
-//                        Toast.makeText(getApplicationContext(), "You have selected " + parent.getItemAtPosition(pos), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-
-                    }
-
-                }
-        );
-    }
-
-    private void remainderSetup(){
-        Spinner remainderSpinner =(Spinner) findViewById(R.id.remainderSpinner);
-
-    }
-
     private void setDateTimeField() {
         checkBoxOnOff();
-
-        Calendar newCalendar = Calendar.getInstance();
+        startDateCalendar = Calendar.getInstance();
+        startDateCalendar.setTimeZone(TimeZone.getTimeZone("Europe/Budapest"));
+        startDateCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        startDateCalendar.set(Calendar.MINUTE, 0);
+        startDateCalendar.set(Calendar.SECOND, 0);
+        startDateCalendar.set(Calendar.MILLISECOND, 0);
+        endDateCalendar = Calendar.getInstance();
+        endDateCalendar.setTimeZone(TimeZone.getTimeZone("Europe/Budapest"));
+        endDateCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        endDateCalendar.set(Calendar.MINUTE, 0);
+        endDateCalendar.set(Calendar.SECOND, 0);
+        endDateCalendar.set(Calendar.MILLISECOND, 0);
 
         fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                startDate.setText(dateFormatter.format(newDate.getTime()));
+                startDateCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
+                startDate.setText(dateFormatter.format(startDateCalendar.getTime()));
                 endDate.setText(startDate.getText());
             }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, startDateCalendar.get(Calendar.YEAR), startDateCalendar.get(Calendar.MONTH), startDateCalendar.get(Calendar.DAY_OF_MONTH));
 
 
         toDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                endDate.setText(dateFormatter.format(newDate.getTime()));
+                endDateCalendar.set(year, monthOfYear, dayOfMonth);
+                endDate.setText(dateFormatter.format(endDateCalendar.getTime()));
             }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, startDateCalendar.get(Calendar.YEAR), startDateCalendar.get(Calendar.MONTH), startDateCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public void roundingThirtyMinutes(Calendar calendar) {
+    private void roundingThirtyMinutes(Calendar calendar) {
         int rounding = calendar.get(Calendar.MINUTE) % 30;
         calendar.add(Calendar.MINUTE, rounding < 8 ? -rounding : (30 - rounding));
     }
 
     private void setTimeField() {
-        Calendar newCalendar = Calendar.getInstance();
-        roundingThirtyMinutes(newCalendar);
+        startTimeCalendar = Calendar.getInstance();
+        startTimeCalendar.set(Calendar.SECOND, 0);
+        startTimeCalendar.set(Calendar.MILLISECOND, 0);
 
-        startTime.setText(timeFormatter.format(newCalendar.getTime()));
+        roundingThirtyMinutes(startTimeCalendar);
+
+        endTimeCalendar = Calendar.getInstance();
+        endTimeCalendar.set(Calendar.SECOND, 0);
+        endTimeCalendar.set(Calendar.MILLISECOND, 0);
+        endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+        roundingThirtyMinutes(endTimeCalendar);
+
+        startTime.setText(timeFormatter.format(startTimeCalendar.getTime()));
 
         fromTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                newTime.set(0, 0, 0, hourOfDay, minute);
-                startTime.setText(timeFormatter.format(newTime.getTime()));
+                startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                startTimeCalendar.set(Calendar.MINUTE, minute);
+                startTime.setText(timeFormatter.format(startTimeCalendar.getTime()));
             }
-        }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
+        }, startTimeCalendar.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), true);
 
-        Calendar toTime = Calendar.getInstance();
-        toTime.setTime(newTime.getTime());
-        toTime.add(Calendar.HOUR_OF_DAY, 1);
-        roundingThirtyMinutes(toTime);
-        endTime.setText(timeFormatter.format(toTime.getTime()));
+        endTime.setText(timeFormatter.format(endTimeCalendar.getTime()));
 
         toTimePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                Calendar newEndTime = Calendar.getInstance();
-                newEndTime.set(0, 0, 0, hourOfDay, minute);
-                endTime.setText(timeFormatter.format(newEndTime.getTime()));
+                endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                endTimeCalendar.set(Calendar.MINUTE, minute);
+                endTime.setText(timeFormatter.format(endTimeCalendar.getTime()));
             }
-        }, toTime.get(Calendar.HOUR_OF_DAY), toTime.get(Calendar.MINUTE), true);
+        }, endTimeCalendar.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), true);
 
     }
 
@@ -197,6 +198,13 @@ public class NewEventActivity extends AppCompatActivity {
                     endTime.setVisibility(View.INVISIBLE);
                     endDate.setText(startDate.getText());
                     editTextEnableOrDisable(endDate, false, InputType.TYPE_NULL);
+                    startTimeCalendar.set(Calendar.HOUR_OF_DAY,0);
+                    startTimeCalendar.set(Calendar.MINUTE,0);
+                    startTimeCalendar.set(Calendar.MILLISECOND,0);
+
+                    endTimeCalendar.set(Calendar.HOUR_OF_DAY,0);
+                    endTimeCalendar.set(Calendar.MINUTE,0);
+                    endTimeCalendar.set(Calendar.MILLISECOND,0);
                 } else if (!checkBox.isChecked()) {
                     startTime.setVisibility(View.VISIBLE);
                     endTime.setVisibility(View.VISIBLE);
@@ -204,6 +212,37 @@ public class NewEventActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void repeatSetup() {
+        //TODO
+        Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeats_array_item, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        repeatSpinner.setAdapter(adapter);
+
+        repeatSpinner.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view1,
+                                               int pos, long id) {
+                        Toast.makeText(getApplicationContext(), "You have selected " + parent.getItemAtPosition(pos), Toast.LENGTH_LONG).show();
+                        repeatSelect = parent.getItemAtPosition(pos).toString();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> arg0) {
+
+                    }
+
+                }
+        );
+    }
+
+    private void remainderSetup() {
+        //TODO
     }
 
     private void editTextEnableOrDisable(EditText editTextName, boolean trueOrFalse, int inputType) {
@@ -229,14 +268,19 @@ public class NewEventActivity extends AppCompatActivity {
         toTimePickerDialog.show();
     }
 
-//    public void repeatTimeSet(View view) {
-//        repeatDialog.show();
-//    }
-
     public void cancelOnClick(View view) {
         super.onBackPressed();
     }
 
     public void saveOnClick(View view) {
+        String uuid = UUID.randomUUID().toString();
+        startTimeCalendar.set(Calendar.YEAR, startDateCalendar.get(Calendar.YEAR));
+        startTimeCalendar.set(Calendar.MONTH, startDateCalendar.get(Calendar.MONTH));
+        startTimeCalendar.set(Calendar.DAY_OF_MONTH, startDateCalendar.get(Calendar.DAY_OF_MONTH));
+        endTimeCalendar.set(Calendar.YEAR, startDateCalendar.get(Calendar.YEAR));
+        endTimeCalendar.set(Calendar.MONTH, startDateCalendar.get(Calendar.MONTH));
+        endTimeCalendar.set(Calendar.DAY_OF_MONTH, startDateCalendar.get(Calendar.DAY_OF_MONTH));
+
+        AddCustomEventHandler.add(uuid, startDateCalendar.getTimeInMillis(), eventName.getText().toString(), eventDescription.getText().toString(), eventPlace.getText().toString(), startTimeCalendar.getTimeInMillis(), endTimeCalendar.getTimeInMillis(), repeatSelect, remainderSelect);
     }
 }

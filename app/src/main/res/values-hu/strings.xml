@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">SmartCampus</string>
+
+    <string name="usernamehint">felhasználónév</string>
+    <string name="passwordHint">jelszó</string>
+    <string name="loginButtonText">Bejelentkezés</string>
+    <string name="login_try_again">Lassú kapcsolat vagy a szolgáltatás nem elérhető, próbáld újra!</string>
+    <string name="login_failed">Nem sikerült bejeletkezni!</string>
+    <string name="login_succes">Sikeresen bejeletkezve!</string>
+    <string name="allDayEventText">Egész napos esemény</string>
+    <string name="cancelButtonText">Mégse</string>
+    <string name="aboutUs">Rólunk</string>
+    <string name="closeDrawer">drawer_close</string>
+    <string name="editCustomEvent">Esemény szerkesztése</string>
+    <string name="eventDescriptionHint">Esemény leírása</string>
+    <string name="eventDetails">Esemény részletező</string>
+    <string name="eventNameHint">Esemény neve</string>
+    <string name="event_delete">Esemény törlése</string>
+    <string name="event_edit">Esemény szerkesztése</string>
+    <string name="howLong">Meddig</string>
+    <string name="nav_about_us_name">Rólunk</string>
+    <string name="nav_calendar_name">Naptár</string>
+    <string name="nav_chat_name">Beszélgetés</string>
+    <string name="nav_classAttendence_name">Órai jelenlét</string>
+    <string name="nav_consultingHours_name">Fogadóórák</string>
+    <string name="nav_home_name">Kezdőképernyő</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="new_event_add">Új esemény</string>
+    <string name="noEventThisDay">Nincs esemény</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="sendButtonText">Küldés</string>
+    <string name="usernamePasswordNeed">Felhasználónév vagy jelszó megadása kötelező!</string>
+    <string name="reason">Oka:</string>
+    <string name="placeHint">hely</string>
+    <string name="textViewEnd">Befejezés:</string>
+    <string name="textViewStart">Kezdet:</string>
+    <string name="reserveButtonText">Foglalás</string>
+    <string name="saveButtonText">Mentés</string>
+    <string name="remainderText">Emlékeztető</string>
+    <string name="repeatText">Ismétlődés</string>
+    <string name="loadingText">Betöltés..</string>
+    <string name="settingsTitle">Beállítások</string>
+
+    <string-array name="nav_item_activity_titles">
+        <item> Kezdőképernyő</item>
+        <item> Naptár</item>
+        <item> Órai jelenlét</item>
+        <item> Fogadóórák</item>
+        <item> Beszélgetés</item>
+        <item> Rólunk</item>
+    </string-array>
+
+    <string-array name="repeats_array_item">
+        <item>Egyszeri esemény</item>
+        <item>Naponta</item>
+        <item>Hetente</item>
+        <item>Kéthetente</item>
+        <item>Havonta</item>
+        <item>Évente</item>
+    </string-array>
+
+    <string-array name="remainder_array_item">
+        <item> 5 perc</item>
+        <item>10 perc</item>
+        <item>15 perc</item>
+        <item>20 perc</item>
+        <item>25 perc</item>
+        <item>30 perc</item>
+        <item>45 perc</item>
+        <item> 1 óra</item>
+        <item> 2 óra</item>
+        <item> 3 óra</item>
+        <item>12 óra</item>
+        <item>24 óra</item>
+        <item> 2 nap</item>
+        <item> 1 hét</item>
+    </string-array>
+
+</resources>
