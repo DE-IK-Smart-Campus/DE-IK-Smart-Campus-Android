@@ -49,7 +49,7 @@ public class DatabaseManager {
         sqLiteDatabase.insert(DatabaseHelper.TABLE_SUBJECTS, null, contentValues);
     }
 
-    public void insertTeacher(String subjectName, String instructorName) {
+    public void insertInstructor(String subjectName, String instructorName) {
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
         final Integer subjectId = getSubjectByName(subjectName);
         ContentValues contentValues = new ContentValues();
@@ -111,6 +111,67 @@ public class DatabaseManager {
         database.insert(TABLE_CUSTOMEVENT, null, contentValues);
     }
 
+    public void setAllSubjectAndInstructor(List<Subject> subjectList) {
+        for (Subject subject : subjectList) {
+            insertSubject(subject.getName());
+            List<Instructor> instructorList = subject.getInstructors();
+            for (Instructor instructor : instructorList) {
+                insertInstructor(subject.getId(), instructor);
+            }
+        }
+    }
+
+    private void insertInstructor(Long subjectId, Instructor instructor) {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.INSTRUCTOR_ID_PK, instructor.getInstructorId());
+        contentValues.put(DatabaseHelper.INSTURCORS_NAME_COL, instructor.getName());
+        contentValues.put(DatabaseHelper.SUBJECT_ID_PK, subjectId);
+        sqLiteDatabase.insert(DatabaseHelper.TABLE_INSTRUCTORS, null, contentValues);
+    }
+
+    public List<Subject> getAllSubjectAndInstructor() {
+        final List<Subject> allSubject = getAllSubject();
+        for (Subject subject : allSubject) {
+            List<Instructor> instructorsBySubjectId = getInstructorsBySubjectId(subject.getId());
+            subject.setInstructors(instructorsBySubjectId);
+        }
+        return allSubject;
+    }
+
+    public List<Instructor> getInstructorsBySubjectId(Long subjectId) {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
+        String[] cols = {
+                DatabaseHelper.INSTRUCTOR_ID_PK,
+                DatabaseHelper.INSTURCORS_NAME_COL
+
+        };
+        String where = DatabaseHelper.SUBJECT_ID_PK + " = ?";
+        String whereArgs[] = {subjectId.toString()};
+
+        Cursor cursor = sqLiteDatabase.query(
+                DatabaseHelper.TABLE_INSTRUCTORS,
+                cols,
+                where,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+
+        List<Instructor> instructorList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            Instructor instructor = new Instructor();
+            instructor.setInstructorId(cursor.getLong(
+                    cursor.getColumnIndexOrThrow(DatabaseHelper.INSTRUCTOR_ID_PK)));
+            instructor.setName(cursor.getString(
+                    cursor.getColumnIndexOrThrow(DatabaseHelper.INSTURCORS_NAME_COL)));
+            instructorList.add(instructor);
+        }
+        cursor.close();
+        return instructorList;
+    }
+
     public List<TimetableEvent> getAllTimetableEvent() {
         List<TimetableEvent> timetableEvents = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_TIMETABLEEVENT;
@@ -144,6 +205,7 @@ public class DatabaseManager {
         if (cursor.moveToFirst()) {
             do {
                 final Subject subject = new Subject();
+                subject.setId(cursor.getLong(0));
                 subject.setName(cursor.getString(1));
                 subjectList.add(subject);
             } while (cursor.moveToNext());
