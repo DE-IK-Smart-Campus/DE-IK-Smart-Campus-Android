@@ -82,6 +82,9 @@ public class OfficeHourHandler {
     public void askSubjects(FragmentManager fragmentManager) {
         try {
             isNetworkFinished = false;
+
+
+
             final Connection connection = Connection.getInstance();
             this.fragmentManager = fragmentManager;
             status = Status.ASKSUBJECTS;

@@ -4,16 +4,19 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import hu.unideb.smartcampus.main.activity.officehours.pojo.Instructor;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.Subject;
 import hu.unideb.smartcampus.sqlite.helper.DatabaseHelper;
 import hu.unideb.smartcampus.sqlite.model.CustomEvent;
 import hu.unideb.smartcampus.sqlite.model.TimetableEvent;
 
 import static hu.unideb.smartcampus.sqlite.helper.DatabaseHelper.TABLE_CUSTOMEVENT;
+import static hu.unideb.smartcampus.sqlite.helper.DatabaseHelper.TABLE_INSTRUCTORS;
+import static hu.unideb.smartcampus.sqlite.helper.DatabaseHelper.TABLE_SUBJECTS;
 import static hu.unideb.smartcampus.sqlite.helper.DatabaseHelper.TABLE_TIMETABLEEVENT;
 import static hu.unideb.smartcampus.sqlite.helper.DatabaseHelper.TIMETABLEEVENT_DATE;
 
@@ -37,6 +40,49 @@ public class DatabaseManager {
 
     public void close() {
         dbHelper.close();
+    }
+
+    public void insertSubject(String subjectName) {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.SUBJECTS_NAME_COL, subjectName);
+        sqLiteDatabase.insert(DatabaseHelper.TABLE_SUBJECTS, null, contentValues);
+    }
+
+    public void insertTeacher(String subjectName, String instructorName) {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        final Integer subjectId = getSubjectByName(subjectName);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.INSTURCORS_NAME_COL, instructorName);
+        contentValues.put(DatabaseHelper.SUBJECT_ID_PK, subjectId);
+        sqLiteDatabase.insert(DatabaseHelper.TABLE_INSTRUCTORS, null, contentValues);
+    }
+
+    public Integer getSubjectByName(String subjectName) {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
+        String[] cols = {
+                DatabaseHelper.SUBJECT_ID_PK
+        };
+        String where = DatabaseHelper.SUBJECTS_NAME_COL + " = ?";
+        String whereArgs[] = {subjectName};
+
+        Cursor cursor = sqLiteDatabase.query(
+                DatabaseHelper.TABLE_SUBJECTS,
+                cols,
+                where,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+
+        Integer subjectId = null;
+        while (cursor.moveToNext()) {
+            subjectId = cursor.getInt(
+                    cursor.getColumnIndexOrThrow(DatabaseHelper.SUBJECT_ID_PK));
+        }
+        cursor.close();
+        return subjectId;
     }
 
     public void insertTimetableEvent(TimetableEvent timetableEvent) {
@@ -91,10 +137,34 @@ public class DatabaseManager {
         return timetableEvents;
     }
 
-    public void getAllSubjects() {
-        String selectQuery = "SELECT * FROM subjects";
+    public List<Subject> getAllSubject() {
+        String selectQuery = "SELECT * FROM " + TABLE_SUBJECTS;
         Cursor cursor = database.rawQuery(selectQuery, null);
-        Log.i("TAG", "getAllSubjects: macska");
+        List<Subject> subjectList = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                final Subject subject = new Subject();
+                subject.setName(cursor.getString(1));
+                subjectList.add(subject);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return subjectList;
+    }
+
+    public List<Instructor> getAllInstructor() {
+        String selectQuery = "SELECT * FROM " + TABLE_INSTRUCTORS;
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        List<Instructor> instructorList = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                Instructor instructor = new Instructor();
+                instructor.setName(cursor.getString(1));
+                instructorList.add(instructor);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return instructorList;
     }
 
     public List<CustomEvent> getAllCustomEvent() {
