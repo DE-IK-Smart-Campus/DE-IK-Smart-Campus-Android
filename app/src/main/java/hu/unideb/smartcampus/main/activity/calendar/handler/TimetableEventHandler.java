@@ -11,17 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jivesoftware.smack.SmackException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.calendar.pojo.AskTimetableEventPojo;
-import hu.unideb.smartcampus.main.activity.calendar.task.TimetableIqRequestTask;
-import hu.unideb.smartcampus.sqlite.manager.DatabaseManager;
-import hu.unideb.smartcampus.sqlite.model.TimetableEvent;
-import hu.unideb.smartcampus.xmpp.Connection;
 
 public class TimetableEventHandler {
 
@@ -37,7 +29,7 @@ public class TimetableEventHandler {
     }
 
     public void sendDefaultMesg() {
-        try{
+    /*    try{
             HashMap<String, String> param = new HashMap<>();
             AskTimetableEventPojo askTimetableEventPojo = Connection.getInstance().createLoadingDialog(new TimetableIqRequestTask(), fragmentManager,param);
 
@@ -57,6 +49,7 @@ public class TimetableEventHandler {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+        */
     }
 
     private void changeToCalndarFragmentView(Bundle bundle) {

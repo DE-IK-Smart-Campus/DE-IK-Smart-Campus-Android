@@ -10,18 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jivesoftware.smack.SmackException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.calendar.fragment.CalendarFragment;
 import hu.unideb.smartcampus.main.activity.calendar.pojo.AskCustomEventPojo;
-import hu.unideb.smartcampus.main.activity.calendar.pojo.AskTimetableEventPojo;
-import hu.unideb.smartcampus.main.activity.calendar.task.CustomEventIqRequestTask;
-import hu.unideb.smartcampus.main.activity.calendar.task.TimetableIqRequestTask;
-import hu.unideb.smartcampus.sqlite.model.CustomEvent;
-import hu.unideb.smartcampus.xmpp.Connection;
 
 public class CustomEventHandler {
 
@@ -38,7 +29,7 @@ public class CustomEventHandler {
     }
 
     public void sendDefaultMesg1() {
-
+/*
         try{
 
             HashMap<String, String> param = new HashMap<>();
@@ -61,6 +52,7 @@ public class CustomEventHandler {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        */
     }
 
     private void changeToCalndarFragmentView(Bundle bundle) {
