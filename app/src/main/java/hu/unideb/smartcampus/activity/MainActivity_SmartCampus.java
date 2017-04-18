@@ -132,6 +132,12 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
 
                 Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
 
+                new Thread(new Runnable() {
+                    public void run() {
+                        OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+                        officeHourHandler.askSubjects(getSupportFragmentManager());
+                    }
+                }).start();
 
                 new Thread(new Runnable() {
                     public void run() {

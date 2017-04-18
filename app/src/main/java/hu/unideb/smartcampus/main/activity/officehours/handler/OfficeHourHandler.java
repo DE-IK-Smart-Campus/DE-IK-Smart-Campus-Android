@@ -42,6 +42,9 @@ public class OfficeHourHandler {
 
     private Status status;
 
+    boolean isDBFinised = false;
+    boolean isNetworkFinished = false;
+
     private AskSubjectsPojo askSubjectsPojo;
     private FragmentManager fragmentManager;
     private Instructor selectedInstructor;
@@ -60,14 +63,32 @@ public class OfficeHourHandler {
         status = Status.ASKSUBJECTS;
     }
 
-    public void askSubjects(FragmentManager fragmentManager) {
+    public void askSubjectsFromDb(FragmentManager fragmentManager) {
         try {
+            isDBFinised = false;
             final Connection connection = Connection.getInstance();
             this.fragmentManager = fragmentManager;
             status = Status.ASKSUBJECTS;
             HashMap<String, String> param = new HashMap<>();
             param.put(PARAM_ACTUAL_USER_JID, connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
             askSubjectsPojo = connection.runAsyncTask(new SubjectsIqRequestTask(), param);
+            isDBFinised = true;
+            changeToOfficeFragmentView(new Bundle());
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void askSubjects(FragmentManager fragmentManager) {
+        try {
+            isNetworkFinished = false;
+            final Connection connection = Connection.getInstance();
+            this.fragmentManager = fragmentManager;
+            status = Status.ASKSUBJECTS;
+            HashMap<String, String> param = new HashMap<>();
+            param.put(PARAM_ACTUAL_USER_JID, connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
+            askSubjectsPojo = connection.runAsyncTask(new SubjectsIqRequestTask(), param);
+            isNetworkFinished = true;
             changeToOfficeFragmentView(new Bundle());
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -75,6 +96,7 @@ public class OfficeHourHandler {
     }
 
     public void askInstructorOfficehours(FragmentManager fragmentManager, Instructor selectedInstructor) {
+        isNetworkFinished = false;
         HashMap<String, String> params = new HashMap<>();
         final String selectedInstructorId = selectedInstructor.getInstructorId().toString();
         params.put(INSTRUCTOR_ID, selectedInstructorId);
@@ -87,6 +109,7 @@ public class OfficeHourHandler {
         this.fragmentManager = fragmentManager;
         status = Status.ASKINSTRUCTOROFFICEHOURS;
         changeToOfficeFragmentView(new Bundle());
+        isNetworkFinished = true;
     }
 
     public void changeToOfficeFragmentView(Bundle bundle) {
@@ -104,7 +127,7 @@ public class OfficeHourHandler {
         bundle.putParcelable(EXTRA_FROM_UNTIL_DATES, selectedOfficeHour.getFromToDates());
         bundle.putLong(SELECTED_OFFICE_HOUR_ID, selectedOfficeHour.getConsultingHourId());
         bundle.putLong(SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM, selectedOfficeHour.getReservedSum());
-        bundle.putString(SELECTED_INSTRUCTOR_NAME,selectedInstructor.getName());
+        bundle.putString(SELECTED_INSTRUCTOR_NAME, selectedInstructor.getName());
         Fragment fragment = new OfficeHourReserveFragment();
         fragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
