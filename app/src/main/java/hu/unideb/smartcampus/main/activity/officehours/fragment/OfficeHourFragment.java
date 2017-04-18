@@ -111,6 +111,4 @@ public class OfficeHourFragment extends Fragment implements OnBackPressedListene
             officeHourHandler.changeToOfficeFragmentView(new Bundle());
         }
     }
-
-
 }
