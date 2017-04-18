@@ -15,7 +15,7 @@
         android:paddingTop="20dp">
 
         <TextView
-            android:id="@+id/selected_consulting_hour_editText"
+            android:id="@+id/selected_office_hours_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
@@ -38,8 +38,9 @@
             android:paddingTop="30dp"
             android:text="Meddig" />
 
+
         <EditText
-            android:id="@+id/consulting_hours_duration_editText"
+            android:id="@+id/office_hours_duration_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/veryLightBackgroundColor"
@@ -55,9 +56,10 @@
             android:text="Oka:" />
 
         <EditText
-            android:id="@+id/consulting_hours_reason_editText"
+
+            android:id="@+id/office_hours_reason_editText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:background="@color/veryLightBackgroundColor"
             android:ems="10"
@@ -65,21 +67,15 @@
             android:inputType="textMultiLine"
             android:textAppearance="@style/TextAppearance.AppCompat" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.2"
-        android:orientation="horizontal">
-
         <Button
-            android:id="@+id/consulting_hour_reserve_button"
+            android:id="@+id/office_hours_reserve_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:background="@color/backgroundColor"
             android:text="Foglalás"
             android:textColor="@android:color/white" />
+
     </LinearLayout>
 
 </LinearLayout>
