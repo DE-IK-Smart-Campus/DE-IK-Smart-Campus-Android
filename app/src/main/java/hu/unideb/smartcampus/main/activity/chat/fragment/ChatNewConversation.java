@@ -39,6 +39,7 @@ import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
+import hu.unideb.smartcampus.main.activity.chat.handler.ChatHandler;
 import hu.unideb.smartcampus.shared.iq.request.AddMucChatIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.AddUserChatIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -152,13 +153,13 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
                                     final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(addMucChatIqRequest);
                                     stanzaCollectorAndSend.nextResultOrThrow(5000);
 
-                                    //TODO
-                                    Fragment fragment = new ChatMainMenuFragment();
-                                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                                            android.R.anim.fade_out);
-                                    fragmentTransaction.replace(R.id.frame, fragment);
-                                    fragmentTransaction.commitAllowingStateLoss();
+                                    Connection.getInstance().createLoadingDialogFragment(getFragmentManager(), new Bundle());
+                                    new Thread(new Runnable() {
+                                        public void run() {
+                                            ChatHandler chatHandler = ChatHandler.getInstance();
+                                            chatHandler.getAllChat(getFragmentManager());
+                                        }
+                                    }).start();
                                 } catch (XmppStringprepException | SmackException.NotConnectedException | XMPPException.XMPPErrorException | SmackException.NoResponseException | InterruptedException | MultiUserChatException.NotAMucServiceException e) {
                                     e.printStackTrace();
                                 }
@@ -199,13 +200,14 @@ public class ChatNewConversation extends Fragment implements OnBackPressedListen
             final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(addUserChatIqRequest);
             stanzaCollectorAndSend.nextResultOrThrow(5000);
             chat.send(newMsg);
-            //TODO
-            Fragment fragment = new ChatMainMenuFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment);
-            fragmentTransaction.commitAllowingStateLoss();
+            Connection.getInstance().createLoadingDialogFragment(getFragmentManager(), new Bundle());
+            new Thread(new Runnable() {
+                public void run() {
+                    ChatHandler chatHandler = ChatHandler.getInstance();
+                    chatHandler.getAllChat(getFragmentManager());
+                }
+            }).start();
+
         } catch (XmppStringprepException | InterruptedException | SmackException.NotConnectedException | SmackException.NoResponseException | XMPPException.XMPPErrorException e) {
             e.printStackTrace();
         }

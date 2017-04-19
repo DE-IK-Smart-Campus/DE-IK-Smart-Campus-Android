@@ -39,6 +39,7 @@ import java.util.List;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.chat.adapter.ChatActualCoversationAdapter;
+import hu.unideb.smartcampus.main.activity.chat.handler.ChatHandler;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatConversationItem;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatHistory;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -256,11 +257,12 @@ public class ChatActualConversationFragment extends Fragment implements OnBackPr
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = new ChatMainMenuFragment();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame, fragment);
-        fragmentTransaction.commitAllowingStateLoss();
+        Connection.getInstance().createLoadingDialogFragment(getFragmentManager(), new Bundle());
+        new Thread(new Runnable() {
+            public void run() {
+                ChatHandler chatHandler = ChatHandler.getInstance();
+                chatHandler.getAllChat(getFragmentManager());
+            }
+        }).start();
     }
 }

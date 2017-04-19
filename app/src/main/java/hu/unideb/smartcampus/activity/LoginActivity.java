@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
+import hu.unideb.smartcampus.fragment.LoginDialogFragment;
 import hu.unideb.smartcampus.main.activity.login.auth.BasicAuth;
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 import hu.unideb.smartcampus.sqlite.manager.DatabaseManager;
@@ -29,6 +30,7 @@ import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
 
 public class LoginActivity extends AppCompatActivity {
     public static final int MY_REQUEST_CODE = 115;
+    public static final String LOGIN_DIALOG_TAG = "LOGIN_DIALOG_TAG";
 
     private EditText username;
     private EditText password;
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
 //        ImageView hunFlagImage = (ImageView) findViewById(R.id.hunFlag);
 //        ImageView enFlagImage = (ImageView) findViewById(R.id.enFlag);
@@ -59,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         setupVariables();
         ActualUserInfo actualUserInfo = null;
-
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else {
@@ -68,9 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 actualUserInfo = new BasicAuth().execute(new ActualUserInfo
                         (username.getText().toString(), password.getText().toString(), null))
                         .get(5000, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             } catch (TimeoutException e) {
                 Toast.makeText(getApplicationContext(), R.string.login_try_again, Toast.LENGTH_SHORT).show();
@@ -81,10 +81,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.activity_login, new LoadingDialogFragment());
-                fragmentTransaction.commitAllowingStateLoss();
-                Toast.makeText(getApplicationContext(), R.string.login_succes, Toast.LENGTH_SHORT).show();
-
+                fragmentTransaction.replace(R.id.activity_login, new LoginDialogFragment(), LOGIN_DIALOG_TAG);
+                fragmentTransaction.addToBackStack(LOGIN_DIALOG_TAG);
+                fragmentTransaction.commit();
 
                 DatabaseManager databaseManager = new DatabaseManager(getApplicationContext());
                 databaseManager.open();

@@ -41,6 +41,7 @@
     <string name="repeatText">Repeat</string>
     <string name="loadingText">Loading..</string>
     <string name="settingsTitle">Settings</string>
+    <string name="login_in_progress">Login in progress…</string>
 
     <string-array name="nav_item_activity_titles">
         <item> Home</item>
