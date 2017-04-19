@@ -41,6 +41,7 @@
     <string name="repeatText">Ismétlődés</string>
     <string name="loadingText">Betöltés..</string>
     <string name="settingsTitle">Beállítások</string>
+    <string name="login_in_progress">Bejelentkezés folyamatban…</string>
 
     <string-array name="nav_item_activity_titles">
         <item> Kezdőképernyő</item>

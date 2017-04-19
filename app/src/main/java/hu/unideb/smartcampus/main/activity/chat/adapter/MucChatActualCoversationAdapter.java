@@ -18,6 +18,8 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.chat.pojo.MucChatConversationItem;
 import hu.unideb.smartcampus.main.activity.chat.pojo.MucChatHistory;
 
+import static hu.unideb.smartcampus.R.id.chat_actual_item_msg_layout;
+
 /**
  * Created by Headswitcher on 2017. 03. 21..
  */
@@ -69,30 +71,21 @@ public class MucChatActualCoversationAdapter extends BaseAdapter {
 
         TextView nameAndDate = (TextView) convertView.findViewById(R.id.chat_name_and_date_text);
         String resourceNameWithCaptialStart = StringUtils.capitalize(resourceName);
-        nameAndDate.setText(resourceNameWithCaptialStart);
 
         ImageView reciverImg = (ImageView) convertView.findViewById(R.id.img_receiver);
-        ImageView senderImg = (ImageView) convertView.findViewById(R.id.img_sender);
         reciverImg.setVisibility(View.VISIBLE);
-        senderImg.setVisibility(View.VISIBLE);
-        LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.chat_actual_item_msg_layout);
-
+        LinearLayout linearLayout = (LinearLayout) convertView.findViewById(chat_actual_item_msg_layout);
         if (StringUtils.equals(resourceName, currentUserJid.getLocalpartOrThrow().toString())) {
+            nameAndDate.setVisibility(View.GONE);
             actualMsgTextView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
             nameAndDate.setGravity(Gravity.END);
             reciverImg.setVisibility(View.GONE);
             linearLayout.setGravity(Gravity.END);
-
-            Bitmap localUserAvatarInBitmap = chatHistory.getResourceAvatarMap().get(currentUserJid.getLocalpartOrNull().toString());
-            if (localUserAvatarInBitmap != null) {
-                senderImg.setImageBitmap(localUserAvatarInBitmap);
-            }
         } else {
+            nameAndDate.setText(resourceNameWithCaptialStart);
             actualMsgTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             nameAndDate.setGravity(Gravity.START);
-            senderImg.setVisibility(View.GONE);
             linearLayout.setGravity(Gravity.START);
-
             Bitmap partnerAvatarInBitmap = chatHistory.getResourceAvatarMap().get(resourceName);
             if (partnerAvatarInBitmap != null) {
                 reciverImg.setImageBitmap(partnerAvatarInBitmap);

@@ -17,6 +17,8 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.chat.pojo.ChatHistory;
 import hu.unideb.smartcampus.xmpp.Connection;
 
+import static hu.unideb.smartcampus.R.id.chat_actual_item_msg_layout;
+
 /**
  * Created by Headswitcher on 2017. 03. 21..
  */
@@ -68,25 +70,20 @@ public class ChatActualCoversationAdapter extends BaseAdapter {
         actualMsgTextView.setText(msg);
         TextView nameAndDate = (TextView) convertView.findViewById(R.id.chat_name_and_date_text);
         String captilaziedName = org.apache.commons.lang3.StringUtils.capitalize(fromUserJid.getLocalpartOrThrow().toString());
-        nameAndDate.setText(captilaziedName);
+        nameAndDate.setText("");
         ImageView reciverImg = (ImageView) convertView.findViewById(R.id.img_receiver);
-        ImageView senderImg = (ImageView) convertView.findViewById(R.id.img_sender);
         reciverImg.setVisibility(View.VISIBLE);
-        senderImg.setVisibility(View.VISIBLE);
-        LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.chat_actual_item_msg_layout);
-
+        LinearLayout linearLayout = (LinearLayout) convertView.findViewById(chat_actual_item_msg_layout);
         if (fromUserJid.asBareJid().equals(Connection.getInstance().getXmppConnection().getUser().asBareJid())) {
+            nameAndDate.setVisibility(View.GONE);
             actualMsgTextView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
             nameAndDate.setGravity(Gravity.END);
             reciverImg.setVisibility(View.GONE);
             linearLayout.setGravity(Gravity.END);
-            if (localUserAvatarInBitmap != null) {
-                senderImg.setImageBitmap(localUserAvatarInBitmap);
-            }
         } else {
+            nameAndDate.setText(captilaziedName);
             actualMsgTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             nameAndDate.setGravity(Gravity.START);
-            senderImg.setVisibility(View.GONE);
             linearLayout.setGravity(Gravity.START);
             if (partnerAvatarInBitmap != null) {
                 reciverImg.setImageBitmap(partnerAvatarInBitmap);

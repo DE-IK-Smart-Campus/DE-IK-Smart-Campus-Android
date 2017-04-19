@@ -10,14 +10,6 @@ import com.squareup.okhttp.Response;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 
@@ -79,5 +71,10 @@ public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
     }
 
 
+    @Override
+    protected void onPostExecute(ActualUserInfo actualUserInfo) {
+
+        super.onPostExecute(actualUserInfo);
+    }
 }
 

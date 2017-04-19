@@ -46,6 +46,7 @@ import java.util.Map;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.chat.adapter.MucChatActualCoversationAdapter;
+import hu.unideb.smartcampus.main.activity.chat.handler.ChatHandler;
 import hu.unideb.smartcampus.main.activity.chat.pojo.MucChatConversationItem;
 import hu.unideb.smartcampus.main.activity.chat.pojo.MucChatHistory;
 import hu.unideb.smartcampus.xmpp.Connection;
@@ -303,12 +304,13 @@ public class ChatActualConversationMUCFragment extends Fragment implements OnBac
         } catch (SmackException.NotConnectedException | InterruptedException e) {
             e.printStackTrace();
         } finally {
-            Fragment fragment = new ChatMainMenuFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out);
-            fragmentTransaction.replace(R.id.frame, fragment);
-            fragmentTransaction.commitAllowingStateLoss();
+            Connection.getInstance().createLoadingDialogFragment(getFragmentManager(), new Bundle());
+            new Thread(new Runnable() {
+                public void run() {
+                    ChatHandler chatHandler = ChatHandler.getInstance();
+                    chatHandler.getAllChat(getFragmentManager());
+                }
+            }).start();
         }
     }
 }

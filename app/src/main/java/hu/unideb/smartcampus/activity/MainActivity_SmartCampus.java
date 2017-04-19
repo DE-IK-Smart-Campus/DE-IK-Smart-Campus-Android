@@ -29,7 +29,7 @@ import hu.unideb.smartcampus.fragment.AboutUsFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
 import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
-import hu.unideb.smartcampus.main.activity.chat.fragment.ChatMainMenuFragment;
+import hu.unideb.smartcampus.main.activity.chat.handler.ChatHandler;
 import hu.unideb.smartcampus.main.activity.home.fragment.HomeFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
 import hu.unideb.smartcampus.scheduler.LocationAlarmReceiver;
@@ -157,13 +157,13 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
                     */
                     break;
                 case 4:
-                    ChatMainMenuFragment chatFragment = new ChatMainMenuFragment();
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, chatFragment, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
-                    //adminChat.addMessageListener(new ChatHandler(getSupportFragmentManager()));
+                    Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
+                    new Thread(new Runnable() {
+                        public void run() {
+                            ChatHandler chatHandler = ChatHandler.getInstance();
+                            chatHandler.getAllChat(getSupportFragmentManager());
+                        }
+                    }).start();
                     break;
                 case 5:
                     AboutUsFragment aboutUsFragment = new AboutUsFragment();

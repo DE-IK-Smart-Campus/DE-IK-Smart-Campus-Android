@@ -100,5 +100,6 @@
     <string name="please_fill_out_every_field">Kérlek tölsd ki az összes mezőt! :)</string>
     <string name="please_give_me_group_name">Kérlek add meg a csoportnevet.</string>
     <string name="create_chat">Chat létrehozása</string>
+    <string name="login_in_progress">Bejelentkezés folyamatban…</string>
 
 </resources>
