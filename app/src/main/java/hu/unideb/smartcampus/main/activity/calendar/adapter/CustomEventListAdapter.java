@@ -14,7 +14,7 @@ import java.util.List;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.sqlite.model.CustomEvent;
 
-public class CustomEventListAdapter extends BaseAdapter{
+public class CustomEventListAdapter extends BaseAdapter {
 
     private Context context;
     private List<CustomEvent> customEventList;
@@ -50,7 +50,10 @@ public class CustomEventListAdapter extends BaseAdapter{
         TextView event_name_and_start_time = (TextView) convertView.findViewById(R.id.custum_event_name_and_time);
         TextView place = (TextView) convertView.findViewById(R.id.custom_event_place);
 
-        event_name_and_start_time.setText(customEvent.getEventName() + " : " + DateFormat.getTimeInstance(DateFormat.SHORT).format(customEvent.getEventStartTime()) + " - " + DateFormat.getTimeInstance(DateFormat.SHORT).format(customEvent.getEventEndTime()));
+        Long startTime = customEvent.getEventStartDate() * 1000;
+        Long endTime = customEvent.getEventEndTime() * 1000;
+
+        event_name_and_start_time.setText(customEvent.getEventName() + " : " + DateFormat.getTimeInstance(DateFormat.SHORT).format(startTime) + " - " + DateFormat.getTimeInstance(DateFormat.SHORT).format(endTime));
         place.setText(customEvent.getEventPlace());
 
         return convertView;

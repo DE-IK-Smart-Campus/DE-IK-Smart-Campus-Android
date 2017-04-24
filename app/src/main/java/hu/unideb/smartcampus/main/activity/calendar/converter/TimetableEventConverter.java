@@ -22,16 +22,24 @@ public class TimetableEventConverter {
 
             for(int j = 0;  j< calendarSubjectIqElement.getAppointmentTimes().size(); j++){
 
-            timetableEvent = new TimetableEvent();
+                timetableEvent = new TimetableEvent();
 
-            AppointmentTimeIqElement calendarTimeIqElement = calendarSubjectIqElement.getAppointmentTimes().get(j);
-            timetableEvent.setTimetableEventDate(calendarTimeIqElement.getWhen());
-            timetableEvent.setTimetableEventName(calendarSubjectIqElement.getSubjectName());
-            timetableEvent.setTimetableEventDescription(calendarSubjectIqElement.getDescription());
-            timetableEvent.setTimetableEventPlace(calendarSubjectIqElement.getWhere());
-            timetableEvent.setTimetableEventStartTime(calendarTimeIqElement.getFrom());
-            timetableEvent.setTimetableEventEndTime(calendarTimeIqElement.getTo());
-            timetableEventsList.add(timetableEvent);
+                AppointmentTimeIqElement calendarTimeIqElement = calendarSubjectIqElement.getAppointmentTimes().get(j);
+                timetableEvent.setTimetableEventDate(calendarTimeIqElement.getWhen());
+                timetableEvent.setTimetableEventName(calendarSubjectIqElement.getSubjectName());
+                if(calendarSubjectIqElement.getDescription().equals("E")) {
+                    timetableEvent.setTimetableEventDescription("Előadás");
+                } else if (calendarSubjectIqElement.getDescription().equals("L")) {
+                    timetableEvent.setTimetableEventDescription("Labor");
+                } else if (calendarSubjectIqElement.getDescription().equals("G")) {
+                    timetableEvent.setTimetableEventDescription("Gyakorlat");
+                } else if(calendarSubjectIqElement.getDescription().equals("O")) {
+                    timetableEvent.setTimetableEventDescription("Egyéb");
+                }
+                timetableEvent.setTimetableEventPlace(calendarSubjectIqElement.getWhere());
+                timetableEvent.setTimetableEventStartTime(calendarTimeIqElement.getFrom());
+                timetableEvent.setTimetableEventEndTime(calendarTimeIqElement.getTo());
+                timetableEventsList.add(timetableEvent);
             }
         }
         askTimetableEventPojo.setTimetableEvents(timetableEventsList);

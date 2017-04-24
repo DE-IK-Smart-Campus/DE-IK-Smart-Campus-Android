@@ -28,7 +28,6 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
-import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
 import hu.unideb.smartcampus.main.activity.chat.handler.ChatHandler;
 import hu.unideb.smartcampus.main.activity.home.fragment.HomeFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;

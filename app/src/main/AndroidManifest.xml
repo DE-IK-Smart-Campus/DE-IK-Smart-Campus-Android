@@ -36,18 +36,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".main.activity.calendar.activity.NewCustomEventActivity"
-            android:label="@string/new_event_add"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".main.activity.calendar.activity.EditCustomEventActivity"
-            android:label="@string/editCustomEvent"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".main.activity.calendar.activity.EventDetailsActivity"
-            android:label="@string/eventDetails"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/settingsTitle"
             android:screenOrientation="portrait" />

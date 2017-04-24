@@ -95,9 +95,9 @@ public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableLis
         StringBuilder builder = new StringBuilder();
         builder.append(sDate).
                 append(" ").
-                append(DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getFrom())).
+                append(DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getFrom() * 1000)).
                 append("  -  ").
-                append(DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getTo()));
+                append(DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getTo() * 1000));
         final String dateDisplayName = builder.toString();
         if (view == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
