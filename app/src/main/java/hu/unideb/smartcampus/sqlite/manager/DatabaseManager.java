@@ -313,4 +313,12 @@ public class DatabaseManager {
 
         return customEventList;
     }
+
+    public void deleteTable() {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        sqLiteDatabase.delete(TABLE_CUSTOMEVENT,null,null);
+        sqLiteDatabase.delete(TABLE_TIMETABLEEVENT,null,null);
+        sqLiteDatabase.close();
+    }
+
 }

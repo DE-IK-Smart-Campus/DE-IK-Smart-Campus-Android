@@ -37,24 +37,24 @@ public class AttendanceHandler {
         this.fragmentManager = fragmentManager;
     }
 
-    public void sendDefaultMsg() {
-        try {
-            HashMap<String, String> param = new HashMap<>();
-            AskSubjectPojo askSubjectsPojo = Connection.getInstance().createLoadingDialog(new SubjectIqRequestTask(), fragmentManager, param);
+//    public void sendDefaultMsg() {
+//        try {
+//            HashMap<String, String> param = new HashMap<>();
+//            AskSubjectPojo askSubjectsPojo = Connection.getInstance().createLoadingDialog(new SubjectIqRequestTask(), fragmentManager, param);
 
-            askSubjectsPojo.getSubjectList();
-
-            Bundle bundle = new Bundle();
-            bundle.putString(STATUSATTENDANCE, ASKSUBJECTSNAME);
-            bundle.putParcelable(ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsPojo);
-            changeToOfficeFragmentView(bundle);
-
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+//            askSubjectsPojo.getSubjectList();
+//
+//            Bundle bundle = new Bundle();
+//            bundle.putString(STATUSATTENDANCE, ASKSUBJECTSNAME);
+//            bundle.putParcelable(ASK_SUBJECTS_PROCESS_MESSAGE_POJO, askSubjectsPojo);
+//            changeToOfficeFragmentView(bundle);
+//
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     private void changeToOfficeFragmentView(Bundle bundle) {

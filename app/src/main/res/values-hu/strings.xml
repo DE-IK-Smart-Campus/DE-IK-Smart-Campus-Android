@@ -78,4 +78,19 @@
         <item> 1 hét</item>
     </string-array>
 
+    <string name="timetableTab">Órák</string>
+    <string name="customTab">Saját</string>
+
+    <string name="chatMe">Én:</string>
+    <string name="roomName">Szoba Név</string>
+    <string name="sendChatMsg">Küldés</string>
+    <string name="roomString">Szoba:</string>
+    <string name="can_not_find">Nem található</string>
+    <string name="user_with_this_name">nevű felhasználó</string>
+    <string name="please_fill_out_every_field">Kérlek tölsd ki az összes mezőt! :)</string>
+    <string name="please_give_me_group_name">Kérlek add meg a csoportnevet.</string>
+    <string name="create_chat">Chat létrehozása</string>
+    <string name="timetableEventDetails">Órarend esemény részletező</string>
+    <string name="customEventDetails">Egyéni esemény részletező</string>
+
 </resources>

@@ -7,10 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jivesoftware.smack.SmackException;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -28,48 +24,53 @@ import hu.unideb.smartcampus.xmpp.Connection;
 
 public class EventHandler {
 
-    private FragmentManager fragmentManager;
-    private Context context;
-    private AskTimetableEventPojo askTimetableEventPojo;
-    private ObjectMapper objectMapper;
+    boolean isNetworkFinished = false;
 
-    public EventHandler(FragmentManager fragmentManager, Context context) throws SmackException.NotConnectedException, InterruptedException {
-        super();
-        askTimetableEventPojo = new AskTimetableEventPojo();
-        this.fragmentManager = fragmentManager;
-        objectMapper = new ObjectMapper();
-        this.context = context;
+    private AskTimetableEventPojo askTimetableEventPojo;
+    private AskCustomEventPojo askCustomEventPojo;
+    private Context context;
+    private FragmentManager fragmentManager;
+    static EventHandler instance;
+
+    public static EventHandler getInstance() {
+        if(instance == null) {
+            instance = new EventHandler();
+        }
+        return instance;
     }
 
-    public void sendDefaultMesg() {
+    public void askEvents(FragmentManager fragmentManager, final Context context) {
         try {
+            final Connection connection = Connection.getInstance();
+            this.fragmentManager = fragmentManager;
             HashMap<String, String> param = new HashMap<>();
-
-//            AskTimetableEventPojo askTimetableEventPojo = Connection.getInstance().createLoadingDialogFragment(new TimetableIqRequestTask(), fragmentManager, param);
-//            AskCustomEventPojo askCustomEventPojo = Connection.getInstance().createLoadingDialogFragment(new CustomEventIqRequestTask(), fragmentManager, param);
+            param.put("Actual JID", connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
+            askTimetableEventPojo = connection.runAsyncTask(new TimetableIqRequestTask(), param);
+            askCustomEventPojo = connection.runAsyncTask(new CustomEventIqRequestTask(), param);
 
             DatabaseManager databaseManager = new DatabaseManager(context);
+
             databaseManager.open();
 
-            List<TimetableEvent> timetableEvents = askTimetableEventPojo.getTimetableEvents();
-//            List<CustomEvent> customEvents = askCustomEventPojo.getCustomEvents();
-
-            List<TimetableEvent> timetableEventListAll = databaseManager.getAllTimetableEvent();
-            List<CustomEvent> customEventListAll = databaseManager.getAllCustomEvent();
-
-                for (TimetableEvent timetableEvent : timetableEvents) {
-                    databaseManager.insertTimetableEvent(timetableEvent);
-                }
-
-//                for (CustomEvent customEvent : customEvents) {
-//                    databaseManager.insertCustomEvent(customEvent);
-//            }
+            databaseManager.deleteTable();
 
             databaseManager.close();
 
-            Bundle bundle = new Bundle();
-            changeToCalndarFragmentView(bundle);
+            databaseManager.open();
 
+            List<TimetableEvent> timetableEvents = askTimetableEventPojo.getTimetableEvents();
+            List<CustomEvent> customEvents = askCustomEventPojo.getCustomEvents();
+
+            for (TimetableEvent timetableEvent : timetableEvents) {
+                    databaseManager.insertTimetableEvent(timetableEvent);
+                }
+
+            for (CustomEvent customEvent : customEvents) {
+                    databaseManager.insertCustomEvent(customEvent);
+                }
+
+            isNetworkFinished = true;
+            changeToCalndarFragmentView(new Bundle());
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }

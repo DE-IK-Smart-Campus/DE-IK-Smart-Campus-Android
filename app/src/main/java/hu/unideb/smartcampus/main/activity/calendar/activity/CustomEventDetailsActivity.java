@@ -1,9 +1,14 @@
 package hu.unideb.smartcampus.main.activity.calendar.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -70,32 +75,32 @@ public class CustomEventDetailsActivity extends AppCompatActivity {
         customEventDetailsList.add(DateFormat.getTimeInstance(DateFormat.SHORT).format(customEventStartDate * 1000));
         customEventDetailsList.add(DateFormat.getTimeInstance(DateFormat.SHORT).format(customEventEndTime * 1000));
         customEventDetailsList.add(DateFormat.getDateInstance(DateFormat.SHORT).format(customEventEndDate * 1000));
-//        customEventDetailsList.add(customEventRepeat);
-//        customEventDetailsList.add(customEventRemainder);
+        customEventDetailsList.add(customEventRepeat);
+        customEventDetailsList.add(customEventRemainder);
 
         return customEventDetailsList;
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.event_details_menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        int id = item.getItemId();
-//        if (id == R.id.action_edit_event) {
-//            Intent i = new Intent(getApplicationContext(), EditCustomEventActivity.class);
-//            startActivity(i);
-//            Toast.makeText(getApplicationContext(), "Szerkeszt", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        if (id == R.id.action_delete_event) {
-//            Toast.makeText(getApplicationContext(), "Töröl", Toast.LENGTH_SHORT).show();
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.event_details_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.action_edit_event) {
+            Intent i = new Intent(getApplicationContext(), EditCustomEventActivity.class);
+            startActivity(i);
+            Toast.makeText(getApplicationContext(), "Szerkeszt", Toast.LENGTH_SHORT).show();
+        }
+
+        if (id == R.id.action_delete_event) {
+            Toast.makeText(getApplicationContext(), "Töröl", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

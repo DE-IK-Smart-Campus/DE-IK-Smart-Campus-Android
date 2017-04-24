@@ -29,7 +29,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="352dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="1">
@@ -74,27 +74,45 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="12dp"
-            android:orientation="horizontal"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="29dp"
+            android:layout_gravity="bottom"
+            android:foregroundGravity="bottom"
+            android:gravity="bottom"
             android:orientation="horizontal"
             android:weightSum="1">
 
-            <ImageView
-                android:id="@+id/hunFlag"
-                android:layout_width="150dp"
-                android:layout_height="34dp"
-                app:srcCompat="@drawable/hun_flag"
-                android:layout_weight="1.33" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_weight="0.5"
+                android:foregroundGravity="bottom"
+                android:gravity="bottom"
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/enFlag"
-                android:layout_width="184dp"
-                android:layout_height="31dp"
-                app:srcCompat="@drawable/us_flag" />
+
+                <ImageView
+                    android:id="@+id/hunFlag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/hun_flag" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_weight="0.5"
+                android:gravity="bottom"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:id="@+id/enFlag"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:src="@drawable/us_flag" />
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.calendar.activity.CustomEventDetailsActivity;
 import hu.unideb.smartcampus.main.activity.calendar.activity.NewCustomEventActivity;
@@ -29,6 +30,8 @@ import hu.unideb.smartcampus.main.activity.calendar.adapter.TimetableEventListAd
 import hu.unideb.smartcampus.sqlite.manager.DatabaseManager;
 import hu.unideb.smartcampus.sqlite.model.CustomEvent;
 import hu.unideb.smartcampus.sqlite.model.TimetableEvent;
+
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.DIALOG_TAG;
 
 public class CalendarFragment extends Fragment implements OnBackPressedListener {
 
@@ -129,7 +132,8 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
                 startActivity(intent);
             }
         });
-
+        LoadingDialogFragment fragmentByTag = (LoadingDialogFragment) getFragmentManager().findFragmentByTag(DIALOG_TAG);
+        fragmentByTag.nDialog.dismiss();
         return view;
 
     }

@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -212,30 +215,29 @@ public class NewCustomEventActivity extends AppCompatActivity {
     }
 
     private void repeatSetup() {
-        //TODO
-//        Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
-//
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeats_array_item, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        repeatSpinner.setAdapter(adapter);
-//
-//        repeatSpinner.setOnItemSelectedListener(
-//                new AdapterView.OnItemSelectedListener() {
-//
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> parent, View view1,
-//                                               int pos, long id) {
+        Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeats_array_item, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        repeatSpinner.setAdapter(adapter);
+
+        repeatSpinner.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view1,
+                                               int pos, long id) {
 //                        Toast.makeText(getApplicationContext(), "You have selected " + parent.getItemAtPosition(pos), Toast.LENGTH_LONG).show();
-//                        repeatSelect = parent.getItemAtPosition(pos).toString();
-//                    }
-//
-//                    @Override
-//                    public void onNothingSelected(AdapterView<?> arg0) {
-//
-//                    }
-//
-//                }
-//        );
+                        repeatSelect = parent.getItemAtPosition(pos).toString();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> arg0) {
+
+                    }
+
+                }
+        );
     }
 
     private void remainderSetup() {
