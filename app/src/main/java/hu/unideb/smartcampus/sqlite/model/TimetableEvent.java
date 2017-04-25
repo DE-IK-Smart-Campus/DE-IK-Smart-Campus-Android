@@ -1,7 +1,5 @@
 package hu.unideb.smartcampus.sqlite.model;
 
-import java.text.DateFormat;
-
 public class TimetableEvent {
     private int id;
     private Long timetableEventDate;
@@ -12,15 +10,6 @@ public class TimetableEvent {
     private Long timetableEventEndTime;
 
     public TimetableEvent() {
-    }
-
-    public TimetableEvent(Long timetableEventDate, String timetableEventName, String timetableEventDescription, String timetableEventPlace, Long timetableEventStartTime, Long timetableEventEndTime) {
-        this.timetableEventDate = timetableEventDate;
-        this.timetableEventName = timetableEventName;
-        this.timetableEventDescription = timetableEventDescription;
-        this.timetableEventPlace = timetableEventPlace;
-        this.timetableEventStartTime = timetableEventStartTime;
-        this.timetableEventEndTime = timetableEventEndTime;
     }
 
     public int getId() {

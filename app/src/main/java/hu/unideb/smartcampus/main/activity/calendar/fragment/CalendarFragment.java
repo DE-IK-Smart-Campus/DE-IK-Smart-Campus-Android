@@ -7,20 +7,31 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TimeZone;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
+import hu.unideb.smartcampus.main.activity.calendar.activity.CustomEventDetailsActivity;
 import hu.unideb.smartcampus.main.activity.calendar.activity.NewCustomEventActivity;
+import hu.unideb.smartcampus.main.activity.calendar.activity.TimetableEventDetailsActivity;
+import hu.unideb.smartcampus.main.activity.calendar.adapter.CustomEventListAdapter;
 import hu.unideb.smartcampus.main.activity.calendar.adapter.TimetableEventListAdapter;
 import hu.unideb.smartcampus.sqlite.manager.DatabaseManager;
+import hu.unideb.smartcampus.sqlite.model.CustomEvent;
 import hu.unideb.smartcampus.sqlite.model.TimetableEvent;
+
+import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.DIALOG_TAG;
 
 public class CalendarFragment extends Fragment implements OnBackPressedListener {
 
@@ -29,29 +40,31 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
     private ListView timetabelEventlistView;
     private ListView customEventlistView;
     private Calendar selectedDate;
-    private TextView emptyText;
-    private List<TimetableEvent> timetableEvents;
+    private TextView emptyTextTimetableEvent;
+    private TextView emptyTextCustomEvent;
+    private String noEventText;
 
     private DatabaseManager databaseManager;
 
     public CalendarFragment() {
     }
 
-
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        timetabelEventlistView = (ListView) view.findViewById(R.id.calendar_event);
+        timetabelEventlistView = (ListView) view.findViewById(R.id.timetable_event);
         customEventlistView = (ListView) view.findViewById(R.id.custom_event_list);
-        emptyText = (TextView) view.findViewById(android.R.id.empty);
+        emptyTextTimetableEvent = (TextView) view.findViewById(R.id.emptyTextTimetableEvent);
+        emptyTextCustomEvent = (TextView) view.findViewById(R.id.emptyTextCustomEvent);
+
+        noEventText = getResources().getString(R.string.noEventThisDay);
 
         databaseManager = new DatabaseManager(getContext());
         databaseManager.open();
 
         selectedDate = Calendar.getInstance();
+        selectedDate.setTimeZone(TimeZone.getTimeZone("Europe/Budapest"));
         selectedDate.set(Calendar.HOUR_OF_DAY, 0);
         selectedDate.set(Calendar.MINUTE, 0);
         selectedDate.set(Calendar.SECOND, 0);
@@ -60,51 +73,67 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         setUpTab(view);
         CalendarInitialize(view);
 
-        timetableEvents = databaseManager.getAllTimetableEvent();
+        final Long selectDate = selectedDate.getTimeInMillis() / 1000;
 
-        //TODO
-//        for(TimetableEvent e : event) {
-//            for (CustomEvent c : events) {
-//                if(e.getTimetableEventDate().equals(selectedDate.getTimeInMillis()) && c.getEventStartDate().equals(selectedDate.getTimeInMillis())) {
-//                    TimetableEventListAdapter adapter1 = new TimetableEventListAdapter(getContext(),event);
-//                    CustomEventListAdapter adapter2 = new CustomEventListAdapter(getContext(),events);
-//
-//                    timetabelEventlistView.setAdapter(adapter1);
-//                    listView2.setAdapter(adapter2);
-////                    timetabelEventlistView.setAdapter(adapter2);
-//                }
-//
-//
-//            }
-//        }
+        List<TimetableEvent> timetableEventsResult = databaseManager.getTimetableEventDate(selectDate);
+        List<CustomEvent> customEventsResult = databaseManager.getCustomEventDate(selectDate);
 
-//        timetabelEventlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                TimetableEvent e = (TimetableEvent) timetabelEventlistView.getItemAtPosition(position);
-//                Intent intent = new Intent(getContext(), EventDetailsActivity.class);
-//                intent.putExtra("eventName", e.getTimetableEventName());
-//                intent.putExtra("eventDescription", e.getTimetableEventDescription());
-//                intent.putExtra("eventPlace", e.getTimetableEventPlace());
-//                intent.putExtra("eventDate", e.getTimetableEventDate());
-//                intent.putExtra("eventStartTime", e.getTimetableEventStartTime());
-//                intent.putExtra("eventEndTime", e.getTimetableEventEndTime());
-//                startActivity(intent);
-//            }
-//        });
+        sortTimetableEvent(timetableEventsResult);
+        sortCustomEvent(customEventsResult);
 
+        if (!timetableEventsResult.isEmpty()) {
+            TimetableEventListAdapter timetableEventListAdapter = new TimetableEventListAdapter(getContext(), timetableEventsResult);
+            timetabelEventlistView.setAdapter(timetableEventListAdapter);
+        } else if (timetableEventsResult.isEmpty()) {
+            timetabelEventlistView.setAdapter(null);
+            emptyTextTimetableEvent.setText(noEventText);
+            timetabelEventlistView.setEmptyView(emptyTextTimetableEvent);
+        }
 
-//        List<TimetableEvent> timetableEventsResult = databaseManager.getTimetableEventDate(selectedDate.getTimeInMillis());
-//        if(timetableEventsResult.size() > 0) {
-//            TimetableEventListAdapter timetableEventListAdapter = new TimetableEventListAdapter(getContext(), timetableEventsResult);
-//            timetabelEventlistView.setAdapter(timetableEventListAdapter);
-//        } else if (timetableEventsResult.size() == 0) {
-//            timetabelEventlistView.setAdapter(null);
-//            emptyText.setText(getResources().getText(R.string.noEventThisDay));
-//            timetabelEventlistView.setEmptyView(emptyText);
-//        }
+        if (!customEventsResult.isEmpty()) {
+            CustomEventListAdapter customEventListAdapter = new CustomEventListAdapter(getContext(), customEventsResult);
+            customEventlistView.setAdapter(customEventListAdapter);
+        } else if (customEventsResult.isEmpty()) {
+            customEventlistView.setAdapter(null);
+            emptyTextCustomEvent.setText(noEventText);
+            customEventlistView.setEmptyView(emptyTextCustomEvent);
+        }
 
+        timetabelEventlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TimetableEvent selectedTimetableEvent = (TimetableEvent) timetabelEventlistView.getItemAtPosition(position);
+                Intent intent = new Intent(getContext(), TimetableEventDetailsActivity.class);
+                intent.putExtra("eventName", selectedTimetableEvent.getTimetableEventName());
+                intent.putExtra("eventDescription", selectedTimetableEvent.getTimetableEventDescription());
+                intent.putExtra("eventPlace", selectedTimetableEvent.getTimetableEventPlace());
+                intent.putExtra("eventDate", selectedTimetableEvent.getTimetableEventDate());
+                intent.putExtra("eventStartTime", selectedTimetableEvent.getTimetableEventStartTime());
+                intent.putExtra("eventEndTime", selectedTimetableEvent.getTimetableEventEndTime());
+                startActivity(intent);
+            }
+        });
 
+        customEventlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CustomEvent selectedCustomEvent = (CustomEvent) customEventlistView.getItemAtPosition(position);
+                Intent intent = new Intent(getContext(), CustomEventDetailsActivity.class);
+                intent.putExtra("uuid", selectedCustomEvent.getUuid());
+                intent.putExtra("name", selectedCustomEvent.getEventName());
+                intent.putExtra("description", selectedCustomEvent.getEventDescription());
+                intent.putExtra("place", selectedCustomEvent.getEventPlace());
+                intent.putExtra("startDate", selectedCustomEvent.getEventStartDate());
+                intent.putExtra("startTime", selectedCustomEvent.getEventStartTime());
+                intent.putExtra("endDate", selectedCustomEvent.getEventEndDate());
+                intent.putExtra("endTime", selectedCustomEvent.getEventEndTime());
+                intent.putExtra("repeat", selectedCustomEvent.getEvenetRepeat());
+                intent.putExtra("remainder", selectedCustomEvent.getEventReminder());
+                startActivity(intent);
+            }
+        });
+        LoadingDialogFragment fragmentByTag = (LoadingDialogFragment) getFragmentManager().findFragmentByTag(DIALOG_TAG);
+        fragmentByTag.nDialog.dismiss();
         return view;
 
     }
@@ -118,19 +147,33 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         myCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                selectedDate.set(year, month , dayOfMonth);
-                //TODO
+                selectedDate.set(year, month, dayOfMonth);
 
-//                List<TimetableEvent> timetableEventsResult = databaseManager.getTimetableEventDate(selectedDate.getTimeInMillis());
-//
-//                if(timetableEventsResult.size() > 0) {
-//                    TimetableEventListAdapter timetableEventListAdapter = new TimetableEventListAdapter(getContext(), timetableEventsResult);
-//                    timetabelEventlistView.setAdapter(timetableEventListAdapter);
-//                } else if (timetableEventsResult.size() == 0) {
-//                    timetabelEventlistView.setAdapter(null);
-//                    emptyText.setText(getResources().getText(R.string.noEventThisDay));
-//                    timetabelEventlistView.setEmptyView(emptyText);
-//                }
+                Long selectDate = selectedDate.getTimeInMillis() / 1000;
+
+                List<TimetableEvent> timetableEventsResult = databaseManager.getTimetableEventDate(selectDate);
+                List<CustomEvent> customEventsResult = databaseManager.getCustomEventDate(selectDate);
+
+                sortTimetableEvent(timetableEventsResult);
+                sortCustomEvent(customEventsResult);
+
+                if (!timetableEventsResult.isEmpty()) {
+                    TimetableEventListAdapter timetableEventListAdapter = new TimetableEventListAdapter(getContext(), timetableEventsResult);
+                    timetabelEventlistView.setAdapter(timetableEventListAdapter);
+                } else if (timetableEventsResult.isEmpty()) {
+                    timetabelEventlistView.setAdapter(null);
+                    emptyTextTimetableEvent.setText(noEventText);
+                    timetabelEventlistView.setEmptyView(emptyTextTimetableEvent);
+                }
+
+                if (!customEventsResult.isEmpty()) {
+                    CustomEventListAdapter customEventListAdapter = new CustomEventListAdapter(getContext(), customEventsResult);
+                    customEventlistView.setAdapter(customEventListAdapter);
+                } else if (customEventsResult.isEmpty()) {
+                    customEventlistView.setAdapter(null);
+                    emptyTextCustomEvent.setText(noEventText);
+                    customEventlistView.setEmptyView(emptyTextCustomEvent);
+                }
 
             }
         });
@@ -145,7 +188,7 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         });
     }
 
-    private void setUpTab(View view){
+    private void setUpTab(View view) {
         TabHost tabHost = (TabHost) view.findViewById(R.id.tabHost);
         tabHost.setup();
 
@@ -162,6 +205,24 @@ public class CalendarFragment extends Fragment implements OnBackPressedListener 
         tabSpec.setContent(R.id.customEventTab);
         tabSpec.setIndicator(customTabText);
         tabHost.addTab(tabSpec);
+    }
+
+    private void sortTimetableEvent(List<TimetableEvent> timetableEventsResult) {
+        Collections.sort(timetableEventsResult, new Comparator<TimetableEvent>() {
+            @Override
+            public int compare(TimetableEvent timetableEvent1, TimetableEvent timetableEvent2) {
+                return timetableEvent1.getTimetableEventStartTime().compareTo(timetableEvent2.getTimetableEventStartTime());
+            }
+        });
+    }
+
+    private void sortCustomEvent(List<CustomEvent> customEventsResult) {
+        Collections.sort(customEventsResult, new Comparator<CustomEvent>() {
+            @Override
+            public int compare(CustomEvent customEvent1, CustomEvent customEvent2) {
+                return customEvent1.getEventStartDate().compareTo(customEvent2.getEventStartDate());
+            }
+        });
     }
 
     @Override

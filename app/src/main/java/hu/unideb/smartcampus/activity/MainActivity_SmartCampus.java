@@ -28,7 +28,7 @@ import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.fragment.AboutUsFragment;
 import hu.unideb.smartcampus.fragment.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.main.activity.attendance.fragment.AttendanceFragment;
-import hu.unideb.smartcampus.main.activity.calendar.handler.TimetableEventHandler;
+import hu.unideb.smartcampus.main.activity.calendar.handler.EventHandler;
 import hu.unideb.smartcampus.main.activity.chat.handler.ChatHandler;
 import hu.unideb.smartcampus.main.activity.home.fragment.HomeFragment;
 import hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler;
@@ -105,79 +105,71 @@ public class MainActivity_SmartCampus extends AppCompatActivity {
     }
 
     private void setListenerForSelectedMenu() {
-        try {
-            FragmentTransaction fragmentTransaction;
-            switch (navItemIndex) {
+        FragmentTransaction fragmentTransaction;
+        switch (navItemIndex) {
 
-                case 0:
-                    HomeFragment homeFragment = new HomeFragment();
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, homeFragment, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
-                    break;
-                case 1:
+            case 0:
+                HomeFragment homeFragment = new HomeFragment();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, homeFragment, CURRENT_TAG);
+                fragmentTransaction.commitAllowingStateLoss();
+                break;
+            case 1:
+                Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
+                new Thread(new Runnable() {
+                    public void run() {
+                        EventHandler eventHandler = EventHandler.getInstance();
+                        eventHandler.askEvents(getSupportFragmentManager(), getApplicationContext());
+                    }
+                }).start();
+                break;
+            case 2:
+//                AttendanceFragment fragment1 = new AttendanceFragment();
+//                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+//                        android.R.anim.fade_out);
+//                fragmentTransaction.replace(R.id.frame, fragment1, CURRENT_TAG);
+//                fragmentTransaction.commitAllowingStateLoss();
+                break;
+            case 3:
+                Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
 
-//                    CalendarFragment fragment = new CalendarFragment();
-//                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-//                            android.R.anim.fade_out);
-//                    fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-//                    fragmentTransaction.commitAllowingStateLoss();
-//                    CustomEventHandler customEventHandler = new CustomEventHandler(getSupportFragmentManager(), getApplicationContext());
-//                    customEventHandler.sendDefaultMesg1();
-                    TimetableEventHandler timetableEventHandler = new TimetableEventHandler(getSupportFragmentManager(), getApplicationContext());
-                    timetableEventHandler.sendDefaultMesg();
-                    break;
-                case 2:
-                    AttendanceFragment fragment1 = new AttendanceFragment();
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, fragment1, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
-                    break;
-                case 3:
-                    Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
+                new Thread(new Runnable() {
+                    public void run() {
+                        OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+                        officeHourHandler.askSubjects(getSupportFragmentManager(), getApplicationContext());
+                    }
+                }).start();
 
-                    new Thread(new Runnable() {
-                        public void run() {
-                            OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
-                            officeHourHandler.askSubjects(getSupportFragmentManager(), getApplicationContext());
-                        }
-                    }).start();
-
-                    /*new Thread(new Runnable() {
-                        public void run() {
-                            OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
-                            officeHourHandler.askSubjectsFromDb(getSupportFragmentManager());
-                        }
-                    }).start();
-                    */
-                    break;
-                case 4:
-                    Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
-                    new Thread(new Runnable() {
-                        public void run() {
-                            ChatHandler chatHandler = ChatHandler.getInstance();
-                            chatHandler.getAllChat(getSupportFragmentManager());
-                        }
-                    }).start();
-                    break;
-                case 5:
-                    AboutUsFragment aboutUsFragment = new AboutUsFragment();
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out);
-                    fragmentTransaction.replace(R.id.frame, aboutUsFragment, CURRENT_TAG);
-                    fragmentTransaction.commitAllowingStateLoss();
-                    break;
-                default:
-                    break;
-            }
-        } catch (SmackException.NotConnectedException | InterruptedException e) {
-            e.printStackTrace();
+                /*new Thread(new Runnable() {
+                    public void run() {
+                        OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
+                        officeHourHandler.askSubjectsFromDb(getSupportFragmentManager());
+                    }
+                }).start();
+                */
+                break;
+            case 4:
+                Connection.getInstance().createLoadingDialogFragment(getSupportFragmentManager(), new Bundle());
+                new Thread(new Runnable() {
+                    public void run() {
+                        ChatHandler chatHandler = ChatHandler.getInstance();
+                        chatHandler.getAllChat(getSupportFragmentManager());
+                    }
+                }).start();
+                break;
+            case 5:
+                AboutUsFragment aboutUsFragment = new AboutUsFragment();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, aboutUsFragment, CURRENT_TAG);
+                fragmentTransaction.commitAllowingStateLoss();
+                break;
+            default:
+                break;
         }
 
     }

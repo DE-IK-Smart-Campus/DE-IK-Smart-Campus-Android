@@ -78,4 +78,19 @@
         <item> 1 hour</item>
     </string-array>
 
+    <string name="timetableTab">Timetable</string>
+    <string name="customTab">Custom</string>
+
+    <string name="chatMe">Me:</string>
+    <string name="roomName">Room name</string>
+    <string name="sendChatMsg">Send</string>
+    <string name="roomString">Room:</string>
+    <string name="can_not_find">Not find!</string>
+    <string name="user_with_this_name">user with this name</string>
+    <string name="please_fill_out_every_field">Please fill out of every field! :)</string>
+    <string name="please_give_me_group_name">Please give me a gorup name.</string>
+    <string name="create_chat">Chat create</string>
+    <string name="timetableEventDetails">Timetable event details</string>
+    <string name="customEventDetails">Custom event details</string>
+
 </resources>

@@ -7,13 +7,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaCollector;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
+import org.jivesoftware.smack.packet.IQ;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.text.DateFormat;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.attendance.pojo.Subject;
+import hu.unideb.smartcampus.shared.iq.request.ChangeAttendanceIqRequest;
+import hu.unideb.smartcampus.xmpp.Connection;
+
+import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 
 public class SubjectDateExpandableListAdaper extends BaseExpandableListAdapter {
 
@@ -74,16 +87,57 @@ public class SubjectDateExpandableListAdaper extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Long dateL = subjectsList.get(groupPosition).getSubjectDates().get(childPosition).getDate();
+    public View getChildView(final int groupPosition,final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().getXmppConnection();
+        final Long dateL = subjectsList.get(groupPosition).getSubjectDates().get(childPosition).getDate() * 1000;
+        final Long t = subjectsList.get(groupPosition).getSubjectDates().get(childPosition).getDateId();
+        final boolean t2 = subjectsList.get(groupPosition).getSubjectDates().get(childPosition).getYesOrNo();
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_subject_date, null);
         }
-
-        CheckBox dateList = (CheckBox) convertView.findViewById(R.id.subjectDate);
+        final CheckBox dateList = (CheckBox) convertView.findViewById(R.id.subjectDate);
+//        dateL.shortValue();
         dateList.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(dateL));
 
+
+        dateList.setChecked(t2);
+
+        dateList.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (dateList.isChecked()) {
+                    try {
+                        ChangeAttendanceIqRequest changeAttendanceIqRequest = new ChangeAttendanceIqRequest();
+                        changeAttendanceIqRequest.setStudent(xmppboshConnection.getUser().getLocalpartOrThrow().toString());
+                        changeAttendanceIqRequest.setAppointmentId(t);
+                        changeAttendanceIqRequest.setPresent(true);
+                        changeAttendanceIqRequest.setType(IQ.Type.set);
+                        changeAttendanceIqRequest.setTo(JidCreate.from(ADMINJID));
+                        changeAttendanceIqRequest.setFrom(xmppboshConnection.getUser());
+                        final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(changeAttendanceIqRequest);
+                        stanzaCollectorAndSend.nextResultOrThrow(5000);
+                        dateList.setChecked(changeAttendanceIqRequest.getPresent());
+                    } catch (SmackException.NoResponseException | SmackException.NotConnectedException | InterruptedException | XMPPException.XMPPErrorException | XmppStringprepException e) {
+                        e.printStackTrace();
+                    }
+                } else if (!dateList.isChecked()) {
+                    try {
+                        ChangeAttendanceIqRequest changeAttendanceIqRequest = new ChangeAttendanceIqRequest();
+                        changeAttendanceIqRequest.setStudent(xmppboshConnection.getUser().getLocalpartOrThrow().toString());
+                        changeAttendanceIqRequest.setAppointmentId(t);
+                        changeAttendanceIqRequest.setPresent(false);
+                        changeAttendanceIqRequest.setType(IQ.Type.set);
+                        changeAttendanceIqRequest.setTo(JidCreate.from(ADMINJID));
+                        changeAttendanceIqRequest.setFrom(xmppboshConnection.getUser());
+                        final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(changeAttendanceIqRequest);
+                        stanzaCollectorAndSend.nextResultOrThrow(5000);
+                    } catch (SmackException.NoResponseException | SmackException.NotConnectedException | InterruptedException | XMPPException.XMPPErrorException | XmppStringprepException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         return convertView;
     }
 

@@ -11,8 +11,6 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.mam.MamManager;
-import org.jivesoftware.smackx.muc.MultiUserChat;
-import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.Jid;
@@ -118,20 +116,9 @@ public class ChatHandler {
         }
 
         for (int i = 0; i < multiUserChat.size(); i++) {
-            message = null;
-            MultiUserChatManager multiUserChatManager = MultiUserChatManager.getInstanceFor(Connection.getInstance().getXmppConnection());
-            MultiUserChat chat = null;
-            try {
-                chat = multiUserChatManager.getMultiUserChat(JidCreate.entityBareFrom(multiUserChat.get(i)));
-            } catch (XmppStringprepException e) {
-                e.printStackTrace();
-            }
-            String chatName;
-            if (!chat.getSubject().isEmpty()) {
-                chatName = chat.getSubject();
-            } else {
-                chatName = XmppStringUtils.parseBareJid(multiUserChat.get(i).getLocalpartOrNull().toString());
-            }
+
+                String chatName;
+            chatName = XmppStringUtils.parseBareJid(multiUserChat.get(i).getLocalpartOrNull().toString());
             final XMPPBOSHConnection xmppConnection = Connection.getInstance().getXmppConnection();
             try {
                 MamManager mamManagerForMultiChat = MamManager.getInstanceFor(xmppConnection, multiUserChat.get(i));

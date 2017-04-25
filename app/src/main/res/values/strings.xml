@@ -43,6 +43,7 @@
     <string name="settingsTitle">Beállítások</string>
     <string name="timetableTab">Órák</string>
     <string name="customTab">Saját</string>
+    <string name="login_in_progress">Bejelentkezés folyamatban…</string>
 
     <string-array name="nav_item_activity_titles">
         <item> Kezdőképernyő</item>
@@ -79,18 +80,6 @@
         <item> 1 hét</item>
     </string-array>
 
-    <string name="ok_button">OK</string>
-    <string name="cancel_button">Mégse</string>
-
-    <string name="other_name">Egyéb</string>
-    <string name="activity_title_about_us">Rólunk</string>
-    
-    <string name="saveButton">Mentés</string>
-    <string name="date">Dátum:</string>
-    <string name="textEventName">Esemény neve:</string>
-    <string name="textEventDescription">Esemény leírása:</string>
-    <string name="textEventEdit">Esemény Szerkesztése:</string>
-    <string name="notEditEventText">Nem történt módosítás!</string>
     <string name="chatMe">Én:</string>
     <string name="roomName">Szoba Név</string>
     <string name="sendChatMsg">Küldés</string>
@@ -100,6 +89,7 @@
     <string name="please_fill_out_every_field">Kérlek tölsd ki az összes mezőt! :)</string>
     <string name="please_give_me_group_name">Kérlek add meg a csoportnevet.</string>
     <string name="create_chat">Chat létrehozása</string>
-    <string name="login_in_progress">Bejelentkezés folyamatban…</string>
+    <string name="timetableEventDetails">Órarend esemény részletező</string>
+    <string name="customEventDetails">Egyéni esemény részletező</string>
 
 </resources>

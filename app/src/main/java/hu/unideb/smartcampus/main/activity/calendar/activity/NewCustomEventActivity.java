@@ -1,9 +1,7 @@
 package hu.unideb.smartcampus.main.activity.calendar.activity;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -14,23 +12,20 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.main.activity.calendar.handler.AddCustomEventHandler;
+import hu.unideb.smartcampus.sqlite.manager.DatabaseManager;
 
 public class NewCustomEventActivity extends AppCompatActivity {
 
@@ -59,11 +54,16 @@ public class NewCustomEventActivity extends AppCompatActivity {
     private String repeatSelect;
     private String remainderSelect;
 
+    private DatabaseManager databaseManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_event_activity);
         setupVariables();
+
+        databaseManager = new DatabaseManager(getApplicationContext());
+        databaseManager.open();
 
         dateFormatter = new SimpleDateFormat("yyyy.MMM dd.,EEE", Locale.getDefault());
         timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -215,7 +215,6 @@ public class NewCustomEventActivity extends AppCompatActivity {
     }
 
     private void repeatSetup() {
-        //TODO
         Spinner repeatSpinner = (Spinner) findViewById(R.id.repeatSpinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeats_array_item, android.R.layout.simple_spinner_item);
@@ -228,7 +227,7 @@ public class NewCustomEventActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view1,
                                                int pos, long id) {
-                        Toast.makeText(getApplicationContext(), "You have selected " + parent.getItemAtPosition(pos), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "You have selected " + parent.getItemAtPosition(pos), Toast.LENGTH_LONG).show();
                         repeatSelect = parent.getItemAtPosition(pos).toString();
                     }
 
@@ -281,6 +280,12 @@ public class NewCustomEventActivity extends AppCompatActivity {
         endTimeCalendar.set(Calendar.MONTH, startDateCalendar.get(Calendar.MONTH));
         endTimeCalendar.set(Calendar.DAY_OF_MONTH, startDateCalendar.get(Calendar.DAY_OF_MONTH));
 
-        AddCustomEventHandler.add(uuid, startDateCalendar.getTimeInMillis(), eventName.getText().toString(), eventDescription.getText().toString(), eventPlace.getText().toString(), startTimeCalendar.getTimeInMillis(), endTimeCalendar.getTimeInMillis(), repeatSelect, remainderSelect);
+        AddCustomEventHandler.add(uuid, startDateCalendar.getTimeInMillis() /1000, eventName.getText().toString(), eventDescription.getText().toString(), eventPlace.getText().toString(), startTimeCalendar.getTimeInMillis() /1000, endTimeCalendar.getTimeInMillis() /1000, repeatSelect, remainderSelect);
+//        databaseManager.insertCustomEvent(new CustomEvent(uuid, eventName.getText().toString(),eventDescription.getText().toString(),eventPlace.getText().toString(),startDateCalendar.getTimeInMillis(), startTimeCalendar.getTimeInMillis(),endDateCalendar.getTimeInMillis(), endTimeCalendar.getTimeInMillis(), repeatSelect, remainderSelect));
+
+//        DeleteCustomEventHandler.delete("b58ddd62-ba30-42d9-8e3d-0e1edf761026");
+
+        Toast.makeText(this, "Esemény hozzáadva", Toast.LENGTH_SHORT).show();
+//        super.onBackPressed();
     }
 }

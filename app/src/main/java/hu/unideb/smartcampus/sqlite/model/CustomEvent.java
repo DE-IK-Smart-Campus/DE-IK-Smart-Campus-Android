@@ -16,19 +16,6 @@ public class CustomEvent {
     public CustomEvent() {
     }
 
-    public CustomEvent(String uuid, String eventName, String eventDescription, String eventPlace, Long eventStartDate, Long eventStartTime, Long eventEndDate, Long eventEndTime, String evenetRepait, String eventReminder) {
-        this.uuid = uuid;
-        this.eventName = eventName;
-        this.eventDescription = eventDescription;
-        this.eventPlace = eventPlace;
-        this.eventStartDate = eventStartDate;
-        this.eventStartTime = eventStartTime;
-        this.eventEndDate = eventEndDate;
-        this.eventEndTime = eventEndTime;
-        this.evenetRepeat = evenetRepait;
-        this.eventReminder = eventReminder;
-    }
-
     public String getUuid() {
         return uuid;
     }

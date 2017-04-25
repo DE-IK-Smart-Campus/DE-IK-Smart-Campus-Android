@@ -14,6 +14,7 @@ import hu.unideb.smartcampus.sqlite.helper.DatabaseHelper;
 import hu.unideb.smartcampus.sqlite.model.CustomEvent;
 import hu.unideb.smartcampus.sqlite.model.TimetableEvent;
 
+import static hu.unideb.smartcampus.sqlite.helper.DatabaseHelper.CUSTOMEVENT_STARTDATE;
 import static hu.unideb.smartcampus.sqlite.helper.DatabaseHelper.TABLE_CUSTOMEVENT;
 import static hu.unideb.smartcampus.sqlite.helper.DatabaseHelper.TABLE_INSTRUCTORS;
 import static hu.unideb.smartcampus.sqlite.helper.DatabaseHelper.TABLE_SUBJECTS;
@@ -284,4 +285,40 @@ public class DatabaseManager {
 
         return resultTimetableEvents;
     }
+
+    public List<CustomEvent> getCustomEventDate(Long selectedDate) {
+        List<CustomEvent> customEventList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_CUSTOMEVENT + " WHERE " + CUSTOMEVENT_STARTDATE + " = " + selectedDate;
+
+        Cursor cursor = database.rawQuery(selectQuery,null);
+
+        if(cursor.moveToFirst()) {
+            do {
+                CustomEvent customEvent = new CustomEvent();
+                customEvent.setUuid(cursor.getString(0));
+                customEvent.setEventName(cursor.getString(1));
+                customEvent.setEventDescription(cursor.getString(2));
+                customEvent.setEventPlace(cursor.getString(3));
+                customEvent.setEventStartDate(cursor.getLong(4));
+                customEvent.setEventStartTime(cursor.getLong(5));
+                customEvent.setEventEndDate(cursor.getLong(6));
+                customEvent.setEventEndTime(cursor.getLong(7));
+                customEvent.setEvenetRepeat(cursor.getString(8));
+                customEvent.setEventReminder(cursor.getString(9));
+
+                customEventList.add(customEvent);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        return customEventList;
+    }
+
+    public void deleteTable() {
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        sqLiteDatabase.delete(TABLE_CUSTOMEVENT,null,null);
+        sqLiteDatabase.delete(TABLE_TIMETABLEEVENT,null,null);
+        sqLiteDatabase.close();
+    }
+
 }
