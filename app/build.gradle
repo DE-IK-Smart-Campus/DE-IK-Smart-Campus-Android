@@ -2,13 +2,29 @@ apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
+
     maven { url "http://wt2.inf.unideb.hu/artifactory/libs-snapshot-local" }
+    google()
 }
 
 android {
-
+    signingConfigs {
+        release {
+            keyAlias 'SmartCampus'
+            keyPassword 'smartcampus'
+            storeFile file('D:/Dropbox/DE-IK-Smart-Campus/smartcampus.keystore')
+            storePassword 'smartcampus'
+        }
+    }
     packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
     }
 
     signingConfigs {
@@ -16,22 +32,45 @@ android {
     lintOptions {
         abortOnError false
     }
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
     defaultConfig {
+        multiDexEnabled true
         applicationId "hu.unideb.smartcampus"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        multiDexEnabled true
+        signingConfig signingConfigs.release
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                includeCompileClasspath false
+//            }
+//        }
     }
     buildTypes {
+
         release {
+            lintOptions {
+                disable 'MissingTranslation'
+                checkReleaseBuilds false
+                abortOnError false
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
+        debug {
+            minifyEnabled false
+        }
+    }
+    productFlavors {
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
     }
 }
 
@@ -46,6 +85,9 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
+
+    provided "org.projectlombok:lombok:1.16.16" // keep
+    annotationProcessor "org.projectlombok:lombok:1.16.16" // add this
 
     compile 'hu.unideb:smart-campus-shared-iq:1.3-SNAPSHOT'
 
@@ -69,5 +111,6 @@ dependencies {
 
     compile 'com.google.android.gms:play-services:10.2.1'
 
+    compile 'com.android.support:multidex:1.0.2'
 
 }
