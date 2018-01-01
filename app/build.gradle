@@ -12,7 +12,6 @@ android {
         release {
             keyAlias 'SmartCampus'
             keyPassword 'smartcampus'
-            storeFile file('D:/Dropbox/DE-IK-Smart-Campus/smartcampus.keystore')
             storePassword 'smartcampus'
         }
     }

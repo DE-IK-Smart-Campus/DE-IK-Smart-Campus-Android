@@ -18,12 +18,16 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.dialog.LoadingDialog;
 import hu.unideb.smartcampus.fragment.LoginDialogFragment;
 import hu.unideb.smartcampus.main.activity.login.auth.BasicAuth;
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
@@ -36,13 +40,17 @@ public class LoginActivity extends AppCompatActivity {
     public static final int MY_REQUEST_CODE = 115;
     public static final String LOGIN_DIALOG_TAG = "LOGIN_DIALOG_TAG";
 
+    @BindView(R.id.usernameId)
     private EditText username;
+
+    @BindView(R.id.passwordId)
     private EditText password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         ImageView hunFlagImage = (ImageView) findViewById(R.id.hunFlag);
@@ -61,18 +69,19 @@ public class LoginActivity extends AppCompatActivity {
                 changeLocale(Locale.ENGLISH);
             }
         });
+
     }
 
     private void login() {
-        setupVariables();
+        //LoadingDialog loadingDialog = new LoadingDialog();
+        //loadingDialog.show(getFragmentManager(),"Macska");
+
         ActualUserInfo actualUserInfo = null;
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else {
-
             try {
-                actualUserInfo = new BasicAuth().execute(new ActualUserInfo
-                        (username.getText().toString(), password.getText().toString(), null))
+                actualUserInfo = new BasicAuth().execute(new ActualUserInfo(username.getText().toString(), username.getText().toString(), null))
                         .get(5000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -115,7 +124,6 @@ public class LoginActivity extends AppCompatActivity {
                 }).start();
             }
         }
-
     }
 
     public void loginOnClick(View v) {
@@ -130,10 +138,6 @@ public class LoginActivity extends AppCompatActivity {
         login();
     }
 
-    private void setupVariables() {
-        username = (EditText) findViewById(R.id.usernameId);
-        password = (EditText) findViewById(R.id.passwordId);
-    }
 
     private void changeLocale(final Locale locale) {
         final Resources res = getApplicationContext().getResources();

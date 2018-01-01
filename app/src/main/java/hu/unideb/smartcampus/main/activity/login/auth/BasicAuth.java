@@ -3,6 +3,7 @@ package hu.unideb.smartcampus.main.activity.login.auth;
 import android.os.AsyncTask;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.auth.api.Auth;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -10,10 +11,18 @@ import com.squareup.okhttp.Response;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
+import hu.unideb.smartcampus.main.activity.login.pojo.AuthReturnPojo;
+import hu.unideb.smartcampus.main.activity.login.pojo.BaseReturnPojo;
+import hu.unideb.smartcampus.main.activity.officehours.pojo.BasePojo;
 
 import static hu.unideb.smartcampus.xmpp.Connection.HTTP_BASIC_AUTH_PATH;
+import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 /**
  * BasicAuth gets the Username, Password for ejabberd login
@@ -31,7 +40,8 @@ import static hu.unideb.smartcampus.xmpp.Connection.HTTP_BASIC_AUTH_PATH;
 public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final int HTTP_OK_STATUS = 200;
+
+    private Integer responseCode;
 
     @Override
     protected ActualUserInfo doInBackground(ActualUserInfo... params) {
@@ -50,11 +60,8 @@ public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
         Response response = null;
         try {
             response = httpClient.newCall(request).execute();
-            if (response.code() == HTTP_OK_STATUS) {
-                actualUserInfo = objectMapper.readValue(response.body().string(), ActualUserInfo.class);
-                return actualUserInfo;
-            }
-
+            responseCode = response.code();
+            actualUserInfo = objectMapper.readValue(response.body().string(), ActualUserInfo.class);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -66,15 +73,22 @@ public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
                 e.printStackTrace();
             }
         }
-        return new ActualUserInfo();
 
+        if (responseCode == HTTP_OK) {
+            return actualUserInfo;
+        }
+        return null;
     }
-
 
     @Override
     protected void onPostExecute(ActualUserInfo actualUserInfo) {
-
         super.onPostExecute(actualUserInfo);
+
+        if (actualUserInfo != null) {
+
+        } else {
+            //HTTP kódkezelés
+        }
     }
 }
 
