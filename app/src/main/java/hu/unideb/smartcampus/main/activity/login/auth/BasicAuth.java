@@ -3,15 +3,15 @@ package hu.unideb.smartcampus.main.activity.login.auth;
 import android.os.AsyncTask;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
 
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static hu.unideb.smartcampus.xmpp.Connection.HTTP_BASIC_AUTH_PATH;
 
@@ -58,12 +58,8 @@ public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (response != null) {
-                    response.body().close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (response != null) {
+                response.body().close();
             }
         }
         return new ActualUserInfo();
