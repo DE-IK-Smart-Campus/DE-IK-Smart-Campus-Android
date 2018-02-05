@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+    @AllArgsConstructor
 public class ActualUserInfo {
 
     String username;

@@ -7,44 +7,29 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.bosh.BOSHConfiguration;
-import org.jxmpp.stringprep.XmppStringprepException;
-
-import java.util.Arrays;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.dialog.LoadingDialog;
-import hu.unideb.smartcampus.fragment.LoginDialogFragment;
-import hu.unideb.smartcampus.main.activity.login.auth.BasicAuth;
+import hu.unideb.smartcampus.main.activity.login.auth.LoginTask;
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 import hu.unideb.smartcampus.sqlite.manager.DatabaseManager;
-import hu.unideb.smartcampus.xmpp.Connection;
-
-import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
 
 public class LoginActivity extends AppCompatActivity {
     public static final int MY_REQUEST_CODE = 115;
     public static final String LOGIN_DIALOG_TAG = "LOGIN_DIALOG_TAG";
 
     @BindView(R.id.usernameId)
-    private EditText username;
+    EditText username;
 
     @BindView(R.id.passwordId)
-    private EditText password;
+    EditText password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,56 +58,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        //LoadingDialog loadingDialog = new LoadingDialog();
-        //loadingDialog.show(getFragmentManager(),"Macska");
-
-        ActualUserInfo actualUserInfo = null;
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
         } else {
-            try {
-                actualUserInfo = new BasicAuth().execute(new ActualUserInfo(username.getText().toString(), username.getText().toString(), null))
-                        .get(5000, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            } catch (TimeoutException e) {
-                Toast.makeText(getApplicationContext(), R.string.login_try_again, Toast.LENGTH_SHORT).show();
-            }
-            if (actualUserInfo.getUsername() == null) {
-                Toast.makeText(getApplicationContext(), R.string.login_failed, Toast.LENGTH_SHORT).show();
-            } else {
-
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.activity_login, new LoginDialogFragment(), LOGIN_DIALOG_TAG);
-                fragmentTransaction.addToBackStack(LOGIN_DIALOG_TAG);
-                fragmentTransaction.commit();
-
                 DatabaseManager databaseManager = new DatabaseManager(getApplicationContext());
                 databaseManager.open();
-
-                final ActualUserInfo finalActualUserInfo = actualUserInfo;
-                new Thread(new Runnable() {
-                    public void run() {
-                        BOSHConfiguration config = null;
-                        try {
-                            config = BOSHConfiguration.builder()
-                                    .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
-                                    .setXmppDomain(HOSTNAME)
-                                    .setHost(HOSTNAME)
-                                    .setPort(80)
-                                    .setFile("/http-bind/")
-                                    .setResource("Smartcampus")
-                                    .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-                                    .setDebuggerEnabled(false)
-                                    .build();
-                        } catch (XmppStringprepException e) {
-                            e.printStackTrace();
-                        }
-                        Connection.getInstance().startBoshConnection(config, getApplicationContext());
-                    }
-                }).start();
-            }
+                new LoginTask(this).execute(new ActualUserInfo(username.getText().toString(), password.getText().toString(), null));
         }
     }
 
