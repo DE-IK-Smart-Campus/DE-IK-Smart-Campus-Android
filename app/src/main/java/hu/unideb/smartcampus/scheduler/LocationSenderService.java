@@ -51,10 +51,12 @@ public class LocationSenderService extends IntentService implements GoogleApiCli
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        /*
         // BEGIN_INCLUDE(service_onhandle)
         BOSHConfiguration config = null;
         xmppConnection = null;
         try {
+
             config = BOSHConfiguration.builder()
                     // .setUsernameAndPassword(finalActualUserInfo.getUsername(), finalActualUserInfo.getXmppPassword())
                     //TODO READ FROM DB
@@ -88,6 +90,7 @@ public class LocationSenderService extends IntentService implements GoogleApiCli
 
         LocationAlarmReceiver.completeWakefulIntent(intent);
         // END_INCLUDE(service_onhandle)
+        */
     }
 
     private void getLocationForService() {
