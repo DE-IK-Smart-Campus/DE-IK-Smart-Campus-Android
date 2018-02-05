@@ -114,7 +114,7 @@ dependencies {
     // Optional for XMPP extensions support
 
     compile 'org.igniterealtime.smack:smack-extensions:4.2.2'
-    compile 'org.igniterealtime.smack:smack-bosh:4.2.2L'
+    compile 'org.igniterealtime.smack:smack-bosh:4.2.2'
 
 
 
