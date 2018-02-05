@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -26,9 +27,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.activity.LoginActivity;
-import hu.unideb.smartcampus.activity.MainActivity_SmartCampus;
 import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
+import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
 import hu.unideb.smartcampus.main.activity.officehours.pojo.BasePojo;
 import hu.unideb.smartcampus.shared.iq.provider.AddCustomEventIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.AddMucChatIqProvider;
@@ -61,23 +61,17 @@ import static java.lang.Thread.sleep;
 public class Connection {
     public static final String CONNECTION_TAG = "Connection";
     private static Connection instance = null;
-    private static Context actualContext;
-    public static final String HTTP_BASIC_AUTH_PATH = "http://wt2.inf.unideb.hu/smartcampus-backend/integration/retrieveUserData";
-    public static final String ADMINJID = "smartcampus@wt2.inf.unideb.hu/Smartcampus";
-    public static final String HOSTNAME = "wt2.inf.unideb.hu";
+
+    public static final String HTTP_BASIC_AUTH_PATH = "https://wt2.inf.unideb.hu/smartcampus-backend/integration/retrieveUserData";
+    public static final String ADMINJID = "smartcampus@wt4.inf.unideb.hu/Smartcampus";
+    public static final String HOSTNAME = "wt4.inf.unideb.hu";
     public static EntityJid adminEntityJID;
 
     private BOSHConfiguration config;
     private XMPPBOSHConnection xmppConnection;
     private String userJID;
+    private Context context;
 
-    public static Context getActualContext() {
-        return actualContext;
-    }
-
-    public static void setActualContext(Context actualContext) {
-        Connection.actualContext = actualContext;
-    }
 
     protected Connection() {
         try {
@@ -94,9 +88,38 @@ public class Connection {
         return instance;
     }
 
-    public boolean maintainConnection(Context actualContext) {
-        boolean returnBool = true;
-        this.actualContext = actualContext;
+
+    public static void startConnection(ActualUserInfo actualUserInfo, Context context) {
+
+        BOSHConfiguration config = null;
+        try {
+            config = BOSHConfiguration.builder()
+                    .setUsernameAndPassword(actualUserInfo.getUsername(), actualUserInfo.getXmppPassword())
+                    .setXmppDomain(HOSTNAME)
+                    .setHost("wt2.inf.unideb.hu")
+                    .setPort(80)
+                    .setFile("/http-bind/")
+                    .setResource("Smartcampus")
+                    .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
+                    .setDebuggerEnabled(false)
+                    .build();
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+
+        Connection connection = Connection.getInstance();
+        connection.setContext(context);
+        connection.setConfig(config);
+        connection.maintainConnection();
+        if (connection.xmppConnection.isAuthenticated()) {
+            connection.discoverFeatures();
+            if (connection.xmppConnection.getConfiguration() != null) {
+                connection.setUserJID(connection.xmppConnection.getConfiguration().toString());
+            }
+        }
+    }
+
+    private void maintainConnection() {
         xmppConnection = new XMPPBOSHConnection(config);
         try {
             if (!xmppConnection.isConnected()) {
@@ -110,58 +133,13 @@ public class Connection {
         } catch (InterruptedException | IOException | SmackException | XMPPException e) {
             e.printStackTrace();
         }
-        return returnBool;
     }
 
     public void newActivity(Class<? extends AppCompatActivity> toActivity) {
-        Intent intent = new Intent(actualContext, toActivity);
+        Intent intent = new Intent(context, toActivity);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        actualContext.startActivity(intent);
+        context.startActivity(intent);
     }
-
-
-    public void startBoshConnection(BOSHConfiguration config, Context actualContext) {
-        this.actualContext = actualContext;
-        this.config = config;
-        if (maintainConnection(actualContext) && xmppConnection.isAuthenticated()) {
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(InstructorConsultingDatesIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(InstructorConsultingDatesIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new InstructorConsultingDateIqProvider());
-
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new SubjectRequestIqProvider());
-
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(CalendarSubjectsIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(CalendarSubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new CalendarSubjectsIqProvider());
-
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(ListCustomEventIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(ListCustomEventIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new ListCustomEventIqProvider());
-
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddCustomEventIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(AddCustomEventIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new AddCustomEventIqProvider());
-
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(DeleteCustomEventIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(DeleteCustomEventIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new DeleteCustomEventIqProvider());
-
-
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddMucChatIqRequest.ELEMENT);
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddUserChatIqRequest.ELEMENT);
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(ListUserChatsIqRequest.ELEMENT);
-
-            ProviderManager.addIQProvider(AddMucChatIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new AddMucChatIqProvider());
-            ProviderManager.addIQProvider(AddUserChatIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new AddUserChatIqProvider());
-            ProviderManager.addIQProvider(ListUserChatsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new UserChatListIqProvider());
-
-
-            ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
-            ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new SubjectRequestIqProvider());
-            userJID = config.getUsername().toString();
-
-            newActivity(MainActivity_SmartCampus.class);
-        } else {
-            newActivity(LoginActivity.class);
-        }
-    }
-
 
     public FragmentManager createLoadingDialogFragment(FragmentManager fragmentManager, Bundle bundle) {
         LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
@@ -211,4 +189,53 @@ public class Connection {
         return xmppConnection;
     }
 
+    private void setUserJID(String userJID) {
+        this.userJID = userJID;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    private void setConfig(BOSHConfiguration config) {
+        this.config = config;
+    }
+
+    private void discoverFeatures() {
+
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(InstructorConsultingDatesIqRequest.ELEMENT);
+        ProviderManager.addIQProvider(InstructorConsultingDatesIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new InstructorConsultingDateIqProvider());
+
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
+        ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new SubjectRequestIqProvider());
+
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(CalendarSubjectsIqRequest.ELEMENT);
+        ProviderManager.addIQProvider(CalendarSubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new CalendarSubjectsIqProvider());
+
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(ListCustomEventIqRequest.ELEMENT);
+        ProviderManager.addIQProvider(ListCustomEventIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new ListCustomEventIqProvider());
+
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddCustomEventIqRequest.ELEMENT);
+        ProviderManager.addIQProvider(AddCustomEventIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new AddCustomEventIqProvider());
+
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(DeleteCustomEventIqRequest.ELEMENT);
+        ProviderManager.addIQProvider(DeleteCustomEventIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new DeleteCustomEventIqProvider());
+
+
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddMucChatIqRequest.ELEMENT);
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(AddUserChatIqRequest.ELEMENT);
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(ListUserChatsIqRequest.ELEMENT);
+
+        ProviderManager.addIQProvider(AddMucChatIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new AddMucChatIqProvider());
+        ProviderManager.addIQProvider(AddUserChatIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new AddUserChatIqProvider());
+        ProviderManager.addIQProvider(ListUserChatsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new UserChatListIqProvider());
+
+        ServiceDiscoveryManager.getInstanceFor(xmppConnection).addFeature(SubjectsIqRequest.ELEMENT);
+        ProviderManager.addIQProvider(SubjectsIqRequest.ELEMENT, BaseSmartCampusIqRequest.BASE_NAMESPACE, new SubjectRequestIqProvider());
+
+    }
 }

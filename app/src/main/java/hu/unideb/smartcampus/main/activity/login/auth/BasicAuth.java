@@ -1,7 +1,5 @@
 package hu.unideb.smartcampus.main.activity.login.auth;
 
-import android.os.AsyncTask;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.codec.binary.Base64;
@@ -9,36 +7,30 @@ import org.apache.commons.codec.binary.Base64;
 import java.io.IOException;
 
 import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
+import hu.unideb.smartcampus.unsafe.Unsafe;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import static hu.unideb.smartcampus.xmpp.Connection.HTTP_BASIC_AUTH_PATH;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 /**
- * BasicAuth gets the Username, Password for ejabberd login
- * from restless call
- *
- * @see hu.unideb.smartcampus.activity.LoginActivity
- * @see ActualUserInfo
- * <p>
- * <p>
- * UnsafeOkHttpClient TODO
- * <p>
- * Created by Headswitcher on 2017. 03. 16..
+ * Created by Headswitcher on 2018. 02. 05..
  */
 
-public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
+public class BasicAuth {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final int HTTP_OK_STATUS = 200;
 
-    @Override
-    protected ActualUserInfo doInBackground(ActualUserInfo... params) {
-        OkHttpClient httpClient = new OkHttpClient();
+    static ActualUserInfo basicAuth(ActualUserInfo paramActualUserInfo) {
+
+        Integer responseCode = null;
+
+        OkHttpClient httpClient = Unsafe.getUnsafeOkHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
 
-        ActualUserInfo actualUserInfo = params[0];
+        ActualUserInfo actualUserInfo = paramActualUserInfo;
         String toBase64 = actualUserInfo.getUsername() + ":" + actualUserInfo.getXmppPassword();
 
         byte[] encodedUsernameAndPassword = Base64.encodeBase64(toBase64.getBytes());
@@ -50,27 +42,23 @@ public class BasicAuth extends AsyncTask<ActualUserInfo, Long, ActualUserInfo> {
         Response response = null;
         try {
             response = httpClient.newCall(request).execute();
-            if (response.code() == HTTP_OK_STATUS) {
-                actualUserInfo = objectMapper.readValue(response.body().string(), ActualUserInfo.class);
-                return actualUserInfo;
-            }
-
+            responseCode = response.code();
+            actualUserInfo = objectMapper.readValue(response.body().string(), ActualUserInfo.class);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+
             if (response != null) {
                 response.body().close();
             }
         }
-        return new ActualUserInfo();
 
+        if (responseCode != null && responseCode == HTTP_OK) {
+            return actualUserInfo;
+        } else {
+            return null;
+        }
     }
 
-
-    @Override
-    protected void onPostExecute(ActualUserInfo actualUserInfo) {
-
-        super.onPostExecute(actualUserInfo);
-    }
 }
 
