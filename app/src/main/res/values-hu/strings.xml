@@ -1,6 +1,23 @@
 <resources>
     <string name="app_name">SmartCampus</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="home_menu_text">Kezdőképernyő</string>
+    <string name="calendar_menu_text">Naptár</string>
+    <string name="attendance_menu_text">Órai jelenlét</string>
+    <string name="office_hours_menu_text">Fogadóórák</string>
+    <string name="chat_menu_text">Beszélgetés</string>
+    <string name="about_us_menu_text">Rólunk</string>
+    <string name="settings_text">Beállítások</string>
+
+    <string name="login_username_hint">felhasználónév</string>
+    <string name="login_password_hint">jelszó</string>
+    <string name="login_button_text">Bejelentkezés</string>
+
+    <!---->
+
     <string name="usernamehint">felhasználónév</string>
     <string name="passwordHint">jelszó</string>
     <string name="loginButtonText">Bejelentkezés</string>
@@ -24,8 +41,6 @@
     <string name="nav_classAttendence_name">Órai jelenlét</string>
     <string name="nav_consultingHours_name">Fogadóórák</string>
     <string name="nav_home_name">Kezdőképernyő</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="new_event_add">Új esemény</string>
     <string name="noEventThisDay">Nincs esemény</string>
     <string name="openDrawer">open_drawer</string>

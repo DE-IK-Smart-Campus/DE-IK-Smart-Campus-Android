@@ -2,12 +2,7 @@ package hu.unideb.smartcampus.xmpp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SmackConfiguration;
@@ -22,14 +17,8 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.fragment.LoadingDialogFragment;
-import hu.unideb.smartcampus.main.activity.login.pojo.ActualUserInfo;
-import hu.unideb.smartcampus.main.activity.officehours.pojo.BasePojo;
+import hu.unideb.smartcampus.pojo.login.ActualUserInfo;
 import hu.unideb.smartcampus.shared.iq.provider.AddCustomEventIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.AddMucChatIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.AddUserChatIqProvider;
@@ -50,13 +39,7 @@ import hu.unideb.smartcampus.shared.iq.request.ListCustomEventIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.ListUserChatsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
-import static hu.unideb.smartcampus.main.activity.officehours.handler.OfficeHourHandler.DIALOG_TAG;
 import static java.lang.Thread.sleep;
-
-/**
- * Created by Erdei Krisztián on 2017.03.03..
- * TODO
- */
 
 public class Connection {
     public static final String CONNECTION_TAG = "Connection";
@@ -141,49 +124,49 @@ public class Connection {
         context.startActivity(intent);
     }
 
-    public FragmentManager createLoadingDialogFragment(FragmentManager fragmentManager, Bundle bundle) {
-        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//    public FragmentManager createLoadingDialogFragment(FragmentManager fragmentManager, Bundle bundle) {
+//        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//        if (loadingDialogFragment != null) {
+//            fragmentTransaction.remove(loadingDialogFragment);
+//            fragmentTransaction.commitNow();
+//        } else {
+//            loadingDialogFragment = new LoadingDialogFragment();
+//        }
+//
+//        if (bundle == null) {
+//            throw new NullPointerException("Bundle can not be null");
+//        }
+//
+//        if (loadingDialogFragment.getArguments() != null) {
+//            loadingDialogFragment.getArguments().putAll(bundle);
+//        } else {
+//            loadingDialogFragment.setArguments(bundle);
+//        }
+//
+//        fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+//        fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOG_TAG);
+//        fragmentTransaction.addToBackStack(DIALOG_TAG);
+//        fragmentTransaction.commit();
+//        Log.i(CONNECTION_TAG, "createLoadingDialogFragment: Replaced!");
+//        return fragmentManager;
+//    }
 
-        if (loadingDialogFragment != null) {
-            fragmentTransaction.remove(loadingDialogFragment);
-            fragmentTransaction.commitNow();
-        } else {
-            loadingDialogFragment = new LoadingDialogFragment();
-        }
-
-        if (bundle == null) {
-            throw new NullPointerException("Bundle can not be null");
-        }
-
-        if (loadingDialogFragment.getArguments() != null) {
-            loadingDialogFragment.getArguments().putAll(bundle);
-        } else {
-            loadingDialogFragment.setArguments(bundle);
-        }
-
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame, loadingDialogFragment, DIALOG_TAG);
-        fragmentTransaction.addToBackStack(DIALOG_TAG);
-        fragmentTransaction.commit();
-        Log.i(CONNECTION_TAG, "createLoadingDialogFragment: Replaced!");
-        return fragmentManager;
-    }
-
-    public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P extends BasePojo>
-    P runAsyncTask(T asyncIqTask, HashMap<String, String> params) throws ExecutionException, InterruptedException {
-
-        HashMap<String, String> asyncTaskParams = new HashMap<>();
-
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            asyncTaskParams.put(entry.getKey(), entry.getValue());
-        }
-
-        P pojoClass = asyncIqTask.execute(asyncTaskParams).get();
-
-        return pojoClass;
-    }
+//    public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P extends BasePojo>
+//    P runAsyncTask(T asyncIqTask, HashMap<String, String> params) throws ExecutionException, InterruptedException {
+//
+//        HashMap<String, String> asyncTaskParams = new HashMap<>();
+//
+//        for (Map.Entry<String, String> entry : params.entrySet()) {
+//            asyncTaskParams.put(entry.getKey(), entry.getValue());
+//        }
+//
+//        P pojoClass = asyncIqTask.execute(asyncTaskParams).get();
+//
+//        return pojoClass;
+//    }
 
     public XMPPBOSHConnection getXmppConnection() {
         return xmppConnection;

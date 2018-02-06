@@ -1,128 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
 
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/main_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true">
 
-    <CalendarView
-        android:id="@+id/calendar"
-        style="@android:style/Widget.DeviceDefault.Light.CalendarView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:dateTextAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
-        android:focusedMonthDateColor="@color/textColorBlack"
-        android:selectedWeekBackgroundColor="@color/colorAccent"
-        android:textAlignment="center"
-        android:unfocusedMonthDateColor="@color/colorPrimary"
-        android:weekNumberColor="@color/textColorBlack"
-        android:weekSeparatorLineColor="@color/textColorBlack"
-        tools:showWeekNumber="false" />
-
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/calendar">
-
-        <TabHost
-            android:id="@+id/tabHost"
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/compactcalendar_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="250dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:compactCalendarBackgroundColor="@color/smart_campus_blue"
+            app:compactCalendarCurrentDayBackgroundColor="@color/white"
+            app:compactCalendarCurrentDayIndicatorStyle="no_fill_large_indicator"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="@color/darkSilver"
+            app:compactCalendarEventIndicatorStyle="small_indicator"
+            app:compactCalendarMultiEventIndicatorColor="#fff"
+            app:compactCalendarTargetHeight="250dp"
+            app:compactCalendarTextColor="#fff"
+            app:compactCalendarTextSize="12sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="38dp" />
-
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:id="@+id/timetableEventTab"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:weightSum="1">
-
-                        <ListView
-                            android:id="@+id/timetable_event"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:id="@+id/emptyTextTimetableEvent"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textSize="36sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/customEventTab"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:weightSum="1">
-
-                        <ListView
-                            android:id="@+id/custom_event_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:id="@+id/emptyTextCustomEvent"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textSize="36sp" />
-
-                    </LinearLayout>
-
-                </FrameLayout>
-            </LinearLayout>
-        </TabHost>
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/new_event_add"
-            style="@style/Widget.Design.FloatingActionButton"
-            android:layout_width="62dp"
-            android:layout_height="56dp"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="15dp"
-            android:foregroundGravity="top"
-            app:backgroundTint="@color/colorPrimaryDark"
-            app:elevation="0dp"
-            app:rippleColor="@color/colorAccent"
-            app:srcCompat="@android:drawable/ic_input_add" />
-
-    </FrameLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

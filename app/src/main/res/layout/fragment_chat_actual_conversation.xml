@@ -54,7 +54,7 @@
             android:id="@+id/chat_send_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/smart_campus_dark_blue"
             android:text="@string/sendChatMsg" />
 
     </LinearLayout>

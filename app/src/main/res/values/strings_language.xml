@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ln">
+        <item>@string/en</item>
+        <item>@string/hu</item>
+    </string-array>
+
+    <string name="en" translatable="false">en</string>
+    <string name="hu" translatable="false">hu</string>
+</resources>
