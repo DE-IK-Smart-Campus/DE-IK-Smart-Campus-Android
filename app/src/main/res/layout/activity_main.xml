@@ -9,7 +9,7 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_main"
+        layout="@layout/app_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -18,11 +18,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/navigaton_drawer_color_gradient"
+        android:background="@drawable/gradinet_color_background"
         android:fitsSystemWindows="true"
-        app:insetForeground="@color/colorPrimaryDark"
-        app:itemBackground="@drawable/menu_background_color"
-        app:itemTextColor="@color/textColorBlack"
-        app:menu="@menu/activity_main_drawer" />
+        app:itemIconTint="@color/selector"
+        app:itemTextColor="@android:color/white"
+        app:menu="@menu/main_drawer_menu" />
 
 </android.support.v4.widget.DrawerLayout>

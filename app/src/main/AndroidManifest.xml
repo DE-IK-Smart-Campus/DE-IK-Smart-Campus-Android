@@ -3,13 +3,13 @@
     package="hu.unideb.smartcampus"
     android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <supports-screens
         android:anyDensity="true"
@@ -20,61 +20,86 @@
         android:xlargeScreens="true" />
 
     <application
-        android:name=".application.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:screenOrientation="portrait"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.SplashScreenActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:name=".activity.splash.SplashScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.LoginActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MainActivity_SmartCampus"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".main.activity.calendar.activity.NewCustomEventActivity"
-            android:label="@string/new_event_add"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".main.activity.calendar.activity.EditCustomEventActivity"
-            android:label="@string/editCustomEvent"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".main.activity.calendar.activity.TimetableEventDetailsActivity"
-            android:label="@string/timetableEventDetails"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".main.activity.calendar.activity.CustomEventDetailsActivity"
-            android:label="@string/customEventDetails"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:label="@string/settingsTitle"
-            android:screenOrientation="portrait" />
-
-        <receiver android:name=".scheduler.LocationAlarmReceiver"/>
-
-        <receiver
-            android:name=".scheduler.LocationBootReceiver"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".scheduler.LocationSenderService" />
+            android:name=".activity.login.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            />
+        <activity android:name=".activity.main.MainActivity" />
+        <activity android:name=".activity.settings.SettingsActivity" />
     </application>
+
+    <!--<application-->
+    <!--android:name=".application.MainApplication"-->
+    <!--android:allowBackup="true"-->
+    <!--android:icon="@mipmap/ic_launcher"-->
+    <!--android:label="@string/app_name"-->
+    <!--android:screenOrientation="portrait"-->
+    <!--android:theme="@style/AppTheme">-->
+    <!--<activity-->
+    <!--android:name=".activity.SplashScreenActivity"-->
+    <!--android:label="@string/app_name"-->
+    <!--android:screenOrientation="portrait">-->
+    <!--<intent-filter>-->
+    <!--<action android:name="android.intent.action.MAIN" />-->
+    <!--<category android:name="android.intent.category.LAUNCHER" />-->
+    <!--</intent-filter>-->
+    <!--</activity>-->
+    <!--<activity-->
+    <!--android:name=".activity.LoginActivity"-->
+    <!--android:label="@string/app_name"-->
+    <!--android:screenOrientation="portrait" />-->
+    <!--<activity-->
+    <!--android:name=".activity.MainActivity_SmartCampus"-->
+    <!--android:screenOrientation="portrait"-->
+    <!--android:theme="@style/AppTheme.NoActionBar" />-->
+    <!--<activity-->
+    <!--android:name=".main.activity.calendar.activity.NewCustomEventActivity"-->
+    <!--android:label="@string/new_event_add"-->
+    <!--android:screenOrientation="portrait" />-->
+    <!--<activity-->
+    <!--android:name=".main.activity.calendar.activity.EditCustomEventActivity"-->
+    <!--android:label="@string/editCustomEvent"-->
+    <!--android:screenOrientation="portrait" />-->
+    <!--<activity-->
+    <!--android:name=".main.activity.calendar.activity.TimetableEventDetailsActivity"-->
+    <!--android:label="@string/timetableEventDetails"-->
+    <!--android:screenOrientation="portrait" />-->
+    <!--<activity-->
+    <!--android:name=".main.activity.calendar.activity.CustomEventDetailsActivity"-->
+    <!--android:label="@string/customEventDetails"-->
+    <!--android:screenOrientation="portrait" />-->
+    <!--<activity-->
+    <!--android:name=".activity.SettingsActivity"-->
+    <!--android:label="@string/settingsTitle"-->
+    <!--android:screenOrientation="portrait" />-->
+
+    <!--<receiver android:name=".scheduler.LocationAlarmReceiver"/>-->
+
+    <!--<receiver-->
+    <!--android:name=".scheduler.LocationBootReceiver"-->
+    <!--android:enabled="false">-->
+    <!--<intent-filter>-->
+    <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
+    <!--</intent-filter>-->
+    <!--</receiver>-->
+
+    <!--<service android:name=".scheduler.LocationSenderService" />-->
+    <!--</application>-->
 
 </manifest>

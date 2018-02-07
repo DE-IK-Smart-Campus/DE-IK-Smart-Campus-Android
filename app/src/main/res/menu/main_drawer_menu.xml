@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home_icon"
+            android:title="@string/home_menu_text" />
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/calendar_icon"
+            android:title="@string/calendar_menu_text" />
+        <item
+            android:id="@+id/attendance"
+            android:icon="@drawable/attendance_icon"
+            android:title="@string/attendance_menu_text" />
+        <item
+            android:id="@+id/nav_office_hours"
+            android:icon="@drawable/office_hours_icon"
+            android:title="@string/office_hours_menu_text" />
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/chat_icon"
+            android:title="@string/chat_menu_text" />
+        <item
+            android:id="@+id/nav_about_us"
+            android:icon="@drawable/about_us_icon"
+            android:title="@string/about_us_menu_text" />
+    </group>
+
+</menu>

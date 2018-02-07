@@ -1,15 +1,37 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/smart_campus_blue</item>
+        <item name="colorPrimaryDark">@color/smart_campus_dark_blue</item>
+        <item name="colorAccent">@color/smart_campus_color_accent</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="HorizontalLine">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">3dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+    </style>
+
+    <style name="HorizontalLineWhite" parent="HorizontalLine">
+        <item name="android:layout_height">3dp</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="HorizontalLineSilver" parent="HorizontalLine">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/silver</item>
+    </style>
 </resources>

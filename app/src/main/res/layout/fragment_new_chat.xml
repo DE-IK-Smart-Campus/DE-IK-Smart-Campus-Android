@@ -50,7 +50,7 @@
             android:id="@+id/chat_new_create_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/backgroundColor"
+            android:background="@color/smart_campus_blue"
             android:text="Új beszélgetés létreozása"
             android:textColor="@android:color/white" />
     </LinearLayout>

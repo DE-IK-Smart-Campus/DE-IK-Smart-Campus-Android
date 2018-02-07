@@ -17,7 +17,7 @@
             android:layout_weight="1"
             android:paddingLeft="0dp"
             android:paddingRight="10dp"
-            app:srcCompat="@drawable/ic_classattendance" />
+            app:srcCompat="@drawable/attendance_icon" />
     </LinearLayout>
 
     <LinearLayout

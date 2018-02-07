@@ -40,7 +40,7 @@
                 android:layout_marginBottom="10dp"
                 android:adjustViewBounds="false"
                 android:visibility="visible"
-                app:srcCompat="@drawable/ic_classattendance" />
+                app:srcCompat="@drawable/attendance_icon" />
         </LinearLayout>
 
         <LinearLayout
