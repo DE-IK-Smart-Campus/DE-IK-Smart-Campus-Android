@@ -34,6 +34,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        resValue "string", "SMARTCAMPUS_BASIC_AUTH_PATH", SMARTCAMPUS_BASIC_AUTH_PATH
+        resValue "string", "SMARTCAMPUS_ADMIN_JID", SMARTCAMPUS_ADMIN_JID
+        resValue "string", "SMARTCAMPUS_HOSTNAME", SMARTCAMPUS_HOSTNAME
+        resValue "string", "SMARTCAMPUS_HOST", SMARTCAMPUS_HOST
+        resValue "string", "SMARTCAMPUS_FILE", SMARTCAMPUS_FILE
+        resValue "string", "SMARTCAMPUS_RESOURCE", SMARTCAMPUS_RESOURCE
+
     }
     buildTypes {
         release {

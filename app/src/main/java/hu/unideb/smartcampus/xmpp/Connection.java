@@ -2,6 +2,7 @@ package hu.unideb.smartcampus.xmpp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -18,6 +19,8 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
 
+import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.application.MainApplication;
 import hu.unideb.smartcampus.pojo.login.ActualUserInfo;
 import hu.unideb.smartcampus.shared.iq.provider.AddCustomEventIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.AddMucChatIqProvider;
@@ -41,20 +44,19 @@ import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
 import static java.lang.Thread.sleep;
 
-public class Connection {
+public class Connection{
     public static final String CONNECTION_TAG = "Connection";
     private static Connection instance = null;
 
-    public static final String HTTP_BASIC_AUTH_PATH = "https://wt2.inf.unideb.hu/smartcampus-backend/integration/retrieveUserData";
-    public static final String ADMINJID = "smartcampus@wt4.inf.unideb.hu/Smartcampus";
-    public static final String HOSTNAME = "wt4.inf.unideb.hu";
+    public static final String HTTP_BASIC_AUTH_PATH = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_BASIC_AUTH_PATH);
+    public static final String ADMINJID = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_ADMIN_JID);
+    public static final String HOSTNAME = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOSTNAME);
     public static EntityJid adminEntityJID;
 
     private BOSHConfiguration config;
     private XMPPBOSHConnection xmppConnection;
     private String userJID;
     private Context context;
-
 
     protected Connection() {
         try {
@@ -73,16 +75,15 @@ public class Connection {
 
 
     public static void startConnection(ActualUserInfo actualUserInfo, Context context) {
-
         BOSHConfiguration config = null;
         try {
             config = BOSHConfiguration.builder()
                     .setUsernameAndPassword(actualUserInfo.getUsername(), actualUserInfo.getXmppPassword())
                     .setXmppDomain(HOSTNAME)
-                    .setHost("wt2.inf.unideb.hu")
+                    .setHost(MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOST))
                     .setPort(80)
-                    .setFile("/http-bind/")
-                    .setResource("Smartcampus")
+                    .setFile(MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_FILE))
+                    .setResource(MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_RESOURCE))
                     .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                     .setDebuggerEnabled(false)
                     .build();

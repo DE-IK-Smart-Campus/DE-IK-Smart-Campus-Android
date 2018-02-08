@@ -4,18 +4,28 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.dialog.settings.language.helper.LanguageHelper;
 
 public class MainApplication extends Application {
 
+    private static Context sContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        sContext = getApplicationContext();
+
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LanguageHelper.onAttach(base, LanguageHelper.getLanguage(base)));
         MultiDex.install(this);
+    }
+
+
+    public static Context getContext() {
+        return sContext;
     }
 }
