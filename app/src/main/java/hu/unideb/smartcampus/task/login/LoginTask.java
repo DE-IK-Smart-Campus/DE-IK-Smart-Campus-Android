@@ -1,13 +1,17 @@
 package hu.unideb.smartcampus.task.login;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import java.net.HttpURLConnection;
 
+import hu.unideb.smartcampus.activity.base.BaseActivity;
 import hu.unideb.smartcampus.activity.login.LoginActivity;
+import hu.unideb.smartcampus.activity.main.MainActivity;
 import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
 import hu.unideb.smartcampus.pojo.login.ActualUserInfo;
+import hu.unideb.smartcampus.task.pojo.ReturnPojo;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
@@ -74,7 +78,9 @@ public class LoginTask extends AsyncTask<ActualUserInfo, Long, ReturnPojo> {
         // TextView errorTextViewAtCustomNumberDialog = dialogFragment.getDialog().findViewById(R.id.custom_number_input_error_textview);
         switch (returnPojo.getStatusCode()) {
             case HTTP_OK:
-                //
+                Intent intent = new Intent(activity, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
                 break;
 
             case HTTP_BAD_REQUEST:
@@ -103,6 +109,8 @@ public class LoginTask extends AsyncTask<ActualUserInfo, Long, ReturnPojo> {
             case HTTP_INTERNAL_ERROR:
                 //TODO SHOW ERROR
         }
+
+
     }
 }
 
