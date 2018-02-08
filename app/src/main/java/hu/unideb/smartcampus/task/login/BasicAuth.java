@@ -12,12 +12,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static hu.unideb.smartcampus.container.Container.AUTHORIZATION_HEADER;
 import static hu.unideb.smartcampus.xmpp.Connection.HTTP_BASIC_AUTH_PATH;
 import static java.net.HttpURLConnection.HTTP_OK;
 
-public class BasicAuth {
-
-    private static final String AUTHORIZATION_HEADER = "Authorization";
+class BasicAuth {
 
     static ActualUserInfo basicAuth(ActualUserInfo paramActualUserInfo) {
 

@@ -23,8 +23,6 @@ import hu.unideb.smartcampus.xmpp.Connection;
 
 public class LoginTask extends AsyncTask<ActualUserInfo, Long, Void> {
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-
     private LoadingDialog loadingDialog;
 
     private Activity activity;

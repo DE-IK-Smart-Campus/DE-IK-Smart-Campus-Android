@@ -2,7 +2,6 @@ package hu.unideb.smartcampus.xmpp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -44,8 +43,8 @@ import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 
 import static java.lang.Thread.sleep;
 
-public class Connection{
-    public static final String CONNECTION_TAG = "Connection";
+public class Connection {
+    private static final String TAG = Connection.class.getSimpleName();
     private static Connection instance = null;
 
     public static final String HTTP_BASIC_AUTH_PATH = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_BASIC_AUTH_PATH);

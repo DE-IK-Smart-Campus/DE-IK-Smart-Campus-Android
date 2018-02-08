@@ -1,21 +1,12 @@
 package hu.unideb.smartcampus.pojo.login;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Role {
-    String role;
-
-    public Role() {
-    }
-
-
-    public Role(String role) {
-        this.role = role;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+    private String role;
 }

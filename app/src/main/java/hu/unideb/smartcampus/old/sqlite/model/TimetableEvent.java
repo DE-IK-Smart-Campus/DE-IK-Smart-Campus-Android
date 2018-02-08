@@ -1,6 +1,7 @@
 package hu.unideb.smartcampus.old.sqlite.model;
 
 public class TimetableEvent {
+
     private int id;
     private Long timetableEventDate;
     private String timetableEventName;

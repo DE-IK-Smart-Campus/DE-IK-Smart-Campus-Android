@@ -8,4 +8,6 @@ public class Container {
 
     public static final String SELECTED_LANGUAGE = "Language.Helper.Selected.Language";
 
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+
 }
