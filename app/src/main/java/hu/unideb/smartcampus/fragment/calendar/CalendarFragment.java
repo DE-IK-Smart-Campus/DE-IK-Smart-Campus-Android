@@ -25,25 +25,26 @@ public class CalendarFragment extends Fragment {
     @BindView(R.id.compactcalendar_view)
     CompactCalendarView compactCalendarView;
 
+    @BindView(R.id.event_list_view)
+    ListView eventListView;
 
     private SimpleDateFormat dateFormatForMonth2;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_calendar, container, false);
+        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
         compactCalendarView.invalidate();
 
-        ListView listView = view.findViewById(R.id.event_list_view);
         String[] values = new String[] { "Android List View",
                 "Adapter implementation",
                 "Simple List View In Android",
@@ -57,7 +58,7 @@ public class CalendarFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
-                listView.setAdapter(adapter);
+        eventListView.setAdapter(adapter);
 
         Locale aDefault = Locale.getDefault();
 
