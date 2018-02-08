@@ -1,6 +1,7 @@
 package hu.unideb.smartcampus.task.login;
 
 import hu.unideb.smartcampus.pojo.login.ActualUserInfo;
+import hu.unideb.smartcampus.task.pojo.ReturnPojo;
 
 /**
  * Created by Headswitcher on 2018. 02. 08..
