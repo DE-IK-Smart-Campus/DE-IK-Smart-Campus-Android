@@ -1,6 +1,5 @@
 package hu.unideb.smartcampus.xmpp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
@@ -53,7 +52,6 @@ public class Connection {
     private BOSHConfiguration config;
     private XMPPBOSHConnection xmppConnection;
     private String userJID;
-    private Context context;
 
 
     protected Connection() {
@@ -72,7 +70,7 @@ public class Connection {
     }
 
 
-    public static void startConnection(ActualUserInfo actualUserInfo, Context context) {
+    public static void startConnection(ActualUserInfo actualUserInfo) {
 
         BOSHConfiguration config = null;
         try {
@@ -91,7 +89,6 @@ public class Connection {
         }
 
         Connection connection = Connection.getInstance();
-        connection.setContext(context);
         connection.setConfig(config);
         connection.maintainConnection();
         if (connection.xmppConnection.isAuthenticated()) {
@@ -118,12 +115,12 @@ public class Connection {
         }
     }
 
-    public void newActivity(Class<? extends AppCompatActivity> toActivity) {
+    /*public void newActivity(Class<? extends AppCompatActivity> toActivity) {
         Intent intent = new Intent(context, toActivity);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
-
+*/
 //    public FragmentManager createLoadingDialogFragment(FragmentManager fragmentManager, Bundle bundle) {
 //        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -174,14 +171,6 @@ public class Connection {
 
     private void setUserJID(String userJID) {
         this.userJID = userJID;
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 
     private void setConfig(BOSHConfiguration config) {
