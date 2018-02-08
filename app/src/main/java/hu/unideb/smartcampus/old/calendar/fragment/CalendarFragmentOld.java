@@ -220,8 +220,4 @@ public class CalendarFragmentOld extends Fragment{
         });
     }
 
-//    @Override
-//    public void onBackPressed() {
-//    }
-
 }
