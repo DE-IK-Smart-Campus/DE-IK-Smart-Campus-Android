@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 repositories {
     mavenCentral()
@@ -40,7 +41,6 @@ android {
         resValue "string", "SMARTCAMPUS_HOST", SMARTCAMPUS_HOST
         resValue "string", "SMARTCAMPUS_FILE", SMARTCAMPUS_FILE
         resValue "string", "SMARTCAMPUS_RESOURCE", SMARTCAMPUS_RESOURCE
-
     }
     buildTypes {
         release {
@@ -121,4 +121,6 @@ dependencies {
 
     compile 'org.igniterealtime.smack:smack-extensions:4.2.2'
     compile 'org.igniterealtime.smack:smack-bosh:4.2.2'
+
+    compile 'org.greenrobot:greendao:3.2.2'
 }

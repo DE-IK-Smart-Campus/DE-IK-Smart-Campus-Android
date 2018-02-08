@@ -1,31 +1,63 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/parent"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
-    android:orientation="vertical">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/main_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/compactcalendar_view"
+        <LinearLayout
+            android:id="@+id/viewA"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            app:compactCalendarBackgroundColor="@color/smart_campus_blue"
-            app:compactCalendarCurrentDayBackgroundColor="@color/white"
-            app:compactCalendarCurrentDayIndicatorStyle="no_fill_large_indicator"
-            app:compactCalendarCurrentSelectedDayBackgroundColor="@color/darkSilver"
-            app:compactCalendarEventIndicatorStyle="small_indicator"
-            app:compactCalendarMultiEventIndicatorColor="#fff"
-            app:compactCalendarTargetHeight="250dp"
-            app:compactCalendarTextColor="#fff"
-            app:compactCalendarTextSize="12sp" />
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="horizontal">
 
-    </RelativeLayout>
-</LinearLayout>
+            <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/compactcalendar_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                app:compactCalendarBackgroundColor="@color/smart_campus_blue"
+                app:compactCalendarCurrentDayBackgroundColor="@color/white"
+                app:compactCalendarCurrentDayIndicatorStyle="no_fill_large_indicator"
+                app:compactCalendarCurrentSelectedDayBackgroundColor="@color/darkSilver"
+                app:compactCalendarEventIndicatorStyle="small_indicator"
+                app:compactCalendarMultiEventIndicatorColor="#fff"
+                app:compactCalendarTargetHeight="250dp"
+                app:compactCalendarTextColor="#fff"
+                app:compactCalendarTextSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/viewB"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:background="@color/light_blue"
+            android:orientation="horizontal">
+
+
+            <ListView
+                android:id="@+id/event_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@drawable/plus_icon"
+        app:layout_anchor="@id/viewA"
+        app:layout_anchorGravity="bottom|right|end"
+        tools:layout_editor_absoluteX="319dp" />
+
+</android.support.design.widget.CoordinatorLayout>

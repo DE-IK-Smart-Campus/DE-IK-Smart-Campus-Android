@@ -1,6 +1,7 @@
 package hu.unideb.smartcampus.activity.login;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.activity.main.MainActivity;
 import hu.unideb.smartcampus.pojo.login.ActualUserInfo;
 import hu.unideb.smartcampus.task.login.LoginTask;
 
@@ -50,16 +52,16 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.login_button)
     public void loginAction() {
         //TESZT
-//        Intent mainIntet = new Intent(this, MainActivity.class);
-//        startActivity(mainIntet);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-            }, MY_REQUEST_CODE);
-            return;
-        }
-
-        login();
+        Intent mainIntet = new Intent(this, MainActivity.class);
+        startActivity(mainIntet);
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{
+//                    Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION
+//            }, MY_REQUEST_CODE);
+//            return;
+//        }
+//
+//        login();
     }
 }

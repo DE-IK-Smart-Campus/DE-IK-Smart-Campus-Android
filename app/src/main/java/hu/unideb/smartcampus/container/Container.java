@@ -10,4 +10,6 @@ public class Container {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
+    public static final String STACKTRACE = "STACKTRACE";
+
 }
