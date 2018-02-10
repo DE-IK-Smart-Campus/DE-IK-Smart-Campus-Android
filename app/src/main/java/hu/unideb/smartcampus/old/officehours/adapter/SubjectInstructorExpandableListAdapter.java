@@ -98,26 +98,4 @@ public class SubjectInstructorExpandableListAdapter extends BaseExpandableListAd
     public boolean isChildSelectable(int i, int i1) {
         return true;
     }
-
-    /**
-     * Implements ExpandableListView.OnChildClickListener this will happen when the user clicks any Subject's teacher.
-     */
-    public class OnChildClickListenerOnStatusAskSubjects implements ExpandableListView.OnChildClickListener {
-        @Override
-        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-
-        /*    Connection.getInstance().createLoadingDialogFragment(getFragmentManager(), new Bundle());
-            final Subject parentListAdapterGroup = (Subject) parent.getExpandableListAdapter().getGroup(groupPosition);
-            final int childPositionToNewThread = childPosition;
-            new Thread(new Runnable() {
-                public void run() {
-                    final OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
-                    officeHourHandler.askInstructorOfficehours(getFragmentManager(), parentListAdapterGroup.getInstructors().get(childPositionToNewThread));
-                }
-            }).start();
-           */
-            return true;
-        }
-    }
-
 }

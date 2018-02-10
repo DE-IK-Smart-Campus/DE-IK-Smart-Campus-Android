@@ -116,18 +116,7 @@ public class OfficeHourHandler {
         }
     */
 /*    public void changeToOfficeReserveActivity(OfficeHour selectedOfficeHour) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_FROM_UNTIL_DATES, selectedOfficeHour.getFromToDates());
-        bundle.putLong(SELECTED_OFFICE_HOUR_ID, selectedOfficeHour.getConsultingHourId());
-        bundle.putLong(SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM, selectedOfficeHour.getReservedSum());
-        bundle.putString(SELECTED_INSTRUCTOR_NAME, selectedInstructor.getName());
-        Fragment fragment = new OfficeHourReserveFragment();
-        fragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame, fragment, OFFICE_HOURS_TAG);
-        fragmentTransaction.commitAllowingStateLoss();
+
     }
 */
     public void onBackPressed() {

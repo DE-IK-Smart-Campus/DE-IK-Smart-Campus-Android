@@ -3,6 +3,7 @@ package hu.unideb.smartcampus.old.officehours.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by Headswitcher on 2017. 03. 08..
  */
 
-public class Instructor extends BasePojo implements Parcelable {
+public class Instructor extends BasePojo implements Serializable {
     private Long instructorId;
     private String name;
     private List<OfficeHour> officeHourList;
@@ -37,30 +38,6 @@ public class Instructor extends BasePojo implements Parcelable {
         name = in.readString();
         officeHourList = in.createTypedArrayList(OfficeHour.CREATOR);
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(instructorId);
-        dest.writeString(name);
-        dest.writeTypedList(officeHourList);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Instructor> CREATOR = new Creator<Instructor>() {
-        @Override
-        public Instructor createFromParcel(Parcel in) {
-            return new Instructor(in);
-        }
-
-        @Override
-        public Instructor[] newArray(int size) {
-            return new Instructor[size];
-        }
-    };
 
     public Long getInstructorId() {
         return instructorId;
