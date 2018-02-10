@@ -3,6 +3,7 @@ package hu.unideb.smartcampus.old.officehours.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
  */
 
 
-public class Subject implements Parcelable {
+public class Subject implements Serializable {
     private Integer id;
     private String name;
     private List<Instructor> instructors;
@@ -29,34 +30,6 @@ public class Subject implements Parcelable {
         this.name = name;
         this.instructors = instructors;
     }
-
-    protected Subject(Parcel in) {
-        name = in.readString();
-        instructors = in.createTypedArrayList(Instructor.CREATOR);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeTypedList(instructors);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Subject> CREATOR = new Creator<Subject>() {
-        @Override
-        public Subject createFromParcel(Parcel in) {
-            return new Subject(in);
-        }
-
-        @Override
-        public Subject[] newArray(int size) {
-            return new Subject[size];
-        }
-    };
 
     public String getName() {
         return name;

@@ -29,23 +29,6 @@ public class SubjectsIqRequestTask extends AsyncTask<HashMap<String, String>, In
 
     @Override
     protected AskSubjectsPojo doInBackground(HashMap<String, String>... params) {
-        try {
-            SubjectsIqRequest iq = new SubjectsIqRequest();
-            iq.setStudent(params[0].get(PARAM_ACTUAL_USER_JID));
-            iq.setType(IQ.Type.get);
-            iq.setTo(JidCreate.from(ADMINJID));
-
-            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
-            final SubjectsIqRequest subjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
-            return OfficeHourConverter.convertToAskSubjectsProcessMessagePojo(subjectsIqRequest);
-
-        } catch (SmackException.NotConnectedException
-                | XMPPException.XMPPErrorException
-                | SmackException.NoResponseException
-                | XmppStringprepException
-                | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return new AskSubjectsPojo();
+            return  null;
     }
 }
