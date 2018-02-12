@@ -1,4 +1,6 @@
 package hu.unideb.smartcampus.fragment.officehours;
 
-public class OfficeHoursFragment {
+import android.support.v4.app.Fragment;
+
+public class OfficeHoursFragment extends Fragment{
 }

@@ -12,13 +12,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.base.BaseActivity;
 import hu.unideb.smartcampus.activity.settings.SettingsActivity;
+import hu.unideb.smartcampus.fragment.about.AboutUsFragment;
+import hu.unideb.smartcampus.fragment.attendance.AttendanceFragment;
 import hu.unideb.smartcampus.fragment.calendar.CalendarFragment;
+import hu.unideb.smartcampus.fragment.chat.ChatFragment;
 import hu.unideb.smartcampus.fragment.home.HomeFragment;
+import hu.unideb.smartcampus.interfaces.OnBackPressedListener;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -49,16 +55,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
@@ -86,6 +82,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_calendar:
                 fragment = new CalendarFragment();
                 break;
+            case R.id.nav_attendance:
+                fragment = new AttendanceFragment();
+                break;
+            case R.id.nav_office_hours:
+                break;
+            case R.id.nav_chat:
+                fragment = new ChatFragment();
+                break;
+            case R.id.nav_about_us:
+                fragment = new AboutUsFragment();
+                break;
         }
 
         if (fragment != null) {
@@ -104,5 +111,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(MenuItem item) {
         displaySelectedScreen(item.getItemId());
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //  each fragment will have a OnBackPressedListener.
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+            return;
+        }
+
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        if (fragmentList != null) {
+            //TODO: Perform your logic to pass back press here
+            for (Fragment fragment : fragmentList) {
+                if (fragment instanceof OnBackPressedListener) {
+                    ((OnBackPressedListener) fragment).onBackPressed();
+                }
+            }
+        }
     }
 }

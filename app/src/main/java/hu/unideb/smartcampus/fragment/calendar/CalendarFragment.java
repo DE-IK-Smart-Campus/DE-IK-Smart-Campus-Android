@@ -37,13 +37,22 @@ public class CalendarFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
         compactCalendarView.invalidate();
+
+        Locale defaultLocale = Locale.getDefault();
+        Locale hunLocale = new Locale("hu", "hu");
+
+        if (defaultLocale.getLanguage().equals(hunLocale.getLanguage())) {
+            dateFormatForMonth2 = new SimpleDateFormat("yyyy. MMMM", defaultLocale);
+        } else {
+            dateFormatForMonth2 = new SimpleDateFormat("MMMM yyyy", defaultLocale);
+
+        }
 
         String[] values = new String[] { "Android List View",
                 "Adapter implementation",
@@ -59,19 +68,6 @@ public class CalendarFragment extends Fragment {
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
         eventListView.setAdapter(adapter);
-
-        Locale aDefault = Locale.getDefault();
-
-        Locale test = new Locale("hu", "HU");
-
-        int hu = 1;
-
-        if (aDefault.getLanguage().equals(test.getLanguage())) {
-            dateFormatForMonth2 = new SimpleDateFormat("yyyy. MMMM", aDefault);
-        } else {
-            dateFormatForMonth2 = new SimpleDateFormat("MMMM yyyy", aDefault);
-
-        }
 
         getActivity().setTitle(dateFormatForMonth2.format(compactCalendarView.getFirstDayOfCurrentMonth()));
 

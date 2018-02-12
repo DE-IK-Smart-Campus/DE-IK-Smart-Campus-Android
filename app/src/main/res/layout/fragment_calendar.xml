@@ -10,7 +10,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/viewA"
+            android:id="@+id/calendarViewLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.4"
@@ -34,11 +34,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/viewB"
+            android:id="@+id/eventListViewLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.4"
-            android:background="@color/light_blue"
+            android:background="@color/white"
             android:orientation="horizontal">
 
 
@@ -50,13 +50,14 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/addNewEventFab"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_margin="16dp"
         android:clickable="true"
         android:src="@drawable/plus_icon"
-        app:layout_anchor="@id/viewA"
+        app:backgroundTint="@color/gradient_start_color"
+        app:layout_anchor="@id/calendarViewLayout"
         app:layout_anchorGravity="bottom|right|end"
         tools:layout_editor_absoluteX="319dp" />
 
