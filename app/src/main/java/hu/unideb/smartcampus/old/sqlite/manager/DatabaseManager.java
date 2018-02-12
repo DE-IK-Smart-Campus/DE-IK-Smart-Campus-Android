@@ -11,8 +11,8 @@ import java.util.List;
 import hu.unideb.smartcampus.old.officehours.pojo.Instructor;
 import hu.unideb.smartcampus.old.officehours.pojo.Subject;
 import hu.unideb.smartcampus.old.sqlite.helper.DatabaseHelper;
-import hu.unideb.smartcampus.old.sqlite.model.CustomEvent;
-import hu.unideb.smartcampus.old.sqlite.model.TimetableEvent;
+import hu.unideb.smartcampus.pojo.calendar.CustomEvent;
+import hu.unideb.smartcampus.pojo.calendar.TimetableEvent;
 
 import static hu.unideb.smartcampus.old.sqlite.helper.DatabaseHelper.CUSTOMEVENT_STARTDATE;
 import static hu.unideb.smartcampus.old.sqlite.helper.DatabaseHelper.TABLE_CUSTOMEVENT;

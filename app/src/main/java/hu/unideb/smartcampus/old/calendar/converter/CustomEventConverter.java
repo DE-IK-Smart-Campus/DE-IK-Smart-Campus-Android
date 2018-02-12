@@ -3,8 +3,8 @@ package hu.unideb.smartcampus.old.calendar.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.unideb.smartcampus.old.calendar.pojo.AskCustomEventPojo;
-import hu.unideb.smartcampus.old.sqlite.model.CustomEvent;
+import hu.unideb.smartcampus.pojo.calendar.AskCustomEventPojo;
+import hu.unideb.smartcampus.pojo.calendar.CustomEvent;
 import hu.unideb.smartcampus.shared.iq.request.ListCustomEventIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.element.CustomEventIqElement;
 

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -25,8 +24,8 @@ import hu.unideb.smartcampus.old.calendar.activity.TimetableEventDetailsActivity
 import hu.unideb.smartcampus.old.calendar.adapter.CustomEventListAdapter;
 import hu.unideb.smartcampus.old.calendar.adapter.TimetableEventListAdapter;
 import hu.unideb.smartcampus.old.sqlite.manager.DatabaseManager;
-import hu.unideb.smartcampus.old.sqlite.model.CustomEvent;
-import hu.unideb.smartcampus.old.sqlite.model.TimetableEvent;
+import hu.unideb.smartcampus.pojo.calendar.CustomEvent;
+import hu.unideb.smartcampus.pojo.calendar.TimetableEvent;
 
 public class CalendarFragmentOld extends Fragment{
 

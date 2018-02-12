@@ -1,17 +1,13 @@
 package hu.unideb.smartcampus.old.calendar.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
-import java.text.DateFormat;
 import java.util.List;
 
-import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.sqlite.model.TimetableEvent;
+import hu.unideb.smartcampus.pojo.calendar.TimetableEvent;
 
 public class TimetableEventListAdapter extends BaseAdapter {
 

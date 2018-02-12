@@ -3,8 +3,8 @@ package hu.unideb.smartcampus.old.calendar.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.unideb.smartcampus.old.calendar.pojo.AskTimetableEventPojo;
-import hu.unideb.smartcampus.old.sqlite.model.TimetableEvent;
+import hu.unideb.smartcampus.pojo.calendar.AskTimetableEventPojo;
+import hu.unideb.smartcampus.pojo.calendar.TimetableEvent;
 import hu.unideb.smartcampus.shared.iq.request.CalendarSubjectsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.element.AppointmentTimeIqElement;
 import hu.unideb.smartcampus.shared.iq.request.element.CalendarSubjectIqElement;

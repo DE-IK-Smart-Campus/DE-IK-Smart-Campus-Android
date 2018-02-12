@@ -2,24 +2,10 @@ package hu.unideb.smartcampus.old.calendar.handler;
 
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.calendar.pojo.AskCustomEventPojo;
-import hu.unideb.smartcampus.old.calendar.pojo.AskTimetableEventPojo;
-import hu.unideb.smartcampus.old.calendar.task.CustomEventIqRequestTask;
-import hu.unideb.smartcampus.old.calendar.task.TimetableIqRequestTask;
-import hu.unideb.smartcampus.old.sqlite.manager.DatabaseManager;
-import hu.unideb.smartcampus.old.sqlite.model.CustomEvent;
-import hu.unideb.smartcampus.old.sqlite.model.TimetableEvent;
-import hu.unideb.smartcampus.xmpp.Connection;
+import hu.unideb.smartcampus.pojo.calendar.AskCustomEventPojo;
+import hu.unideb.smartcampus.pojo.calendar.AskTimetableEventPojo;
 
 public class EventHandler {
 

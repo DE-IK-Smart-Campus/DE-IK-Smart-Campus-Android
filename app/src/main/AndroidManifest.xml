@@ -56,22 +56,6 @@
             </intent-filter>
         </receiver>
     </application>
-
-    <!--android:name=".main.activity.calendar.activity.NewCustomEventActivity"-->
-    <!--android:label="@string/new_event_add"-->
-    <!--android:screenOrientation="portrait" />-->
-    <!--<activity-->
-    <!--android:name=".main.activity.calendar.activity.EditCustomEventActivity"-->
-    <!--android:label="@string/editCustomEvent"-->
-    <!--android:screenOrientation="portrait" />-->
-    <!--<activity-->
-    <!--android:name=".main.activity.calendar.activity.TimetableEventDetailsActivity"-->
-    <!--android:label="@string/timetableEventDetails"-->
-    <!--android:screenOrientation="portrait" />-->
-    <!--<activity-->
-    <!--android:name=".main.activity.calendar.activity.CustomEventDetailsActivity"-->
-    <!--android:label="@string/customEventDetails"-->
-    <!--android:screenOrientation="portrait" />-->
     <!--<receiver android:name=".scheduler.LocationAlarmReceiver"/>-->
     <!--<receiver-->
     <!--android:name=".scheduler.LocationBootReceiver"-->
