@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.old.officehours.adapter;
+package hu.unideb.smartcampus.adapter.officehour;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -14,8 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.officehours.pojo.FromToDatesInLong;
-import hu.unideb.smartcampus.old.officehours.pojo.Instructor;
+import hu.unideb.smartcampus.pojo.officehours.FromToDatesInLong;
+import hu.unideb.smartcampus.pojo.officehours.Instructor;
 
 public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableListAdapter {
 

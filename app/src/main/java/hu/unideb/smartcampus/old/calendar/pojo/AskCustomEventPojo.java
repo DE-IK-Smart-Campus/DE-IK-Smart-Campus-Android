@@ -3,10 +3,9 @@ package hu.unideb.smartcampus.old.calendar.pojo;
 
 import java.util.List;
 
-import hu.unideb.smartcampus.old.officehours.pojo.BasePojo;
 import hu.unideb.smartcampus.old.sqlite.model.CustomEvent;
 
-public class AskCustomEventPojo extends BasePojo {
+public class AskCustomEventPojo {
 
     private List<CustomEvent> customEvents;
 

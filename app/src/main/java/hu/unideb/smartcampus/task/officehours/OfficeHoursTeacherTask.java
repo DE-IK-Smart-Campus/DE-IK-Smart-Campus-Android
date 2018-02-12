@@ -12,26 +12,17 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
-import hu.unideb.smartcampus.old.officehours.converter.OfficeHourConverter;
-import hu.unideb.smartcampus.old.officehours.fragment.OfficeHourFragment;
-import hu.unideb.smartcampus.old.officehours.pojo.AskSubjectsPojo;
-import hu.unideb.smartcampus.old.officehours.pojo.FromToDatesInLong;
-import hu.unideb.smartcampus.old.officehours.pojo.Instructor;
-import hu.unideb.smartcampus.old.officehours.pojo.OfficeHour;
-import hu.unideb.smartcampus.old.officehours.pojo.Subject;
-import hu.unideb.smartcampus.old.officehours.task.InstructorConsultingDatesIqRequestTask;
+import hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment;
+import hu.unideb.smartcampus.converter.officehour.OfficeHourConverter;
+import hu.unideb.smartcampus.pojo.officehours.Instructor;
 import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
-import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static hu.unideb.smartcampus.old.officehours.handler.OfficeHourHandler.OFFICE_HOURS_TAG;
-import static hu.unideb.smartcampus.old.officehours.task.SubjectsIqRequestTask.PARAM_ACTUAL_USER_JID;
+import static hu.unideb.smartcampus.dialog.loading.LoadingDialog.LOADING_DIALOG_TAG;
+import static hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment.OFFICE_HOUR_INSTRUCTOR_KEY;
+import static hu.unideb.smartcampus.task.officehours.OfficeHoursSubjectsTask.OFFICE_HOUR_LIST_FRAGMENT;
 import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 
 /**
@@ -75,7 +66,7 @@ public class OfficeHoursTeacherTask extends AsyncTask<Instructor, Long, Instruct
     @Override
     protected void onPreExecute() {
         loadingDialog = new LoadingDialog();
-        loadingDialog.show(activity.getFragmentManager(), "LOADING");
+        loadingDialog.show(activity.getFragmentManager(), LOADING_DIALOG_TAG);
         super.onPreExecute();
     }
 
@@ -87,16 +78,19 @@ public class OfficeHoursTeacherTask extends AsyncTask<Instructor, Long, Instruct
         if (instructor != null) {
             OfficeHourFragment fragment = new OfficeHourFragment();
             Bundle bundle = new Bundle();
-            //bundle.putSerializable("INSTRUCTOR", instructor); // TODO
-            List<OfficeHour> officeHours = new ArrayList<>();
+            bundle.putSerializable(OFFICE_HOUR_INSTRUCTOR_KEY, instructor); // TODO
+
+           /* List<OfficeHour> officeHours = new ArrayList<>();
             OfficeHour officeHour = new OfficeHour(1L, new FromToDatesInLong(System.nanoTime(), System.nanoTime() + 3600L), 5L);
             officeHours.add(officeHour);
             Instructor instructor1 = new Instructor(1L, "Pató Pál", officeHours);
 
             bundle.putSerializable("INSTRUCTOR", instructor1); // TODO
+            */
+
             fragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOURS_TAG);
+            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOUR_LIST_FRAGMENT);
             fragmentTransaction.commitAllowingStateLoss();
         }
     }

@@ -1,20 +1,16 @@
-package hu.unideb.smartcampus.old.officehours.adapter;
+package hu.unideb.smartcampus.adapter.officehour;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.officehours.handler.OfficeHourHandler;
-import hu.unideb.smartcampus.old.officehours.pojo.Subject;
-import hu.unideb.smartcampus.xmpp.Connection;
+import hu.unideb.smartcampus.pojo.officehours.Subject;
 
 public class SubjectInstructorExpandableListAdapter extends BaseExpandableListAdapter {
 

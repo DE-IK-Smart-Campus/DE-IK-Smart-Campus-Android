@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.old.officehours.fragment;
+package hu.unideb.smartcampus.fragment.officehours;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -11,20 +11,18 @@ import android.widget.ExpandableListView;
 
 import java.util.Collections;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.officehours.adapter.InstructorOfficeHourExpandableListAdapter;
-import hu.unideb.smartcampus.old.officehours.adapter.SubjectInstructorExpandableListAdapter;
-import hu.unideb.smartcampus.old.officehours.pojo.AskSubjectsPojo;
-import hu.unideb.smartcampus.old.officehours.pojo.Instructor;
-import hu.unideb.smartcampus.old.officehours.pojo.OfficeHour;
-import hu.unideb.smartcampus.old.officehours.pojo.Subject;
+import hu.unideb.smartcampus.adapter.officehour.InstructorOfficeHourExpandableListAdapter;
+import hu.unideb.smartcampus.adapter.officehour.SubjectInstructorExpandableListAdapter;
+import hu.unideb.smartcampus.pojo.officehours.AskSubjectsPojo;
+import hu.unideb.smartcampus.pojo.officehours.Instructor;
+import hu.unideb.smartcampus.pojo.officehours.OfficeHour;
+import hu.unideb.smartcampus.pojo.officehours.Subject;
 import hu.unideb.smartcampus.task.officehours.OfficeHoursTeacherTask;
 
-import static hu.unideb.smartcampus.old.officehours.handler.OfficeHourHandler.EXTRA_FROM_UNTIL_DATES;
-import static hu.unideb.smartcampus.old.officehours.handler.OfficeHourHandler.OFFICE_HOURS_TAG;
-import static hu.unideb.smartcampus.old.officehours.handler.OfficeHourHandler.SELECTED_INSTRUCTOR_NAME;
-import static hu.unideb.smartcampus.old.officehours.handler.OfficeHourHandler.SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM;
-import static hu.unideb.smartcampus.old.officehours.handler.OfficeHourHandler.SELECTED_OFFICE_HOUR_ID;
+import static hu.unideb.smartcampus.fragment.officehours.OfficeHourReserveFragment.OFFICE_HOURS_TAG;
 
 
 /**
@@ -33,29 +31,35 @@ import static hu.unideb.smartcampus.old.officehours.handler.OfficeHourHandler.SE
  */
 
 public class OfficeHourFragment extends android.app.Fragment {
+
+    public static String OFFICE_HOUR_INSTRUCTOR_KEY = "INSTRUCTOR";
+    public static String OFFICE_HOUR_SUBJECT_KEY = "OFFICE_HOUR_SUBJECT";
+
+    @BindView(R.id.consulting_hours_ExpandableListView)
+    ExpandableListView expandableListView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_office_hour, container, false);
-        ExpandableListView expandableListViewList = view.findViewById(R.id.consulting_hours_ExpandableListView);
+        ButterKnife.bind(this, view);
 
-        AskSubjectsPojo subjectList = (AskSubjectsPojo) getArguments().getSerializable("SUBJECTS");
-        Instructor instructor = (Instructor) getArguments().getSerializable("INSTRUCTOR");
+        AskSubjectsPojo subjectList = (AskSubjectsPojo) getArguments().getSerializable(OFFICE_HOUR_SUBJECT_KEY);
+        Instructor instructor = (Instructor) getArguments().getSerializable(OFFICE_HOUR_INSTRUCTOR_KEY);
+
         if (instructor == null) { // TODO
             final ExpandableListAdapter ClassChildTeacherListAdapter =
                     new SubjectInstructorExpandableListAdapter(getActivity().getApplicationContext(), subjectList.getSubjects());
-            expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
-
-            expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskSubjects());
+            expandableListView.setAdapter(ClassChildTeacherListAdapter);
+            expandableListView.setOnChildClickListener(new OnChildClickListenerOnStatusAskSubjects());
         } else {
-
             final ExpandableListAdapter ClassChildTeacherListAdapter;
             ClassChildTeacherListAdapter = new InstructorOfficeHourExpandableListAdapter(getActivity().getApplicationContext(),
                     Collections.singletonList(
                             instructor));
-            expandableListViewList.setAdapter(ClassChildTeacherListAdapter);
-            expandableListViewList.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
-            expandableListViewList.expandGroup(0);
+            expandableListView.setAdapter(ClassChildTeacherListAdapter);
+            expandableListView.setOnChildClickListener(new OnChildClickListenerOnStatusAskInstructorCH());
+            expandableListView.expandGroup(0);
         }
         return view;
     }
@@ -80,33 +84,31 @@ public class OfficeHourFragment extends android.app.Fragment {
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
             Instructor selectedInstructor = (Instructor) parent.getExpandableListAdapter().getGroup(groupPosition);
-
             final OfficeHour selectedOfficeHour = selectedInstructor.getOfficeHourList().get(childPosition);
 
             Bundle bundle = new Bundle();
-            bundle.putParcelable(EXTRA_FROM_UNTIL_DATES, selectedOfficeHour.getFromToDates());
-            bundle.putLong(SELECTED_OFFICE_HOUR_ID, selectedOfficeHour.getConsultingHourId());
-            bundle.putLong(SELECTED_OFFICE_HOUR_ALREADY_RESERVED_SUM, selectedOfficeHour.getReservedSum());
-            bundle.putString(SELECTED_INSTRUCTOR_NAME, selectedInstructor.getName());
+            bundle.putSerializable("SELECTED_INSTRUCTOR", selectedInstructor);
+            bundle.putSerializable("SELECTED_OFFICE_HOUR", selectedOfficeHour);
+
             Fragment fragment = new OfficeHourReserveFragment();
             fragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOURS_TAG);
             fragmentTransaction.commitAllowingStateLoss();
-
-
             return true;
         }
     }
 
-/*
+
+    /*
     @Override
     public void onBackPressed() {
-        final OfficeHourHandler officeHourHandler = OfficeHourHandler.getInstance();
-        if (officeHourHandler.getStatus().equals(OfficeHourHandler.Status.ASKINSTRUCTOROFFICEHOURS)) {
-            officeHourHandler.onBackPressed();
-            officeHourHandler.changeToOfficeFragmentView(new Bundle());
+        Instructor instructor = (Instructor) getArguments().getSerializable(OFFICE_HOUR_INSTRUCTOR_KEY);
+        if (instructor != null) {
+            new OfficeHoursSubjectsTask(getActivity()).execute(); // TODO clear transactions
         }
     }
     */
+
+
 }

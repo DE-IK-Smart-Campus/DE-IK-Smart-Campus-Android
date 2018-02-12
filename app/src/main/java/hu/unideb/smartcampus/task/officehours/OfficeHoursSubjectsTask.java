@@ -13,37 +13,28 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
-import hu.unideb.smartcampus.old.officehours.converter.OfficeHourConverter;
-import hu.unideb.smartcampus.old.officehours.fragment.OfficeHourFragment;
-import hu.unideb.smartcampus.old.officehours.pojo.AskSubjectsPojo;
-import hu.unideb.smartcampus.old.officehours.pojo.Instructor;
-import hu.unideb.smartcampus.old.officehours.pojo.Subject;
-import hu.unideb.smartcampus.old.officehours.task.SubjectsIqRequestTask;
+import hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment;
+import hu.unideb.smartcampus.converter.officehour.OfficeHourConverter;
+import hu.unideb.smartcampus.pojo.officehours.AskSubjectsPojo;
+import hu.unideb.smartcampus.pojo.officehours.Instructor;
+import hu.unideb.smartcampus.pojo.officehours.Subject;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
-import hu.unideb.smartcampus.task.pojo.ReturnPojo;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static hu.unideb.smartcampus.old.officehours.handler.OfficeHourHandler.OFFICE_HOURS_TAG;
-import static hu.unideb.smartcampus.old.officehours.task.SubjectsIqRequestTask.PARAM_ACTUAL_USER_JID;
+import static hu.unideb.smartcampus.dialog.loading.LoadingDialog.LOADING_DIALOG_TAG;
+import static hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment.OFFICE_HOUR_SUBJECT_KEY;
 import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_CLIENT_TIMEOUT;
-import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT;
-import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
-import static java.net.HttpURLConnection.HTTP_OK;
-import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
 /**
  * Created by Headswitcher on 2018. 02. 10..
  */
 
 public class OfficeHoursSubjectsTask extends AsyncTask<String, Long, AskSubjectsPojo> {
+
+    public static String OFFICE_HOUR_LIST_FRAGMENT = "OFFICE_HOUR_LIST_FRAGMENT";
 
     private LoadingDialog loadingDialog;
 
@@ -56,18 +47,16 @@ public class OfficeHoursSubjectsTask extends AsyncTask<String, Long, AskSubjects
     @Override
     protected void onPreExecute() {
         loadingDialog = new LoadingDialog();
-        loadingDialog.show(activity.getFragmentManager(), "LOADING");
+        loadingDialog.show(activity.getFragmentManager(), LOADING_DIALOG_TAG);
         super.onPreExecute();
     }
 
     @Override
     protected AskSubjectsPojo doInBackground(String... strings) {
         final Connection connection = Connection.getInstance();
-        HashMap<String, String> param = new HashMap<>();
-        param.put(PARAM_ACTUAL_USER_JID, connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
         try {
             SubjectsIqRequest iq = new SubjectsIqRequest();
-            iq.setStudent(PARAM_ACTUAL_USER_JID);
+            iq.setStudent(connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
             iq.setType(IQ.Type.get);
             iq.setTo(JidCreate.from(ADMINJID));
 
@@ -92,22 +81,25 @@ public class OfficeHoursSubjectsTask extends AsyncTask<String, Long, AskSubjects
         if (askSubjectsPojo != null) {
             OfficeHourFragment fragment = new OfficeHourFragment();
             Bundle bundle = new Bundle();
-            //bundle.putSerializable("SUBJECTS", askSubjectsPojo);
+            bundle.putSerializable(OFFICE_HOUR_SUBJECT_KEY, askSubjectsPojo);
 
+            /* TEST ADAT
             AskSubjectsPojo askSubjectsPojo1 = new AskSubjectsPojo();
             ArrayList<Subject> subjects = new ArrayList<>();
             ArrayList<Instructor> instructors = new ArrayList<>();
             instructors.add(new Instructor(1L, "Pató Pál", null));
-            subjects.add(new Subject("Tárgy1", instructors));
-            subjects.add(new Subject("Tárgy2", instructors));
-            subjects.add(new Subject("Tárgy3", instructors));
+
+            subjects.add(new Subject(1, "Tárgy1", instructors));
+            subjects.add(new Subject(2, "Tárgy2", instructors));
+            subjects.add(new Subject(3, "Tárgy3", instructors));
             askSubjectsPojo1.setSubjects(subjects);
 
-            bundle.putSerializable("SUBJECTS", askSubjectsPojo1);
+            //bundle.putSerializable("OFFICE_HOUR_SUBJECT_KEY", askSubjectsPojo1);
+            */
 
             fragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOURS_TAG);
+            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOUR_LIST_FRAGMENT);
             fragmentTransaction.commitAllowingStateLoss();
         }
     }

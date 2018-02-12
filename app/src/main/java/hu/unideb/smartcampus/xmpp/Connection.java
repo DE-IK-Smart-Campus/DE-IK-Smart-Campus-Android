@@ -1,8 +1,6 @@
 package hu.unideb.smartcampus.xmpp;
 
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SmackConfiguration;
@@ -21,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import hu.unideb.smartcampus.old.officehours.pojo.BasePojo;
 import hu.unideb.smartcampus.pojo.login.ActualUserInfo;
 import hu.unideb.smartcampus.shared.iq.provider.AddCustomEventIqProvider;
 import hu.unideb.smartcampus.shared.iq.provider.AddMucChatIqProvider;
@@ -156,7 +153,7 @@ public class Connection {
 //        return fragmentManager;
 //    }
 
-    public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P extends BasePojo>
+    public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P>
     P runAsyncTask(T asyncIqTask, HashMap<String, String> params) throws ExecutionException, InterruptedException {
 
         HashMap<String, String> asyncTaskParams = new HashMap<>();

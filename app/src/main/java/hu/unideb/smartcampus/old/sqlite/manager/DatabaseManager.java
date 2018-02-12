@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.unideb.smartcampus.old.officehours.pojo.Instructor;
-import hu.unideb.smartcampus.old.officehours.pojo.Subject;
+import hu.unideb.smartcampus.pojo.officehours.Instructor;
+import hu.unideb.smartcampus.pojo.officehours.Subject;
 import hu.unideb.smartcampus.old.sqlite.helper.DatabaseHelper;
 import hu.unideb.smartcampus.old.sqlite.model.CustomEvent;
 import hu.unideb.smartcampus.old.sqlite.model.TimetableEvent;
