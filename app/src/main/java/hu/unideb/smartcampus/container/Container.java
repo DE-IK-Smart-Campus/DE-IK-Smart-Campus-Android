@@ -12,4 +12,6 @@ public class Container {
 
     public static final String STACKTRACE = "STACKTRACE";
 
+    public static final String LOADING_DIALOG_TAG = "LoadingDialog";
+
 }

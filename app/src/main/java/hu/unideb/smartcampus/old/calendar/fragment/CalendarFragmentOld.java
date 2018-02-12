@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.calendar.activity.CustomEventDetailsActivity;
-import hu.unideb.smartcampus.old.calendar.activity.TimetableEventDetailsActivity;
 import hu.unideb.smartcampus.old.calendar.adapter.CustomEventListAdapter;
 import hu.unideb.smartcampus.old.calendar.adapter.TimetableEventListAdapter;
 import hu.unideb.smartcampus.old.sqlite.manager.DatabaseManager;
@@ -47,11 +45,6 @@ public class CalendarFragmentOld extends Fragment{
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-//        timetabelEventlistView = (ListView) view.findViewById(R.id.timetable_event);
-//        customEventlistView = (ListView) view.findViewById(R.id.custom_event_list);
-//        emptyTextTimetableEvent = (TextView) view.findViewById(R.id.emptyTextTimetableEvent);
-//        emptyTextCustomEvent = (TextView) view.findViewById(R.id.emptyTextCustomEvent);
-
         noEventText = getResources().getString(R.string.noEventThisDay);
 
         databaseManager = new DatabaseManager(getContext());
@@ -64,7 +57,6 @@ public class CalendarFragmentOld extends Fragment{
         selectedDate.set(Calendar.SECOND, 0);
         selectedDate.set(Calendar.MILLISECOND, 0);
 
-        setUpTab(view);
         CalendarInitialize(view);
 
         final Long selectDate = selectedDate.getTimeInMillis() / 1000;
@@ -93,41 +85,6 @@ public class CalendarFragmentOld extends Fragment{
             customEventlistView.setEmptyView(emptyTextCustomEvent);
         }
 
-        timetabelEventlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TimetableEvent selectedTimetableEvent = (TimetableEvent) timetabelEventlistView.getItemAtPosition(position);
-                Intent intent = new Intent(getContext(), TimetableEventDetailsActivity.class);
-                intent.putExtra("eventName", selectedTimetableEvent.getTimetableEventName());
-                intent.putExtra("eventDescription", selectedTimetableEvent.getTimetableEventDescription());
-                intent.putExtra("eventPlace", selectedTimetableEvent.getTimetableEventPlace());
-                intent.putExtra("eventDate", selectedTimetableEvent.getTimetableEventDate());
-                intent.putExtra("eventStartTime", selectedTimetableEvent.getTimetableEventStartTime());
-                intent.putExtra("eventEndTime", selectedTimetableEvent.getTimetableEventEndTime());
-                startActivity(intent);
-            }
-        });
-
-        customEventlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CustomEvent selectedCustomEvent = (CustomEvent) customEventlistView.getItemAtPosition(position);
-                Intent intent = new Intent(getContext(), CustomEventDetailsActivity.class);
-                intent.putExtra("uuid", selectedCustomEvent.getUuid());
-                intent.putExtra("name", selectedCustomEvent.getEventName());
-                intent.putExtra("description", selectedCustomEvent.getEventDescription());
-                intent.putExtra("place", selectedCustomEvent.getEventPlace());
-                intent.putExtra("startDate", selectedCustomEvent.getEventStartDate());
-                intent.putExtra("startTime", selectedCustomEvent.getEventStartTime());
-                intent.putExtra("endDate", selectedCustomEvent.getEventEndDate());
-                intent.putExtra("endTime", selectedCustomEvent.getEventEndTime());
-                intent.putExtra("repeat", selectedCustomEvent.getEvenetRepeat());
-                intent.putExtra("remainder", selectedCustomEvent.getEventReminder());
-                startActivity(intent);
-            }
-        });
-//        LoadingDialogFragment fragmentByTag = (LoadingDialogFragment) getFragmentManager().findFragmentByTag(DIALOG_TAG);
-//        fragmentByTag.nDialog.dismiss();
         return view;
 
     }
@@ -182,24 +139,7 @@ public class CalendarFragmentOld extends Fragment{
         });
     }
 
-    private void setUpTab(View view) {
-//        TabHost tabHost = (TabHost) view.findViewById(R.id.tabHost);
-//        tabHost.setup();
-//
-//        String timetableTabText = getResources().getString(R.string.timetableTab);
-//        String customTabText = getResources().getString(R.string.customTab);
-//
-//        TabHost.TabSpec tabSpec = tabHost.newTabSpec(timetableTabText);
-//        tabSpec.setContent(R.id.timetableEventTab);
-//        tabSpec.setIndicator(timetableTabText);
-//        tabHost.addTab(tabSpec);
-//
-//
-//        tabSpec = tabHost.newTabSpec(customTabText);
-//        tabSpec.setContent(R.id.customEventTab);
-//        tabSpec.setIndicator(customTabText);
-//        tabHost.addTab(tabSpec);
-    }
+
 
     private void sortTimetableEvent(List<TimetableEvent> timetableEventsResult) {
         Collections.sort(timetableEventsResult, new Comparator<TimetableEvent>() {
