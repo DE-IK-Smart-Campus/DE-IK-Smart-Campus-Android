@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.old.calendar.converter;
+package hu.unideb.smartcampus.converter.calendar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +42,7 @@ public class TimetableEventConverter {
                 timetableEventsList.add(timetableEvent);
             }
         }
-//        askTimetableEventPojo.setTimetableEvents(timetableEventsList);
-
+        askTimetableEventPojo.setTimetableEvents(timetableEventsList);
         return askTimetableEventPojo;
     }
 

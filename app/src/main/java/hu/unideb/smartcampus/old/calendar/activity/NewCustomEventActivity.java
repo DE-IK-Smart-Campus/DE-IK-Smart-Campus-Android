@@ -4,15 +4,9 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -22,9 +16,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
-
-import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.sqlite.manager.DatabaseManager;
 
 public class NewCustomEventActivity extends AppCompatActivity {
 
@@ -53,7 +44,6 @@ public class NewCustomEventActivity extends AppCompatActivity {
     private String repeatSelect;
     private String remainderSelect;
 
-    private DatabaseManager databaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +51,6 @@ public class NewCustomEventActivity extends AppCompatActivity {
 //        setContentView(R.layout.new_event_activity);
         setupVariables();
 
-        databaseManager = new DatabaseManager(getApplicationContext());
-        databaseManager.open();
 
         dateFormatter = new SimpleDateFormat("yyyy.MMM dd.,EEE", Locale.getDefault());
         timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());

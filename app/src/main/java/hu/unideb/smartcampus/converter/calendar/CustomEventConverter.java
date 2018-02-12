@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.old.calendar.converter;
+package hu.unideb.smartcampus.converter.calendar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class CustomEventConverter {
             customEvents.add(customEvent);
         }
 
-//        askCustomEventPojo.setCustomEvents(customEvents);
+        askCustomEventPojo.setCustomEvents(customEvents);
         return askCustomEventPojo;
 
     }

@@ -11,7 +11,7 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
-import hu.unideb.smartcampus.old.calendar.converter.CustomEventConverter;
+import hu.unideb.smartcampus.converter.calendar.CustomEventConverter;
 import hu.unideb.smartcampus.pojo.calendar.AskCustomEventPojo;
 import hu.unideb.smartcampus.shared.iq.request.ListCustomEventIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
