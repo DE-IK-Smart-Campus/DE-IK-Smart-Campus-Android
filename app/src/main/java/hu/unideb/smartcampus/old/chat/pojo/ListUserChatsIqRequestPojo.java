@@ -2,14 +2,12 @@ package hu.unideb.smartcampus.old.chat.pojo;
 
 import java.util.List;
 
-import hu.unideb.smartcampus.old.officehours.pojo.BasePojo;
-
 
 /**
  * Created by Headswitcher on 2017. 04. 11..
  */
 
-public class ListUserChatsIqRequestPojo extends BasePojo {
+public class ListUserChatsIqRequestPojo {
 
     private String student;
     private List<String> chatList;

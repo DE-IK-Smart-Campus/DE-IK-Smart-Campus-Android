@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.old.officehours.adapter;
+package hu.unideb.smartcampus.adapter.officehour;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.officehours.pojo.Subject;
+import hu.unideb.smartcampus.pojo.officehours.Subject;
 
 public class SubjectInstructorExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -59,15 +59,15 @@ public class SubjectInstructorExpandableListAdapter extends BaseExpandableListAd
 
     @Override
     public View getGroupView(int classAt, boolean isExpanded, View view, ViewGroup parent) {
-//        String headerTitle = subjectList.get(classAt).getName();
-//        if (view == null) {
-//            LayoutInflater layoutInflater = (LayoutInflater) context
-//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            view = layoutInflater.inflate(R.layout.list_class, null);
-//        }
-//        TextView classTextView = (TextView) view
-//                .findViewById(R.id.classListId);
-//        classTextView.setText(headerTitle);
+        String headerTitle = subjectList.get(classAt).getName();
+        if (view == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = layoutInflater.inflate(R.layout.list_class, null);
+        }
+        TextView classTextView = (TextView) view
+                .findViewById(R.id.classListId);
+        classTextView.setText(headerTitle);
 
         return view;
 
@@ -75,18 +75,18 @@ public class SubjectInstructorExpandableListAdapter extends BaseExpandableListAd
 
     @Override
     public View getChildView(int classAt, int teacherAt, boolean isExpanded, View view, ViewGroup viewGroup) {
-//        final String teacherName = subjectList.get(classAt).getInstructors().get(teacherAt).getName();
-//
-//        if (view == null) {
-//            LayoutInflater infalInflater = (LayoutInflater) this.context
-//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            view = infalInflater.inflate(R.layout.list_instructor, null);
-//        }
-//
-//        TextView teacherTextView = (TextView) view
-//                .findViewById(R.id.teacherListItemId);
-//
-//        teacherTextView.setText(teacherName);
+        final String teacherName = subjectList.get(classAt).getInstructors().get(teacherAt).getName();
+
+        if (view == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this.context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = infalInflater.inflate(R.layout.list_instructor, null);
+        }
+
+        TextView teacherTextView = (TextView) view
+                .findViewById(R.id.teacherListItemId);
+
+        teacherTextView.setText(teacherName);
         return view;
     }
 

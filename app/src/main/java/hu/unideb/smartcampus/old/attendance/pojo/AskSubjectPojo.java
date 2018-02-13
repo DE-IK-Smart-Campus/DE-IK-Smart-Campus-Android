@@ -5,10 +5,8 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-import hu.unideb.smartcampus.old.officehours.pojo.BasePojo;
 
-
-public class AskSubjectPojo extends BasePojo implements Parcelable {
+public class AskSubjectPojo implements Parcelable {
 
     List<Subject> subjectList;
 

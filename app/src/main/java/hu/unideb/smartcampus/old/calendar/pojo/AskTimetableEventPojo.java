@@ -3,10 +3,9 @@ package hu.unideb.smartcampus.old.calendar.pojo;
 
 import java.util.List;
 
-import hu.unideb.smartcampus.old.officehours.pojo.BasePojo;
 import hu.unideb.smartcampus.old.sqlite.model.TimetableEvent;
 
-public class AskTimetableEventPojo extends BasePojo {
+public class AskTimetableEventPojo {
 
     private List<TimetableEvent> timetableEvents;
 

@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.old.officehours.adapter;
+package hu.unideb.smartcampus.adapter.officehour;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -14,8 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.officehours.pojo.FromToDatesInLong;
-import hu.unideb.smartcampus.old.officehours.pojo.Instructor;
+import hu.unideb.smartcampus.pojo.officehours.FromToDatesInLong;
+import hu.unideb.smartcampus.pojo.officehours.Instructor;
 
 public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -66,14 +66,14 @@ public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableLis
     public View getGroupView(int teacherAt, boolean isExpanded, View view, ViewGroup parent) {
         String headerTitle = instructor.get(teacherAt).getName();
         if (view == null) {
-//            LayoutInflater layoutInflater = (LayoutInflater) context
-//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            view = layoutInflater.inflate(R.layout.list_instructor, null);
+            LayoutInflater layoutInflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = layoutInflater.inflate(R.layout.list_instructor, null);
         }
-//        TextView teacherNameTextView = (TextView) view
-//                .findViewById(R.id.teacherListItemId);
-//        teacherNameTextView.setTypeface(null, Typeface.BOLD);
-//        teacherNameTextView.setText(headerTitle);
+        TextView teacherNameTextView = (TextView) view
+                .findViewById(R.id.teacherListItemId);
+        teacherNameTextView.setTypeface(null, Typeface.BOLD);
+        teacherNameTextView.setText(headerTitle);
 
         return view;
 
@@ -94,15 +94,15 @@ public class InstructorOfficeHourExpandableListAdapter extends BaseExpandableLis
                 append(DateFormat.getTimeInstance(DateFormat.SHORT).format(dates.getTo() * 1000));
         final String dateDisplayName = builder.toString();
         if (view == null) {
-//            LayoutInflater infalInflater = (LayoutInflater) this.context
-//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            view = infalInflater.inflate(R.layout.list_consultinghours, null);
+            LayoutInflater infalInflater = (LayoutInflater) this.context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = infalInflater.inflate(R.layout.list_consultinghours, null);
         }
-//
-//        TextView consultingHoursTextView = (TextView) view
-//                .findViewById(R.id.consultingHoursListItemId);
 
-//        consultingHoursTextView.setText(dateDisplayName);
+        TextView consultingHoursTextView = (TextView) view
+                .findViewById(R.id.consultingHoursListItemId);
+
+        consultingHoursTextView.setText(dateDisplayName);
         return view;
     }
 
