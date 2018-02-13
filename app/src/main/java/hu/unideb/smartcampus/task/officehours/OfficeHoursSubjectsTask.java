@@ -15,9 +15,9 @@ import org.jxmpp.stringprep.XmppStringprepException;
 import java.util.ArrayList;
 
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.converter.OfficeHourConverter;
 import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
 import hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment;
-import hu.unideb.smartcampus.converter.officehour.OfficeHourConverter;
 import hu.unideb.smartcampus.pojo.officehours.AskSubjectsPojo;
 import hu.unideb.smartcampus.pojo.officehours.Instructor;
 import hu.unideb.smartcampus.pojo.officehours.Subject;

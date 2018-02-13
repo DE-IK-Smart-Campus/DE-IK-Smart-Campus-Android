@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +23,9 @@ import hu.unideb.smartcampus.pojo.officehours.FromToDatesInLong;
 import hu.unideb.smartcampus.pojo.officehours.Instructor;
 import hu.unideb.smartcampus.pojo.officehours.OfficeHour;
 
+import static hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment.OFFICE_HOUR_INSTRUCTOR_KEY;
+import static hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment.OFFICE_HOUR_SUBJECT_KEY;
+
 /**
  * This is where the user will reserve the selected office hour.
  * //TODO New calandar event.
@@ -32,8 +37,8 @@ public class OfficeHourReserveFragment extends android.app.Fragment {
     public static final String OFFICE_HOURS_TAG = "OFFICE_HOURS_TAG";
 
 
-    @BindView(R.id.selected_office_hours_editText)
-    EditText fromUntilDatesTextView;
+    @BindView(R.id.selected_office_hours_textview)
+    TextView fromUntilDatesTextView;
 
     @BindView(R.id.reserved_sum_textview)
     TextView reservedSumTextView;
@@ -53,16 +58,16 @@ public class OfficeHourReserveFragment extends android.app.Fragment {
         ButterKnife.bind(this, view);
 
         Bundle arguments = getArguments();
-        Instructor selectedInstructor = (Instructor) arguments.getSerializable("SELECTED_INSTRUCTOR");
-        OfficeHour selectedOfficeHour = (OfficeHour) arguments.getSerializable("SELECTED_OFFICE_HOUR");
+        Instructor selectedInstructor = (Instructor) arguments.getSerializable(OFFICE_HOUR_INSTRUCTOR_KEY);
+        OfficeHour selectedOfficeHour = (OfficeHour) arguments.getSerializable(OFFICE_HOUR_SUBJECT_KEY);
 
 
-        Long selectedOfficeHourId = selectedOfficeHour.getConsultingHourId();
-        FromToDatesInLong fromUntilDates = selectedOfficeHour.getFromToDates();
-        Long reservedSum = selectedOfficeHour.getReservedSum();
-        String teacherName = selectedInstructor.getName();
+      //  Long selectedOfficeHourId = selectedOfficeHour.getConsultingHourId();
+      //  FromToDatesInLong fromUntilDates = selectedOfficeHour.getFromToDates();
+      //  Long reservedSum = selectedOfficeHour.getReservedSum();
+      //  String teacherName = selectedInstructor.getName();
 
-
+    /*
         //Show selected office hour times
         if (reservedSum != null) {
             String reservedSumString = reservedSumTextView.getText() + reservedSum.toString();
@@ -88,6 +93,7 @@ public class OfficeHourReserveFragment extends android.app.Fragment {
         } else {
             throw new NullPointerException("getArguments().getParcelable(EXTRA_FROM_UNTIL_DATES) IS NULL");
         }
+        */
 
         return view;
     }

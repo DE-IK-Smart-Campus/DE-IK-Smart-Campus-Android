@@ -12,11 +12,16 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.converter.OfficeHourConverter;
 import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
 import hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment;
-import hu.unideb.smartcampus.converter.officehour.OfficeHourConverter;
+import hu.unideb.smartcampus.pojo.officehours.FromToDatesInLong;
 import hu.unideb.smartcampus.pojo.officehours.Instructor;
+import hu.unideb.smartcampus.pojo.officehours.OfficeHour;
 import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
@@ -78,15 +83,22 @@ public class OfficeHoursTeacherTask extends AsyncTask<Instructor, Long, Instruct
         if (instructor != null) {
             OfficeHourFragment fragment = new OfficeHourFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(OFFICE_HOUR_INSTRUCTOR_KEY, instructor); // TODO
+            //TODO!
+            OfficeHour officeHour = new OfficeHour(1L, new FromToDatesInLong(System.nanoTime(), System.nanoTime() + 3600L), 5L);
+            List<OfficeHour> officeHours = new ArrayList<>();
+            officeHours.add(officeHour);
+            instructor.setOfficeHourList(officeHours);
+            bundle.putSerializable(OFFICE_HOUR_INSTRUCTOR_KEY, instructor);
 
-           /* List<OfficeHour> officeHours = new ArrayList<>();
+
+
+        /*    List<OfficeHour> officeHours = new ArrayList<>();
             OfficeHour officeHour = new OfficeHour(1L, new FromToDatesInLong(System.nanoTime(), System.nanoTime() + 3600L), 5L);
             officeHours.add(officeHour);
             Instructor instructor1 = new Instructor(1L, "Pató Pál", officeHours);
 
-            bundle.putSerializable("INSTRUCTOR", instructor1); // TODO
-            */
+            bundle.putSerializable(OFFICE_HOUR_INSTRUCTOR_KEY, instructor1); // TODO
+*/
 
             fragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();

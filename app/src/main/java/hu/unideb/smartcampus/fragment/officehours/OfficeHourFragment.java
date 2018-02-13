@@ -48,6 +48,7 @@ public class OfficeHourFragment extends android.app.Fragment {
         Instructor instructor = (Instructor) getArguments().getSerializable(OFFICE_HOUR_INSTRUCTOR_KEY);
 
         if (instructor == null) { // TODO
+
             final ExpandableListAdapter ClassChildTeacherListAdapter =
                     new SubjectInstructorExpandableListAdapter(getActivity().getApplicationContext(), subjectList.getSubjects());
             expandableListView.setAdapter(ClassChildTeacherListAdapter);
