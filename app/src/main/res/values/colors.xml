@@ -14,4 +14,8 @@
     <color name="white">#FFFFFF</color>
     <color name="silver">#C0C0C0</color>
     <color name="darkSilver">#686868</color>
+
+    <array name="event_color">
+        <!--<item>@color/md_red_500</item>-->
+    </array>
 </resources>

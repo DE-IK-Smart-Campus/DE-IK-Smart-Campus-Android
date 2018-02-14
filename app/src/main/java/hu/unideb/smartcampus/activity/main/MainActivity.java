@@ -51,7 +51,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         displaySelectedScreen(R.id.nav_home);
         navigationView.getMenu().getItem(0).setChecked(true);
-
     }
 
     @Override
