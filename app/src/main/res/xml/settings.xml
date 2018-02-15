@@ -8,7 +8,7 @@
             android:defaultValue="1"
             android:entries="@array/languages"
             android:entryValues="@array/languages_values"
-            android:key="list_lang"
+            android:key="language_list_key"
             android:persistent="true"
             android:summary="@string/language_chooser_summary"
             android:title="@string/language_chooser_title" />
@@ -19,7 +19,7 @@
 
         <com.kizitonwose.colorpreference.ColorPreference
             android:defaultValue="@color/color_choices_1"
-            android:key="color_pref_circle_large"
+            android:key="timetable_event_color_chooser_key"
             android:summary="@string/color_chooser_summary"
             android:title="@string/color_chooser_title"
             app:colorChoices="@array/color_choices"
