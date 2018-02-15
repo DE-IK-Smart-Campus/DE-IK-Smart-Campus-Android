@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="ln">
+    <string-array name="languages">
+        <item>@string/default_lang</item>
         <item>@string/en</item>
         <item>@string/hu</item>
     </string-array>
 
-    <string name="en" translatable="false">en</string>
-    <string name="hu" translatable="false">hu</string>
+    <string name="default_lang" translatable="true">@string/def</string>
+    <string name="en" translatable="true">@string/english</string>
+    <string name="hu" translatable="true">@string/hungarian</string>
+
+    <string-array name="languages_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

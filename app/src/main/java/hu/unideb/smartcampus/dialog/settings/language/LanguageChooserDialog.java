@@ -63,18 +63,18 @@ public class LanguageChooserDialog extends DialogFragment {
         return dialog;
     }
 
-    private void loadLanguageList() {
-        for (String langCode : getResources().getStringArray(R.array.ln)) {
-            // based on language code get language name to display in same locale
-            Locale languageLocale = new Locale(langCode);
-            String languageName = languageLocale.getDisplayLanguage(languageLocale);
-            // based on language code get language name to display in english locale
-            Locale englishLocale = new Locale(getString(R.string.en));
-            String languageNameInEnglishLocale = languageLocale.getDisplayLanguage(englishLocale);
-            Language langAndLocale = new Language(langCode, languageName, languageNameInEnglishLocale);
-            langAndLocalesList.add(langAndLocale);
-        }
+//    private void loadLanguageList() {
+//        for (String langCode : getResources().getStringArray(R.array.ln)) {
+//            // based on language code get language name to display in same locale
+//            Locale languageLocale = new Locale(langCode);
+//            String languageName = languageLocale.getDisplayLanguage(languageLocale);
+//            // based on language code get language name to display in english locale
+//            Locale englishLocale = new Locale(getString(R.string.en));
+//            String languageNameInEnglishLocale = languageLocale.getDisplayLanguage(englishLocale);
+//            Language langAndLocale = new Language(langCode, languageName, languageNameInEnglishLocale);
+//            langAndLocalesList.add(langAndLocale);
+//        }
 
-    }
+//    }
 
 }

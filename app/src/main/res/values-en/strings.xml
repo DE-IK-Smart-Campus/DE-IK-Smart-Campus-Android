@@ -16,6 +16,19 @@
     <string name="login_password_hint">password</string>
     <string name="login_button_text">Login</string>
 
+    <string name="preference_category_language">Application language</string>
+    <string name="preference_category_event_color">Event colors</string>
+
+    <string name="def">Standard</string>
+    <string name="english">English</string>
+    <string name="hungarian">Hunagrian</string>
+
+    <string name="language_chooser_title">Language selector</string>
+    <string name="language_chooser_summary">Please your application language</string>
+
+    <string name="color_chooser_title">Event color</string>
+    <string name="color_chooser_summary">Timetable event color</string>
+
     <!---->
     <string name="usernamehint">username</string>
     <string name="passwordHint">password</string>

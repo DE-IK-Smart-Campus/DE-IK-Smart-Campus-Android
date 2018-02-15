@@ -1,24 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:title="Alaklamzás nyelve">
-        <!--<ListPreference-->
-        <!--android:defaultValue="1"-->
-        <!--android:entries="@array/languages"-->
-        <!--android:entryValues="@array/languages_values"-->
-        <!--android:key="list_lang"-->
-        <!--android:persistent="true"-->
-        <!--android:title="Nyelv választó:" />-->
+
+    <PreferenceCategory android:title="@string/preference_category_language">
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/languages"
+            android:entryValues="@array/languages_values"
+            android:key="list_lang"
+            android:persistent="true"
+            android:summary="@string/language_chooser_summary"
+            android:title="@string/language_chooser_title" />
+
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Esemény színei">
-        <com.jaredrummler.android.colorpicker.ColorPreference
-            android:defaultValue="0xFFCDDC39"
-            android:key="timetable_event_color_chooser"
+    <PreferenceCategory android:title="@string/preference_category_event_color">
+
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:defaultValue="@color/color_choices_1"
+            android:key="color_pref_circle_large"
             android:summary="@string/color_chooser_summary"
             android:title="@string/color_chooser_title"
-            app:cpv_allowCustom="false"
-            app:cpv_colorPresets="@array/event_color"
-            app:cpv_previewSize="large"
-            app:cpv_showColorShades="false" />
+            app:colorChoices="@array/color_choices"
+            app:colorShape="circle"
+            app:viewSize="large" />
+
     </PreferenceCategory>
+
 </PreferenceScreen>

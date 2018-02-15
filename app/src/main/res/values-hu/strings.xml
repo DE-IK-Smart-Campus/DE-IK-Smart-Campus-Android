@@ -16,6 +16,19 @@
     <string name="login_password_hint">jelszó</string>
     <string name="login_button_text">Bejelentkezés</string>
 
+    <string name="preference_category_language">Alkalmazás nyelve</string>
+    <string name="preference_category_event_color">Események színe</string>
+
+    <string name="def">Alapértelmezett</string>
+    <string name="english">Angol</string>
+    <string name="hungarian">Magyar</string>
+
+    <string name="language_chooser_title">Nyelv választó</string>
+    <string name="language_chooser_summary">Kérem válassza ki az alkalmazás nyelvét</string>
+
+    <string name="color_chooser_title">Esemény színe</string>
+    <string name="color_chooser_summary">Órarendi esemény színe</string>
+
     <!---->
 
     <string name="usernamehint">felhasználónév</string>
