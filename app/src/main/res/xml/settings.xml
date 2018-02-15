@@ -1,16 +1,24 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="Alaklamzás nyelve">
+        <!--<ListPreference-->
+        <!--android:defaultValue="1"-->
+        <!--android:entries="@array/languages"-->
+        <!--android:entryValues="@array/languages_values"-->
+        <!--android:key="list_lang"-->
+        <!--android:persistent="true"-->
+        <!--android:title="Nyelv választó:" />-->
+    </PreferenceCategory>
 
-  <PreferenceCategory android:title="Demo">
-    <!--<com.jaredrummler.android.colorpicker.ColorPreference-->
-        <!--android:defaultValue="0xFFCDDC39"-->
-        <!--android:key="my_presets"-->
-        <!--android:summary="A picker with presets different presets"-->
-        <!--android:title="Custom presets"-->
-        <!--app:cpv_allowCustom="false"-->
-        <!--app:cpv_colorPresets="@array/demo_colors"-->
-        <!--app:cpv_previewSize="large"-->
-        <!--app:cpv_showColorShades="false"/>-->
-  </PreferenceCategory>
-
+    <PreferenceCategory android:title="Esemény színei">
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="0xFFCDDC39"
+            android:key="timetable_event_color_chooser"
+            android:summary="@string/color_chooser_summary"
+            android:title="@string/color_chooser_title"
+            app:cpv_allowCustom="false"
+            app:cpv_colorPresets="@array/event_color"
+            app:cpv_previewSize="large"
+            app:cpv_showColorShades="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

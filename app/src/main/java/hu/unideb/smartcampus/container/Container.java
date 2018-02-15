@@ -6,6 +6,8 @@ public class Container {
 
     public static final int MY_REQUEST_CODE = 115;
 
+    public static final String TIMETABLE_EVENT_COLOR_CHOOSER_KEY = "timetable_event_color_chooser";
+
     public static final String SELECTED_LANGUAGE = "Language.Helper.Selected.Language";
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
