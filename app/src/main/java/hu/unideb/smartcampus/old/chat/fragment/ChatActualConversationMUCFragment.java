@@ -96,43 +96,40 @@ public class ChatActualConversationMUCFragment extends Fragment {
             MucEnterConfiguration.Builder builder = enterConfigurationBuilder.requestNoHistory();
             MucEnterConfiguration build = builder.build();
             chat.createOrJoin(build);
-            chat.addMessageListener(new MessageListener() {
-                @Override
-                public void processMessage(Message message) {
-                    Log.e(TAG, "processMessage: " + message.getExtensions());
-                    if (!message.getExtensions().isEmpty() && message.getExtension("http://jabber.org/protocol/chatstates") != null) {
-                        ExtensionElement extension = message.getExtension("http://jabber.org/protocol/chatstates");
-                        Log.e(TAG, "processMessage: " + extension.getNamespace());
-                        if (org.apache.commons.lang3.StringUtils.equals(extension.getElementName().toString(), "composing")) {
-                            Log.e(TAG, message.getFrom().getResourceOrEmpty().toString() + "éppenír:" + extension.getElementName());
-                        }
-                        if (org.apache.commons.lang3.StringUtils.equals(extension.getElementName().toString(), "paused")) {
-                            Log.e(TAG, message.getFrom().getResourceOrEmpty().toString() + "éppenmegált:" + extension.getElementName());
-                        }
-                        if (org.apache.commons.lang3.StringUtils.equals(extension.getElementName().toString(), "active")) {
-                            Log.e(TAG, message.getFrom().getResourceOrEmpty().toString() + "éppen itt van:" + extension.getElementName());
-                        }
-
-                        if (org.apache.commons.lang3.StringUtils.equals(extension.getElementName().toString(), "inactive")) {
-                            Log.e(TAG, message.getFrom().getResourceOrEmpty().toString() + "éppen inaktív:" + extension.getElementName());
-                        }
+            chat.addMessageListener(message -> {
+                Log.e(TAG, "processMessage: " + message.getExtensions());
+                if (!message.getExtensions().isEmpty() && message.getExtension("http://jabber.org/protocol/chatstates") != null) {
+                    ExtensionElement extension = message.getExtension("http://jabber.org/protocol/chatstates");
+                    Log.e(TAG, "processMessage: " + extension.getNamespace());
+                    if (org.apache.commons.lang3.StringUtils.equals(extension.getElementName().toString(), "composing")) {
+                        Log.e(TAG, message.getFrom().getResourceOrEmpty().toString() + "éppenír:" + extension.getElementName());
                     }
-                    if (message.getBody() != null && !message.getBody().isEmpty() && message.getExtension("urn:xmpp:delay") == null) {
-                        MucChatConversationItem tmpChatConversationItem = new MucChatConversationItem();
-                        tmpChatConversationItem.setMsg(message.getBody());
-                        tmpChatConversationItem.setResourceName(message.getFrom().getResourceOrThrow().toString());
-                        LinkedList<MucChatConversationItem> chatConversationItems2 = chatHistory.getChatConversationItems();
-                        chatConversationItems2.addLast(tmpChatConversationItem);
-                        chatHistory.setChatConversationItems(chatConversationItems2);
-
-                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
-                        Fragment chatactual = new ChatActualConversationMUCFragment();
-                        chatactual.setArguments(getArguments());
-                        fragmentTransaction.replace(R.id.drawer_layout, chatactual);
-                        afterViewCreate = false;
-                        fragmentTransaction.commit();
+                    if (org.apache.commons.lang3.StringUtils.equals(extension.getElementName().toString(), "paused")) {
+                        Log.e(TAG, message.getFrom().getResourceOrEmpty().toString() + "éppenmegált:" + extension.getElementName());
                     }
+                    if (org.apache.commons.lang3.StringUtils.equals(extension.getElementName().toString(), "active")) {
+                        Log.e(TAG, message.getFrom().getResourceOrEmpty().toString() + "éppen itt van:" + extension.getElementName());
+                    }
+
+                    if (org.apache.commons.lang3.StringUtils.equals(extension.getElementName().toString(), "inactive")) {
+                        Log.e(TAG, message.getFrom().getResourceOrEmpty().toString() + "éppen inaktív:" + extension.getElementName());
+                    }
+                }
+                if (message.getBody() != null && !message.getBody().isEmpty() && message.getExtension("urn:xmpp:delay") == null) {
+                    MucChatConversationItem tmpChatConversationItem = new MucChatConversationItem();
+                    tmpChatConversationItem.setMsg(message.getBody());
+                    tmpChatConversationItem.setResourceName(message.getFrom().getResourceOrThrow().toString());
+                    LinkedList<MucChatConversationItem> chatConversationItems2 = chatHistory.getChatConversationItems();
+                    chatConversationItems2.addLast(tmpChatConversationItem);
+                    chatHistory.setChatConversationItems(chatConversationItems2);
+
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+                    Fragment chatactual = new ChatActualConversationMUCFragment();
+                    chatactual.setArguments(getArguments());
+                    fragmentTransaction.replace(R.id.drawer_layout, chatactual);
+                    afterViewCreate = false;
+                    fragmentTransaction.commit();
                 }
             });
         } catch (MultiUserChatException.MucAlreadyJoinedException e) {

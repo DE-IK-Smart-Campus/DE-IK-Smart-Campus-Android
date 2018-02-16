@@ -36,6 +36,9 @@ import org.jxmpp.util.XmppStringUtils;
 import java.util.Iterator;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.shared.iq.request.AddMucChatIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.AddUserChatIqRequest;
@@ -61,119 +64,102 @@ public class ChatNewConversation extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @OnTextChanged(value = R.id.chat_new_partnerJids_edittext, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void onPartnerFilled(Editable s) {
+        EditText groupNameEditText = (EditText) getView().findViewById(R.id.chat_new_group_name_editText);
+        final int length = StringUtils.split(s.toString(), ",").length;
+        if (s.toString().contains(",") && length > 1) {
+            groupNameEditText.setVisibility(View.VISIBLE);
+        } else {
+            groupNameEditText.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.chat_new_create_button)
+    void createNewChat(View v) {
+        final EditText newMsg = (EditText) getView().findViewById(R.id.chat_new_msg_edittext);
+        final EditText newChatPartners = (EditText) getView().findViewById(R.id.chat_new_partnerJids_edittext);
+        final String newMsgText = newMsg.getText().toString();
+        final String partnerBareJid = newChatPartners.getText().toString();
+        final XMPPBOSHConnection xmppConnection = Connection.getInstance().getXmppConnection();
+        final UserSearchManager userSearchManager = new UserSearchManager(xmppConnection);
+        if (!partnerBareJid.isEmpty() && !newMsgText.isEmpty()) {
+            boolean isValidUsername = true;
+            if (partnerBareJid.contains(",")) {
+                EditText groupNameEditText = (EditText) getView().findViewById(R.id.chat_new_group_name_editText);
+                String[] partnerBareJids = StringUtils.split(partnerBareJid, ",");
+                for (int i = 0; i < partnerBareJids.length; i++) {
+                    if ((partnerBareJids[i].length() > 0)) {
+                        isValidUsername = checkUserIsExists(xmppConnection, userSearchManager, partnerBareJids[i]);
+                        if (!isValidUsername) {
+                            final String toastText = getString(R.string.can_not_find) + " " + partnerBareJids[i] + " " + getString(R.string.user_with_this_name);
+                            Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
+                            isValidUsername = false;
+                            break;
+                        }
+                    }
+                }
+                if (isValidUsername) {
+                    if (groupNameEditText.getText().length() != 0) {
+                        MultiUserChat createChat = null;
+                        try {
+                            final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().
+                                    getXmppConnection();
+                            final String groupnameInString = groupNameEditText.getText().toString();
+                            StringUtils.remove(groupnameInString, " ");
+                            final String groupnameInJid = groupnameInString + "@conference." + HOSTNAME;
+                            createChat = MultiUserChatManager.
+                                    getInstanceFor(xmppboshConnection).
+                                    getMultiUserChat(JidCreate.entityBareFrom(groupnameInJid));
+                            final Form configurationForm = createChat.getConfigurationForm();
+                            final Form answerForm = configurationForm.createAnswerForm();
+                            answerForm.setAnswer("muc#roomconfig_persistentroom", true);
+                            answerForm.setAnswer("mam", true);
+                            answerForm.setAnswer("muc#roomconfig_publicroom", true);
+                            createChat.sendConfigurationForm(answerForm);
+
+                            createChat.join(Resourcepart.from(xmppboshConnection.getUser().getLocalpartOrNull().toString()));
+                            createChat.sendMessage(newMsgText);
+                            createChat.leave();
+
+                            AddMucChatIqRequest addMucChatIqRequest = new AddMucChatIqRequest();
+                            addMucChatIqRequest.setStudent(xmppConnection.getUser().getLocalpartOrThrow().toString());
+                            addMucChatIqRequest.setMuc(groupnameInJid);
+                            addMucChatIqRequest.setType(IQ.Type.set);
+                            addMucChatIqRequest.setFrom(xmppConnection.getUser());
+                            addMucChatIqRequest.setTo(JidCreate.from(ADMINJID));
+                            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(addMucChatIqRequest);
+                            stanzaCollectorAndSend.nextResultOrThrow(5000);
+                            new GetChatsTask(getActivity()).execute();
+
+                        } catch (XmppStringprepException | SmackException.NotConnectedException | XMPPException.XMPPErrorException | SmackException.NoResponseException | InterruptedException | MultiUserChatException.NotAMucServiceException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(v.getContext(), R.string.please_give_me_group_name, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            } else {
+                isValidUsername = checkUserIsExists(xmppConnection, userSearchManager, partnerBareJid);
+                if (isValidUsername) {
+                    createSingleChat(xmppConnection, partnerBareJid, newMsgText);
+                } else {
+                    final String toastText = getString(R.string.can_not_find) + partnerBareJid + getString(R.string.user_with_this_name);
+                    Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            Toast.makeText(v.getContext(), R.string.please_fill_out_every_field, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_chat, container, false);
-
-        final EditText editText = (EditText) view.findViewById(R.id.chat_new_partnerJids_edittext);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                EditText groupNameEditText = (EditText) getView().findViewById(R.id.chat_new_group_name_editText);
-                final int length = StringUtils.split(s.toString(), ",").length;
-                if (s.toString().contains(",") && length > 1) {
-                    groupNameEditText.setVisibility(View.VISIBLE);
-                } else {
-                    groupNameEditText.setVisibility(View.GONE);
-                }
-            }
-
-        });
-
-        final Button createNewChat = (Button) view.findViewById(R.id.chat_new_create_button);
-        createNewChat.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v) {
-
-                final EditText newMsg = (EditText) getView().findViewById(R.id.chat_new_msg_edittext);
-                final EditText newChatPartners = (EditText) getView().findViewById(R.id.chat_new_partnerJids_edittext);
-                final String newMsgText = newMsg.getText().toString();
-                final String partnerBareJid = newChatPartners.getText().toString();
-                final XMPPBOSHConnection xmppConnection = Connection.getInstance().getXmppConnection();
-                final UserSearchManager userSearchManager = new UserSearchManager(xmppConnection);
-                if (!partnerBareJid.isEmpty() && !newMsgText.isEmpty()) {
-                    boolean isValidUsername = true;
-                    if (partnerBareJid.contains(",")) {
-                        EditText groupNameEditText = (EditText) getView().findViewById(R.id.chat_new_group_name_editText);
-                        String[] partnerBareJids = StringUtils.split(partnerBareJid, ",");
-                        for (int i = 0; i < partnerBareJids.length; i++) {
-                            if ((partnerBareJids[i].length() > 0)) {
-                                isValidUsername = checkUserIsExists(xmppConnection, userSearchManager, partnerBareJids[i]);
-                                if (!isValidUsername) {
-                                    final String toastText = getString(R.string.can_not_find) + " " + partnerBareJids[i] + " " + getString(R.string.user_with_this_name);
-                                    Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
-                                    isValidUsername = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (isValidUsername) {
-                            if (groupNameEditText.getText().length() != 0) {
-                                MultiUserChat createChat = null;
-                                try {
-                                    final XMPPBOSHConnection xmppboshConnection = Connection.getInstance().
-                                            getXmppConnection();
-                                    final String groupnameInString = groupNameEditText.getText().toString();
-                                    StringUtils.remove(groupnameInString, " ");
-                                    final String groupnameInJid = groupnameInString + "@conference." + HOSTNAME;
-                                    createChat = MultiUserChatManager.
-                                            getInstanceFor(xmppboshConnection).
-                                            getMultiUserChat(JidCreate.entityBareFrom(groupnameInJid));
-                                    final Form configurationForm = createChat.getConfigurationForm();
-                                    final Form answerForm = configurationForm.createAnswerForm();
-                                    answerForm.setAnswer("muc#roomconfig_persistentroom", true);
-                                    answerForm.setAnswer("mam", true);
-                                    answerForm.setAnswer("muc#roomconfig_publicroom", true);
-                                    createChat.sendConfigurationForm(answerForm);
-
-                                    createChat.join(Resourcepart.from(xmppboshConnection.getUser().getLocalpartOrNull().toString()));
-                                    createChat.sendMessage(newMsgText);
-                                    createChat.leave();
-
-                                    AddMucChatIqRequest addMucChatIqRequest = new AddMucChatIqRequest();
-                                    addMucChatIqRequest.setStudent(xmppConnection.getUser().getLocalpartOrThrow().toString());
-                                    addMucChatIqRequest.setMuc(groupnameInJid);
-                                    addMucChatIqRequest.setType(IQ.Type.set);
-                                    addMucChatIqRequest.setFrom(xmppConnection.getUser());
-                                    addMucChatIqRequest.setTo(JidCreate.from(ADMINJID));
-                                    final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(addMucChatIqRequest);
-                                    stanzaCollectorAndSend.nextResultOrThrow(5000);
-                                    new GetChatsTask(getActivity()).execute();
-
-                                } catch (XmppStringprepException | SmackException.NotConnectedException | XMPPException.XMPPErrorException | SmackException.NoResponseException | InterruptedException | MultiUserChatException.NotAMucServiceException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                Toast.makeText(v.getContext(), R.string.please_give_me_group_name, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                    } else {
-                        isValidUsername = checkUserIsExists(xmppConnection, userSearchManager, partnerBareJid);
-                        if (isValidUsername) {
-                            createSingleChat(xmppConnection, partnerBareJid, newMsgText);
-                        } else {
-                            final String toastText = getString(R.string.can_not_find) + partnerBareJid + getString(R.string.user_with_this_name);
-                            Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                } else {
-                    Toast.makeText(v.getContext(), R.string.please_fill_out_every_field, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        ButterKnife.bind(this, view);
         return view;
 
     }
