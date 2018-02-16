@@ -5,27 +5,19 @@ import org.jxmpp.jid.Jid;
 import java.io.Serializable;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Created by Headswitcher on 2018. 02. 16..
  */
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GetChatsPojo implements Serializable {
-
 
     List<ChatItem> chatItemList;
 
-    public GetChatsPojo() {
-    }
-
-    public GetChatsPojo(List<ChatItem> chatItemList) {
-        this.chatItemList = chatItemList;
-    }
-
-    public List<ChatItem> getChatItemList() {
-        return chatItemList;
-    }
-
-    public void setChatItemList(List<ChatItem> chatItemList) {
-        this.chatItemList = chatItemList;
-    }
 }

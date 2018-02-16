@@ -24,17 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
 import hu.unideb.smartcampus.converter.chat.ChatConverter;
+import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
 import hu.unideb.smartcampus.old.chat.fragment.ChatMainMenuFragment;
 import hu.unideb.smartcampus.pojo.chat.ChatItem;
-import hu.unideb.smartcampus.pojo.chat.ListUserChatsIqRequestPojo;
 import hu.unideb.smartcampus.pojo.chat.GetChatsPojo;
+import hu.unideb.smartcampus.pojo.chat.ListUserChatsIqRequestPojo;
 import hu.unideb.smartcampus.shared.iq.request.ListUserChatsIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.dialog.loading.LoadingDialog.LOADING_DIALOG_TAG;
-import static hu.unideb.smartcampus.task.officehours.OfficeHoursSubjectsTask.OFFICE_HOUR_LIST_FRAGMENT;
 import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 
 /**
@@ -44,6 +43,8 @@ import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
 public class GetChatsTask extends AsyncTask<Void, Long, GetChatsPojo> {
 
     public static String GET_CHATS_KEY = "GET_CHATS_KEY";
+    public final static String CHAT_MAIN_MENU_FRAGMENT_KEY = "CHAT_MAIN_MENU_FRAGMENT";
+
 
     private LoadingDialog loadingDialog;
 
@@ -163,7 +164,7 @@ public class GetChatsTask extends AsyncTask<Void, Long, GetChatsPojo> {
 
             fragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOUR_LIST_FRAGMENT);
+            fragmentTransaction.replace(R.id.drawer_layout, fragment, CHAT_MAIN_MENU_FRAGMENT_KEY);
             fragmentTransaction.commitAllowingStateLoss();
         }
     }

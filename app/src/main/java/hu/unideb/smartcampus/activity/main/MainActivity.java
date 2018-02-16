@@ -20,6 +20,7 @@ import hu.unideb.smartcampus.activity.base.BaseActivity;
 import hu.unideb.smartcampus.activity.settings.SettingsActivity;
 import hu.unideb.smartcampus.fragment.calendar.CalendarFragment;
 import hu.unideb.smartcampus.fragment.home.HomeFragment;
+import hu.unideb.smartcampus.task.chat.GetChatsTask;
 import hu.unideb.smartcampus.task.officehours.OfficeHoursSubjectsTask;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -90,6 +91,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.nav_office_hours:
                 new OfficeHoursSubjectsTask(this).execute();
+                break;
+            case R.id.nav_chat:
+                new GetChatsTask(this).execute();
                 break;
         }
 
