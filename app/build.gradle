@@ -128,4 +128,7 @@ dependencies {
 
     //colorpreference
     implementation 'com.github.kizitonwose.colorpreference:support:1.0.5'
+
+    //sublime picker
+    compile 'com.appeaser.sublimepickerlibrary:sublimepickerlibrary:2.1.1'
 }
