@@ -1,21 +1,13 @@
-package hu.unideb.smartcampus.old.chat.adapter;
+package hu.unideb.smartcampus.adapter.chat;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
 import java.util.List;
 
-import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.chat.pojo.ChatItem;
+import hu.unideb.smartcampus.pojo.chat.ChatItem;
 
 /**
  * Created by Headswitcher on 2017. 03. 21..

@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.old.chat.pojo;
+package hu.unideb.smartcampus.pojo.chat;
 
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.Jid;

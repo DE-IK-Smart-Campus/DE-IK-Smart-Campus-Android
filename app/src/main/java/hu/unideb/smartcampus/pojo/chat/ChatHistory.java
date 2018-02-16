@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.old.chat.pojo;
+package hu.unideb.smartcampus.pojo.chat;
 
 import java.util.LinkedList;
 

@@ -1,4 +1,4 @@
-package hu.unideb.smartcampus.old.chat.pojo;
+package hu.unideb.smartcampus.pojo.chat;
 
 /**
  * Created by Headswitcher on 2017. 03. 21..

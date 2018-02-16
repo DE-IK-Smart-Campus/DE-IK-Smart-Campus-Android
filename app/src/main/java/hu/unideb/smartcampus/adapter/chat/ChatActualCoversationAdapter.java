@@ -1,21 +1,14 @@
-package hu.unideb.smartcampus.old.chat.adapter;
+package hu.unideb.smartcampus.adapter.chat;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.jxmpp.jid.Jid;
 
-import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.chat.pojo.ChatHistory;
-import hu.unideb.smartcampus.xmpp.Connection;
+import hu.unideb.smartcampus.pojo.chat.ChatHistory;
 
 
 /**

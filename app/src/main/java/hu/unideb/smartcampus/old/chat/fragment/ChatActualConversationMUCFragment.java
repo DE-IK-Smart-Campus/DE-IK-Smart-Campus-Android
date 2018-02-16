@@ -1,57 +1,26 @@
 package hu.unideb.smartcampus.old.chat.fragment;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import org.jivesoftware.smack.MessageListener;
-import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
-import org.jivesoftware.smack.packet.ExtensionElement;
-import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smackx.forward.packet.Forwarded;
-import org.jivesoftware.smackx.mam.MamManager;
-import org.jivesoftware.smackx.muc.MucEnterConfiguration;
 import org.jivesoftware.smackx.muc.MultiUserChat;
-import org.jivesoftware.smackx.muc.MultiUserChatException;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
-import org.jivesoftware.smackx.vcardtemp.VCardManager;
-import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.EntityBareJid;
-import org.jxmpp.jid.impl.JidCreate;
-import org.jxmpp.jid.parts.Resourcepart;
-import org.jxmpp.stringprep.XmppStringprepException;
-import org.jxmpp.util.XmppStringUtils;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.old.chat.pojo.MucChatConversationItem;
-import hu.unideb.smartcampus.old.chat.pojo.MucChatHistory;
+import hu.unideb.smartcampus.pojo.chat.MucChatConversationItem;
+import hu.unideb.smartcampus.pojo.chat.MucChatHistory;
 import hu.unideb.smartcampus.xmpp.Connection;
 
-import static android.content.ContentValues.TAG;
 import static hu.unideb.smartcampus.old.chat.fragment.ChatMainMenuFragment.CHAT_HISTORY_ITEM_COUNT;
 import static hu.unideb.smartcampus.old.chat.fragment.ChatMainMenuFragment.SELECTED_CHAT_FROM;
-import static hu.unideb.smartcampus.xmpp.Connection.HOSTNAME;
 
 /**
  * Created by Erdei Krisztián on 2017.04.09..

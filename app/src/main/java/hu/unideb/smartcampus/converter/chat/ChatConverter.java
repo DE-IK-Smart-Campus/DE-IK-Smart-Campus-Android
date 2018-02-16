@@ -1,6 +1,6 @@
-package hu.unideb.smartcampus.old.chat.converter;
+package hu.unideb.smartcampus.converter.chat;
 
-import hu.unideb.smartcampus.old.chat.pojo.ListUserChatsIqRequestPojo;
+import hu.unideb.smartcampus.pojo.chat.ListUserChatsIqRequestPojo;
 import hu.unideb.smartcampus.shared.iq.request.ListUserChatsIqRequest;
 
 /**

@@ -106,7 +106,7 @@ public class OfficeHourFragment extends android.app.Fragment {
     public void onBackPressed() {
         Instructor instructor = (Instructor) getArguments().getSerializable(OFFICE_HOUR_INSTRUCTOR_KEY);
         if (instructor != null) {
-            new OfficeHoursSubjectsTask(getActivity()).execute(); // TODO clear transactions
+            new GetChatsTask(getActivity()).execute(); // TODO clear transactions
         }
     }
     */
