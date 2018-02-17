@@ -42,10 +42,11 @@
         </activity>
         <activity
             android:name=".activity.login.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        android:theme="@style/AppTheme.NoActionBar"
+        android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity android:name=".activity.main.MainActivity" />
         <activity android:name=".activity.settings.SettingsActivity" />
+        <activity android:name=".activity.calendar.NewCustomEventActivity"/>
 
         <receiver
             android:name=".network.receiver.NetworkChangeReceiver"
