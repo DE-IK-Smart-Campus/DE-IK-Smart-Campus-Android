@@ -128,4 +128,15 @@ dependencies {
 
     //colorpreference
     implementation 'com.github.kizitonwose.colorpreference:support:1.0.5'
+
+    //sublime picker
+    compile 'com.github.bakbalazs:SublimePicker:v1.0'
+
+    //toast extra
+    compile 'com.github.GrenderG:Toasty:1.2.5'
+
+    //animation
+    compile 'com.airbnb.android:lottie:2.0.0-rc1'
+
+
 }
