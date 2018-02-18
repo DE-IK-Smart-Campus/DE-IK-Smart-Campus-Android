@@ -31,7 +31,13 @@
     <string name="timetable_event_color_chooser_summary">Alapértelmezett szín választása</string>
 
     <string name="event_save_text">Mentés</string>
-
+    <string name="event_name_text_hint">esemény neve</string>
+    <string name="event_description_text_hint">esemény leírása</string>
+    <string name="event_place_text_hint">esemény helye</string>
+    <string name="event_start_date_and_time_text">Esemény kezdeti dátuma és ideje:</string>
+    <string name="event_end_time_and_time_text">Esemény befejezési dátuma és ideje:</string>
+    <string name="event_repeat_text_hint">esemény ismétlődése</string>
+    <string name="event_notification_text_hint">esemény értesítése</string>
 
     <!---->
 
