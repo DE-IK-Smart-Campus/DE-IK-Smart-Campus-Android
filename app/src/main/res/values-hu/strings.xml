@@ -30,6 +30,9 @@
     <string name="timetable_event_color_chooser_title">Órarendi esemény</string>
     <string name="timetable_event_color_chooser_summary">Alapértelmezett szín választása</string>
 
+    <string name="event_save_text">Mentés</string>
+
+
     <!---->
 
     <string name="usernamehint">felhasználónév</string>

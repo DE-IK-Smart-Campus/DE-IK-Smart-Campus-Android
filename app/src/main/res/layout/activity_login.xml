@@ -7,9 +7,9 @@
     android:layout_centerHorizontal="true"
     android:layout_centerInParent="true"
     android:background="@drawable/gradinet_color_background"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
-    android:isScrollContainer="true">
+    android:isScrollContainer="true"
+    android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -105,7 +105,7 @@
                     android:hint="@string/login_password_hint"
                     android:inputType="text|textPassword"
                     android:textColor="@color/silver"
-                    android:textColorHint="@color/silver"/>
+                    android:textColorHint="@color/silver" />
 
                 <ImageView
                     android:id="@+id/login_password_error_image_view"
@@ -117,10 +117,10 @@
         <com.balysv.materialripple.MaterialRippleLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_gravity="center"
-            app:mrl_rippleOverlay="true"
+            android:layout_marginTop="24dp"
             app:mrl_rippleColor="@color/white"
+            app:mrl_rippleOverlay="true"
             app:mrl_rippleRoundedCorners="49dp">
 
             <Button
@@ -131,7 +131,7 @@
                 android:background="@drawable/button_style"
                 android:text="@string/login_button_text"
                 android:textColor="@color/white"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
         </com.balysv.materialripple.MaterialRippleLayout>
 

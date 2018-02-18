@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -18,13 +17,12 @@
 
         <EditText
             android:id="@+id/eventName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignLeft="@+id/eventDescription"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/eventDescription"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="13dp"
+            android:layout_margin="15dp"
             android:ems="10"
             android:hint="@string/eventNameHint"
             android:inputType="text" />
@@ -32,41 +30,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="74dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/eventDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/eventName"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="18dp"
-                android:ems="10"
-                android:hint="@string/eventDescriptionHint"
-                android:inputType="text" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/eventDescription"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/eventPlaceText"
-                android:layout_width="104dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:ems="10"
-                android:hint="@string/placeHint"
-                android:inputType="text" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/eventName"
+            android:layout_margin="15dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/eventDescriptionHint"
+            android:inputType="text" />
 
     </LinearLayout>
 
@@ -76,20 +52,31 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/eventPlaceText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="15dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/placeHint"
+            android:inputType="text" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_weight="1"
-                android:text="@string/textViewStart" />
+    </LinearLayout>
 
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/textViewStart"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -101,11 +88,13 @@
 
         <EditText
             android:id="@+id/start_date"
-            android:layout_width="155dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginLeft="15dp"
-            android:layout_weight="0.10"
-            android:ems="10"
+            android:layout_marginStart="15dp"
+            android:layout_weight="1"
             android:inputType="date"
             android:onClick="startDateSet"
             android:textAlignment="center"
@@ -113,10 +102,13 @@
 
         <EditText
             android:id="@+id/start_time"
-            android:layout_width="61dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.19"
-            android:ems="5"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_weight="1"
             android:inputType="time"
             android:onClick="startTimeSet"
             android:textAlignment="center"
@@ -218,36 +210,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:text="@string/remainderText" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="15dp"
-        android:foregroundGravity="bottom"
-        android:gravity="bottom|end"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_weight="0.27"
-            android:onClick="cancelOnClick"
-            android:text="@string/cancelButtonText" />
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_weight="0.27"
-            android:onClick="saveOnClick"
-            android:text="@string/saveButtonText" />
     </LinearLayout>
 
 </LinearLayout>

@@ -30,6 +30,9 @@
     <string name="timetable_event_color_chooser_title">Timetable event</string>
     <string name="timetable_event_color_chooser_summary">Set default color</string>
 
+    <string name="event_save_text">Save</string>
+
+
     <!---->
     <string name="usernamehint">username</string>
     <string name="passwordHint">password</string>

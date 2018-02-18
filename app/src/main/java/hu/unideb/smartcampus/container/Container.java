@@ -18,4 +18,6 @@ public class Container {
 
     public static final String LOADING_DIALOG_TAG = "LoadingDialog";
 
+    public static final String SELECTED_DATE_LONG = "SelectedDateLong";
+
 }

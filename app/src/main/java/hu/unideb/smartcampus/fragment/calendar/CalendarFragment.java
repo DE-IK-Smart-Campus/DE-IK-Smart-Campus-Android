@@ -25,6 +25,8 @@ import butterknife.OnClick;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.calendar.NewCustomEventActivity;
 
+import static hu.unideb.smartcampus.container.Container.SELECTED_DATE_LONG;
+
 public class CalendarFragment extends Fragment {
 
     @BindView(R.id.compactcalendar_view)
@@ -100,6 +102,7 @@ public class CalendarFragment extends Fragment {
     public void addNewEvent() {
 
         Intent intent = new Intent(getActivity(), NewCustomEventActivity.class);
+        intent.putExtra(SELECTED_DATE_LONG, selectedDate.getTime());
         startActivity(intent);
         Toast.makeText(getContext(), "Selected: "
                 + selectedDate.toString(), Toast.LENGTH_LONG).show();

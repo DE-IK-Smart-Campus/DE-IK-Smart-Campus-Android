@@ -48,7 +48,6 @@ public class NewCustomEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.new_event_activity);
         setupVariables();
 
 
