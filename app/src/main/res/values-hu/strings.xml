@@ -11,6 +11,7 @@
     <string name="chat_menu_text">Beszélgetés</string>
     <string name="about_us_menu_text">Rólunk</string>
     <string name="settings_text">Beállítások</string>
+    <string name="new_event_text">Új esemény</string>
 
     <string name="login_username_hint">felhasználónév</string>
     <string name="login_password_hint">jelszó</string>
@@ -26,8 +27,8 @@
     <string name="language_chooser_title">Nyelv választó</string>
     <string name="language_chooser_summary">Kérem válassza ki az alkalmazás nyelvét</string>
 
-    <string name="color_chooser_title">Esemény színe</string>
-    <string name="color_chooser_summary">Órarendi esemény színe</string>
+    <string name="timetable_event_color_chooser_title">Órarendi esemény</string>
+    <string name="timetable_event_color_chooser_summary">Alapértelmezett szín választása</string>
 
     <!---->
 

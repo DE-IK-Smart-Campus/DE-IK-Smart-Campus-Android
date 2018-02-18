@@ -1,5 +1,6 @@
 package hu.unideb.smartcampus.fragment.calendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hu.unideb.smartcampus.R;
+import hu.unideb.smartcampus.activity.calendar.NewCustomEventActivity;
 
 public class CalendarFragment extends Fragment {
 
@@ -97,7 +99,8 @@ public class CalendarFragment extends Fragment {
     @OnClick(R.id.add_new_event_fab)
     public void addNewEvent() {
 
-
+        Intent intent = new Intent(getActivity(), NewCustomEventActivity.class);
+        startActivity(intent);
         Toast.makeText(getContext(), "Selected: "
                 + selectedDate.toString(), Toast.LENGTH_LONG).show();
         Log.e("asd", selectedDate.toString());

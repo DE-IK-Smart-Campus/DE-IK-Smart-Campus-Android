@@ -11,6 +11,7 @@
     <string name="chat_menu_text">Chat</string>
     <string name="about_us_menu_text">About Us</string>
     <string name="settings_text">Settings</string>
+    <string name="new_event_text">New event</string>
 
     <string name="login_username_hint">username</string>
     <string name="login_password_hint">password</string>
@@ -26,8 +27,8 @@
     <string name="language_chooser_title">Language selector</string>
     <string name="language_chooser_summary">Please your application language</string>
 
-    <string name="color_chooser_title">Event color</string>
-    <string name="color_chooser_summary">Timetable event color</string>
+    <string name="timetable_event_color_chooser_title">Timetable event</string>
+    <string name="timetable_event_color_chooser_summary">Set default color</string>
 
     <!---->
     <string name="usernamehint">username</string>

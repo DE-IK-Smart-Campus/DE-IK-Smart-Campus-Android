@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                app:compactCalendarBackgroundColor="@color/smart_campus_blue"
+                app:compactCalendarBackgroundColor="#50b6f1"
                 app:compactCalendarCurrentDayBackgroundColor="@color/white"
                 app:compactCalendarCurrentDayIndicatorStyle="no_fill_large_indicator"
                 app:compactCalendarCurrentSelectedDayBackgroundColor="@color/darkSilver"
@@ -51,12 +51,12 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_new_event_fab"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/plus_icon"
-        app:backgroundTint="@color/gradient_start_color"
+        android:src="@drawable/add_new_event_icon"
+        app:backgroundTint="#0475b8"
         app:layout_anchor="@id/calendarViewLayout"
         app:layout_anchorGravity="bottom|right|end"
         tools:layout_editor_absoluteX="319dp" />
