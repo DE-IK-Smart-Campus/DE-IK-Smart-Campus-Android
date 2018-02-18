@@ -92,7 +92,7 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/event_na2me_edit_text"
+                        android:id="@+id/event_description_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -132,7 +132,7 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/event_name_e2dit_text"
+                        android:id="@+id/event_place_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -194,22 +194,22 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/st1art_date"
+                    android:id="@+id/event_start_date_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:inputType="date"
-                    android:textAlignment="viewStart"
+                    android:textAlignment="center"
                     android:textAllCaps="true" />
 
                 <EditText
-                    android:id="@+id/st1art_time"
+                    android:id="@+id/event_start_time_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:inputType="time"
-                    android:textAlignment="viewStart"
+                    android:textAlignment="center"
                     android:textAllCaps="true" />
 
             </LinearLayout>
@@ -266,22 +266,22 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/start_date"
+                    android:id="@+id/event_end_date_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:inputType="date"
-                    android:textAlignment="viewStart"
+                    android:textAlignment="center"
                     android:textAllCaps="true" />
 
                 <EditText
-                    android:id="@+id/start_time"
+                    android:id="@+id/event_end_time_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:inputType="time"
-                    android:textAlignment="viewStart"
+                    android:textAlignment="center"
                     android:textAllCaps="true" />
 
             </LinearLayout>
@@ -316,7 +316,7 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/event_namesa_edit_text"
+                        android:id="@+id/event_repeat_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -356,7 +356,7 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/event_name_edit_text"
+                        android:id="@+id/event_notification_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
