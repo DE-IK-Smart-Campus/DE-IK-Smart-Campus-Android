@@ -5,24 +5,28 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.base.BaseActivity;
 
+import static hu.unideb.smartcampus.container.Container.CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_EN;
+import static hu.unideb.smartcampus.container.Container.CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_HU;
+import static hu.unideb.smartcampus.container.Container.EVENT_DATE_FORMAT_PATTERN_EN;
+import static hu.unideb.smartcampus.container.Container.EVENT_DATE_FORMAT_PATTERN_HU;
+import static hu.unideb.smartcampus.container.Container.EVENT_TIME_FORMAT_PATTERN;
 import static hu.unideb.smartcampus.container.Container.SELECTED_DATE_LONG;
 
 public class NewCustomEventActivity extends BaseActivity {
-
-    // yyyy.mm.nap  magyar
-    // nap.hónap.év angol
 
     @BindView(R.id.event_name_edit_text)
     EditText eventNameEditText;
@@ -62,15 +66,70 @@ public class NewCustomEventActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.new_event_text);
         ButterKnife.bind(this);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         Long startDate = getIntent().getExtras().getLong(SELECTED_DATE_LONG);
 
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy.MMM dd.,EEE", Locale.getDefault());
 
-        String selectedDateCalendar = dateFormatter.format(startDate);
+        setDefaultDateAndTime(startDate);
+//
+//
 
+//        eventEndDateEditText.setText(selectedDateCalendar);
+//        eventEndTimeEditText.setText(timeFormatter.format(endTimeCalendar.getTimeInMillis()));
+
+
+    }
+
+    private void setDefaultDateAndTime(Long selectedDate) {
+
+        SimpleDateFormat dateFormatter;
+        SimpleDateFormat timeFormatter = new SimpleDateFormat(EVENT_TIME_FORMAT_PATTERN, Locale.getDefault());
+
+        Locale defaultLocale = Locale.getDefault();
+        Locale hunLocale = new Locale("hu", "hu");
+
+        if (defaultLocale.getLanguage().equals(hunLocale.getLanguage())) {
+            dateFormatter = new SimpleDateFormat(EVENT_DATE_FORMAT_PATTERN_HU, defaultLocale);
+        } else {
+            dateFormatter = new SimpleDateFormat(EVENT_DATE_FORMAT_PATTERN_EN, defaultLocale);
+        }
+
+        eventStartDateEditText.setFocusable(false);
+        eventStartDateEditText.setFocusableInTouchMode(false);
+
+        eventStartTimeEditText.setFocusable(false);
+        eventStartTimeEditText.setFocusableInTouchMode(false);
+
+        eventEndDateEditText.setFocusable(false);
+        eventEndDateEditText.setFocusableInTouchMode(false);
+
+        eventEndTimeEditText.setFocusable(false);
+        eventEndTimeEditText.setFocusableInTouchMode(false);
+
+        Calendar startTimeCalendar = Calendar.getInstance();
+        startTimeCalendar.set(Calendar.SECOND, 0);
+        startTimeCalendar.set(Calendar.MILLISECOND, 0);
+        startTimeCalendar.setTimeZone(TimeZone.getDefault());
+        roundingThirtyMinutes(startTimeCalendar);
+
+        Calendar endTimeCalendar = Calendar.getInstance();
+        endTimeCalendar.set(Calendar.SECOND, 0);
+        endTimeCalendar.set(Calendar.MILLISECOND, 0);
+        endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+        roundingThirtyMinutes(endTimeCalendar);
+
+
+        String selectedDateCalendar = dateFormatter.format(selectedDate);
+        String selectedDateCalendar1 = timeFormatter.format(startTimeCalendar.getTimeInMillis());
         eventStartDateEditText.setText(selectedDateCalendar);
+        eventStartTimeEditText.setText(selectedDateCalendar1);
+    }
 
 
+    private void roundingThirtyMinutes(Calendar calendar) {
+        int rounding = calendar.get(Calendar.MINUTE) % 30;
+        calendar.add(Calendar.MINUTE, rounding < 8 ? -rounding : (30 - rounding));
     }
 
     @Override

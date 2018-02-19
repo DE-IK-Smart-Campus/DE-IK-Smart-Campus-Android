@@ -10,6 +10,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.main.MainActivity;
 import hu.unideb.smartcampus.pojo.login.ActualUserInfo;
@@ -38,9 +39,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), R.string.usernamePasswordNeed, Toast.LENGTH_SHORT).show();
+            Toasty.error(getApplicationContext(), getResources().getString(R.string.usernamePasswordNeed), Toast.LENGTH_LONG).show();
         } else {
-            new LoginTask(this).execute(new ActualUserInfo(username.getText().toString(), password.getText().toString(), null));
+            new LoginTask(this).execute(new ActualUserInfo(username.getText().toString().trim(), password.getText().toString().trim(), null));
         }
     }
 

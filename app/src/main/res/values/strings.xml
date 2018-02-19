@@ -36,8 +36,8 @@
     <string name="event_place_text_hint">event place</string>
     <string name="event_start_date_and_time_text">Event start date and time:</string>
     <string name="event_end_time_and_time_text">Event end date and time:</string>
-    <string name="event_repeat_text_hint">event repeat</string>
-    <string name="event_notification_text_hint">event notification</string>
+    <string name="event_repeat_text_hint">repeat</string>
+    <string name="event_notification_text_hint">notification</string>
 
 
     <!---->

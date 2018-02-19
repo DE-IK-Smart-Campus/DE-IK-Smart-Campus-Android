@@ -25,6 +25,8 @@ import butterknife.OnClick;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.calendar.NewCustomEventActivity;
 
+import static hu.unideb.smartcampus.container.Container.CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_EN;
+import static hu.unideb.smartcampus.container.Container.CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_HU;
 import static hu.unideb.smartcampus.container.Container.SELECTED_DATE_LONG;
 
 public class CalendarFragment extends Fragment {
@@ -57,9 +59,9 @@ public class CalendarFragment extends Fragment {
         Locale hunLocale = new Locale("hu", "hu");
 
         if (defaultLocale.getLanguage().equals(hunLocale.getLanguage())) {
-            dateFormatForMonth2 = new SimpleDateFormat("yyyy. MMMM", defaultLocale);
+            dateFormatForMonth2 = new SimpleDateFormat(CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_HU, defaultLocale);
         } else {
-            dateFormatForMonth2 = new SimpleDateFormat("MMMM yyyy", defaultLocale);
+            dateFormatForMonth2 = new SimpleDateFormat(CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_EN, defaultLocale);
 
         }
 

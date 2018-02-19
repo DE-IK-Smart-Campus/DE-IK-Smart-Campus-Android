@@ -20,4 +20,14 @@ public class Container {
 
     public static final String SELECTED_DATE_LONG = "SelectedDateLong";
 
+    public static final String CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_HU = "yyyy. MMMM";
+
+    public static final String CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_EN = "MMMM yyyy";
+
+    public static final String EVENT_DATE_FORMAT_PATTERN_HU = "yyyy.MMM dd.,EEE";
+
+    public static final String EVENT_DATE_FORMAT_PATTERN_EN = "EEE, dd MMM yyyy";
+
+    public static final String EVENT_TIME_FORMAT_PATTERN = "HH:mm";
+
 }

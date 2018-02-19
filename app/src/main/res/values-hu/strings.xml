@@ -36,8 +36,8 @@
     <string name="event_place_text_hint">esemény helye</string>
     <string name="event_start_date_and_time_text">Esemény kezdeti dátuma és ideje:</string>
     <string name="event_end_time_and_time_text">Esemény befejezési dátuma és ideje:</string>
-    <string name="event_repeat_text_hint">esemény ismétlődése</string>
-    <string name="event_notification_text_hint">esemény értesítése</string>
+    <string name="event_repeat_text_hint">ismétlődés</string>
+    <string name="event_notification_text_hint">értesítés</string>
 
     <!---->
 
