@@ -60,7 +60,8 @@ public class ChatMainMenuFragment extends Fragment {
 
         final List<ChatItem> chatItemList;
         if (getChatsPojo != null) {
-            chatItemList = getChatsPojo.getChatItemList();
+            //chatItemList = getChatsPojo.getChatItemList();
+            chatItemList = null;
 
             final ListAdapter listAdapter = new ChatMemberAdapter(chatItemList, getActivity().getApplicationContext());
 

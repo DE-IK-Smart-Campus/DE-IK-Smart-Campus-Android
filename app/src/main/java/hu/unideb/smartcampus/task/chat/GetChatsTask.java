@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.StanzaCollector;
+import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
@@ -26,8 +28,13 @@ import java.util.List;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.converter.chat.ChatConverter;
 import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
+import hu.unideb.smartcampus.old.chat.fragment.ChatActualChatV2;
 import hu.unideb.smartcampus.old.chat.fragment.ChatMainMenuFragment;
+import hu.unideb.smartcampus.old.chat.fragment.Chatv2MainMenu;
 import hu.unideb.smartcampus.pojo.chat.ChatItem;
+import hu.unideb.smartcampus.pojo.chat.ChatMessage;
+import hu.unideb.smartcampus.pojo.chat.ChatUser;
+import hu.unideb.smartcampus.pojo.chat.Dialog;
 import hu.unideb.smartcampus.pojo.chat.GetChatsPojo;
 import hu.unideb.smartcampus.pojo.chat.ListUserChatsIqRequestPojo;
 import hu.unideb.smartcampus.shared.iq.request.ListUserChatsIqRequest;
@@ -63,8 +70,8 @@ public class GetChatsTask extends AsyncTask<Void, Long, GetChatsPojo> {
 
     @Override
     protected GetChatsPojo doInBackground(Void... voids) {
-        List<ChatItem> chatItemList = new ArrayList<>();
-        Message message;
+        List<Dialog> chatItemList = new ArrayList<>();
+        Message message = null;
 
         MamManager mamManager = MamManager.getInstanceFor(Connection.getInstance().getXmppConnection());
 
@@ -96,7 +103,7 @@ public class GetChatsTask extends AsyncTask<Void, Long, GetChatsPojo> {
 
 
         //TODO refactor into seperate method toChatMsg
-        for (int i = 0; i < twoUserChatJids.size(); i++) {
+       /*for (int i = 0; i < twoUserChatJids.size(); i++) {
             try {
                 message = null;
                 MamManager.MamQueryResult queryResult = mamManager.mostRecentPage(twoUserChatJids.get(i), 1);
@@ -129,12 +136,44 @@ public class GetChatsTask extends AsyncTask<Void, Long, GetChatsPojo> {
             } catch (XMPPException.XMPPErrorException | SmackException.NotLoggedInException | InterruptedException | SmackException.NotConnectedException | SmackException.NoResponseException e) {
                 e.printStackTrace();
             }
-
-            return new GetChatsPojo(chatItemList);
-
         }
+        */
+
+        XMPPConnection xmppConnection = Connection.getInstance().getXmppConnection();
+
+        for (int i = 0; i < multiUserChat.size(); i++) {
+
+            String chatName;
+            chatName = XmppStringUtils.parseBareJid(multiUserChat.get(i).getLocalpartOrNull().toString());
+           /* MamManager mamManagerForMultiChat = MamManager.getInstanceFor(xmppConnection, multiUserChat.get(i));
+            MamManager.MamQueryResult queryResult = mamManagerForMultiChat.queryArchive(1);
+
+            if (queryResult.forwardedMessages.size() > 0) {
+                message = (Message) queryResult.forwardedMessages.get(0).getForwardedStanza();
+                ArrayList<ChatUser> chatUsers = new ArrayList<>();
+                chatUsers.add(new ChatUser(Integer.toString(i), connection.getXmppConnection().getUser().toString(), "VCARDTOAVATARTODO", true));
+                chatUsers.add(new ChatUser(Integer.toString(i), "TODO2NDUSER", "VCARDTOAVATARTODO", true));
+                Dialog dialog = new Dialog(Integer.toString(i), chatName, "VCARDTOAVATARTODO", chatUsers, new ChatMessage("TODOID", new ChatUser(Integer.toString(i), message.getFrom().toString(), "VCARDTOAVATARTODO", true), message.getBody().toString()), 0);
+                chatItemList.add(dialog);
+            } else {
+            */
+            ArrayList<ChatUser> chatUsers = new ArrayList<>();
+
+            ChatUser mockUser1 = new ChatUser("123", "MockUser1", "VCARDTOAVATARTODO", true);
+            ChatUser mockUser2 = new ChatUser("124", "MockUser2", "VCARDTOAVATARTODO", true);
+
+            chatUsers.add(mockUser1);
+            chatUsers.add(mockUser2);
+
+            Dialog dialog = new Dialog(Integer.toString(i), chatName, "VCARDTOAVATARTODO", chatUsers, new ChatMessage("TESZT", mockUser1, "Test message"), i);
+
+            chatItemList.add(dialog);
+        }
+        //  }
         return new GetChatsPojo(chatItemList);
+
     }
+
 
     @Override
     protected void onPostExecute(GetChatsPojo getChatsPojo) {
@@ -143,24 +182,10 @@ public class GetChatsTask extends AsyncTask<Void, Long, GetChatsPojo> {
 
         if (getChatsPojo != null) {
 
-            ChatMainMenuFragment fragment = new ChatMainMenuFragment();
+            Chatv2MainMenu fragment = new Chatv2MainMenu();
             Bundle bundle = new Bundle();
 
             bundle.putSerializable(GET_CHATS_KEY, getChatsPojo);
-
-            /* TEST ADAT
-            AskSubjectsPojo askSubjectsPojo1 = new AskSubjectsPojo();
-            ArrayList<Subject> subjects = new ArrayList<>();
-            ArrayList<Instructor> instructors = new ArrayList<>();
-            instructors.add(new Instructor(1L, "Pató Pál", null));
-
-            subjects.add(new Subject(1, "Tárgy1", instructors));
-            subjects.add(new Subject(2, "Tárgy2", instructors));
-            subjects.add(new Subject(3, "Tárgy3", instructors));
-            askSubjectsPojo1.setSubjects(subjects);
-
-            //bundle.putSerializable("OFFICE_HOUR_SUBJECT_KEY", askSubjectsPojo1);
-            */
 
             fragment.setArguments(bundle);
             FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();

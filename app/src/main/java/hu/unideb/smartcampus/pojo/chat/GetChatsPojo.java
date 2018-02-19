@@ -18,6 +18,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetChatsPojo implements Serializable {
 
-    List<ChatItem> chatItemList;
+    List<Dialog> chatItemList;
 
 }

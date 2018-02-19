@@ -63,7 +63,6 @@ public class ChatActualConversationFragment extends Fragment {
     private int chatHistoryItemCount;
     private EntityBareJid selectedChatPartnerJid;
     private Chat chat;
-    private View actualV;
     private ChatManager chatManager;
     private Bitmap userAvatarInBitmap;
     private Bitmap partnerAvatarInBitmap;
@@ -225,7 +224,6 @@ public class ChatActualConversationFragment extends Fragment {
         chatListView.setAdapter(new ChatActualCoversationAdapter(chatHistory, partnerAvatarInBitmap, userAvatarInBitmap, getActivity().getApplicationContext()));
         chatListView.setSelection(chatHistory.getChatConversationItems().size() - 1);
 
-        actualV = view;
         afterViewCreate = true;
         return view;
 
