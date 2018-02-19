@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -18,9 +19,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.base.BaseActivity;
+import hu.unideb.smartcampus.pojo.calendar.TimetableEvent;
 
-import static hu.unideb.smartcampus.container.Container.CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_EN;
-import static hu.unideb.smartcampus.container.Container.CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_HU;
 import static hu.unideb.smartcampus.container.Container.EVENT_DATE_FORMAT_PATTERN_EN;
 import static hu.unideb.smartcampus.container.Container.EVENT_DATE_FORMAT_PATTERN_HU;
 import static hu.unideb.smartcampus.container.Container.EVENT_TIME_FORMAT_PATTERN;
@@ -67,18 +67,9 @@ public class NewCustomEventActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
         Long startDate = getIntent().getExtras().getLong(SELECTED_DATE_LONG);
 
-
         setDefaultDateAndTime(startDate);
-//
-//
-
-//        eventEndDateEditText.setText(selectedDateCalendar);
-//        eventEndTimeEditText.setText(timeFormatter.format(endTimeCalendar.getTimeInMillis()));
-
-
     }
 
     private void setDefaultDateAndTime(Long selectedDate) {
@@ -120,12 +111,18 @@ public class NewCustomEventActivity extends BaseActivity {
         roundingThirtyMinutes(endTimeCalendar);
 
 
-        String selectedDateCalendar = dateFormatter.format(selectedDate);
-        String selectedDateCalendar1 = timeFormatter.format(startTimeCalendar.getTimeInMillis());
-        eventStartDateEditText.setText(selectedDateCalendar);
-        eventStartTimeEditText.setText(selectedDateCalendar1);
-    }
+        String formatStartDate = dateFormatter.format(selectedDate);
+        String formatStartTime = timeFormatter.format(startTimeCalendar.getTimeInMillis());
 
+        String formatEndDate = dateFormatter.format(selectedDate);
+        String formatEndTime = timeFormatter.format(endTimeCalendar.getTimeInMillis());
+
+        eventStartDateEditText.setText(formatStartDate);
+        eventStartTimeEditText.setText(formatStartTime);
+
+        eventEndDateEditText.setText(formatEndDate);
+        eventEndTimeEditText.setText(formatEndTime);
+    }
 
     private void roundingThirtyMinutes(Calendar calendar) {
         int rounding = calendar.get(Calendar.MINUTE) % 30;
