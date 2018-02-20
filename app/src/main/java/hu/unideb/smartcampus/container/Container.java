@@ -20,6 +20,10 @@ public class Container {
 
     public static final String SELECTED_DATE_LONG = "SelectedDateLong";
 
+    public static final String DATE_PICKER_DIALOG = "DatePickerDialog";
+
+    public static final String TIME_PICKER_DIALOG = "TimePickerDialog";
+
     public static final String CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_HU = "yyyy. MMMM";
 
     public static final String CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_EN = "MMMM yyyy";
