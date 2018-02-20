@@ -60,7 +60,7 @@ public class NewCustomEventActivity extends AppCompatActivity {
         String fromTime = timeFormatter.format(Calendar.getInstance().getTime());
         String toTime = timeFormatter.format(now.getTime());
 
-        Date selectedDate = new Date(getIntent().getExtras().getLong("selectedDate"));
+        Date selectedDate = new Date(getIntent().getExtras().getLong("selectedStartDate"));
 
         String selectedDateCalendar = dateFormatter.format(selectedDate);
 

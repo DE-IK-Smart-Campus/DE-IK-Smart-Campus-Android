@@ -18,11 +18,16 @@ import java.util.TimeZone;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.base.BaseActivity;
+import hu.unideb.smartcampus.activity.calendar.picker.EndDatePicker;
+import hu.unideb.smartcampus.activity.calendar.picker.EndTimePicker;
 import hu.unideb.smartcampus.activity.calendar.picker.StartDatePicker;
 import hu.unideb.smartcampus.activity.calendar.picker.StartTimePicker;
+import hu.unideb.smartcampus.interfaces.calendar.date.EndDatePickerInterface;
 import hu.unideb.smartcampus.interfaces.calendar.date.StartDatePickerInterface;
+import hu.unideb.smartcampus.interfaces.calendar.time.EndTimePickerInterface;
 import hu.unideb.smartcampus.interfaces.calendar.time.StartTimePickerInterface;
 
 import static hu.unideb.smartcampus.container.Container.EVENT_DATE_FORMAT_PATTERN_EN;
@@ -30,7 +35,7 @@ import static hu.unideb.smartcampus.container.Container.EVENT_DATE_FORMAT_PATTER
 import static hu.unideb.smartcampus.container.Container.EVENT_TIME_FORMAT_PATTERN;
 import static hu.unideb.smartcampus.container.Container.SELECTED_DATE_LONG;
 
-public class NewCustomEventActivity extends BaseActivity implements StartDatePickerInterface, StartTimePickerInterface {
+public class NewCustomEventActivity extends BaseActivity implements StartDatePickerInterface, StartTimePickerInterface, EndDatePickerInterface, EndTimePickerInterface {
 
     private final String TAG = NewCustomEventActivity.class.getSimpleName();
 
@@ -62,8 +67,11 @@ public class NewCustomEventActivity extends BaseActivity implements StartDatePic
     EditText eventNotificationEditText;
 
     private int pickerColor;
+    private Long startDate;
     private Calendar startDateCalendar = Calendar.getInstance();
     private Calendar startTimeCalendar = Calendar.getInstance();
+    private Calendar endDateCalendar = Calendar.getInstance();
+    private Calendar endTimeCalendar = Calendar.getInstance();
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter = new SimpleDateFormat(EVENT_TIME_FORMAT_PATTERN, Locale.getDefault());
 
@@ -91,38 +99,23 @@ public class NewCustomEventActivity extends BaseActivity implements StartDatePic
             dateFormatter = new SimpleDateFormat(EVENT_DATE_FORMAT_PATTERN_EN, defaultLocale);
         }
 
-        Long startDate = getIntent().getExtras().getLong(SELECTED_DATE_LONG);
+        startDate = getIntent().getExtras().getLong(SELECTED_DATE_LONG);
         startDateCalendar.setTimeInMillis(startDate);
+        endDateCalendar.setTimeInMillis(startDate);
 
-        setDefaultDateAndTime(startDate);
-
+        setDefaultDateAndTime();
     }
-
-//    SimpleDateFormat timeFormatter = new SimpleDateFormat(EVENT_TIME_FORMAT_PATTERN, Locale.getDefault());
-//    String formatStartTime = timeFormatter.format(startTimeCalendar.getTimeInMillis());
-//
-//        eventStartTimeEditText.setText(formatStartTime);
-//    @Override
-//    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-//        String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
-//        String minuteString = minute < 10 ? "0"+minute : ""+minute;
-//        SimpleDateFormat timeFormatter1 = new SimpleDateFormat(EVENT_TIME_FORMAT_PATTERN, Locale.getDefault());
-//
-//        Calendar  v = Calendar.getInstance();
-//        v.set(Calendar.HOUR_OF_DAY, hourOfDay);
-//        v.set(Calendar.MINUTE, minute);
-//        v.set(Calendar.SECOND,0);
-//        Log.e("asd", timeFormatter1.format(new Date(v.getTimeInMillis())));
-//        String time = hourString+":"+minuteString;
-//        Log.e("ad", time);
-//        eventStartTimeEditText.setText(time);
-//    }
-
 
     @OnClick(R.id.event_start_date_edit_text)
     public void startDateOnClick() {
         StartDatePicker startDatePicker = new StartDatePicker(this);
         startDatePicker.show(getFragmentManager(), pickerColor, startDateCalendar);
+    }
+
+    @OnClick(R.id.event_end_date_edit_text)
+    public void endDateOnClick() {
+        EndDatePicker endDatePicker = new EndDatePicker(this);
+        endDatePicker.show(getFragmentManager(), pickerColor, endDateCalendar);
     }
 
     @OnClick(R.id.event_start_time_edit_text)
@@ -131,12 +124,23 @@ public class NewCustomEventActivity extends BaseActivity implements StartDatePic
         startTimePicker.show(getFragmentManager(), pickerColor, startTimeCalendar);
     }
 
-    private void setDefaultDateAndTime(Long selectedDate) {
+    @OnClick(R.id.event_end_time_edit_text)
+    public void endTimeOnClick() {
+        EndTimePicker endTimePicker = new EndTimePicker(this);
+        endTimePicker.show(getFragmentManager(), pickerColor, endTimeCalendar);
+    }
+
+    private void setDefaultDateAndTime() {
 
         startTimeCalendar.set(Calendar.SECOND, 0);
         startTimeCalendar.set(Calendar.MILLISECOND, 0);
         startTimeCalendar.setTimeZone(TimeZone.getDefault());
         roundingThirtyMinutes(startTimeCalendar);
+
+        endTimeCalendar.set(Calendar.SECOND, 0);
+        endTimeCalendar.set(Calendar.MILLISECOND, 0);
+        endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+        roundingThirtyMinutes(endTimeCalendar);
 
         eventStartDateEditText.setFocusable(false);
         eventStartDateEditText.setFocusableInTouchMode(false);
@@ -144,25 +148,18 @@ public class NewCustomEventActivity extends BaseActivity implements StartDatePic
         eventStartTimeEditText.setFocusable(false);
         eventStartTimeEditText.setFocusableInTouchMode(false);
 
+        eventEndDateEditText.setFocusable(false);
+        eventEndDateEditText.setFocusableInTouchMode(false);
+
+        eventEndTimeEditText.setFocusable(false);
+        eventEndTimeEditText.setFocusableInTouchMode(false);
+
         eventStartDateEditText.setText(dateFormatter.format(startDateCalendar.getTimeInMillis()));
         eventStartTimeEditText.setText(timeFormatter.format(startTimeCalendar.getTimeInMillis()));
 
-//        eventEndDateEditText.setFocusable(false);
-//        eventEndDateEditText.setFocusableInTouchMode(false);
-//        eventEndTimeEditText.setFocusable(false);
-//        eventEndTimeEditText.setFocusableInTouchMode(false);
-//        Calendar endTimeCalendar = Calendar.getInstance();
-//        endTimeCalendar.set(Calendar.SECOND, 0);
-//        endTimeCalendar.set(Calendar.MILLISECOND, 0);
-//        endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
-//        roundingThirtyMinutes(endTimeCalendar);
-//        String formatStartDate = dateFormatter.format(selectedDate);
-//        String formatEndDate = dateFormatter.format(selectedDate);
-//        String formatEndTime = timeFormatter.format(endTimeCalendar.getTimeInMillis());
-//
-//        eventStartDateEditText.setText(formatStartDate);
-//        eventEndDateEditText.setText(formatEndDate);
-//        eventEndTimeEditText.setText(formatEndTime);
+        eventEndDateEditText.setText(dateFormatter.format(endDateCalendar.getTimeInMillis()));
+        eventEndTimeEditText.setText(timeFormatter.format(endTimeCalendar.getTimeInMillis()));
+
     }
 
     private void roundingThirtyMinutes(Calendar calendar) {
@@ -194,23 +191,57 @@ public class NewCustomEventActivity extends BaseActivity implements StartDatePic
     }
 
     @Override
-    public void selectedDate(Calendar calendar) {
+    public void selectedStartDate(Calendar calendar) {
         startDateCalendar = calendar;
 
         String formatStartDate = dateFormatter.format(calendar.getTimeInMillis());
 
         eventStartDateEditText.setText(formatStartDate);
 
-        Log.d(TAG, "SelectedDate " + formatStartDate);
+        Log.d(TAG, "StartDate " + formatStartDate);
     }
 
     @Override
-    public void selectedTime(Calendar calendar) {
+    public void selectedStartTime(Calendar calendar) {
         startTimeCalendar = calendar;
 
         String formatStartTime = timeFormatter.format(calendar.getTimeInMillis());
 
         eventStartTimeEditText.setText(formatStartTime);
-        Log.d(TAG, "SelectedTime " + formatStartTime);
+
+        Log.d(TAG, "StartTime " + formatStartTime);
     }
+
+    @Override
+    public void selectedEndDate(Calendar calendar) {
+        endDateCalendar = calendar;
+
+        String formatEndDate = dateFormatter.format(calendar.getTimeInMillis());
+
+        if (endDateCalendar.getTimeInMillis() > startDateCalendar.getTimeInMillis()) {
+
+            eventEndDateEditText.setText(formatEndDate);
+        } else {
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.setTimeInMillis(startDate);
+            endDateCalendar = calendar1;
+            Toasty.error(getApplicationContext(), "Nem választható kisbeb", Toast.LENGTH_LONG).show();
+        }
+
+        Log.d(TAG, "EndDate " + formatEndDate);
+
+    }
+
+    @Override
+    public void selectedEndTime(Calendar calendar) {
+        endTimeCalendar = calendar;
+
+        String formatEndTime = timeFormatter.format(calendar.getTimeInMillis());
+
+        eventEndTimeEditText.setText(formatEndTime);
+
+        Log.d(TAG, "EndTime " + formatEndTime);
+    }
+
+
 }
