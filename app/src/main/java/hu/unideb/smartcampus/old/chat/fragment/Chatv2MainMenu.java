@@ -21,6 +21,7 @@ import hu.unideb.smartcampus.pojo.chat.Dialog;
 import hu.unideb.smartcampus.pojo.chat.ChatMessage;
 import hu.unideb.smartcampus.pojo.chat.ChatUser;
 import hu.unideb.smartcampus.pojo.chat.GetChatsPojo;
+import hu.unideb.smartcampus.task.chat.GetSelectedChatTask;
 
 import static hu.unideb.smartcampus.task.chat.GetChatsTask.GET_CHATS_KEY;
 
@@ -41,8 +42,15 @@ public class Chatv2MainMenu extends Fragment {
         DialogsListAdapter dialogsListAdapter = new DialogsListAdapter<>(null);
         GetChatsPojo getChatsPojo = (GetChatsPojo) getArguments().getSerializable(GET_CHATS_KEY);
         dialogsListAdapter.addItems(getChatsPojo.getChatItemList());
+
+        dialogsListAdapter.setOnDialogClickListener(dialog -> {
+            Dialog dialog1 = (Dialog) dialog;
+            new GetSelectedChatTask(getActivity()).execute(dialog1);
+        });
         dialogsList.setAdapter(dialogsListAdapter);
+
 
         return view;
     }
+
 }

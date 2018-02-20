@@ -17,6 +17,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.mam.MamManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
+import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
@@ -87,10 +88,13 @@ public class GetChatsTask extends AsyncTask<Void, Long, GetChatsPojo> {
             iqRequest.setType(IQ.Type.get);
             iqRequest.setTo(JidCreate.from(ADMINJID));
 
+            ArrayList<ChatUser> chatUsers = new ArrayList<>();
+
+
             final StanzaCollector stanzaCollectorAndSend = connection.getXmppConnection().createStanzaCollectorAndSend(iqRequest);
             final ListUserChatsIqRequest listUserChatsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(SmackConfiguration.getDefaultReplyTimeout());
             final ListUserChatsIqRequestPojo listUserChatsIqRequestPojo = ChatConverter.convertToListUserChatsIqRequestPojo(listUserChatsIqRequest);
-
+// TODO NAMING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             for (String userJidInString : listUserChatsIqRequestPojo.getChatList()) {
                 twoUserChatJids.add(JidCreate.entityBareFrom(userJidInString));
             }
@@ -141,10 +145,20 @@ public class GetChatsTask extends AsyncTask<Void, Long, GetChatsPojo> {
 
         XMPPConnection xmppConnection = Connection.getInstance().getXmppConnection();
 
+
         for (int i = 0; i < multiUserChat.size(); i++) {
 
             String chatName;
             chatName = XmppStringUtils.parseBareJid(multiUserChat.get(i).getLocalpartOrNull().toString());
+            ChatUser chatUser = new ChatUser(multiUserChat.get(i).asEntityBareJidOrThrow().toString()
+                    , multiUserChat.get(i).asEntityBareJidOrThrow().toString()
+                    , "TODO"
+                    , false);
+
+            ChatUser actualUser = new ChatUser(connection.getUserJID()
+                    , connection.getUserJID()
+                    , "TODO"
+                    , false);
            /* MamManager mamManagerForMultiChat = MamManager.getInstanceFor(xmppConnection, multiUserChat.get(i));
             MamManager.MamQueryResult queryResult = mamManagerForMultiChat.queryArchive(1);
 
@@ -159,13 +173,16 @@ public class GetChatsTask extends AsyncTask<Void, Long, GetChatsPojo> {
             */
             ArrayList<ChatUser> chatUsers = new ArrayList<>();
 
-            ChatUser mockUser1 = new ChatUser("123", "MockUser1", "VCARDTOAVATARTODO", true);
+          /*  ChatUser mockUser1 = new ChatUser("123", "MockUser1", "VCARDTOAVATARTODO", true);
             ChatUser mockUser2 = new ChatUser("124", "MockUser2", "VCARDTOAVATARTODO", true);
 
             chatUsers.add(mockUser1);
             chatUsers.add(mockUser2);
+           */
+            chatUsers.add(chatUser);
+            chatUsers.add(actualUser);
 
-            Dialog dialog = new Dialog(Integer.toString(i), chatName, "VCARDTOAVATARTODO", chatUsers, new ChatMessage("TESZT", mockUser1, "Test message"), i);
+            Dialog dialog = new Dialog(Integer.toString(i), chatName, "VCARDTOAVATARTODO", chatUsers, new ChatMessage("TESZT", chatUser, "Test message"), i);
 
             chatItemList.add(dialog);
         }

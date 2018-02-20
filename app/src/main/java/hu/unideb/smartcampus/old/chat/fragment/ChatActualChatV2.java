@@ -23,8 +23,10 @@ import hu.unideb.smartcampus.pojo.chat.ChatMessage;
 import hu.unideb.smartcampus.pojo.chat.ChatUser;
 import hu.unideb.smartcampus.pojo.chat.Dialog;
 import hu.unideb.smartcampus.pojo.chat.GetChatsPojo;
+import hu.unideb.smartcampus.task.chat.SelectedChatForwardedMessages;
 
 import static hu.unideb.smartcampus.task.chat.GetChatsTask.GET_CHATS_KEY;
+import static hu.unideb.smartcampus.task.chat.GetSelectedChatTask.GET_SELECTED_CHAT_KEY;
 
 /**
  * Created by Headswitcher on 2018. 02. 17..
@@ -38,40 +40,13 @@ public class ChatActualChatV2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_actual_chatv2, container, false);
         ButterKnife.bind(this, view);
+        SelectedChatForwardedMessages selectedChatForwardedMessages = (SelectedChatForwardedMessages) getArguments().getSerializable(GET_SELECTED_CHAT_KEY);
 
-        ChatUser chatUser = new ChatUser("1", "ÉnTeszt", "Avatar", true);
-
-        ChatUser chatUser2 = new ChatUser("2", "NemÉnTeszt", "Avatar", true);
-
-        ArrayList<ChatUser> chatUsers = new ArrayList<>();
-
-        chatUsers.add(chatUser);
-        chatUsers.add(chatUser2);
-
-
-        ChatMessage chatMessage = new ChatMessage("1", chatUser, "SZIA");
-        ChatMessage chatMessage0 = new ChatMessage("2", chatUser2, "sup");
-        ChatMessage chatMessage1 = new ChatMessage("1", chatUser, "nothin");
-
-        MessagesListAdapter<ChatMessage> adapter = new MessagesListAdapter<>("1", null);
-        ArrayList<ChatMessage> chatDialog = new ArrayList<>();
-
-        chatDialog.add(chatMessage);
-        chatDialog.add(chatMessage0);
-        chatDialog.add(chatMessage1);
-        adapter.addToEnd(chatDialog, true);
+        MessagesListAdapter<ChatMessage> adapter = new MessagesListAdapter<>(null, null);
+        if (selectedChatForwardedMessages.getForwardedMessages() != null) {
+            adapter.addToEnd(selectedChatForwardedMessages.getForwardedMessages(), true);
+        }
         messagesList.setAdapter(adapter);
-
-        /*
-        DialogsListAdapter dialogsListAdapter = new DialogsListAdapter<>(new ImageLoader() {
-            @Override
-            public void loadImage(ImageView imageView, String url) {
-            }
-        });
-        GetChatsPojo getChatsPojo = (GetChatsPojo) getArguments().getSerializable(GET_CHATS_KEY);
-        dialogsListAdapter.addItems(getChatsPojo.getChatItemList());
-        dialogsList.setAdapter(dialogsListAdapter);
-*/
 
         return view;
     }

@@ -55,6 +55,9 @@ public class Connection {
     private XMPPBOSHConnection xmppConnection;
     private String userJID;
 
+    public String getUserJID() {
+        return userJID;
+    }
 
     protected Connection() {
         try {
