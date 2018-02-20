@@ -34,4 +34,8 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/silver</item>
     </style>
+
+    <style name="DateAndTimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/smart_campus_blue</item>
+    </style>
 </resources>

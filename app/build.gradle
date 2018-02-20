@@ -128,8 +128,8 @@ dependencies {
     //colorpreference
     implementation 'com.github.kizitonwose.colorpreference:support:1.0.5'
 
-    //sublime picker
-    compile 'com.github.bakbalazs:SublimePicker:v1.0'
+    //date and time picker
+    compile 'com.wdullaer:materialdatetimepicker:3.5.1'
 
     //toast extra
     compile 'com.github.GrenderG:Toasty:1.2.5'
