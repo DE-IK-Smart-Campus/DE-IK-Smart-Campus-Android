@@ -1,7 +1,17 @@
 <resources>
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/smart_campus_blue</item>
+        <item name="colorPrimaryDark">@color/smart_campus_dark_blue</item>
+        <item name="colorAccent">@color/smart_campus_color_accent</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:navigationBarColor">@color/smart_campus_blue</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:navigationBarColor">@color/smart_campus_blue</item>
     </style>
 </resources>

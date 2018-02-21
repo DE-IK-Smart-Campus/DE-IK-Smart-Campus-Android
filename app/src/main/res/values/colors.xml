@@ -8,8 +8,10 @@
     <color name="gradient_center_color">#207cca</color>
     <color name="gradient_end_color">#7db9e8</color>
 
-    <color name="calendar_blue">#03A7E9</color>
+    <color name="calendar_blue">#50b6f1</color>
     <color name="light_blue">#7ccdff</color>
+    <color name="calendar_select_day">#327297</color>
+    <color name="add_new_event">#0475b8</color>
 
     <color name="white">#FFFFFF</color>
     <color name="silver">#C0C0C0</color>
