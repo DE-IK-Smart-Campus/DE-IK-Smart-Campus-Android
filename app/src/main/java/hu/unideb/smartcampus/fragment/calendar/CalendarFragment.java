@@ -40,6 +40,8 @@ import hu.unideb.smartcampus.pojo.calendar.type.EventType;
 
 import static hu.unideb.smartcampus.container.Container.CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_EN;
 import static hu.unideb.smartcampus.container.Container.CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_HU;
+import static hu.unideb.smartcampus.container.Container.EVENT_OBJECT;
+import static hu.unideb.smartcampus.container.Container.EVENT_TYPE;
 import static hu.unideb.smartcampus.container.Container.SELECTED_DATE_LONG;
 
 public class CalendarFragment extends Fragment {
@@ -172,8 +174,8 @@ public class CalendarFragment extends Fragment {
 
     private void startIntet(String eventType, Object object) {
         Intent intent = new Intent(getActivity(), EventDetailsActivity.class);
-        intent.putExtra("TEST1", eventType);
-        intent.putExtra("TEST", (Serializable) object);
+        intent.putExtra(EVENT_TYPE, eventType);
+        intent.putExtra(EVENT_OBJECT, (Serializable) object);
         startActivity(intent);
 
     }

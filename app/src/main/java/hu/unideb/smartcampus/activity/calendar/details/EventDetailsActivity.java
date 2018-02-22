@@ -1,7 +1,6 @@
 package hu.unideb.smartcampus.activity.calendar.details;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -28,12 +27,17 @@ import hu.unideb.smartcampus.pojo.calendar.TimetableEvent;
 
 import static hu.unideb.smartcampus.container.Container.EVENT_DATE_FORMAT_PATTERN_EN;
 import static hu.unideb.smartcampus.container.Container.EVENT_DATE_FORMAT_PATTERN_HU;
+import static hu.unideb.smartcampus.container.Container.EVENT_OBJECT;
 import static hu.unideb.smartcampus.container.Container.EVENT_TIME_FORMAT_PATTERN;
+import static hu.unideb.smartcampus.container.Container.EVENT_TYPE;
 
 public class EventDetailsActivity extends BaseActivity {
 
     @BindView(R.id.event_details_list_view)
     ListView eventDetailsListView;
+
+    @BindView(R.id.toolbarTextView)
+    TextView toolbarTextView;
 
     private SimpleDateFormat dateFormatter;
 
@@ -48,23 +52,23 @@ public class EventDetailsActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         ButterKnife.bind(this);
-        String eventTypeString = getIntent().getExtras().getString("TEST1");
+        String eventTypeString = getIntent().getExtras().getString(EVENT_TYPE);
 
         switch (eventTypeString) {
 
             case "TIMETABLE":
-                TimetableEvent timetableEvent = (TimetableEvent) getIntent().getExtras().getSerializable("TEST");
+                TimetableEvent timetableEvent = (TimetableEvent) getIntent().getExtras().getSerializable(EVENT_OBJECT);
                 timetableEventListDetails(timetableEvent);
                 Log.e("ASD", timetableEvent.toString());
                 break;
             case "CUSTOM":
-                CustomEvent customEvent = (CustomEvent) getIntent().getExtras().getSerializable("TEST");
+                CustomEvent customEvent = (CustomEvent) getIntent().getExtras().getSerializable(EVENT_OBJECT);
                 Log.e("ASD", customEvent.toString());
                 break;
         }
     }
 
-    private void timetableEventListDetails(TimetableEvent timetableEvent){
+    private void timetableEventListDetails(TimetableEvent timetableEvent) {
         Locale defaultLocale = Locale.getDefault();
         Locale hunLocale = new Locale("hu", "hu");
 
@@ -75,23 +79,27 @@ public class EventDetailsActivity extends BaseActivity {
         }
         SimpleDateFormat timeFormatter = new SimpleDateFormat(EVENT_TIME_FORMAT_PATTERN, Locale.getDefault());
 
-        String z1 = dateFormatter.format(new Date(timetableEvent.getTimetableEventDate())) + "/n" + timeFormatter.format(new Date(timetableEvent.getTimetableEventStartTime())) + " - " + timeFormatter.format(new Date(timetableEvent.getTimetableEventEndTime()));
-        String z = timetableEvent.getTimetableEventName();
-        String z4 = timetableEvent.getTimetableEventDescription();
-        String z3 = timetableEvent.getTimetableEventPlace();
-        List<String> strings = Arrays.asList(z1, z3, z4);
-        List<Integer> imgId = Arrays.asList(R.drawable.event_time_icon, R.drawable.event_place_icon, R.drawable.event_comment_icon);
+        String timetableEventName = timetableEvent.getTimetableEventName();
+        String timetableEventDescription = timetableEvent.getTimetableEventDescription();
+        String timetableEventPlace = timetableEvent.getTimetableEventPlace();
 
-        TextView toolbarTextView = (TextView) findViewById(R.id.toolbarTextView);
-        toolbarTextView.setVisibility(View.VISIBLE);
-        toolbarTextView.setText(z);
+        String timetableEventDate = dateFormatter.format(new Date(timetableEvent.getTimetableEventDate()));
+        String timetableEventStartTime = timeFormatter.format(new Date(timetableEvent.getTimetableEventStartTime()));
+        String timetableEventEndTime = timeFormatter.format(new Date(timetableEvent.getTimetableEventEndTime()));
 
-        EventDetailsAdapter eventDetailsAdapter = new EventDetailsAdapter(this, strings, imgId);
+        String timetableEventDateAndTime = timetableEventDate + "\n\n" + timetableEventStartTime + " - " + timetableEventEndTime;
+
+        List<String> timetableEventTexts = Arrays.asList(timetableEventDateAndTime, timetableEventPlace, timetableEventDescription);
+        List<Integer> timetableEventImg = Arrays.asList(R.drawable.event_time_icon, R.drawable.event_place_icon, R.drawable.event_comment_icon);
+
+        toolbarTextView.setText(timetableEventName);
+
+        EventDetailsAdapter eventDetailsAdapter = new EventDetailsAdapter(this, timetableEventTexts, timetableEventImg);
 
         eventDetailsListView.setAdapter(eventDetailsAdapter);
     }
 
-    private void customEventListDetails(CustomEvent customEvent){
+    private void customEventListDetails(CustomEvent customEvent) {
         Locale defaultLocale = Locale.getDefault();
         Locale hunLocale = new Locale("hu", "hu");
 

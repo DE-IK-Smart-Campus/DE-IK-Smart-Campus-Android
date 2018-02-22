@@ -34,4 +34,8 @@ public class Container {
 
     public static final String EVENT_TIME_FORMAT_PATTERN = "HH:mm";
 
+    public static final String EVENT_TYPE = "EVENT_TYPE";
+
+    public static final String EVENT_OBJECT = "EVENT_OBJECT";
+
 }
