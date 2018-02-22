@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -30,7 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import es.dmoral.toasty.Toasty;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.calendar.custom.NewCustomEventActivity;
 import hu.unideb.smartcampus.activity.calendar.details.EventDetailsActivity;
@@ -102,7 +100,7 @@ public class CalendarFragment extends Fragment {
 
         for (int i = 0; i < customEvents.size(); i++) {
             CustomEvent customEvent = customEvents.get(i);
-            events.add(new Event(color1, customEvent.getEventStartDate(), new CalendarEvent(customEvent.getEventName(), customEvent.getEventPlace(), customEvent.getEventStartTime(), customEvent.getEventEndTime(), EventType.CUSTOM,null, customEvent)));
+            events.add(new Event(color1, customEvent.getEventStartDate(), new CalendarEvent(customEvent.getEventName(), customEvent.getEventPlace(), customEvent.getEventStartTime(), customEvent.getEventEndTime(), EventType.CUSTOM, null, customEvent)));
         }
 
         List<Event> events1 = new ArrayList<>();
@@ -157,12 +155,12 @@ public class CalendarFragment extends Fragment {
 
         CalendarEvent t = (CalendarEvent) listItem.getData();
 
-        if((t != null ? t.getEventType() : null) == EventType.TIMETABLE) {
+        if ((t != null ? t.getEventType() : null) == EventType.TIMETABLE) {
 
             startIntet(EventType.TIMETABLE.name(), t.getTimetableEvent());
 //            Log.e("timetable", t.getTimetableEvent().toString());
 //            Toasty.info(getContext(), "Timetable", Toast.LENGTH_SHORT).show();
-        } else if((t != null ? t.getEventType() : null) == EventType.CUSTOM){
+        } else if ((t != null ? t.getEventType() : null) == EventType.CUSTOM) {
 
             startIntet(EventType.CUSTOM.name(), t.getCustomEvent());
 
@@ -172,11 +170,11 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    private void startIntet(String eventType, Object object){
-                    Intent intent = new Intent(getActivity(), EventDetailsActivity.class);
-            intent.putExtra("TEST1",eventType);
-            intent.putExtra("TEST", (Serializable) object);
-            startActivity(intent);
+    private void startIntet(String eventType, Object object) {
+        Intent intent = new Intent(getActivity(), EventDetailsActivity.class);
+        intent.putExtra("TEST1", eventType);
+        intent.putExtra("TEST", (Serializable) object);
+        startActivity(intent);
 
     }
 
@@ -211,7 +209,7 @@ public class CalendarFragment extends Fragment {
 
         TimetableEvent timetableEvent = new TimetableEvent(1, 1519081200000L, "esemény neve1", "esemény leírása", "esemény helye", 2211703200000L, 2211681600000L);
         TimetableEvent timetableEvent1 = new TimetableEvent(2, 1519167600000L, "esemény neve2", "esemény leírása", "esemény helye", 2211703200000L, 2211681600000L);
-        TimetableEvent timetableEvent2 = new TimetableEvent(3, 1519254000000L, "Teszt esemény", "Teszt leírás", "Teszt hely", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent2 = new TimetableEvent(3, 1519254000000L, "Teszt esemény esemény esemény esemény ", "Teszt leírás", "Teszt hely", 2211681600000L, 2211681600000L);
         TimetableEvent timetableEvent3 = new TimetableEvent(4, 1519081200000L, "esemény neve4", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
         TimetableEvent timetableEvent4 = new TimetableEvent(5, 1519340400000L, "esemény neve5", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
         TimetableEvent timetableEvent5 = new TimetableEvent(6, 1519426800000L, "esemény neve6", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
