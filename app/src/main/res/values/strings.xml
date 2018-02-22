@@ -39,6 +39,7 @@
     <string name="event_repeat_text_hint">repeat</string>
     <string name="event_notification_text_hint">notification</string>
     <string name="no_events">No events</string>
+    <string name="edit_event">Edit</string>
 
 
     <!---->

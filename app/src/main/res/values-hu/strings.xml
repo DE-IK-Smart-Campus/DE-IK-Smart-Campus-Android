@@ -39,6 +39,8 @@
     <string name="event_repeat_text_hint">ismétlődés</string>
     <string name="event_notification_text_hint">értesítés</string>
     <string name="no_events">Nincs esemény</string>
+    <string name="edit_event">Szerkeztés</string>
+
 
 
     <!---->

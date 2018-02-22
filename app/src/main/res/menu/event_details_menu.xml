@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/edit_event_action"
+        android:icon="@drawable/event_edit_icon"
+        android:title="@string/event_save_text"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/delete_event_action"
+        android:icon="@drawable/event_delete_icon"
+        android:title="@string/event_save_text"
+        app:showAsAction="ifRoom" />
+</menu>

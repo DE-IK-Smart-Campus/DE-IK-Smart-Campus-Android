@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.activity.calendar.NewCustomEventActivity;
 import hu.unideb.smartcampus.activity.login.LoginActivity;
 
 import static hu.unideb.smartcampus.container.Container.SPLASH_SCREEN_TIME_OUT;
