@@ -1,13 +1,17 @@
-package hu.unideb.smartcampus.old.officehours.converter;
+package hu.unideb.smartcampus.converter;
+
+/**
+ * Created by Headswitcher on 2018. 02. 13..
+ */
 
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.unideb.smartcampus.old.officehours.pojo.AskSubjectsPojo;
-import hu.unideb.smartcampus.old.officehours.pojo.FromToDatesInLong;
-import hu.unideb.smartcampus.old.officehours.pojo.Instructor;
-import hu.unideb.smartcampus.old.officehours.pojo.OfficeHour;
-import hu.unideb.smartcampus.old.officehours.pojo.Subject;
+import hu.unideb.smartcampus.pojo.officehours.AskSubjectsPojo;
+import hu.unideb.smartcampus.pojo.officehours.FromToDatesInLong;
+import hu.unideb.smartcampus.pojo.officehours.Instructor;
+import hu.unideb.smartcampus.pojo.officehours.OfficeHour;
+import hu.unideb.smartcampus.pojo.officehours.Subject;
 import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.SubjectsIqRequest;
 import hu.unideb.smartcampus.shared.iq.request.element.ConsultingDateIqElement;
@@ -25,7 +29,8 @@ public class OfficeHourConverter {
     public static Instructor convertToAskInstructorOfficeHourPojo(InstructorConsultingDatesIqRequest instructorConsultingDatesIqRequest) {
 
         Instructor instructor = new Instructor();
-        instructor.setName(""); // TODO
+
+        instructor.setName(instructorConsultingDatesIqRequest.getInstructorName()); // TODO
         instructor.setInstructorId(Long.valueOf(instructorConsultingDatesIqRequest.getInstructorId()));
 
         List<OfficeHour> officeHourList = new ArrayList<>();

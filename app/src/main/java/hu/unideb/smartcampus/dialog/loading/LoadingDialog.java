@@ -9,6 +9,8 @@ import hu.unideb.smartcampus.R;
 
 public class LoadingDialog extends DialogFragment {
 
+    public static  String LOADING_DIALOG_TAG = "LOADING_DIALOG_TAG";
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getActivity());
