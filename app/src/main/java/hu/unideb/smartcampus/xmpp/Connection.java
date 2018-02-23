@@ -47,13 +47,12 @@ import static java.lang.Thread.sleep;
 public class Connection {
     private static final String TAG = Connection.class.getSimpleName();
 
-    private static MainApplication mainApplication = new MainApplication();
-
     private static Connection instance = null;
 
-    public static final String HTTP_BASIC_AUTH_PATH = mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_BASIC_AUTH_PATH);
-    public static final String ADMINJID = mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_ADMIN_JID);
-    public static final String HOSTNAME = mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOSTNAME);
+    public static final String HTTP_BASIC_AUTH_PATH = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_BASIC_AUTH_PATH);
+
+    public static final String ADMINJID = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_ADMIN_JID);
+    public static final String HOSTNAME = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOSTNAME);
     public static EntityJid adminEntityJID;
 
     private BOSHConfiguration config;
@@ -82,10 +81,10 @@ public class Connection {
             config = BOSHConfiguration.builder()
                     .setUsernameAndPassword(actualUserInfo.getUsername(), actualUserInfo.getXmppPassword())
                     .setXmppDomain(HOSTNAME)
-                    .setHost(mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOST))
+                    .setHost(MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOST))
                     .setPort(80)
-                    .setFile(mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_FILE))
-                    .setResource(mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_RESOURCE))
+                    .setFile(MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_FILE))
+                    .setResource(MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_RESOURCE))
                     .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                     .setDebuggerEnabled(false)
                     .build();

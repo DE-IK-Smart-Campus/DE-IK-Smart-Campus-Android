@@ -8,35 +8,59 @@ import java.util.List;
 
 public class AskSubjectPojo implements Parcelable {
 
-    List<Subject> subjectList;
-
-    public AskSubjectPojo() {
-    }
-
-    public AskSubjectPojo(List<Subject> subjectList) {
-        this.subjectList = subjectList;
-    }
+//    List<Subject> subjectList;
+//
+//    public AskSubjectPojo() {
+//    }
+//
+//    public AskSubjectPojo(List<Subject> subjectList) {
+//        this.subjectList = subjectList;
+//    }
+//
+//    protected AskSubjectPojo(Parcel in) {
+//        subjectList = in.createTypedArrayList(Subject.CREATOR);
+//    }
+//
+//    public List<Subject> getSubjectList() {
+//        return subjectList;
+//    }
+//
+//    public void setSubjectList(List<Subject> subjectList) {
+//        this.subjectList = subjectList;
+//    }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel parcel, int i) {
+//        parcel.writeTypedList(subjectList);
+//    }
+//
+//    public static final Creator<AskSubjectPojo> CREATOR = new Creator<AskSubjectPojo>() {
+//        @Override
+//        public AskSubjectPojo createFromParcel(Parcel in) {
+//            return new AskSubjectPojo(in);
+//        }
+//
+//        @Override
+//        public AskSubjectPojo[] newArray(int size) {
+//            return new AskSubjectPojo[size];
+//        }
+//    };
 
     protected AskSubjectPojo(Parcel in) {
-        subjectList = in.createTypedArrayList(Subject.CREATOR);
     }
 
-    public List<Subject> getSubjectList() {
-        return subjectList;
-    }
-
-    public void setSubjectList(List<Subject> subjectList) {
-        this.subjectList = subjectList;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
     }
 
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeTypedList(subjectList);
     }
 
     public static final Creator<AskSubjectPojo> CREATOR = new Creator<AskSubjectPojo>() {

@@ -8,7 +8,7 @@ import hu.unideb.smartcampus.dialog.settings.language.helper.LanguageHelper;
 
 public class MainApplication extends Application {
 
-    private Context sContext;
+    private static Context sContext;
 
     @Override
     public void onCreate() {
@@ -22,8 +22,7 @@ public class MainApplication extends Application {
         MultiDex.install(this);
     }
 
-
-    public Context getContext() {
+    public static Context getContext() {
         return sContext;
     }
 }
