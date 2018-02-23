@@ -2,10 +2,8 @@ package hu.unideb.smartcampus.activity.calendar.details;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,13 +39,15 @@ public class EventDetailsActivity extends BaseActivity {
 
     private SimpleDateFormat dateFormatter;
 
+    private boolean menuitemVisible;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
 
         setContentView(R.layout.activity_event_details);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_event_details);
+        Toolbar toolbar = findViewById(R.id.toolbar_event_details);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -60,11 +60,12 @@ public class EventDetailsActivity extends BaseActivity {
             case "TIMETABLE":
                 TimetableEvent timetableEvent = (TimetableEvent) getIntent().getExtras().getSerializable(EVENT_OBJECT);
                 timetableEventListDetails(timetableEvent);
-                Log.e("ASD", timetableEvent.toString());
+                setMenuitemVisible(false);
                 break;
             case "CUSTOM":
                 CustomEvent customEvent = (CustomEvent) getIntent().getExtras().getSerializable(EVENT_OBJECT);
-                Log.e("ASD", customEvent.toString());
+                customEventListDetails(customEvent);
+                setMenuitemVisible(true);
                 break;
         }
     }
@@ -80,7 +81,7 @@ public class EventDetailsActivity extends BaseActivity {
         }
         SimpleDateFormat timeFormatter = new SimpleDateFormat(EVENT_TIME_FORMAT_PATTERN, Locale.getDefault());
 
-        String timetableEventName =timetableEvent.getTimetableEventName();
+        String timetableEventName = timetableEvent.getTimetableEventName();
         String timetableEventDescription = timetableEvent.getTimetableEventDescription();
         String timetableEventPlace = timetableEvent.getTimetableEventPlace();
 
@@ -92,6 +93,8 @@ public class EventDetailsActivity extends BaseActivity {
 
         List<String> timetableEventTexts = Arrays.asList(timetableEventDateAndTime, timetableEventPlace, timetableEventDescription);
         List<Integer> timetableEventImg = Arrays.asList(R.drawable.event_time_icon, R.drawable.event_place_icon, R.drawable.event_comment_icon);
+
+//        remainder tag berakása
 
         toolbarTextView.setText(timetableEventName);
 
@@ -111,16 +114,29 @@ public class EventDetailsActivity extends BaseActivity {
         }
         SimpleDateFormat timeFormatter = new SimpleDateFormat(EVENT_TIME_FORMAT_PATTERN, Locale.getDefault());
 
-//        private String uuid;
-//        private String eventName;
-//        private String eventDescription;
-//        private String eventPlace;
-//        private Long eventStartDate;
-//        private Long eventStartTime;
-//        private Long eventEndDate;
-//        private Long eventEndTime;
-//        private String evenetRepeat;
-//        private String eventReminder;
+        String customEventName = customEvent.getEventName();
+        String customEventDescription = customEvent.getEventDescription();
+        String customEventPlace = customEvent.getEventPlace();
+
+        String customEventRepeat = customEvent.getEvenetRepeat();
+        String customEventReminder = customEvent.getEventReminder();
+
+        String customEventStartDate = dateFormatter.format(new Date(customEvent.getEventStartDate()));
+        String customEventEndDate = dateFormatter.format(new Date(customEvent.getEventEndDate()));
+
+        String customEventStartTime = timeFormatter.format(new Date(customEvent.getEventStartTime()));
+        String customEventEndTime = timeFormatter.format(new Date(customEvent.getEventEndTime()));
+
+        String customEventDatesAndTime = customEventStartDate + " - " + customEventEndDate + "\n\n" + customEventStartTime + " - " + customEventEndTime;
+
+        List<String> customEventTexts = Arrays.asList(customEventDatesAndTime, customEventPlace, customEventDescription, customEventRepeat, customEventReminder);
+        List<Integer> customEventImg = Arrays.asList(R.drawable.event_time_icon, R.drawable.event_place_icon, R.drawable.event_comment_icon, R.drawable.event_repeat_icon, R.drawable.event_notification_icon);
+
+        toolbarTextView.setText(customEventName);
+
+        EventDetailsAdapter eventDetailsAdapter = new EventDetailsAdapter(this, customEventTexts, customEventImg);
+
+        eventDetailsListView.setAdapter(eventDetailsAdapter);
     }
 
     @Override
@@ -132,6 +148,8 @@ public class EventDetailsActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.event_details_menu, menu);
+        menu.findItem(R.id.edit_event_action).setVisible(isMenuitemVisible());
+        menu.findItem(R.id.delete_event_action).setVisible(isMenuitemVisible());
         return true;
     }
 
@@ -147,5 +165,13 @@ public class EventDetailsActivity extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean isMenuitemVisible() {
+        return menuitemVisible;
+    }
+
+    public void setMenuitemVisible(boolean menuitemVisible) {
+        this.menuitemVisible = menuitemVisible;
     }
 }
