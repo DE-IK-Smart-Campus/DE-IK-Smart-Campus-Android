@@ -213,8 +213,8 @@ public class CalendarFragment extends Fragment {
         TimetableEvent timetableEvent1 = new TimetableEvent(2, 1519167600000L, "esemény neve2", "esemény leírása", "esemény helye", 2211703200000L, 2211681600000L);
         TimetableEvent timetableEvent2 = new TimetableEvent(3, 1519254000000L, "Teszt esemény esemény esemény esemény ", "Teszt leírás", "Teszt hely", 2211681600000L, 2211681600000L);
         TimetableEvent timetableEvent3 = new TimetableEvent(4, 1519081200000L, "esemény neve4", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent4 = new TimetableEvent(5, 1519340400000L, "esemény neve5", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent5 = new TimetableEvent(6, 1519426800000L, "esemény neve6", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent4 = new TimetableEvent(5, 1519340400000L, "Az internet eszközei és szolgáltatásai", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent5 = new TimetableEvent(6, 1519426800000L, "Valószínűségszámítás és statisztika", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
         TimetableEvent timetableEvent6 = new TimetableEvent(7, 1519513200000L, "esemény neve7", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
         TimetableEvent timetableEvent7 = new TimetableEvent(8, 1519599600000L, "esemény neve8", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
         TimetableEvent timetableEvent8 = new TimetableEvent(9, 1519686000000L, "esemény neve9", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);

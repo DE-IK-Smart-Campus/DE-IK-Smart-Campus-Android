@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/smart_campus_color_accent</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
+        <!--<item name="colorControlNormal">@color/white</item>-->
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -51,6 +51,7 @@ public class EventDetailsActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         ButterKnife.bind(this);
         String eventTypeString = getIntent().getExtras().getString(EVENT_TYPE);
 
@@ -79,7 +80,7 @@ public class EventDetailsActivity extends BaseActivity {
         }
         SimpleDateFormat timeFormatter = new SimpleDateFormat(EVENT_TIME_FORMAT_PATTERN, Locale.getDefault());
 
-        String timetableEventName = timetableEvent.getTimetableEventName();
+        String timetableEventName =timetableEvent.getTimetableEventName();
         String timetableEventDescription = timetableEvent.getTimetableEventDescription();
         String timetableEventPlace = timetableEvent.getTimetableEventPlace();
 
