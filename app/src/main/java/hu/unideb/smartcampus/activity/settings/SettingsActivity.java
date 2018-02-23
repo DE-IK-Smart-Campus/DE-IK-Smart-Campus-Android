@@ -5,6 +5,8 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.widget.Toolbar;
 
+import com.kizitonwose.colorpreference.ColorPreference;
+
 import butterknife.ButterKnife;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.base.BaseActivity;
@@ -56,6 +58,7 @@ public class SettingsActivity extends BaseActivity {
 //                    return false;
 //                }
 //            });
+
         }
     }
 }
