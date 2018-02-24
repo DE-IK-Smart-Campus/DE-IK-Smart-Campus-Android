@@ -1,11 +1,14 @@
 package hu.unideb.smartcampus.activity.login;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        Toasty.info(getApplicationContext(), Locale.getDefault().getLanguage(), Toast.LENGTH_LONG).show();
+
     }
 
     private void login() {

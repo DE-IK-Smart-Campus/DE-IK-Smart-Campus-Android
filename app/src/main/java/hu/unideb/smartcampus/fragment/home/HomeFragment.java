@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import hu.unideb.smartcampus.R;
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -20,4 +20,5 @@ public class HomeFragment extends Fragment{
         getActivity().setTitle(getResources().getString(R.string.home_menu_text));
         return view;
     }
+
 }

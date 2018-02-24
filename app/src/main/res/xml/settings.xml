@@ -18,22 +18,25 @@
     <PreferenceCategory android:title="@string/preference_category_event_color">
 
         <com.kizitonwose.colorpreference.ColorPreference
-            android:defaultValue="@color/color_choices_5"
             android:key="timetable_event_color_chooser_key"
             android:summary="@string/timetable_event_color_chooser_summary"
             android:title="@string/timetable_event_color_chooser_title"
-            app:colorChoices="@array/timetable_event_color_choices"
+            app:colorChoices="@array/color_choices"
             app:colorShape="circle"
             app:viewSize="large" />
 
-        <com.kizitonwose.colorpreference.ColorPreference
-            android:defaultValue="@color/color_choices_20"
-            android:key="custom_event_color_chooser_key"
-            android:summary="Custom event color"
-            android:title="Event color"
-            app:colorChoices="@array/custom_event_color_choices"
-            app:colorShape="circle"
-            app:viewSize="large" />
+        <!--app:colorChoices="@array/timetable_event_color_choices"-->
+        <!--android:defaultValue="@color/color_choices_5"-->
+
+
+        <!--<com.kizitonwose.colorpreference.ColorPreference-->
+            <!--android:defaultValue="@color/color_choices_20"-->
+            <!--android:key="custom_event_color_chooser_key"-->
+            <!--android:summary="Custom event color"-->
+            <!--android:title="Event color"-->
+            <!--app:colorChoices="@array/custom_event_color_choices"-->
+            <!--app:colorShape="circle"-->
+            <!--app:viewSize="large" />-->
 
     </PreferenceCategory>
 

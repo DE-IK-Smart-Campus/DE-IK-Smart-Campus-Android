@@ -1,6 +1,7 @@
 package hu.unideb.smartcampus.fragment.calendar;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,6 +34,7 @@ import butterknife.OnItemClick;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.calendar.custom.NewCustomEventActivity;
 import hu.unideb.smartcampus.activity.calendar.details.EventDetailsActivity;
+import hu.unideb.smartcampus.activity.settings.AppSettings;
 import hu.unideb.smartcampus.listview.adapter.event.EventListAdapter;
 import hu.unideb.smartcampus.pojo.calendar.CalendarEvent;
 import hu.unideb.smartcampus.pojo.calendar.CustomEvent;
@@ -95,7 +97,11 @@ public class CalendarFragment extends Fragment {
 
         List<TimetableEvent> timetableEvents = addEvents();
         List<CustomEvent> customEvents = addEvents1();
-        int color = getResources().getColor(R.color.color_choices_3);
+//        int color = getResources().getColor(R.color.color_choices_3);
+        AppSettings settings = AppSettings.getSettings(getActivity());
+
+        int color = Color.parseColor(getColorHex(settings.getC()));
+
         int color1 = getResources().getColor(R.color.color_choices_17);
 
         List<Event> events = new ArrayList<>();
@@ -154,6 +160,10 @@ public class CalendarFragment extends Fragment {
             }
         });
         getActivity().setTitle(dateFormatForMonth2.format(compactCalendarView.getFirstDayOfCurrentMonth()));
+    }
+
+    private String getColorHex(int color) {
+        return String.format("#%02x%02x%02x", Color.red(color), Color.green(color), Color.blue(color));
     }
 
     @OnItemClick(R.id.event_list_view)

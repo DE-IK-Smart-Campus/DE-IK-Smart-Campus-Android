@@ -1,7 +1,10 @@
 package hu.unideb.smartcampus.activity.main;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,13 +14,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.base.BaseActivity;
+import hu.unideb.smartcampus.activity.settings.AppSettings;
 import hu.unideb.smartcampus.activity.settings.SettingsActivity;
 import hu.unideb.smartcampus.fragment.about.AboutUsFragment;
 import hu.unideb.smartcampus.fragment.attendance.AttendanceFragment;
@@ -33,6 +40,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+
+    private static final int SETTINGS_REQUEST = 1000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,48 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         displaySelectedScreen(R.id.nav_home);
         navigationView.getMenu().getItem(0).setChecked(true);
+        fillViews();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case SETTINGS_REQUEST:
+                fillViews();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void fillViews() {
+        AppSettings settings = AppSettings.getSettings(this);
+
+      //  Toasty.info(getApplicationContext(), settings.getColor(), Toast.LENGTH_LONG).show();
+        Toasty.info(getApplicationContext(), settings.getC().toString(), Toast.LENGTH_LONG).show();
+        Toasty.info(getApplicationContext(), getColorHex(settings.getC()), Toast.LENGTH_LONG).show();
+
+//     updateStatusBarColor(settings.getC());
+
+
+//        Color.(settings.getC());
+Color.parseColor(getColorHex(settings.getC()));
+    }
+
+//    List<String> colorPrimaryList;
+//    List<String> colorPrimaryDarkList;
+//
+//    private void updateStatusBarColor(int newColor) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            String newColorString = getColorHex(newColor);
+//            colorPrimaryList = Arrays.asList(getResources().getStringArray(R.array.color_choices));
+//            colorPrimaryDarkList = Arrays.asList(getResources().getStringArray(R.array.color_choices_700));
+//            getWindow().setStatusBarColor((Color.parseColor(colorPrimaryDarkList.get(colorPrimaryList.indexOf(newColorString)))));
+//
+//
+//        }
+//    }
+//
+    private String getColorHex(int color) {
+        return String.format("#%02x%02x%02x", Color.red(color), Color.green(color), Color.blue(color));
     }
 
     @Override
@@ -63,7 +115,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings_action:
-                startActivity(new Intent(this, SettingsActivity.class));
+                SettingsActivity.startThisActivityForResult(this, SETTINGS_REQUEST);
+
+//                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
