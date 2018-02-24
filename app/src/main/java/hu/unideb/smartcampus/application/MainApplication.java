@@ -10,9 +10,7 @@ import hu.unideb.smartcampus.activity.settings.AppSettings;
 import hu.unideb.smartcampus.dialog.settings.language.helper.LanguageHelper;
 
 public class MainApplication extends Application {
-
     public final AppSettings settings = new AppSettings(this);
-
 
     private Context sContext;
 
@@ -31,8 +29,7 @@ public class MainApplication extends Application {
         MultiDex.install(this);
     }
 
-
-    public Context getContext() {
+    public static Context getContext() {
         return sContext;
     }
 }

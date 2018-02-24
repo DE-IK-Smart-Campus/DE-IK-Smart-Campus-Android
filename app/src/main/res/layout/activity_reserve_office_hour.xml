@@ -15,7 +15,7 @@
         android:paddingTop="20dp">
 
         <TextView
-            android:id="@+id/selected_office_hours_editText"
+            android:id="@+id/selected_office_hours_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"

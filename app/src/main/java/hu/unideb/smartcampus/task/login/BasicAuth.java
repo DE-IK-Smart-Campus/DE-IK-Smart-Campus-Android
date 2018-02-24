@@ -14,13 +14,15 @@ import okhttp3.Response;
 
 import static hu.unideb.smartcampus.container.Container.AUTHORIZATION_HEADER;
 import static hu.unideb.smartcampus.xmpp.Connection.HTTP_BASIC_AUTH_PATH;
+import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_OK;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
 class BasicAuth {
 
-    static ActualUserInfo basicAuth(ActualUserInfo paramActualUserInfo) {
+    static BasicAuthReturnPojo basicAuth(ActualUserInfo paramActualUserInfo) {
 
-        Integer responseCode = null;
+        Integer responseCode;
 
         OkHttpClient httpClient = Unsafe.getUnsafeOkHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -38,21 +40,18 @@ class BasicAuth {
         try {
             response = httpClient.newCall(request).execute();
             responseCode = response.code();
-            actualUserInfo = objectMapper.readValue(response.body().string(), ActualUserInfo.class);
-        } catch (IOException e) {
+            if (response.body() != null) {
+                actualUserInfo = objectMapper.readValue(response.body().string(), ActualUserInfo.class);
+            }
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
+            return new BasicAuthReturnPojo(HTTP_INTERNAL_ERROR, null);
         } finally {
-
             if (response != null) {
-                response.body().close();
+                response.close();
             }
         }
-
-        if (responseCode != null && responseCode == HTTP_OK) {
-            return actualUserInfo;
-        } else {
-            return null;
-        }
+        return new BasicAuthReturnPojo(responseCode, actualUserInfo);
     }
 
 }

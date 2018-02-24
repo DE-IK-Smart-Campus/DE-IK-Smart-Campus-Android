@@ -1,8 +1,6 @@
 package hu.unideb.smartcampus.xmpp;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SmackConfiguration;
@@ -17,6 +15,9 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.application.MainApplication;
@@ -46,19 +47,17 @@ import static java.lang.Thread.sleep;
 public class Connection {
     private static final String TAG = Connection.class.getSimpleName();
 
-    private static MainApplication mainApplication = new MainApplication();
-
     private static Connection instance = null;
 
-    public static final String HTTP_BASIC_AUTH_PATH = mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_BASIC_AUTH_PATH);
-    public static final String ADMINJID = mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_ADMIN_JID);
-    public static final String HOSTNAME = mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOSTNAME);
+    public static final String HTTP_BASIC_AUTH_PATH = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_BASIC_AUTH_PATH);
+
+    public static final String ADMINJID = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_ADMIN_JID);
+    public static final String HOSTNAME = MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOSTNAME);
     public static EntityJid adminEntityJID;
 
     private BOSHConfiguration config;
     private XMPPBOSHConnection xmppConnection;
     private String userJID;
-    private Context context;
 
     protected Connection() {
         try {
@@ -76,16 +75,16 @@ public class Connection {
     }
 
 
-    public static void startConnection(ActualUserInfo actualUserInfo, Context context) {
+    public static void startConnection(ActualUserInfo actualUserInfo) {
         BOSHConfiguration config = null;
         try {
             config = BOSHConfiguration.builder()
                     .setUsernameAndPassword(actualUserInfo.getUsername(), actualUserInfo.getXmppPassword())
                     .setXmppDomain(HOSTNAME)
-                    .setHost(mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOST))
+                    .setHost(MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_HOST))
                     .setPort(80)
-                    .setFile(mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_FILE))
-                    .setResource(mainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_RESOURCE))
+                    .setFile(MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_FILE))
+                    .setResource(MainApplication.getContext().getResources().getString(R.string.SMARTCAMPUS_RESOURCE))
                     .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                     .setDebuggerEnabled(false)
                     .build();
@@ -94,7 +93,6 @@ public class Connection {
         }
 
         Connection connection = Connection.getInstance();
-        connection.setContext(context);
         connection.setConfig(config);
         connection.maintainConnection();
         if (connection.xmppConnection.isAuthenticated()) {
@@ -121,12 +119,12 @@ public class Connection {
         }
     }
 
-    public void newActivity(Class<? extends AppCompatActivity> toActivity) {
+    /*public void newActivity(Class<? extends AppCompatActivity> toActivity) {
         Intent intent = new Intent(context, toActivity);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
-
+*/
 //    public FragmentManager createLoadingDialogFragment(FragmentManager fragmentManager, Bundle bundle) {
 //        LoadingDialogFragment loadingDialogFragment = (LoadingDialogFragment) fragmentManager.findFragmentByTag(DIALOG_TAG);
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -157,19 +155,19 @@ public class Connection {
 //        return fragmentManager;
 //    }
 
-//    public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P extends BasePojo>
-//    P runAsyncTask(T asyncIqTask, HashMap<String, String> params) throws ExecutionException, InterruptedException {
-//
-//        HashMap<String, String> asyncTaskParams = new HashMap<>();
-//
-//        for (Map.Entry<String, String> entry : params.entrySet()) {
-//            asyncTaskParams.put(entry.getKey(), entry.getValue());
-//        }
-//
-//        P pojoClass = asyncIqTask.execute(asyncTaskParams).get();
-//
-//        return pojoClass;
-//    }
+    public <T extends AsyncTask<HashMap<String, String>, Integer, P>, P>
+    P runAsyncTask(T asyncIqTask, HashMap<String, String> params) throws ExecutionException, InterruptedException {
+
+        HashMap<String, String> asyncTaskParams = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            asyncTaskParams.put(entry.getKey(), entry.getValue());
+        }
+
+        P pojoClass = asyncIqTask.execute(asyncTaskParams).get();
+
+        return pojoClass;
+    }
 
     public XMPPBOSHConnection getXmppConnection() {
         return xmppConnection;
@@ -177,14 +175,6 @@ public class Connection {
 
     private void setUserJID(String userJID) {
         this.userJID = userJID;
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 
     private void setConfig(BOSHConfiguration config) {

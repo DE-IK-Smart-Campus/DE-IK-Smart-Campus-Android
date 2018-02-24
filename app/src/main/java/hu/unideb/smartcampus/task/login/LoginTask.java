@@ -1,12 +1,25 @@
 package hu.unideb.smartcampus.task.login;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 
+import java.net.HttpURLConnection;
+
+import hu.unideb.smartcampus.activity.base.BaseActivity;
 import hu.unideb.smartcampus.activity.login.LoginActivity;
+import hu.unideb.smartcampus.activity.main.MainActivity;
 import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
 import hu.unideb.smartcampus.pojo.login.ActualUserInfo;
+import hu.unideb.smartcampus.task.pojo.ReturnPojo;
 import hu.unideb.smartcampus.xmpp.Connection;
+
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_CLIENT_TIMEOUT;
+import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT;
+import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
+import static java.net.HttpURLConnection.HTTP_OK;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
 /**
  * LoginTask gets the Username, Password for ejabberd login
@@ -21,7 +34,7 @@ import hu.unideb.smartcampus.xmpp.Connection;
  * Created by Headswitcher on 2017. 03. 16..
  */
 
-public class LoginTask extends AsyncTask<ActualUserInfo, Long, Void> {
+public class LoginTask extends AsyncTask<ActualUserInfo, Long, ReturnPojo> {
 
     private LoadingDialog loadingDialog;
 
@@ -39,21 +52,65 @@ public class LoginTask extends AsyncTask<ActualUserInfo, Long, Void> {
     }
 
     @Override
-    protected Void doInBackground(ActualUserInfo... params) {
+    protected ReturnPojo doInBackground(ActualUserInfo... params) {
 
         ActualUserInfo actualUserInfo = params[0];
-        ActualUserInfo xmppUserInfo = BasicAuth.basicAuth(actualUserInfo);
+        BasicAuthReturnPojo authReturnPojo = BasicAuth.basicAuth(actualUserInfo);
 
-        if (xmppUserInfo != null) {
-            Connection.startConnection(xmppUserInfo, activity.getApplicationContext());
+        if (authReturnPojo.getStatusCode() == HttpURLConnection.HTTP_OK) {
+            ActualUserInfo xmppUserInfo = authReturnPojo.getActualUserInfo();
+            if (xmppUserInfo != null) {
+                Connection.startConnection(xmppUserInfo);
+            }
+        } else {
+            return new ReturnPojo(authReturnPojo.getStatusCode());
         }
-        return null;
+        if (Connection.getInstance().getXmppConnection().isConnected()) {
+            return new ReturnPojo(HTTP_OK);
+        }
+        return new ReturnPojo(HTTP_INTERNAL_ERROR);
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
+    protected void onPostExecute(ReturnPojo returnPojo) {
+        super.onPostExecute(returnPojo);
         loadingDialog.dismiss();
+        // TextView errorTextViewAtCustomNumberDialog = dialogFragment.getDialog().findViewById(R.id.custom_number_input_error_textview);
+        switch (returnPojo.getStatusCode()) {
+            case HTTP_OK:
+                Intent intent = new Intent(activity, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
+                break;
+
+            case HTTP_BAD_REQUEST:
+                //TODO SHOW ERROR
+                break;
+
+            //  case NO_INTERNET_ERROR:
+            //     //TODO SHOW ERROR
+            //    break;
+
+            //     case UNKNOW_ERROR:
+            //         //TODO SHOW ERROR
+            //        break;
+
+            case HTTP_GATEWAY_TIMEOUT:
+                //TODO SHOW ERROR
+                break;
+
+            case HTTP_CLIENT_TIMEOUT:
+                //TODO SHOW ERROR
+                break;
+
+            case HTTP_UNAUTHORIZED:
+                //TODO SHOW ERROR
+
+            case HTTP_INTERNAL_ERROR:
+                //TODO SHOW ERROR
+        }
+
+
     }
 }
 

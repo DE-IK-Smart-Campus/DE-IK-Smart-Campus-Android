@@ -101,14 +101,18 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/event_description_edit_text"
                         android:layout_gravity="center"
-                        android:hint="@string/event_description_text_hint">
+                        android:hint="@string/event_description_text_hint"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="20">
 
-                        <EditText
+                        <com.txusballesteros.AutoscaleEditText
                             android:id="@+id/event_description_edit_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:inputType="textPersonName" />
+                            android:textSize="18sp"
+                            app:animationDuration="200"
+                            app:linesLimit="3"
+                            app:textScale="0.75"/>
                     </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>

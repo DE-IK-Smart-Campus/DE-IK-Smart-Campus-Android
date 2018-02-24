@@ -12,6 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import hu.unideb.smartcampus.fragment.calendar.CalendarFragment;
 import hu.unideb.smartcampus.fragment.chat.ChatFragment;
 import hu.unideb.smartcampus.fragment.home.HomeFragment;
 import hu.unideb.smartcampus.interfaces.OnBackPressedListener;
+import hu.unideb.smartcampus.task.officehours.OfficeHoursSubjectsTask;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -139,6 +141,7 @@ Color.parseColor(getColorHex(settings.getC()));
                 fragment = new AttendanceFragment();
                 break;
             case R.id.nav_office_hours:
+                new OfficeHoursSubjectsTask(this).execute();
                 break;
             case R.id.nav_chat:
                 fragment = new ChatFragment();

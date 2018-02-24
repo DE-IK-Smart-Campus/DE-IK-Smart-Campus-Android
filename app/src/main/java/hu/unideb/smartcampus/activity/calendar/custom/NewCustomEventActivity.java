@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.txusballesteros.AutoscaleEditText;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -43,7 +45,7 @@ public class NewCustomEventActivity extends BaseActivity implements StartDatePic
     EditText eventNameEditText;
 
     @BindView(R.id.event_description_edit_text)
-    EditText eventDescriptionEditText;
+    AutoscaleEditText eventDescriptionEditText;
 
     @BindView(R.id.event_place_edit_text)
     EditText eventPlaceEditText;

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
-import com.kizitonwose.colorpreference.ColorPreference;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -76,10 +75,6 @@ public class CalendarFragment extends Fragment {
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
         compactCalendarView.invalidate();
-
-
-        final int defaultOrder = ColorPreference.DEFAULT_ORDER;
-        Log.e("asd", String.valueOf(defaultOrder));
 
         Locale defaultLocale = Locale.getDefault();
         Locale hunLocale = new Locale("hu", "hu");
@@ -173,9 +168,17 @@ public class CalendarFragment extends Fragment {
         CalendarEvent t = (CalendarEvent) listItem.getData();
 
         if ((t != null ? t.getEventType() : null) == EventType.TIMETABLE) {
+
             startIntet(EventType.TIMETABLE.name(), t.getTimetableEvent());
+//            Log.e("timetable", t.getTimetableEvent().toString());
+//            Toasty.info(getContext(), "Timetable", Toast.LENGTH_SHORT).show();
         } else if ((t != null ? t.getEventType() : null) == EventType.CUSTOM) {
+
             startIntet(EventType.CUSTOM.name(), t.getCustomEvent());
+
+//            Log.e("custom", t.getCustomEvent().toString());
+//            Toasty.info(getContext(), "custom", Toast.LENGTH_SHORT).show();
+
         }
     }
 
