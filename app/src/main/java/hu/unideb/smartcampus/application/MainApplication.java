@@ -12,7 +12,7 @@ import hu.unideb.smartcampus.dialog.settings.language.helper.LanguageHelper;
 public class MainApplication extends Application {
     public final AppSettings settings = new AppSettings(this);
 
-    private Context sContext;
+    private static Context sContext;
 
     @Override
     public void onCreate() {
