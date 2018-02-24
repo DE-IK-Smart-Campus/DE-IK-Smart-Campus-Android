@@ -53,16 +53,16 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.login_button)
     public void loginAction() {
         //TESZT
-//        Intent mainIntet = new Intent(this, MainActivity.class);
-//        startActivity(mainIntet);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-            }, MY_REQUEST_CODE);
-            return;
-        }
-
-        login();
+        Intent mainIntet = new Intent(this, MainActivity.class);
+        startActivity(mainIntet);
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{
+//                    Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION
+//            }, MY_REQUEST_CODE);
+//            return;
+//        }
+//
+//        login();
     }
 }

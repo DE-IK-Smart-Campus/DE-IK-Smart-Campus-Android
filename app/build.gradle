@@ -136,4 +136,7 @@ dependencies {
 
     //animation
     compile 'com.airbnb.android:lottie:2.0.0-rc1'
+
+    //autoscsale edittext
+    compile 'com.txusballesteros:AutoscaleEditText:1.0'
 }
