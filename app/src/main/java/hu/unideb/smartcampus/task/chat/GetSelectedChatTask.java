@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.stfalcon.chatkit.messages.MessagesListAdapter;
+
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
@@ -102,7 +104,7 @@ public class GetSelectedChatTask extends AsyncTask<Dialog, Long, SelectedChatFor
             final EntityBareJid jid = JidCreate.entityBareFrom(partnerToJid);
             selectedChatPartnerJid = jid;
 
-            MamManager.MamQueryResult lastQueryResult = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryItemCount);
+/*            MamManager.MamQueryResult lastQueryResult = mamManager.mostRecentPage(selectedChatPartnerJid, chatHistoryItemCount);
             List<Forwarded> forwardedMessages = lastQueryResult.forwardedMessages;
             List<ChatMessage> chatMessages = new ArrayList<>();
 
@@ -116,24 +118,44 @@ public class GetSelectedChatTask extends AsyncTask<Dialog, Long, SelectedChatFor
                         , tmpMsg.getBody()));
 
             }
-        /*
-        ChatUser chatUser = new ChatUser("1", "ÉnTeszt", "Avatar", true);
-        ChatUser chatUser2 = new ChatUser("2", "NemÉnTeszt", "Avatar", true);
-        ArrayList<ChatUser> chatUsers = new ArrayList<>();
-        chatUsers.add(chatUser);
-        chatUsers.add(chatUser2);
-        ChatMessage chatMessage = new ChatMessage("1", chatUser, "SZIA");
-        ChatMessage chatMessage0 = new ChatMessage("2", chatUser2, "sup");
-        ChatMessage chatMessage1 = new ChatMessage("1", chatUser, "nothin");
-        MessagesListAdapter<ChatMessage> adapter = new MessagesListAdapter<>("1", null);
-        ArrayList<ChatMessage> chatDialog = new ArrayList<>();
-        chatDialog.add(chatMessage);
-        chatDialog.add(chatMessage0);
-        chatDialog.add(chatMessage1);
+            */
+
+       /*     ChatUser chatUser = new ChatUser("1", "ÉnTeszt", "Avatar", true);
+            ChatUser chatUser2 = new ChatUser("2", "NemÉnTeszt", "Avatar", true);
+            ArrayList<ChatUser> chatUsers = new ArrayList<>();
+            chatUsers.add(chatUser);
+            chatUsers.add(chatUser2);
+            ChatMessage chatMessage = new ChatMessage("1", chatUser, "SZIA");
+            ChatMessage chatMessage0 = new ChatMessage("2", chatUser2, "sup");
+            ChatMessage chatMessage1 = new ChatMessage("1", chatUser, "nothin");
+            MessagesListAdapter<ChatMessage> adapter = new MessagesListAdapter<>("1", null);
+            ArrayList<ChatMessage> chatMessages = new ArrayList<>();
+            chatMessages.add(chatMessage);
+            chatMessages.add(chatMessage0);
+            chatMessages.add(chatMessage1);
         */
+
+            ChatUser chatUser = new ChatUser("1", "ÉnTeszt", "Avatar", true);
+            ChatUser chatUser2 = new ChatUser("2", "NemÉnTeszt", "Avatar", true);
+            ArrayList<ChatUser> chatUsers = new ArrayList<>();
+            chatUsers.add(chatUser);
+            chatUsers.add(chatUser2);
+            ChatMessage chatMessage = new ChatMessage("1", chatUser, "Teszt1 User1");
+            ChatMessage chatMessage0 = new ChatMessage("2", chatUser2, "Teszt2 User2");
+            ChatMessage chatMessage1 = new ChatMessage("1", chatUser, "Teszt2 User1");
+
+            ArrayList<ChatMessage> chatMessages = new ArrayList<>();
+            chatMessages.add(chatMessage);
+            chatMessages.add(chatMessage0);
+            chatMessages.add(chatMessage1);
+
             return new SelectedChatForwardedMessages(chatMessages);
 
-        } catch (SmackException.NotLoggedInException | SmackException.NoResponseException | XMPPException.XMPPErrorException | InterruptedException | SmackException.NotConnectedException | XmppStringprepException e) {
+        /*} catch (SmackException.NotLoggedInException | SmackException.NoResponseException | XMPPException.XMPPErrorException | InterruptedException | SmackException.NotConnectedException | XmppStringprepException e) {
+            e.printStackTrace();
+        }
+        */
+        } catch (XmppStringprepException e) {
             e.printStackTrace();
         }
         return null;

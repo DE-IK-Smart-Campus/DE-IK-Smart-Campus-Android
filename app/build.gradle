@@ -117,4 +117,8 @@ dependencies {
 
     //chat ui
     compile 'com.github.stfalcon:chatkit:0.2.1'
+
+    //Lottie :)
+    compile 'com.airbnb.android:lottie:2.5.0-rc1'
+
 }

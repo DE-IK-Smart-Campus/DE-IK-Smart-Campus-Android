@@ -13,6 +13,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import static hu.unideb.smartcampus.xmpp.Connection.HTTP_BASIC_AUTH_PATH;
+import static java.lang.Thread.sleep;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
@@ -30,6 +31,12 @@ public class BasicAuth {
 
         ActualUserInfo actualUserInfo = paramActualUserInfo;
         String toBase64 = actualUserInfo.getUsername() + ":" + actualUserInfo.getXmppPassword();
+
+        try {
+            sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         byte[] encodedUsernameAndPassword = Base64.encodeBase64(toBase64.getBytes());
         Request request = new Request.Builder()
