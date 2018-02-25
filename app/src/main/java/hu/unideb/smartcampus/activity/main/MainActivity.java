@@ -79,8 +79,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         AppSettings settings = AppSettings.getSettings(this);
 
       //  Toasty.info(getApplicationContext(), settings.getColor(), Toast.LENGTH_LONG).show();
-        Toasty.info(getApplicationContext(), settings.getC().toString(), Toast.LENGTH_LONG).show();
-        Toasty.info(getApplicationContext(), getColorHex(settings.getC()), Toast.LENGTH_LONG).show();
+//        Toasty.info(getApplicationContext(), settings.getC().toString(), Toast.LENGTH_LONG).show();
+//        Toasty.info(getApplicationContext(), getColorHex(settings.getC()), Toast.LENGTH_LONG).show();
+        Toasty.info(getApplicationContext(), settings.getC1(), Toast.LENGTH_LONG).show();
 
 //     updateStatusBarColor(settings.getC());
 

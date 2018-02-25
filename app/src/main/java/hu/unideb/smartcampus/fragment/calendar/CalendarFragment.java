@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -30,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import es.dmoral.toasty.Toasty;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.calendar.custom.NewCustomEventActivity;
 import hu.unideb.smartcampus.activity.calendar.details.EventDetailsActivity;
@@ -156,6 +158,7 @@ public class CalendarFragment extends Fragment {
         });
         getActivity().setTitle(dateFormatForMonth2.format(compactCalendarView.getFirstDayOfCurrentMonth()));
     }
+
 
     private String getColorHex(int color) {
         return String.format("#%02x%02x%02x", Color.red(color), Color.green(color), Color.blue(color));
