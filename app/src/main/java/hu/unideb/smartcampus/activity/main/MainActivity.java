@@ -79,10 +79,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 //        Toasty.info(getApplicationContext(), getColorHex(settings.getSelected_timetable_event_color()), Toast.LENGTH_LONG).show();
         Toasty.info(getApplicationContext(), settings.getSelected_notification_sound(), Toast.LENGTH_LONG).show();
 
-//     updateStatusBarColor(settings.getC());
-
-
-//        Color.(settings.getC());
 Color.parseColor(getColorHex(settings.getSelected_timetable_event_color()));
     }
 

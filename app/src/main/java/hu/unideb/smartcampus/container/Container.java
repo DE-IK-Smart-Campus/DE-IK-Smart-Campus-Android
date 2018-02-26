@@ -1,7 +1,5 @@
 package hu.unideb.smartcampus.container;
 
-import hu.unideb.smartcampus.pojo.settings.Settings;
-
 public class Container {
 
     public static final int SPLASH_SCREEN_TIME_OUT = 2500;

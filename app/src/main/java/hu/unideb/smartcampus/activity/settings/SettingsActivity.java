@@ -58,15 +58,15 @@ public class SettingsActivity extends BaseActivity {
                     return true;
                 }
             });
-//            RingtonePreference colorPrefs1 = (RingtonePreference) findPreference("settings_notification_sound_picker_key");
-//            colorPrefs1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//                @Override
-//                public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                    preference.setSummary(String.valueOf(newValue));
-//
-//                    return true;
-//                }
-//            });
+            RingtonePreference colorPrefs1 = (RingtonePreference) findPreference("notification_sound_picker_chooser_key");
+            colorPrefs1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    preference.setSummary(String.valueOf(newValue));
+
+                    return true;
+                }
+            });
 
 //            Preference serverAddressPrefs = findPreference("server_address");
 //            serverAddressPrefs.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

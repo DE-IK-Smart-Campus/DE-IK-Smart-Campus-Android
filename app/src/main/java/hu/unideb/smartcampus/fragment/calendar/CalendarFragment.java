@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -31,7 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import es.dmoral.toasty.Toasty;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.calendar.custom.NewCustomEventActivity;
 import hu.unideb.smartcampus.activity.calendar.details.EventDetailsActivity;
@@ -49,6 +47,7 @@ import static hu.unideb.smartcampus.container.Container.EVENT_TYPE;
 import static hu.unideb.smartcampus.container.Container.SELECTED_DATE_LONG;
 
 public class CalendarFragment extends Fragment {
+
     private final String TAG = CalendarFragment.class.getSimpleName();
 
     @BindView(R.id.compact_calendar_view)
@@ -62,13 +61,15 @@ public class CalendarFragment extends Fragment {
 
     private SimpleDateFormat dateFormatForMonth2;
     private Date selectedDate = getCurrentDate();
-    int color;
+    private int timetable_event_color;
+    private int custom_event_color;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
         AppSettings settings = AppSettings.getSettings(getActivity());
-        color = Color.parseColor(getColorHex(settings.getSelected_timetable_event_color()));
+        timetable_event_color = Color.parseColor(getColorHex(settings.getSelected_timetable_event_color()));
+        custom_event_color = Color.parseColor(getColorHex(settings.getSelected_custom_event_default_color()));
         ButterKnife.bind(this, view);
         return view;
     }
@@ -97,18 +98,16 @@ public class CalendarFragment extends Fragment {
         List<TimetableEvent> timetableEvents = addEvents();
         List<CustomEvent> customEvents = addEvents1();
 
-        int color1 = getResources().getColor(R.color.white);
-
         List<Event> events = new ArrayList<>();
 
         for (int i = 0; i < timetableEvents.size(); i++) {
             TimetableEvent timetableEvent = timetableEvents.get(i);
-            events.add(new Event(color, timetableEvent.getTimetableEventDate(), new CalendarEvent(timetableEvent.getTimetableEventName(), timetableEvent.getTimetableEventPlace(), timetableEvent.getTimetableEventStartTime(), timetableEvent.getTimetableEventEndTime(), EventType.TIMETABLE, timetableEvent, null)));
+            events.add(new Event(timetable_event_color, timetableEvent.getTimetableEventDate(), new CalendarEvent(timetableEvent.getTimetableEventName(), timetableEvent.getTimetableEventPlace(), timetableEvent.getTimetableEventStartTime(), timetableEvent.getTimetableEventEndTime(), EventType.TIMETABLE, timetableEvent, null)));
         }
 
         for (int i = 0; i < customEvents.size(); i++) {
             CustomEvent customEvent = customEvents.get(i);
-            events.add(new Event(color1, customEvent.getEventStartDate(), new CalendarEvent(customEvent.getEventName(), customEvent.getEventPlace(), customEvent.getEventStartTime(), customEvent.getEventEndTime(), EventType.CUSTOM, null, customEvent)));
+            events.add(new Event(custom_event_color, customEvent.getEventStartDate(), new CalendarEvent(customEvent.getEventName(), customEvent.getEventPlace(), customEvent.getEventStartTime(), customEvent.getEventEndTime(), EventType.CUSTOM, null, customEvent)));
         }
 
         List<Event> events1 = new ArrayList<>();
@@ -164,17 +163,9 @@ public class CalendarFragment extends Fragment {
         CalendarEvent t = (CalendarEvent) listItem.getData();
 
         if ((t != null ? t.getEventType() : null) == EventType.TIMETABLE) {
-
             startIntet(EventType.TIMETABLE.name(), t.getTimetableEvent());
-//            Log.e("timetable", t.getTimetableEvent().toString());
-//            Toasty.info(getContext(), "Timetable", Toast.LENGTH_SHORT).show();
         } else if ((t != null ? t.getEventType() : null) == EventType.CUSTOM) {
-
             startIntet(EventType.CUSTOM.name(), t.getCustomEvent());
-
-//            Log.e("custom", t.getCustomEvent().toString());
-//            Toasty.info(getContext(), "custom", Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -183,7 +174,6 @@ public class CalendarFragment extends Fragment {
         intent.putExtra(EVENT_TYPE, eventType);
         intent.putExtra(EVENT_OBJECT, (Serializable) object);
         startActivity(intent);
-
     }
 
     @OnClick(R.id.add_new_event_fab)

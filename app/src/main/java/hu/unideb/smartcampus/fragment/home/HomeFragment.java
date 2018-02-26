@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -25,20 +26,20 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        AppSettings appSettings = AppSettings.getSettings(getActivity());
+        Toast.makeText(getContext(), appSettings.getSelected_notification_sound(), Toast.LENGTH_SHORT).show();
         ButterKnife.bind(this, view);
         getActivity().setTitle(getResources().getString(R.string.home_menu_text));
         Button button = view.findViewById(R.id.b);
-        AppSettings appSettings = AppSettings.getSettings(getActivity());
-        Toast.makeText(getContext(), appSettings.getSelected_notification_sound(), Toast.LENGTH_SHORT).show();
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                generateNotification(getContext(), Uri.parse(appSettings.getSelected_notification_sound()));
-            }
-        });
+
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                generateNotification(getContext(), Uri.parse(appSettings.getSelected_notification_sound()));
+//            }
+//        });
         return view;
     }
-
 
     private void generateNotification(Context mContext, Uri message) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext);
