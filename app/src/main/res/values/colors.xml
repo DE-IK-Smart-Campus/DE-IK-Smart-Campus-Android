@@ -17,96 +17,31 @@
     <color name="silver">#C0C0C0</color>
     <color name="darkSilver">#686868</color>
 
+    <color name="timetable_event_default_color">#003459</color>
+    <color name="custom_event_default_color">#136F63</color>
+
     <string-array name="timetable_event_color_choices">
-        <item>@color/color_choices_1</item>
-        <item>@color/color_choices_2</item>
-        <item>@color/color_choices_3</item>
-        <item>@color/color_choices_4</item>
-        <item>@color/color_choices_5</item>
-        <item>@color/color_choices_6</item>
-        <item>@color/color_choices_7</item>
-        <item>@color/color_choices_8</item>
-        <item>@color/color_choices_9</item>
-        <item>@color/color_choices_10</item>
+        <item>#820933</item>
+        <item>#D84797</item>
+        <item>#C8C2AE</item>
+        <item>#34E4EA</item>
+        <item>#003459</item>
+        <item>#2196f3</item>
+        <item>#57A773</item>
+        <item>#f37748</item>
+        <item>#FFBA08</item>
     </string-array>
 
     <string-array name="custom_event_color_choices">
-        <item>@color/color_choices_11</item>
-        <item>@color/color_choices_12</item>
-        <item>@color/color_choices_13</item>
-        <item>@color/color_choices_14</item>
-        <item>@color/color_choices_15</item>
-        <item>@color/color_choices_16</item>
-        <item>@color/color_choices_17</item>
-        <item>@color/color_choices_18</item>
-        <item>@color/color_choices_19</item>
-        <item>@color/color_choices_20</item>
-    </string-array>
-
-    <color name="color_choices_1">#820933</color>
-    <color name="color_choices_2">#D84797</color>
-    <color name="color_choices_3">#C8C2AE</color>
-    <color name="color_choices_4">#34E4EA</color>
-    <color name="color_choices_5">#003459</color>
-    <color name="color_choices_6">#57A773</color>
-    <color name="color_choices_7">#009688</color>
-    <color name="color_choices_8">#f37748</color>
-    <color name="color_choices_9">#D00000</color>
-    <color name="color_choices_10">#FFBA08</color>
-
-    <color name="color_choices_11">#136F63</color>
-    <color name="color_choices_12">#AFA98D</color>
-    <color name="color_choices_13">#6D8EA0</color>
-    <color name="color_choices_14">#303036</color>
-    <color name="color_choices_15">#FF8A5B</color>
-    <color name="color_choices_16">#EA526F</color>
-    <color name="color_choices_17">#E6C229</color>
-    <color name="color_choices_18">#F17105</color>
-    <color name="color_choices_19">#6610F2</color>
-    <color name="color_choices_20">#07BEB8</color>
-
-    <string-array name="color_choices">
-        <item>#f44336</item>
-        <item>#e91e63</item>
-        <item>#9c27b0</item>
-        <item>#673ab7</item>
-        <item>#3f51b5</item>
-        <item>#2196f3</item>
-        <item>#03a9f4</item>
-        <item>#00bcd4</item>
-        <item>#009688</item>
-        <item>#4caf50</item>
-        <item>#8bc34a</item>
-        <item>#cddc39</item>
-        <item>#ffeb3b</item>
-        <item>#ffc107</item>
-        <item>#ff9800</item>
-        <item>#ff5722</item>
-        <item>#795548</item>
-        <item>#9e9e9e</item>
-        <item>#607d8b</item>
-    </string-array>
-
-    <string-array name="color_choices_700">
-        <item>#d32f2f</item>
-        <item>#c2185b</item>
-        <item>#7b1fa2</item>
-        <item>#512da8</item>
-        <item>#303f9f</item>
-        <item>#1976d2</item>
-        <item>#0288d1</item>
-        <item>#0097a7</item>
-        <item>#00796b</item>
-        <item>#388e3c</item>
-        <item>#689f38</item>
-        <item>#afb42b</item>
-        <item>#fbc02d</item>
-        <item>#ffa000</item>
-        <item>#f57c00</item>
-        <item>#e64a19</item>
-        <item>#5d4037</item>
-        <item>#616161</item>
-        <item>#455a64</item>
+        <item>#136F63</item>
+        <item>#6D8EA0</item>
+        <item>#303036</item>
+        <item>#FF8A5B</item>
+        <item>#EA526F</item>
+        <item>#E6C229</item>
+        <item>#F17105</item>
+        <item>#6610F2</item>
+        <item>#07BEB8</item>
     </string-array>
 
 </resources>

@@ -35,7 +35,7 @@ import es.dmoral.toasty.Toasty;
 import hu.unideb.smartcampus.R;
 import hu.unideb.smartcampus.activity.calendar.custom.NewCustomEventActivity;
 import hu.unideb.smartcampus.activity.calendar.details.EventDetailsActivity;
-import hu.unideb.smartcampus.activity.settings.AppSettings;
+import hu.unideb.smartcampus.application.settings.AppSettings;
 import hu.unideb.smartcampus.listview.adapter.event.EventListAdapter;
 import hu.unideb.smartcampus.pojo.calendar.CalendarEvent;
 import hu.unideb.smartcampus.pojo.calendar.CustomEvent;
@@ -49,7 +49,6 @@ import static hu.unideb.smartcampus.container.Container.EVENT_TYPE;
 import static hu.unideb.smartcampus.container.Container.SELECTED_DATE_LONG;
 
 public class CalendarFragment extends Fragment {
-
     private final String TAG = CalendarFragment.class.getSimpleName();
 
     @BindView(R.id.compact_calendar_view)
@@ -63,10 +62,13 @@ public class CalendarFragment extends Fragment {
 
     private SimpleDateFormat dateFormatForMonth2;
     private Date selectedDate = getCurrentDate();
+    int color;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
+        AppSettings settings = AppSettings.getSettings(getActivity());
+        color = Color.parseColor(getColorHex(settings.getSelected_timetable_event_color()));
         ButterKnife.bind(this, view);
         return view;
     }
@@ -94,12 +96,8 @@ public class CalendarFragment extends Fragment {
 
         List<TimetableEvent> timetableEvents = addEvents();
         List<CustomEvent> customEvents = addEvents1();
-//        int color = getResources().getColor(R.color.color_choices_3);
-        AppSettings settings = AppSettings.getSettings(getActivity());
 
-        int color = Color.parseColor(getColorHex(settings.getC()));
-
-        int color1 = getResources().getColor(R.color.color_choices_17);
+        int color1 = getResources().getColor(R.color.white);
 
         List<Event> events = new ArrayList<>();
 
@@ -159,11 +157,6 @@ public class CalendarFragment extends Fragment {
         getActivity().setTitle(dateFormatForMonth2.format(compactCalendarView.getFirstDayOfCurrentMonth()));
     }
 
-
-    private String getColorHex(int color) {
-        return String.format("#%02x%02x%02x", Color.red(color), Color.green(color), Color.blue(color));
-    }
-
     @OnItemClick(R.id.event_list_view)
     public void eventListViewClickListener(int position) {
         Event listItem = (Event) eventListView.getItemAtPosition(position);
@@ -219,6 +212,9 @@ public class CalendarFragment extends Fragment {
         });
     }
 
+    private String getColorHex(int color) {
+        return String.format("#%02x%02x%02x", Color.red(color), Color.green(color), Color.blue(color));
+    }
 
     private List<TimetableEvent> addEvents() {
 
@@ -238,15 +234,12 @@ public class CalendarFragment extends Fragment {
         return Arrays.asList(timetableEvent, timetableEvent1, timetableEvent2, timetableEvent3, timetableEvent4, timetableEvent5, timetableEvent6, timetableEvent7, timetableEvent8, timetableEvent9, timetableEvent10, timetableEvent11);
     }
 
-
     private List<CustomEvent> addEvents1() {
-
 
         CustomEvent customEvent = new CustomEvent("1", "esemény1", "esemény leírása", "esemény helye", 1519081200000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
         CustomEvent customEvent1 = new CustomEvent("1", "esemény2", "esemény leírása", "esemény helye", 1519081200000L, 2211714000000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
         CustomEvent customEvent2 = new CustomEvent("1", "esemény3", "esemény leírása", "esemény helye", 1519081200000L, 2211699600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
         CustomEvent customEvent3 = new CustomEvent("1", "esemény4", "esemény leírása", "esemény helye", 1519081200000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
-
 
         return Arrays.asList(customEvent, customEvent1, customEvent2, customEvent3);
     }

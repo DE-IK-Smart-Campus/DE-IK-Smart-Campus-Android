@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">SmartCampus</string>
 
+    <string name="settings_language_list_key" translatable="false">language_chooser_key</string>
+    <string name="settings_timetable_event_color_key" translatable="false">timetable_event_color_chooser_key</string>
+    <string name="settings_custom_event_color_default_key" translatable="false">custom_event_default_color_chooser_key</string>
+    <string name="settings_notification_sound_picker_key" translatable="false">notification_sound_picker_chooser_key</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

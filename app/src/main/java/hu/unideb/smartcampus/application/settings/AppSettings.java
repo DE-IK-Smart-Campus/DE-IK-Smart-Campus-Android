@@ -1,10 +1,11 @@
-package hu.unideb.smartcampus.activity.settings;
+package hu.unideb.smartcampus.application.settings;
 
 import android.app.Activity;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import hu.unideb.smartcampus.pojo.settings.Settings;
 import hu.unideb.smartcampus.application.MainApplication;
 
 public class AppSettings extends Settings {
@@ -22,7 +23,6 @@ public class AppSettings extends Settings {
 	public AppSettings(MainApplication application) {
 		this.application = application;
 	}
-
 
 	public void load() {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(application);

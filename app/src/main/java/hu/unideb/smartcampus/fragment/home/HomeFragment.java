@@ -5,7 +5,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,10 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import hu.unideb.smartcampus.R;
-import hu.unideb.smartcampus.activity.settings.AppSettings;
+import hu.unideb.smartcampus.application.settings.AppSettings;
 
 public class HomeFragment extends Fragment {
 
@@ -29,10 +29,11 @@ public class HomeFragment extends Fragment {
         getActivity().setTitle(getResources().getString(R.string.home_menu_text));
         Button button = view.findViewById(R.id.b);
         AppSettings appSettings = AppSettings.getSettings(getActivity());
+        Toast.makeText(getContext(), appSettings.getSelected_notification_sound(), Toast.LENGTH_SHORT).show();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                generateNotification(getContext(), Uri.parse(appSettings.getC1()));
+                generateNotification(getContext(), Uri.parse(appSettings.getSelected_notification_sound()));
             }
         });
         return view;
