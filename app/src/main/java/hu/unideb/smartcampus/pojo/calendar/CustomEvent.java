@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CustomEvent implements Serializable{
 
+    private long id;
     private String uuid;
     private String eventName;
     private String eventDescription;
@@ -19,6 +20,6 @@ public class CustomEvent implements Serializable{
     private Long eventStartTime;
     private Long eventEndDate;
     private Long eventEndTime;
-    private String evenetRepeat;
+    private String eventRepeat;
     private String eventReminder;
 }

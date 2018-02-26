@@ -28,7 +28,7 @@ public class CustomEventConverter {
             customEvent.setEventEndDate(customEventIqElement.getEventEnd());
             customEvent.setEventStartTime(customEventIqElement.getEventStart());
             customEvent.setEventEndTime(customEventIqElement.getEventEnd());
-            customEvent.setEvenetRepeat(customEventIqElement.getEventRepeat());
+            customEvent.setEventRepeat(customEventIqElement.getEventRepeat());
             customEvent.setEventReminder(customEventIqElement.getReminder());
 
             customEvents.add(customEvent);

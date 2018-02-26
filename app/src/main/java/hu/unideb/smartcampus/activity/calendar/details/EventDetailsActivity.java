@@ -118,7 +118,7 @@ public class EventDetailsActivity extends BaseActivity {
         String customEventDescription = customEvent.getEventDescription();
         String customEventPlace = customEvent.getEventPlace();
 
-        String customEventRepeat = customEvent.getEvenetRepeat();
+        String customEventRepeat = customEvent.getEventRepeat();
         String customEventReminder = customEvent.getEventReminder();
 
         String customEventStartDate = dateFormatter.format(new Date(customEvent.getEventStartDate()));

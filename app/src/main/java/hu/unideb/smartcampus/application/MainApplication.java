@@ -19,6 +19,7 @@ public class MainApplication extends Application {
 
         //todo ha nem választ ki semmit akkr a nyelv a telo nyelve ha kiválasztaja akkor az addig míg meg nem változtatja
         settings.load();
+
     }
 
     @Override

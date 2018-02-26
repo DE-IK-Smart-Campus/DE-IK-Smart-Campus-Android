@@ -1,5 +1,7 @@
 package hu.unideb.smartcampus.container;
 
+import hu.unideb.smartcampus.pojo.settings.Settings;
+
 public class Container {
 
     public static final int SPLASH_SCREEN_TIME_OUT = 2500;
@@ -27,6 +29,8 @@ public class Container {
     public static final String DATE_PICKER_DIALOG = "DatePickerDialog";
 
     public static final String TIME_PICKER_DIALOG = "TimePickerDialog";
+
+    public static final boolean ENCRYPTED_DATABASE = true;
 
     public static final String CALENDAR_ACTION_BAR_DATE_FORMAT_PATTERN_HU = "yyyy. MMMM";
 

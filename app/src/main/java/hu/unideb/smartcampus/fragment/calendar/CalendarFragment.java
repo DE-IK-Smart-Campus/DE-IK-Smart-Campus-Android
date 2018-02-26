@@ -236,10 +236,10 @@ public class CalendarFragment extends Fragment {
 
     private List<CustomEvent> addEvents1() {
 
-        CustomEvent customEvent = new CustomEvent("1", "esemény1", "esemény leírása", "esemény helye", 1519081200000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
-        CustomEvent customEvent1 = new CustomEvent("1", "esemény2", "esemény leírása", "esemény helye", 1519081200000L, 2211714000000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
-        CustomEvent customEvent2 = new CustomEvent("1", "esemény3", "esemény leírása", "esemény helye", 1519081200000L, 2211699600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
-        CustomEvent customEvent3 = new CustomEvent("1", "esemény4", "esemény leírása", "esemény helye", 1519081200000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
+        CustomEvent customEvent = new CustomEvent(1,"1", "esemény1", "esemény leírása", "esemény helye", 1519081200000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
+        CustomEvent customEvent1 = new CustomEvent(2,"1", "esemény2", "esemény leírása", "esemény helye", 1519081200000L, 2211714000000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
+        CustomEvent customEvent2 = new CustomEvent(3,"1", "esemény3", "esemény leírása", "esemény helye", 1519081200000L, 2211699600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
+        CustomEvent customEvent3 = new CustomEvent(4,"1", "esemény4", "esemény leírása", "esemény helye", 1519081200000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
 
         return Arrays.asList(customEvent, customEvent1, customEvent2, customEvent3);
     }
