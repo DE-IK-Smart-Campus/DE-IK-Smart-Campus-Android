@@ -11,8 +11,8 @@
     <string name="hu" translatable="true">@string/hungarian</string>
 
     <string-array name="languages_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+        <item>def</item>
+        <item>en</item>
+        <item>hu</item>
     </string-array>
 </resources>

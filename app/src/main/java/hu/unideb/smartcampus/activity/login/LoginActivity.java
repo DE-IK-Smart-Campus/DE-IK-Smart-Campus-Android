@@ -42,8 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        Toasty.info(getApplicationContext(), Locale.getDefault().getLanguage(), Toast.LENGTH_LONG).show();
-
     }
 
     private void login() {

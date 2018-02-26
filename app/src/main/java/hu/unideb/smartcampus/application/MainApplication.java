@@ -3,7 +3,11 @@ package hu.unideb.smartcampus.application;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.widget.Toast;
 
+import java.util.Locale;
+
+import es.dmoral.toasty.Toasty;
 import hu.unideb.smartcampus.application.settings.AppSettings;
 import hu.unideb.smartcampus.dialog.settings.language.helper.LanguageHelper;
 
@@ -19,6 +23,8 @@ public class MainApplication extends Application {
 
         //todo ha nem választ ki semmit akkr a nyelv a telo nyelve ha kiválasztaja akkor az addig míg meg nem változtatja
         settings.load();
+
+        Locale.getDefault().getLanguage();
 
     }
 

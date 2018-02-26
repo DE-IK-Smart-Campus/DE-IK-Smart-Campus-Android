@@ -42,7 +42,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private static final int SETTINGS_REQUEST = 1000;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
