@@ -28,6 +28,7 @@ import hu.unideb.smartcampus.fragment.attendance.AttendanceFragment;
 import hu.unideb.smartcampus.fragment.calendar.CalendarFragment;
 import hu.unideb.smartcampus.fragment.chat.ChatFragment;
 import hu.unideb.smartcampus.fragment.home.HomeFragment;
+import hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment;
 import hu.unideb.smartcampus.interfaces.OnBackPressedListener;
 import hu.unideb.smartcampus.task.officehours.OfficeHoursSubjectsTask;
 
@@ -118,7 +119,8 @@ Color.parseColor(getColorHex(settings.getSelected_timetable_event_color()));
                 fragment = new AttendanceFragment();
                 break;
             case R.id.nav_office_hours:
-                new OfficeHoursSubjectsTask(this).execute();
+                fragment = new OfficeHourFragment();
+//                new OfficeHoursSubjectsTask(this).execute();
                 break;
             case R.id.nav_chat:
                 fragment = new ChatFragment();

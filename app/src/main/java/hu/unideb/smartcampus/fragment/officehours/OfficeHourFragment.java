@@ -1,14 +1,14 @@
 package hu.unideb.smartcampus.fragment.officehours;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import butterknife.BindView;
@@ -30,7 +30,7 @@ import static hu.unideb.smartcampus.fragment.officehours.OfficeHourReserveFragme
  * This class responsible for showing view and OfficeHourHandler is the controller.
  */
 
-public class OfficeHourFragment extends android.app.Fragment {
+public class OfficeHourFragment extends Fragment {
 
     public static String OFFICE_HOUR_INSTRUCTOR_KEY = "INSTRUCTOR";
     public static String OFFICE_HOUR_SUBJECT_KEY = "OFFICE_HOUR_SUBJECT";
@@ -44,8 +44,25 @@ public class OfficeHourFragment extends android.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_office_hour, container, false);
         ButterKnife.bind(this, view);
 
-        AskSubjectsPojo subjectList = (AskSubjectsPojo) getArguments().getSerializable(OFFICE_HOUR_SUBJECT_KEY);
-        Instructor instructor = (Instructor) getArguments().getSerializable(OFFICE_HOUR_INSTRUCTOR_KEY);
+        AskSubjectsPojo askSubjectsPojo1 = new AskSubjectsPojo();
+            ArrayList<Subject> subjects = new ArrayList<>();
+            ArrayList<Instructor> instructors = new ArrayList<>();
+            instructors.add(new Instructor(1L, "Pató Pál", null));
+
+            subjects.add(new Subject(1, "Tárgy1", instructors));
+            subjects.add(new Subject(2, "Tárgy2", instructors));
+            subjects.add(new Subject(3, "Tárgy3", instructors));
+            askSubjectsPojo1.setSubjects(subjects);
+
+//            bundle.putSerializable("OFFICE_HOUR_SUBJECT_KEY", askSubjectsPojo1);
+
+
+//        AskSubjectsPojo subjectList = (AskSubjectsPojo) getArguments().getSerializable(OFFICE_HOUR_SUBJECT_KEY);
+//        Instructor instructor = (Instructor) getArguments().getSerializable(OFFICE_HOUR_INSTRUCTOR_KEY);
+       Instructor instructor1 =  new Instructor(1L, "Pató Pál", null);
+        AskSubjectsPojo subjectList = askSubjectsPojo1;
+//        Instructor instructor = (Instructor) getArguments().getSerializable(OFFICE_HOUR_INSTRUCTOR_KEY);
+        Instructor instructor = instructor1;
 
         if (instructor == null) { // TODO
 
@@ -90,12 +107,12 @@ public class OfficeHourFragment extends android.app.Fragment {
             Bundle bundle = new Bundle();
             bundle.putSerializable("SELECTED_INSTRUCTOR", selectedInstructor);
             bundle.putSerializable("SELECTED_OFFICE_HOUR", selectedOfficeHour);
-
-            Fragment fragment = new OfficeHourReserveFragment();
-            fragment.setArguments(bundle);
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOURS_TAG);
-            fragmentTransaction.commitAllowingStateLoss();
+//
+//            Fragment fragment = new OfficeHourReserveFragment();
+//            fragment.setArguments(bundle);
+//            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOURS_TAG);
+//            fragmentTransaction.commitAllowingStateLoss();
             return true;
         }
     }

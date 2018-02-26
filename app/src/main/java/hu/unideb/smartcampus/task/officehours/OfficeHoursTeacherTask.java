@@ -100,10 +100,10 @@ public class OfficeHoursTeacherTask extends AsyncTask<Instructor, Long, Instruct
             bundle.putSerializable(OFFICE_HOUR_INSTRUCTOR_KEY, instructor1); // TODO
 */
 
-            fragment.setArguments(bundle);
-            FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOUR_LIST_FRAGMENT);
-            fragmentTransaction.commitAllowingStateLoss();
+//            fragment.setArguments(bundle);
+//            FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOUR_LIST_FRAGMENT);
+//            fragmentTransaction.commitAllowingStateLoss();
         }
     }
 }
