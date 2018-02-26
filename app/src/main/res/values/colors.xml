@@ -3,6 +3,7 @@
     <color name="smart_campus_blue">#28a4ef</color>
     <color name="smart_campus_dark_blue">#28a4ef</color>
     <color name="smart_campus_color_accent">#52baf9</color>
+    <color name="smart_campus_color_accent2">#3498db</color>
 
     <color name="gradient_start_color">#3b679e</color>
     <color name="gradient_center_color">#207cca</color>
