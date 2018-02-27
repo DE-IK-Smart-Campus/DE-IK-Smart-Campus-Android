@@ -1,7 +1,8 @@
 package hu.unideb.smartcampus.fragment.officehours;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import hu.unideb.smartcampus.pojo.officehours.AskSubjectsPojo;
 import hu.unideb.smartcampus.pojo.officehours.Instructor;
 import hu.unideb.smartcampus.pojo.officehours.OfficeHour;
 import hu.unideb.smartcampus.pojo.officehours.Subject;
+import hu.unideb.smartcampus.task.officehours.OfficeHoursSubjectsTask;
 import hu.unideb.smartcampus.task.officehours.OfficeHoursTeacherTask;
 
 import static hu.unideb.smartcampus.fragment.officehours.OfficeHourReserveFragment.OFFICE_HOURS_TAG;

@@ -47,25 +47,29 @@ public class OfficeHoursTeacherTask extends AsyncTask<Instructor, Long, Instruct
     @Override
     protected Instructor doInBackground(Instructor... instructors) {
 
-        try {
-            InstructorConsultingDatesIqRequest iq = new InstructorConsultingDatesIqRequest();
-
-            iq.setInstructorId(instructors[0].getInstructorId().toString());
-            iq.setType(IQ.Type.get);
-            iq.setTo(JidCreate.from(ADMINJID));
-
-            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
-            final InstructorConsultingDatesIqRequest iqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
-            return OfficeHourConverter.convertToAskInstructorOfficeHourPojo(iqRequest);
-
-        } catch (SmackException.NotConnectedException
-                | XMPPException.XMPPErrorException
-                | SmackException.NoResponseException
-                | XmppStringprepException
-                | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return new Instructor();
+//        try {
+//            InstructorConsultingDatesIqRequest iq = new InstructorConsultingDatesIqRequest();
+//
+//            iq.setInstructorId(instructors[0].getInstructorId().toString());
+//            iq.setType(IQ.Type.get);
+//            iq.setTo(JidCreate.from(ADMINJID));
+//
+//            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
+//            final InstructorConsultingDatesIqRequest iqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
+//            return OfficeHourConverter.convertToAskInstructorOfficeHourPojo(iqRequest);
+//
+//        } catch (SmackException.NotConnectedException
+//                | XMPPException.XMPPErrorException
+//                | SmackException.NoResponseException
+//                | XmppStringprepException
+//                | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        List<OfficeHour> officeHours = new ArrayList<>();
+        OfficeHour officeHour = new OfficeHour(1L, new FromToDatesInLong(System.nanoTime(), System.nanoTime() + 3600L), 5L);
+        officeHours.add(officeHour);
+        Instructor instructor1 = new Instructor(1L, "Pató Pál", officeHours);
+        return instructor1;
     }
 
     @Override

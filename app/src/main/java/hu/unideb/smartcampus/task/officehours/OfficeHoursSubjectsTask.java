@@ -70,47 +70,37 @@ public class OfficeHoursSubjectsTask extends AsyncTask<String, Long, AskSubjects
 //                | InterruptedException e) {
 //            e.printStackTrace();
 //        }
-        return new AskSubjectsPojo();
+
+        AskSubjectsPojo askSubjectsPojo1 = new AskSubjectsPojo();
+        ArrayList<Subject> subjects = new ArrayList<>();
+        ArrayList<Instructor> instructors = new ArrayList<>();
+        instructors.add(new Instructor(1L, "Pató Pál", null));
+
+        subjects.add(new Subject(1, "Tárgy1", instructors));
+        subjects.add(new Subject(2, "Tárgy2", instructors));
+        subjects.add(new Subject(3, "Tárgy3", instructors));
+        askSubjectsPojo1.setSubjects(subjects);
+        return askSubjectsPojo1;
     }
 
     @Override
     protected void onPostExecute(AskSubjectsPojo askSubjectsPojo) {
         super.onPostExecute(askSubjectsPojo);
         loadingDialog.dismiss();
-        if (askSubjectsPojo != null) {
+//        if (askSubjectsPojo != null) {
             OfficeHourFragment fragment = new OfficeHourFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable(OFFICE_HOUR_SUBJECT_KEY, askSubjectsPojo);
 //
 //            /* TEST ADAT
-            AskSubjectsPojo askSubjectsPojo1 = new AskSubjectsPojo();
-            ArrayList<Subject> subjects = new ArrayList<>();
-            ArrayList<Instructor> instructors = new ArrayList<>();
-            instructors.add(new Instructor(1L, "Pató Pál", null));
 
-            subjects.add(new Subject(1, "Tárgy1", instructors));
-            subjects.add(new Subject(2, "Tárgy2", instructors));
-            subjects.add(new Subject(3, "Tárgy3", instructors));
-            askSubjectsPojo1.setSubjects(subjects);
 
-            bundle.putSerializable("OFFICE_HOUR_SUBJECT_KEY", askSubjectsPojo1);
-//            */
-//
+            bundle.putSerializable("OFFICE_HOUR_SUBJECT_KEY", askSubjectsPojo);
             fragment.setArguments(bundle);
 
-//
-//            android.app.FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
-//            ft.replace(R.id.content_frame, fragment, OFFICE_HOUR_LIST_FRAGMENT);
-//            ft.commit();
-//
-////            getSupportFragmentManager()
-////            FragmentTransaction fragmentTransaction = activity.beginTransaction();
-////            FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
-////            ft.replace(R.id.content_frame, fragment);
-////            ft.commit();
             android.app.FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOUR_LIST_FRAGMENT);
             fragmentTransaction.commitAllowingStateLoss();
-        }
+//        }
     }
 }
