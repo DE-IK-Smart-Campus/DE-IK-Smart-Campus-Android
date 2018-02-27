@@ -1,9 +1,8 @@
 package hu.unideb.smartcampus.task.officehours;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.AsyncTask;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.StanzaCollector;
@@ -53,24 +52,24 @@ public class OfficeHoursSubjectsTask extends AsyncTask<String, Long, AskSubjects
 
     @Override
     protected AskSubjectsPojo doInBackground(String... strings) {
-        final Connection connection = Connection.getInstance();
-        try {
-            SubjectsIqRequest iq = new SubjectsIqRequest();
-            iq.setStudent(connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
-            iq.setType(IQ.Type.get);
-            iq.setTo(JidCreate.from(ADMINJID));
+//        final Connection connection = Connection.getInstance();
+//        try {
+//            SubjectsIqRequest iq = new SubjectsIqRequest();
+//            iq.setStudent(connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
+//            iq.setType(IQ.Type.get);
+//            iq.setTo(JidCreate.from(ADMINJID));
+//
+//            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
+//            final SubjectsIqRequest subjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
+//            return OfficeHourConverter.convertToAskSubjectsProcessMessagePojo(subjectsIqRequest);
 
-            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
-            final SubjectsIqRequest subjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
-            return OfficeHourConverter.convertToAskSubjectsProcessMessagePojo(subjectsIqRequest);
-
-        } catch (SmackException.NotConnectedException
-                | XMPPException.XMPPErrorException
-                | SmackException.NoResponseException
-                | XmppStringprepException
-                | InterruptedException e) {
-            e.printStackTrace();
-        }
+//        } catch (SmackException.NotConnectedException
+//                | XMPPException.XMPPErrorException
+//                | SmackException.NoResponseException
+//                | XmppStringprepException
+//                | InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return new AskSubjectsPojo();
     }
 
@@ -78,29 +77,40 @@ public class OfficeHoursSubjectsTask extends AsyncTask<String, Long, AskSubjects
     protected void onPostExecute(AskSubjectsPojo askSubjectsPojo) {
         super.onPostExecute(askSubjectsPojo);
         loadingDialog.dismiss();
-//        if (askSubjectsPojo != null) {
-//            OfficeHourFragment fragment = new OfficeHourFragment();
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable(OFFICE_HOUR_SUBJECT_KEY, askSubjectsPojo);
+        if (askSubjectsPojo != null) {
+            OfficeHourFragment fragment = new OfficeHourFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(OFFICE_HOUR_SUBJECT_KEY, askSubjectsPojo);
 //
 //            /* TEST ADAT
-//            AskSubjectsPojo askSubjectsPojo1 = new AskSubjectsPojo();
-//            ArrayList<Subject> subjects = new ArrayList<>();
-//            ArrayList<Instructor> instructors = new ArrayList<>();
-//            instructors.add(new Instructor(1L, "Pató Pál", null));
-//
-//            subjects.add(new Subject(1, "Tárgy1", instructors));
-//            subjects.add(new Subject(2, "Tárgy2", instructors));
-//            subjects.add(new Subject(3, "Tárgy3", instructors));
-//            askSubjectsPojo1.setSubjects(subjects);
-//
-//            //bundle.putSerializable("OFFICE_HOUR_SUBJECT_KEY", askSubjectsPojo1);
+            AskSubjectsPojo askSubjectsPojo1 = new AskSubjectsPojo();
+            ArrayList<Subject> subjects = new ArrayList<>();
+            ArrayList<Instructor> instructors = new ArrayList<>();
+            instructors.add(new Instructor(1L, "Pató Pál", null));
+
+            subjects.add(new Subject(1, "Tárgy1", instructors));
+            subjects.add(new Subject(2, "Tárgy2", instructors));
+            subjects.add(new Subject(3, "Tárgy3", instructors));
+            askSubjectsPojo1.setSubjects(subjects);
+
+            bundle.putSerializable("OFFICE_HOUR_SUBJECT_KEY", askSubjectsPojo1);
 //            */
 //
-//            fragment.setArguments(bundle);
-//            FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOUR_LIST_FRAGMENT);
-//            fragmentTransaction.commitAllowingStateLoss();
-//        }
+            fragment.setArguments(bundle);
+
+//
+//            android.app.FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
+//            ft.replace(R.id.content_frame, fragment, OFFICE_HOUR_LIST_FRAGMENT);
+//            ft.commit();
+//
+////            getSupportFragmentManager()
+////            FragmentTransaction fragmentTransaction = activity.beginTransaction();
+////            FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
+////            ft.replace(R.id.content_frame, fragment);
+////            ft.commit();
+            android.app.FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.drawer_layout, fragment, OFFICE_HOUR_LIST_FRAGMENT);
+            fragmentTransaction.commitAllowingStateLoss();
+        }
     }
 }

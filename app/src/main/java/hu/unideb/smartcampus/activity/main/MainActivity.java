@@ -118,8 +118,8 @@ Color.parseColor(getColorHex(settings.getSelected_timetable_event_color()));
                 fragment = new AttendanceFragment();
                 break;
             case R.id.nav_office_hours:
-                fragment = new OfficeHourFragment();
-//                new OfficeHoursSubjectsTask(this).execute();
+//                fragment = new OfficeHourFragment();
+                new OfficeHoursSubjectsTask(this).execute();
                 break;
             case R.id.nav_chat:
                 fragment = new ChatFragment();
