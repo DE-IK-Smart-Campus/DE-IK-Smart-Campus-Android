@@ -44,6 +44,11 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void login() {
         if (username.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             Toasty.error(getApplicationContext(), getResources().getString(R.string.usernamePasswordNeed), Toast.LENGTH_LONG).show();

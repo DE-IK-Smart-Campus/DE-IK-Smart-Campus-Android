@@ -2,6 +2,8 @@ package hu.unideb.smartcampus.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.multidex.MultiDex;
 import android.widget.Toast;
 
@@ -23,9 +25,12 @@ public class MainApplication extends Application {
 
         //todo ha nem választ ki semmit akkr a nyelv a telo nyelve ha kiválasztaja akkor az addig míg meg nem változtatja
         settings.load();
-
-        Locale.getDefault().getLanguage();
-
+        if(settings.getSelected_language().equals("def")) {
+                    Locale locle = Resources.getSystem().getConfiguration().locale;
+            LanguageHelper.setLanguage(getApplicationContext(), locle.getLanguage());
+        } else {
+            LanguageHelper.setLanguage(getApplicationContext(), settings.getSelected_language());
+        }
     }
 
     @Override
