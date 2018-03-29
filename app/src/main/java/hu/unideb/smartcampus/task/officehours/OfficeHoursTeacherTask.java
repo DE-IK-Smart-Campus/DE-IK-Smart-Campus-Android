@@ -22,7 +22,7 @@ import hu.unideb.smartcampus.fragment.officehours.OfficeHourFragment;
 import hu.unideb.smartcampus.pojo.officehours.FromToDatesInLong;
 import hu.unideb.smartcampus.pojo.officehours.Instructor;
 import hu.unideb.smartcampus.pojo.officehours.OfficeHour;
-import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
+//import hu.unideb.smartcampus.shared.iq.request.InstructorConsultingDatesIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.dialog.loading.LoadingDialog.LOADING_DIALOG_TAG;

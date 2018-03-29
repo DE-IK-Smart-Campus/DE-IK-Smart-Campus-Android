@@ -3,7 +3,7 @@ apply plugin: 'org.greenrobot.greendao'
 
 repositories {
     mavenCentral()
-    maven { url "http://wt2.inf.unideb.hu/artifactory/libs-snapshot-local" }
+//    maven { url "http://wt2.inf.unideb.hu/artifactory/libs-snapshot-local" }
     maven { url "https://jitpack.io" }
     google()
 }
@@ -84,7 +84,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     //backend
-    compile 'hu.unideb:smart-campus-shared-iq:1.3-SNAPSHOT'
+//    compile 'hu.unideb:smart-campus-shared-iq:1.3-SNAPSHOT'
 
     //butterknife
     compile 'com.jakewharton:butterknife:8.8.1'

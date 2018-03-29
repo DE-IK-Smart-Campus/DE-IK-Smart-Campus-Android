@@ -1,14 +1,13 @@
 package hu.unideb.smartcampus.converter.attendance;
 
 import hu.unideb.smartcampus.pojo.attendance.AskAttendancetPojo;
-import hu.unideb.smartcampus.shared.iq.request.ListUserAttendanceIqRequest;
 
 public class AttendanceConverter {
 
-    public static AskAttendancetPojo convertToAskSubjectPojo(ListUserAttendanceIqRequest listUserAttendanceIqRequest){
-
-        return new AskAttendancetPojo();
-    }
+//    public static AskAttendancetPojo convertToAskSubjectPojo(ListUserAttendanceIqRequest listUserAttendanceIqRequest){
+//
+//        return new AskAttendancetPojo();
+//    }
 
 //    public static AskAttendancetPojo convertToAskSubjectPojo(ListUserAttendanceIqRequest listUserAttendanceIqRequest) {
 //        AskAttendancetPojo askSubjectPojo = new AskAttendancetPojo();

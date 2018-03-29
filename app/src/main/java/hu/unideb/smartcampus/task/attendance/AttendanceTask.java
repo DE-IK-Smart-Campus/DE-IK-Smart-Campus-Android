@@ -14,7 +14,7 @@ import org.jxmpp.stringprep.XmppStringprepException;
 import hu.unideb.smartcampus.converter.attendance.AttendanceConverter;
 import hu.unideb.smartcampus.dialog.loading.LoadingDialog;
 import hu.unideb.smartcampus.pojo.attendance.AskAttendancetPojo;
-import hu.unideb.smartcampus.shared.iq.request.ListUserAttendanceIqRequest;
+//import hu.unideb.smartcampus.shared.iq.request.ListUserAttendanceIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static hu.unideb.smartcampus.container.Container.LOADING_DIALOG_TAG;
@@ -30,37 +30,42 @@ public class AttendanceTask extends AsyncTask<String, Long, AskAttendancetPojo> 
     }
 
     @Override
+    protected AskAttendancetPojo doInBackground(String... strings) {
+        return null;
+    }
+
+    @Override
     protected void onPreExecute() {
         super.onPreExecute();
         loadingDialog = new LoadingDialog();
         loadingDialog.show(activity.getFragmentManager(), LOADING_DIALOG_TAG);
     }
 
-    @Override
-    protected AskAttendancetPojo doInBackground(String... strings) {
-        final Connection connection = Connection.getInstance();
-        try {
-
-            ListUserAttendanceIqRequest iq = new ListUserAttendanceIqRequest();
-            EntityFullJid user = Connection.getInstance().getXmppConnection().getUser();
-            iq.setStudent(connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
-            iq.setType(IQ.Type.get);
-            iq.setFrom(user);
-            iq.setTo(JidCreate.from(ADMINJID));
-
-            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
-            final ListUserAttendanceIqRequest calendarSubjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
-            return AttendanceConverter.convertToAskSubjectPojo(calendarSubjectsIqRequest);
-
-        } catch (SmackException.NotConnectedException
-                | XMPPException.XMPPErrorException
-                | SmackException.NoResponseException
-                | XmppStringprepException
-                | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return new AskAttendancetPojo();
-    }
+//    @Override
+//    protected AskAttendancetPojo doInBackground(String... strings) {
+//        final Connection connection = Connection.getInstance();
+//        try {
+//
+//            ListUserAttendanceIqRequest iq = new ListUserAttendanceIqRequest();
+//            EntityFullJid user = Connection.getInstance().getXmppConnection().getUser();
+//            iq.setStudent(connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
+//            iq.setType(IQ.Type.get);
+//            iq.setFrom(user);
+//            iq.setTo(JidCreate.from(ADMINJID));
+//
+//            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(iq);
+//            final ListUserAttendanceIqRequest calendarSubjectsIqRequest = stanzaCollectorAndSend.nextResultOrThrow(5000);
+//            return AttendanceConverter.convertToAskSubjectPojo(calendarSubjectsIqRequest);
+//
+//        } catch (SmackException.NotConnectedException
+//                | XMPPException.XMPPErrorException
+//                | SmackException.NoResponseException
+//                | XmppStringprepException
+//                | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        return new AskAttendancetPojo();
+//    }
 
     @Override
     protected void onPostExecute(AskAttendancetPojo askAttendancetPojo) {

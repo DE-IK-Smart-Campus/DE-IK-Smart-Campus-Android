@@ -94,15 +94,15 @@ public class SettingsActivity extends BaseActivity {
                     return true;
                 }
             });
-            RingtonePreference colorPrefs1 = (RingtonePreference) findPreference("notification_sound_picker_chooser_key");
-            colorPrefs1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    preference.setSummary(String.valueOf(newValue));
-
-                    return true;
-                }
-            });
+//            RingtonePreference colorPrefs1 = (RingtonePreference) findPreference("notification_sound_picker_chooser_key");
+//            colorPrefs1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//                @Override
+//                public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                    preference.setSummary(String.valueOf(newValue));
+//
+//                    return true;
+//                }
+//            });
 
 //            Preference serverAddressPrefs = findPreference("server_address");
 //            serverAddressPrefs.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -152,8 +152,8 @@ public class SettingsActivity extends BaseActivity {
             ColorPreference colorPreference = (ColorPreference) findPreference("timetable_event_color_chooser_key");
 //            colorPreference.setSummary(settings.getC());
 
-            RingtonePreference rf = (RingtonePreference) findPreference("notification_sound_picker_chooser_key");
-            rf.setSummary(settings.getSelected_notification_sound());
+//            RingtonePreference rf = (RingtonePreference) findPreference("notification_sound_picker_chooser_key");
+//            rf.setSummary(settings.getSelected_notification_sound());
         }
 
         @Override

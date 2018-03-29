@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Locale;
@@ -25,6 +26,8 @@ public class MainApplication extends Application {
 
         //todo ha nem választ ki semmit akkr a nyelv a telo nyelve ha kiválasztaja akkor az addig míg meg nem változtatja
         settings.load();
+        Log.e("ASD", String.valueOf(settings.getSelected_language()));
+
         if(settings.getSelected_language().equals("def")) {
                     Locale locle = Resources.getSystem().getConfiguration().locale;
             LanguageHelper.setLanguage(getApplicationContext(), locle.getLanguage());

@@ -132,6 +132,7 @@ public class CalendarFragment extends Fragment {
                 selectedDate = dateClicked;
 
                 eventListView.setAdapter(null);
+Log.e("ASD", String.valueOf(dateClicked.getTime()));
 
                 List<Event> events1 = new ArrayList<>();
                 for (int i = 0; i < events.size(); i++) {
@@ -208,28 +209,28 @@ public class CalendarFragment extends Fragment {
 
     private List<TimetableEvent> addEvents() {
 
-        TimetableEvent timetableEvent = new TimetableEvent(1, 1519081200000L, "esemény neve1", "esemény leírása", "esemény helye", 2211703200000L, 2211681600000L);
-        TimetableEvent timetableEvent1 = new TimetableEvent(2, 1519167600000L, "esemény neve2", "esemény leírása", "esemény helye", 2211703200000L, 2211681600000L);
-        TimetableEvent timetableEvent2 = new TimetableEvent(3, 1519254000000L, "Teszt esemény esemény esemény esemény ", "Teszt leírás", "Teszt hely", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent3 = new TimetableEvent(4, 1519081200000L, "esemény neve4", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent4 = new TimetableEvent(5, 1519340400000L, "Az internet eszközei és szolgáltatásai", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent5 = new TimetableEvent(6, 1519426800000L, "Valószínűségszámítás és statisztika", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent6 = new TimetableEvent(7, 1519513200000L, "esemény neve7", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent7 = new TimetableEvent(8, 1519599600000L, "esemény neve8", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent8 = new TimetableEvent(9, 1519686000000L, "esemény neve9", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent9 = new TimetableEvent(10, 1519772400000L, "esemény neve10", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent10 = new TimetableEvent(11, 1519081200000L, "esemény neve11", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
-        TimetableEvent timetableEvent11 = new TimetableEvent(12, 1518994800000L, "esemény neve12", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent = new TimetableEvent(1, 1521500400000L, "esemény neve1", "esemény leírása", "esemény helye", 2211703200000L, 2211681600000L);
+        TimetableEvent timetableEvent1 = new TimetableEvent(2, 1521586800000L, "esemény neve2", "esemény leírása", "esemény helye", 2211703200000L, 2211681600000L);
+        TimetableEvent timetableEvent2 = new TimetableEvent(3, 1521673200000L, "Teszt esemény1 ", "Teszt leírás", "Teszt hely", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent3 = new TimetableEvent(4, 1521759600000L, "esemény neve4", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent4 = new TimetableEvent(5, 1521846000000L, "Az internet eszközei és szolgáltatásai", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent5 = new TimetableEvent(6, 1521846000000L, "Valószínűségszámítás és statisztika", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent6 = new TimetableEvent(7, 1521846000000L, "esemény neve7", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent7 = new TimetableEvent(8, 1521846000000L, "esemény neve8", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent8 = new TimetableEvent(9, 1522015200000L, "esemény neve9", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent9 = new TimetableEvent(10, 1520377200000L, "esemény neve10", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent10 = new TimetableEvent(11, 1520377200000L, "esemény neve11", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
+        TimetableEvent timetableEvent11 = new TimetableEvent(12, 1520982000000L, "esemény neve12", "esemény leírása", "esemény helye", 2211681600000L, 2211681600000L);
 
         return Arrays.asList(timetableEvent, timetableEvent1, timetableEvent2, timetableEvent3, timetableEvent4, timetableEvent5, timetableEvent6, timetableEvent7, timetableEvent8, timetableEvent9, timetableEvent10, timetableEvent11);
     }
 
     private List<CustomEvent> addEvents1() {
 
-        CustomEvent customEvent = new CustomEvent(1,"1", "esemény1", "esemény leírása", "esemény helye", 1519081200000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
-        CustomEvent customEvent1 = new CustomEvent(2,"1", "esemény2", "esemény leírása", "esemény helye", 1519081200000L, 2211714000000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
-        CustomEvent customEvent2 = new CustomEvent(3,"1", "esemény3", "esemény leírása", "esemény helye", 1519081200000L, 2211699600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
-        CustomEvent customEvent3 = new CustomEvent(4,"1", "esemény4", "esemény leírása", "esemény helye", 1519081200000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
+        CustomEvent customEvent = new CustomEvent(1,"1", "esemény1", "esemény leírása", "esemény helye", 1521846000000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
+        CustomEvent customEvent1 = new CustomEvent(2,"1", "esemény2", "esemény leírása", "esemény helye", 1521846000000L, 2211714000000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
+        CustomEvent customEvent2 = new CustomEvent(3,"1", "esemény3", "esemény leírása", "esemény helye", 1520982000000L, 2211699600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
+        CustomEvent customEvent3 = new CustomEvent(4,"1", "esemény4", "esemény leírása", "esemény helye", 1520377200000L, 2211681600000L, 1519081200000L, 2211681600000L, "ismétlés", "emlékeztetők");
 
         return Arrays.asList(customEvent, customEvent1, customEvent2, customEvent3);
     }

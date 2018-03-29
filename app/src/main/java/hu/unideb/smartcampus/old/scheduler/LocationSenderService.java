@@ -31,7 +31,7 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
 
-import hu.unideb.smartcampus.shared.iq.request.UserLocationIqRequest;
+//import hu.unideb.smartcampus.shared.iq.request.UserLocationIqRequest;
 import hu.unideb.smartcampus.xmpp.Connection;
 
 import static com.google.android.gms.location.LocationServices.FusedLocationApi;
@@ -93,40 +93,40 @@ public class LocationSenderService extends IntentService implements GoogleApiCli
         */
     }
 
-    private void getLocationForService() {
-        if (mLastLocation != null) {
-
-            try {
-                sleep(SmackConfiguration.getDefaultReplyTimeout());
-                UserLocationIqRequest userLocationIqRequest = new UserLocationIqRequest();
-                EntityFullJid user = null;
-
-                //TODO Read from db
-                if (Connection.getInstance().getXmppConnection() != null && Connection.getInstance().getXmppConnection().isAuthenticated()) {
-                    user = Connection.getInstance().getXmppConnection().getUser();
-                } else {
-                    user = xmppConnection.getUser();
-                }
-                userLocationIqRequest.setUsername(user.getLocalpartOrThrow().toString());
-                userLocationIqRequest.setAccuracy((double) mLastLocation.getAccuracy());
-                userLocationIqRequest.setLatitude(mLastLocation.getLatitude());
-                userLocationIqRequest.setLongitude(mLastLocation.getLongitude());
-                userLocationIqRequest.setTimeStamp(mLastLocation.getTime());
-
-                userLocationIqRequest.setTo(JidCreate.from(ADMINJID));
-                userLocationIqRequest.setType(IQ.Type.set);
-                userLocationIqRequest.setFrom(user);
-
-                final StanzaCollector stanzaCollectorAndSend = xmppConnection.createStanzaCollectorAndSend(userLocationIqRequest);
-                stanzaCollectorAndSend.nextResultOrThrow(5000);
-                xmppConnection.disconnect();
-                Log.i(TAG, "getLocationForService: SUCCES");
-            } catch (XmppStringprepException | InterruptedException | SmackException.NotConnectedException | SmackException.NoResponseException | XMPPException.XMPPErrorException e) {
-                Log.e(TAG, "getLocationForService: ERROR ");
-                e.printStackTrace();
-            }
-        }
-    }
+//    private void getLocationForService() {
+//        if (mLastLocation != null) {
+//
+//            try {
+//                sleep(SmackConfiguration.getDefaultReplyTimeout());
+//                UserLocationIqRequest userLocationIqRequest = new UserLocationIqRequest();
+//                EntityFullJid user = null;
+//
+//                //TODO Read from db
+//                if (Connection.getInstance().getXmppConnection() != null && Connection.getInstance().getXmppConnection().isAuthenticated()) {
+//                    user = Connection.getInstance().getXmppConnection().getUser();
+//                } else {
+//                    user = xmppConnection.getUser();
+//                }
+//                userLocationIqRequest.setUsername(user.getLocalpartOrThrow().toString());
+//                userLocationIqRequest.setAccuracy((double) mLastLocation.getAccuracy());
+//                userLocationIqRequest.setLatitude(mLastLocation.getLatitude());
+//                userLocationIqRequest.setLongitude(mLastLocation.getLongitude());
+//                userLocationIqRequest.setTimeStamp(mLastLocation.getTime());
+//
+//                userLocationIqRequest.setTo(JidCreate.from(ADMINJID));
+//                userLocationIqRequest.setType(IQ.Type.set);
+//                userLocationIqRequest.setFrom(user);
+//
+//                final StanzaCollector stanzaCollectorAndSend = xmppConnection.createStanzaCollectorAndSend(userLocationIqRequest);
+//                stanzaCollectorAndSend.nextResultOrThrow(5000);
+//                xmppConnection.disconnect();
+//                Log.i(TAG, "getLocationForService: SUCCES");
+//            } catch (XmppStringprepException | InterruptedException | SmackException.NotConnectedException | SmackException.NoResponseException | XMPPException.XMPPErrorException e) {
+//                Log.e(TAG, "getLocationForService: ERROR ");
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -135,7 +135,7 @@ public class LocationSenderService extends IntentService implements GoogleApiCli
         }
         mLastLocation = FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        getLocationForService();
+//        getLocationForService();
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, new LocationRequest(), new LocationListener() {
                     @Override
