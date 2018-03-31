@@ -74,7 +74,6 @@ public class SettingsActivity extends BaseActivity {
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings);
-//
 
             Preference colorPrefs = findPreference("language_chooser_key");
             colorPrefs.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

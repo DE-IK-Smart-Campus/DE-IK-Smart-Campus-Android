@@ -29,7 +29,7 @@ public class MainApplication extends Application {
         Log.e("ASD", String.valueOf(settings.getSelected_language()));
 
         if(settings.getSelected_language().equals("def")) {
-                    Locale locle = Resources.getSystem().getConfiguration().locale;
+            Locale locle = Resources.getSystem().getConfiguration().locale;
             LanguageHelper.setLanguage(getApplicationContext(), locle.getLanguage());
         } else {
             LanguageHelper.setLanguage(getApplicationContext(), settings.getSelected_language());
