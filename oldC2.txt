@@ -1,0 +1,182 @@
+package hu.unideb.smartcampus.old.calendar.handler;
+
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaCollector;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
+import org.jivesoftware.smack.packet.IQ;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
+
+import hu.unideb.smartcampus.shared.iq.request.AddCustomEventIqRequest;
+import hu.unideb.smartcampus.shared.iq.request.element.CustomEventIqElement;
+import hu.unideb.smartcampus.xmpp.Connection;
+
+import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
+
+public class AddCustomEventHandler {
+
+    public static void add(String uuid,Long eventWhen,String eventName, String eventDescription, String eventPlace, Long eventStart, Long eventEnd,String repeat, String remainder) {
+        XMPPBOSHConnection xmppboshConnection = Connection.getInstance().getXmppConnection();
+        try {
+            AddCustomEventIqRequest addCustomEventIqRequest = new AddCustomEventIqRequest();
+            addCustomEventIqRequest.setStudent(xmppboshConnection.getUser().getLocalpartOrThrow().toString());
+            CustomEventIqElement myCustomEventIqElement = new CustomEventIqElement();
+
+            myCustomEventIqElement.setGuid(uuid);
+            myCustomEventIqElement.setEventWhen(eventWhen);
+            myCustomEventIqElement.setEventName(eventName);
+            myCustomEventIqElement.setEventDescription(eventDescription);
+            myCustomEventIqElement.setEventPlace(eventPlace);
+            myCustomEventIqElement.setEventStart(eventStart);
+            myCustomEventIqElement.setEventEnd(eventEnd);
+            myCustomEventIqElement.setEventRepeat(repeat);
+            myCustomEventIqElement.setReminder(remainder);
+
+            addCustomEventIqRequest.setCustomEvent(myCustomEventIqElement);
+
+            addCustomEventIqRequest.setType(IQ.Type.set);
+            addCustomEventIqRequest.setTo(JidCreate.from(ADMINJID));
+            addCustomEventIqRequest.setFrom(xmppboshConnection.getUser());
+
+            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend(addCustomEventIqRequest);
+            stanzaCollectorAndSend.nextResultOrThrow(5000);
+
+        } catch (SmackException.NoResponseException | SmackException.NotConnectedException | InterruptedException | XMPPException.XMPPErrorException | XmppStringprepException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+package hu.unideb.smartcampus.old.calendar.handler;
+
+
+import android.content.Context;
+import android.support.v4.app.FragmentManager;
+
+import hu.unideb.smartcampus.pojo.calendar.AskCustomEventPojo;
+import hu.unideb.smartcampus.pojo.calendar.AskTimetableEventPojo;
+
+public class EventHandler {
+
+    boolean isNetworkFinished = false;
+
+    private AskTimetableEventPojo askTimetableEventPojo;
+    private AskCustomEventPojo askCustomEventPojo;
+    private Context context;
+    private FragmentManager fragmentManager;
+    static EventHandler instance;
+
+    public static EventHandler getInstance() {
+        if(instance == null) {
+            instance = new EventHandler();
+        }
+        return instance;
+    }
+
+//    public void askEvents(FragmentManager fragmentManager, final Context context) {
+//        try {
+//            final Connection connection = Connection.getInstance();
+//            this.fragmentManager = fragmentManager;
+//            HashMap<String, String> param = new HashMap<>();
+//            param.put("Actual JID", connection.getXmppConnection().getUser().getLocalpartOrThrow().toString());
+////            askTimetableEventPojo = connection.runAsyncTask(new TimetableIqRequestTask(), param);
+////            askCustomEventPojo = connection.runAsyncTask(new CustomEventIqRequestTask(), param);
+//
+//            DatabaseManager databaseManager = new DatabaseManager(context);
+//
+//            databaseManager.open();
+//
+//            databaseManager.deleteTable();
+//
+//            databaseManager.close();
+//
+//            databaseManager.open();
+
+//            List<TimetableEvent> timetableEvents = askTimetableEventPojo.getTimetableEvents();
+//            List<CustomEvent> customEvents = askCustomEventPojo.getCustomEvents();
+
+//            for (TimetableEvent timetableEvent : timetableEvents) {
+//                    databaseManager.insertTimetableEvent(timetableEvent);
+//                }
+//
+//            for (CustomEvent customEvent : customEvents) {
+//                    databaseManager.insertCustomEvent(customEvent);
+//                }
+
+//            isNetworkFinished = true;
+//            changeToCalndarFragmentView(new Bundle());
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+//    }
+
+//    private void changeToCalndarFragmentView(Bundle bundle) {
+//        Fragment fragment = new CalendarFragmentOld();
+//        fragment.setArguments(bundle);
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+//                android.R.anim.fade_out);
+//        fragmentTransaction.replace(R.id.frame, fragment, "CALENDAR_TAG");
+//        fragmentTransaction.commitAllowingStateLoss();
+//    }
+
+}
+
+
+
+
+package hu.unideb.smartcampus.old.calendar.handler;
+
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaCollector;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
+import org.jivesoftware.smack.packet.IQ;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
+
+import hu.unideb.smartcampus.shared.iq.request.DeleteCustomEventIqRequest;
+import hu.unideb.smartcampus.xmpp.Connection;
+
+import static hu.unideb.smartcampus.xmpp.Connection.ADMINJID;
+
+public class DeleteCustomEventHandler {
+
+    public static void delete(String uuid) {
+        XMPPBOSHConnection xmppboshConnection = Connection.getInstance().getXmppConnection();
+        try {
+            DeleteCustomEventIqRequest deleteCustomEventIqRequest = new DeleteCustomEventIqRequest();
+            deleteCustomEventIqRequest.setStudent(xmppboshConnection.getUser().getLocalpartOrThrow().toString());
+
+            deleteCustomEventIqRequest.setEventGuid(uuid);
+
+            deleteCustomEventIqRequest.setType(IQ.Type.set);
+            deleteCustomEventIqRequest.setTo(JidCreate.from(ADMINJID));
+            deleteCustomEventIqRequest.setFrom(xmppboshConnection.getUser());
+
+            final StanzaCollector stanzaCollectorAndSend = Connection.getInstance().getXmppConnection().createStanzaCollectorAndSend( deleteCustomEventIqRequest);
+            stanzaCollectorAndSend.nextResultOrThrow(5000);
+
+        } catch (SmackException.NoResponseException | SmackException.NotConnectedException | InterruptedException | XMPPException.XMPPErrorException | XmppStringprepException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
